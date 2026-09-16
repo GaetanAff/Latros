@@ -1,0 +1,53 @@
+# Secrets and local settings
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Python and virtual environments
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+env/
+
+# Notebooks and local experiments
+.ipynb_checkpoints/
+wandb/
+mlruns/
+
+# Medical data and generated snapshots: version manifests only, never raw data
+data/raw/
+data/staging/
+data/canonical/
+data/runtime/
+patient-data/
+
+# Local model weights and inference caches
+models/
+checkpoints/
+*.safetensors
+*.gguf
+*.onnx
+
+# Local databases and exports
+*.duckdb
+*.sqlite
+*.sqlite3
+*.db
+*.parquet
+
+# Editor and operating system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
