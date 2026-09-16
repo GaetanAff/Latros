@@ -1,0 +1,180 @@
+{
+  "$defs": {
+    "Artifact": {
+      "additionalProperties": false,
+      "properties": {
+        "filename": {
+          "title": "Filename",
+          "type": "string"
+        },
+        "format": {
+          "enum": [
+            "obographs-json",
+            "orphadata-product4-xml"
+          ],
+          "title": "Format",
+          "type": "string"
+        },
+        "language": {
+          "enum": [
+            "en",
+            "fr"
+          ],
+          "title": "Language",
+          "type": "string"
+        },
+        "product": {
+          "title": "Product",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "url": {
+          "title": "Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "filename",
+        "product",
+        "format",
+        "language",
+        "url",
+        "sha256"
+      ],
+      "title": "Artifact",
+      "type": "object"
+    },
+    "License": {
+      "additionalProperties": false,
+      "properties": {
+        "attribution": {
+          "minLength": 1,
+          "title": "Attribution",
+          "type": "string"
+        },
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "notes": {
+          "default": "",
+          "title": "Notes",
+          "type": "string"
+        },
+        "redistribution": {
+          "enum": [
+            "allowed_with_attribution",
+            "restricted",
+            "unknown"
+          ],
+          "title": "Redistribution",
+          "type": "string"
+        },
+        "url": {
+          "minLength": 1,
+          "title": "Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "url",
+        "attribution",
+        "redistribution"
+      ],
+      "title": "License",
+      "type": "object"
+    },
+    "Source": {
+      "additionalProperties": false,
+      "properties": {
+        "artifacts": {
+          "items": {
+            "$ref": "#/$defs/Artifact"
+          },
+          "minItems": 1,
+          "title": "Artifacts",
+          "type": "array"
+        },
+        "authentication_required": {
+          "default": false,
+          "title": "Authentication Required",
+          "type": "boolean"
+        },
+        "homepage": {
+          "title": "Homepage",
+          "type": "string"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "license": {
+          "$ref": "#/$defs/License"
+        },
+        "release": {
+          "title": "Release",
+          "type": "string"
+        },
+        "release_date": {
+          "title": "Release Date",
+          "type": "string"
+        },
+        "role": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Role",
+          "type": "array"
+        },
+        "upstream_dependencies": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Upstream Dependencies",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "role",
+        "homepage",
+        "release",
+        "release_date",
+        "license",
+        "upstream_dependencies",
+        "artifacts"
+      ],
+      "title": "Source",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "sources": {
+      "items": {
+        "$ref": "#/$defs/Source"
+      },
+      "minItems": 1,
+      "title": "Sources",
+      "type": "array"
+    }
+  },
+  "required": [
+    "sources"
+  ],
+  "title": "Registry",
+  "type": "object"
+}

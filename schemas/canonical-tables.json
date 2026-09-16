@@ -1,0 +1,60 @@
+{
+  "schema": "canonical_v1",
+  "tables": {
+    "concept": {
+      "external_id": "VARCHAR",
+      "id": "VARCHAR",
+      "kind": "VARCHAR",
+      "label": "VARCHAR",
+      "obsolete": "BOOLEAN",
+      "source_release_id": "VARCHAR"
+    },
+    "disease_phenotype_assertion": {
+      "disease_id": "VARCHAR",
+      "frequency_json": "VARCHAR",
+      "id": "VARCHAR",
+      "languages_json": "VARCHAR",
+      "phenotype_id": "VARCHAR",
+      "polarity": "VARCHAR",
+      "provenance_json": "VARCHAR",
+      "source_phenotype_id": "VARCHAR",
+      "source_record_id": "VARCHAR",
+      "source_release_id": "VARCHAR"
+    },
+    "external_identifier": {
+      "concept_id": "VARCHAR",
+      "id": "VARCHAR",
+      "identifier": "VARCHAR",
+      "relation": "VARCHAR",
+      "source_release_id": "VARCHAR"
+    },
+    "hierarchy_edge": {
+      "child_id": "VARCHAR",
+      "id": "VARCHAR",
+      "parent_id": "VARCHAR",
+      "source_release_id": "VARCHAR"
+    },
+    "mapping": {
+      "evidence_json": "VARCHAR",
+      "id": "VARCHAR",
+      "relation": "VARCHAR",
+      "source_release_id": "VARCHAR",
+      "subject_id": "VARCHAR",
+      "target_external_id": "VARCHAR"
+    },
+    "source_release": {
+      "id": "VARCHAR",
+      "metadata_json": "VARCHAR",
+      "release": "VARCHAR",
+      "source_id": "VARCHAR"
+    },
+    "term": {
+      "concept_id": "VARCHAR",
+      "id": "VARCHAR",
+      "language": "VARCHAR",
+      "scope": "VARCHAR",
+      "source_release_id": "VARCHAR",
+      "text": "VARCHAR"
+    }
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "$defs": {
+    "Observation": {
+      "additionalProperties": false,
+      "properties": {
+        "concept_id": {
+          "pattern": "^HP:\\d{7}$",
+          "title": "Concept Id",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "present",
+            "absent",
+            "unknown"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "concept_id",
+        "status"
+      ],
+      "title": "Observation",
+      "type": "object"
+    },
+    "QuestionAnswer": {
+      "additionalProperties": false,
+      "properties": {
+        "answer": {
+          "enum": [
+            "present",
+            "absent",
+            "unknown"
+          ],
+          "title": "Answer",
+          "type": "string"
+        },
+        "concept_id": {
+          "pattern": "^HP:\\d{7}$",
+          "title": "Concept Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "concept_id",
+        "answer"
+      ],
+      "title": "QuestionAnswer",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "age": {
+      "anyOf": [
+        {
+          "maximum": 130,
+          "minimum": 0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Age"
+    },
+    "case_id": {
+      "maxLength": 120,
+      "minLength": 1,
+      "title": "Case Id",
+      "type": "string"
+    },
+    "observations": {
+      "items": {
+        "$ref": "#/$defs/Observation"
+      },
+      "title": "Observations",
+      "type": "array"
+    },
+    "question_history": {
+      "items": {
+        "$ref": "#/$defs/QuestionAnswer"
+      },
+      "maxItems": 12,
+      "title": "Question History",
+      "type": "array"
+    },
+    "sex": {
+      "anyOf": [
+        {
+          "enum": [
+            "male",
+            "female",
+            "intersex",
+            "unknown"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Sex"
+    }
+  },
+  "required": [
+    "case_id"
+  ],
+  "title": "ClinicalCase",
+  "type": "object"
+}

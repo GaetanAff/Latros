@@ -2,7 +2,7 @@
 
 ## Document de conception — phase 0
 
-**Statut :** document de discussion, sans choix technologique définitif et sans implémentation.
+**Statut actualisé le 16 septembre 2026 :** ce document conserve la vision initiale. Une première tranche interne de recherche est désormais autorisée et implémentée : maladies rares, CLI Python 3.11, HPO/Mondo/Orphadata, moteur `semantic_v1` et questions adaptatives. Voir [README](README.md) et [ADR 0001](docs/decisions/0001-socle-recherche.md) pour les choix applicables. Les autres composants ci-dessous restent prospectifs.
 
 **Objectif de la phase :** définir l'architecture scientifique, les responsabilités des composants, le modèle de données, les règles de provenance, les méthodes d'évaluation et les limites du projet avant de télécharger des jeux de données ou de coder le moteur.
 

@@ -16,6 +16,14 @@ __pycache__/
 .coverage
 htmlcov/
 .venv/
+.bootstrap/
+.uv-cache/
+*.egg-info/
+build/
+dist/
+data/.build-*/
+data/failures/
+data/examples/
 venv/
 env/
 
@@ -50,4 +58,3 @@ checkpoints/
 .idea/
 .DS_Store
 Thumbs.db
-

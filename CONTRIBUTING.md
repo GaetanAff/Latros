@@ -1,8 +1,8 @@
 # Contribuer à Latros
 
-## Règle de phase 0
+## Périmètre actuel
 
-Le projet est encore en conception. Toute modification doit préserver l'absence de choix technique définitif et ne doit pas introduire de moteur diagnostique, d'importateur de données ou de traitement de données patient sans décision d'architecture explicite.
+Le socle de recherche maladies rares est autorisé par le plan d'implémentation et [ADR 0001](docs/decisions/0001-socle-recherche.md). Python 3.11, uv, Pydantic, Typer, DuckDB/Parquet sont retenus pour cette tranche. Pas d'interface patient, de LLM, de triage ou de données patient réelles. La vision de phase 0 reste documentée dans `projet.md` mais n'interdit plus l'implémentation de ce périmètre.
 
 ## Avant une modification
 
@@ -22,6 +22,8 @@ Le projet est encore en conception. Toute modification doit préserver l'absence
 
 ## Pull requests
 
+Garder `main` stable : une branche par fonctionnalité, puis une pull request. Ne pas fusionner sans revue. Exécuter les contrôles du README et régénérer les schémas si les contrats changent. Un changement de sources ou d'implémentation de référence exige un nouvel identifiant de snapshot ; ne pas remplacer les anciens manifestes pour masquer une dérive.
+
 Une pull request doit expliquer :
 
 - le problème résolu ;
@@ -29,4 +31,3 @@ Une pull request doit expliquer :
 - les données ou licences concernées ;
 - les tests ou vérifications réalisés ;
 - l'impact éventuel sur la sécurité, la confidentialité ou l'explicabilité.
-

@@ -1,0 +1,66 @@
+schema_version: 1
+sources:
+  - id: hpo
+    role: [phenotype_ontology]
+    homepage: https://hpo.jax.org/
+    release: '2026-09-01'
+    release_date: '2026-09-01'
+    license:
+      name: LicenseRef-HPO
+      url: https://hpo.jax.org/app/license
+      attribution: Human Phenotype Ontology Consortium; release 2026-09-01
+      redistribution: restricted
+      notes: Ontology only. Respect HPO terms; HPOA and OMIM-derived annotations excluded.
+    authentication_required: false
+    upstream_dependencies: []
+    artifacts:
+      - filename: hp.json
+        product: HPO ontology
+        format: obographs-json
+        language: en
+        url: https://github.com/obophenotype/human-phenotype-ontology/releases/download/v2026-09-01/hp.json
+        sha256: a7b3a012e7b4007a35a7cf8da35f2373b54cc16907f80d13d62470d31f833501
+  - id: mondo
+    role: [disease_ontology, mappings]
+    homepage: https://mondo.monarchinitiative.org/
+    release: '2026-09-01'
+    release_date: '2026-09-01'
+    license:
+      name: CC-BY-4.0
+      url: https://creativecommons.org/licenses/by/4.0/
+      attribution: Mondo Disease Ontology contributors; release 2026-09-01
+      redistribution: allowed_with_attribution
+    authentication_required: false
+    upstream_dependencies: [Orphanet, Disease Ontology, OMIM-cross-references]
+    artifacts:
+      - filename: mondo.json
+        product: Mondo ontology
+        format: obographs-json
+        language: en
+        url: https://github.com/monarch-initiative/mondo/releases/download/v2026-09-01/mondo.json
+        sha256: ba19a3be2a384f21d2a09eaa726daedf6f06b9747ae011ab81d29fcd4dd8d3ee
+  - id: orphadata
+    role: [disease_phenotype_associations, translations]
+    homepage: https://sciences.orphadata.com/phenotypes/
+    release: '2026-07'
+    release_date: '2026-06-29'
+    license:
+      name: CC-BY-4.0
+      url: https://creativecommons.org/licenses/by/4.0/
+      attribution: 'Orphadata: Free access data from Orphanet. INSERM; July 2026. Archive commit 463f51d0db1d754b53e96027dd098a3d96a9c79c.'
+      redistribution: allowed_with_attribution
+    authentication_required: false
+    upstream_dependencies: [HPO]
+    artifacts:
+      - filename: en_product4.xml
+        product: Orphadata Science product 4
+        format: orphadata-product4-xml
+        language: en
+        url: https://media.githubusercontent.com/media/Orphanet/Orphadata_aggregated/463f51d0db1d754b53e96027dd098a3d96a9c79c/Rare%20diseases%20with%20associated%20phenotypes/en_product4.xml
+        sha256: 4f44e8a61201399911aa1ba44a293c0ccaa5ce11272c47d40862255cb72f6b32
+      - filename: fr_product4.xml
+        product: Orphadata Science product 4
+        format: orphadata-product4-xml
+        language: fr
+        url: https://media.githubusercontent.com/media/Orphanet/Orphadata_aggregated/463f51d0db1d754b53e96027dd098a3d96a9c79c/Rare%20diseases%20with%20associated%20phenotypes/fr_product4.xml
+        sha256: 526123718342e00b1905b79ed9de265a9fc51fc8bbe57a7e3852100f65fb4bd8

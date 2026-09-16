@@ -1,0 +1,11 @@
+{
+  "case_id": "synthetic-example-not-a-patient",
+  "age": 22,
+  "sex": "unknown",
+  "observations": [
+    {"concept_id": "HP:0001250", "status": "present"},
+    {"concept_id": "HP:0000256", "status": "present"},
+    {"concept_id": "HP:0001249", "status": "unknown"}
+  ],
+  "question_history": []
+}

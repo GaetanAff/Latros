@@ -2,6 +2,8 @@
 
 Ce dossier contient les décisions qui modifient durablement Latros : périmètre clinique, sources de données, licences, modèle de données, stratégie de raisonnement, sécurité, évaluation et choix techniques.
 
+Décision acceptée : [0001 — Socle local maladies rares et moteur pur](0001-socle-recherche.md).
+
 Utiliser un fichier par décision, par exemple :
 
 ```text
@@ -20,4 +22,3 @@ Conséquences
 Sources et licences concernées
 Date
 ```
-
