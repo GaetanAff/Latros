@@ -10,6 +10,13 @@ Le socle de recherche maladies rares est autorisé par le plan d'implémentation
 2. Créer ou commenter une issue pour les décisions qui modifient le périmètre, les données, les licences ou la sécurité clinique.
 3. Documenter les arbitrages importants dans `docs/decisions/`.
 4. Ne jamais committer de données personnelles, de poids de modèles, de jeux de données sous licence restrictive ou de secrets.
+5. Suivre [docs/plan.md](docs/plan.md) pour le périmètre de chaque jalon et les noms de snapshots (`v0.2.0` pour le premier snapshot médical).
+
+## Documentation à chaque livraison
+
+Actualiser `history.md`, `README.md` et `docs/plan.md` avec les changements réellement effectués, les commandes utilisables, les vérifications et les limites. Ajouter une entrée datée à l'historique sans effacer les anciennes réalisations. Mettre également à jour `projet.md`, les ADR, schémas, registre ou manifestes lorsque leurs informations changent. Une demande de discussion seule n'implique pas de modification du code.
+
+Les références de snapshots reprennent les versions du plan. Un identifiant publié est immuable ; une révision reçoit un nouvel identifiant documenté. La version du paquet Python et celle d'un snapshot restent distinctes.
 
 ## Principes de qualité
 

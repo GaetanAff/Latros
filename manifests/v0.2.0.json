@@ -1,0 +1,181 @@
+{
+  "build_code_sha256": "0f8cb80eb774bf992df65395753a3c724e9328a590a67371fbe886bb6763ce54",
+  "content_sha256": "1dca4e8f69925e3f49f87c3266c2a05005423ff7b70ad0df5864f735979f7d4a",
+  "duckdb_version": "1.5.5",
+  "errors": [],
+  "latros_version": "0.3.0",
+  "rules": {
+    "associations": "orphadata_product4_v1",
+    "bilingual": "same_record_verified_then_combined",
+    "frequency": "lossless; counts_Beta_1_1; category_interval_midpoint_only_for_reasoning",
+    "mapping": "explicit_exactMatch_only; xrefs_not_equivalence; ORPHA_identity_preserved",
+    "obsolete_hpo": "follow_unique_replaced_by; retain_inactive_without_replacement_unscored; unknown_fail",
+    "ontology": "obographs_v1",
+    "runtime_integrity": "local_receipt; canonical_hashes_define_snapshot_identity",
+    "safety": "not_evaluated",
+    "schema": "canonical_v1",
+    "scoring": "semantic_v1"
+  },
+  "schema_version": 1,
+  "snapshot": "v0.2.0",
+  "sources": [
+    {
+      "artifacts": [
+        {
+          "filename": "hp.json",
+          "format": "obographs-json",
+          "language": "en",
+          "product": "HPO ontology",
+          "sha256": "a7b3a012e7b4007a35a7cf8da35f2373b54cc16907f80d13d62470d31f833501",
+          "url": "https://github.com/obophenotype/human-phenotype-ontology/releases/download/v2026-09-01/hp.json"
+        }
+      ],
+      "authentication_required": false,
+      "homepage": "https://hpo.jax.org/",
+      "id": "hpo",
+      "license": {
+        "attribution": "Human Phenotype Ontology Consortium; release 2026-09-01",
+        "name": "LicenseRef-HPO",
+        "notes": "Ontology only. Respect HPO terms; HPOA and OMIM-derived annotations excluded.",
+        "redistribution": "restricted",
+        "url": "https://hpo.jax.org/app/license"
+      },
+      "release": "2026-09-01",
+      "release_date": "2026-09-01",
+      "role": [
+        "phenotype_ontology"
+      ],
+      "upstream_dependencies": []
+    },
+    {
+      "artifacts": [
+        {
+          "filename": "mondo.json",
+          "format": "obographs-json",
+          "language": "en",
+          "product": "Mondo ontology",
+          "sha256": "ba19a3be2a384f21d2a09eaa726daedf6f06b9747ae011ab81d29fcd4dd8d3ee",
+          "url": "https://github.com/monarch-initiative/mondo/releases/download/v2026-09-01/mondo.json"
+        }
+      ],
+      "authentication_required": false,
+      "homepage": "https://mondo.monarchinitiative.org/",
+      "id": "mondo",
+      "license": {
+        "attribution": "Mondo Disease Ontology contributors; release 2026-09-01",
+        "name": "CC-BY-4.0",
+        "notes": "",
+        "redistribution": "allowed_with_attribution",
+        "url": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      "release": "2026-09-01",
+      "release_date": "2026-09-01",
+      "role": [
+        "disease_ontology",
+        "mappings"
+      ],
+      "upstream_dependencies": [
+        "Orphanet",
+        "Disease Ontology",
+        "OMIM-cross-references"
+      ]
+    },
+    {
+      "artifacts": [
+        {
+          "filename": "en_product4.xml",
+          "format": "orphadata-product4-xml",
+          "language": "en",
+          "product": "Orphadata Science product 4",
+          "sha256": "4f44e8a61201399911aa1ba44a293c0ccaa5ce11272c47d40862255cb72f6b32",
+          "url": "https://media.githubusercontent.com/media/Orphanet/Orphadata_aggregated/463f51d0db1d754b53e96027dd098a3d96a9c79c/Rare%20diseases%20with%20associated%20phenotypes/en_product4.xml"
+        },
+        {
+          "filename": "fr_product4.xml",
+          "format": "orphadata-product4-xml",
+          "language": "fr",
+          "product": "Orphadata Science product 4",
+          "sha256": "526123718342e00b1905b79ed9de265a9fc51fc8bbe57a7e3852100f65fb4bd8",
+          "url": "https://media.githubusercontent.com/media/Orphanet/Orphadata_aggregated/463f51d0db1d754b53e96027dd098a3d96a9c79c/Rare%20diseases%20with%20associated%20phenotypes/fr_product4.xml"
+        }
+      ],
+      "authentication_required": false,
+      "homepage": "https://sciences.orphadata.com/phenotypes/",
+      "id": "orphadata",
+      "license": {
+        "attribution": "Orphadata: Free access data from Orphanet. INSERM; July 2026. Archive commit 463f51d0db1d754b53e96027dd098a3d96a9c79c.",
+        "name": "CC-BY-4.0",
+        "notes": "",
+        "redistribution": "allowed_with_attribution",
+        "url": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      "release": "2026-07",
+      "release_date": "2026-06-29",
+      "role": [
+        "disease_phenotype_associations",
+        "translations"
+      ],
+      "upstream_dependencies": [
+        "HPO"
+      ]
+    }
+  ],
+  "tables": {
+    "concept": {
+      "logical_sha256": "afdcdb5ec1be1fb0583e902b911cc515cbcc12816c4e1ec1c002b4d05fcddd69",
+      "parquet_sha256": "b98ea19a8063d7cc5f99d2509e545903a569048a80f021b87712f345ef8ba0fe",
+      "rows": 60928
+    },
+    "disease_phenotype_assertion": {
+      "logical_sha256": "eeb418af93cdd75701b7a49b0cc651b3894be5954ee910c40b2f180097378d43",
+      "parquet_sha256": "67ec731badbc69d9a7ecbee6a5de3d1a7f37710de4ce5f0249732f4ec829817f",
+      "rows": 116664
+    },
+    "external_identifier": {
+      "logical_sha256": "b4f7f6e3c64c753ad65a2dd2c55b3ab0716b03a2efff3780f9443c550741dfe5",
+      "parquet_sha256": "a72052ac634db2bcd42b6c49cd63b567e036f379992e52a7a8f1cd9a7cd5ae5d",
+      "rows": 64976
+    },
+    "hierarchy_edge": {
+      "logical_sha256": "483d3dd777c93f84214d10308a276dd2e844c3e438af2a6050236100c4660372",
+      "parquet_sha256": "db3c733f3140f92492442ddef73f2e396533e0de6f95bd7e4aab9f6ec2e94138",
+      "rows": 71018
+    },
+    "mapping": {
+      "logical_sha256": "cf25fa9c4a8385c7e1f7a7efb58a38b75590745c1561e19c1d6b869a95d752f8",
+      "parquet_sha256": "95888949982a6be45e85c62e59283c6e7f35e994938b9b1f1c8a6e7e3522be4a",
+      "rows": 23022
+    },
+    "source_release": {
+      "logical_sha256": "6ea200ad6dc40a4c4bcb79a3f7f325a295e887b64d0598789ae6a735445c6050",
+      "parquet_sha256": "b8901288591c44570ea9fc45ec2b2dfab49049ecf5138528903e04357d5f105a",
+      "rows": 3
+    },
+    "term": {
+      "logical_sha256": "cb7ee9d5a8ab586bcddb90f7edeb1c147f7330c45fbb7ae37e2789e991c17d22",
+      "parquet_sha256": "1177b18c6a86bd9f56079d7038a37c0da687475430464a42ee3d0abd5ede14eb",
+      "rows": 195396
+    }
+  },
+  "warnings": [
+    "Conflicting frequencies; retained, not usable for penalties/questions: ORPHA:101001 / HP:0001288",
+    "Conflicting frequencies; retained, not usable for penalties/questions: ORPHA:137888 / HP:0000377",
+    "Conflicting frequencies; retained, not usable for penalties/questions: ORPHA:191 / HP:0001288",
+    "Conflicting frequencies; retained, not usable for penalties/questions: ORPHA:273 / HP:0001262",
+    "Conflicting frequencies; retained, not usable for penalties/questions: ORPHA:275 / HP:0005403",
+    "Conflicting frequencies; retained, not usable for penalties/questions: ORPHA:3077 / HP:0000718",
+    "Conflicting frequencies; retained, not usable for penalties/questions: ORPHA:3385 / HP:0001288",
+    "Conflicting frequencies; retained, not usable for penalties/questions: ORPHA:405 / HP:0003072",
+    "Conflicting frequencies; retained, not usable for penalties/questions: ORPHA:487 / HP:0001288",
+    "Conflicting frequencies; retained, not usable for penalties/questions: ORPHA:581 / HP:0001249",
+    "Conflicting frequencies; retained, not usable for penalties/questions: ORPHA:60030 / HP:0001382",
+    "Conflicting frequencies; retained, not usable for penalties/questions: ORPHA:778 / HP:0001288",
+    "Conflicting frequencies; retained, not usable for penalties/questions: ORPHA:79244 / HP:0001288",
+    "Conflicting frequencies; retained, not usable for penalties/questions: ORPHA:83617 / HP:0010976",
+    "Conflicting frequencies; retained, not usable for penalties/questions: ORPHA:905 / HP:0001288",
+    "Conflicting frequencies; retained, not usable for penalties/questions: ORPHA:90658 / HP:0001288",
+    "Conflicting frequencies; retained, not usable for penalties/questions: ORPHA:93311 / HP:0001288",
+    "Conflicting frequencies; retained, not usable for penalties/questions: ORPHA:93314 / HP:0001288",
+    "Inactive HPO retained but excluded from reasoning: HP:0025237"
+  ]
+}

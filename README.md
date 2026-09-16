@@ -6,19 +6,21 @@ Prototype **interne de recherche** pour classer des maladies rares à partir de 
 
 La version de développement `0.3.0` regroupe le socle technique, le pipeline de données et le moteur pur. Voir [ADR 0001](docs/decisions/0001-socle-recherche.md) pour les décisions, [méthodologie](docs/methodology.md) pour les calculs et [projet.md](projet.md) pour la vision à long terme.
 
+Le [plan et son avancement](docs/plan.md) distinguent les trois étapes : fondation `v0.1.0`, premier snapshot médical `v0.2.0`, moteur pur `v0.3.0`. Le snapshot de référence s'appelle maintenant **`v0.2.0`**, conformément au jalon du plan. La version du paquet Python reste `0.3.0`, car le moteur est déjà présent. [history.md](history.md) conserve les réalisations et vérifications datées ; ces documents sont actualisés à chaque livraison.
+
 ## Installation
 
 Prérequis : Git, Python 3.11 et [uv](https://docs.astral.sh/uv/getting-started/installation/) (version utilisée en CI : `0.12.15`). L'installation initiale des dépendances et le téléchargement des sources nécessitent Internet. Ces commandes s'exécutent depuis la racine du dépôt sous PowerShell ou un shell Unix.
 
 ```text
-git clone https://github.com/GaetanAff/Latros.git
+git clone --branch feat/clinical-foundation https://github.com/GaetanAff/Latros.git
 cd Latros
 uv sync --locked --python 3.11
 uv run --no-sync latros --help
 uv run --no-sync latros sources validate
 ```
 
-Le dépôt est privé : Git doit disposer de votre authentification GitHub. `uv.lock` fixe les dépendances ; ne pas le mettre à jour pour reconstruire un snapshot historique. Pour récupérer les évolutions : `git pull --ff-only`, puis `uv sync --locked`.
+Le dépôt est privé : Git doit disposer de votre authentification GitHub. La commande choisit la branche de la [pull request #1](https://github.com/GaetanAff/Latros/pull/1), car `main` ne contient pas encore cette tranche. Après fusion, un clone de `main` pourra être utilisé. `uv.lock` fixe les dépendances ; ne pas le mettre à jour pour reconstruire un snapshot historique. Pour récupérer les évolutions : `git pull --ff-only`, puis `uv sync --locked`.
 
 ## Télécharger les sources épinglées
 
@@ -44,13 +46,15 @@ Les produits Orphadata sont fixés au commit `463f51d0db1d754b53e96027dd098a3d96
 ## Construire et inspecter hors ligne
 
 ```text
-uv run --offline --no-sync latros data build --snapshot latros-kb-0002
-uv run --offline --no-sync latros data inspect --snapshot latros-kb-0002
+uv run --offline --no-sync latros data build --snapshot v0.2.0
+uv run --offline --no-sync latros data inspect --snapshot v0.2.0
 ```
 
-Les sept tables canoniques sont publiées dans `data/canonical/latros-kb-0002/*.parquet`. Le runtime `data/runtime/latros-kb-0002/knowledge.duckdb` est ouvert en lecture seule par le moteur. Le [manifeste](manifests/latros-kb-0002.json) contient sources, hashes, comptes, version du code, transformations et avertissements. Le numéro 0001 correspondait à une reconstruction préparatoire locale, non publiée.
+Les sept tables canoniques sont publiées dans `data/canonical/v0.2.0/*.parquet`. Le runtime `data/runtime/v0.2.0/knowledge.duckdb` est ouvert en lecture seule par le moteur. Le [manifeste v0.2.0](manifests/v0.2.0.json) contient sources, hashes, comptes, version du code, transformations et avertissements. Cette référence reprend les mêmes données que l'ancien [latros-kb-0002](manifests/latros-kb-0002.json), conservé pour les reconstructions historiques. Le nouveau snapshot est construit séparément ; l'ancien manifeste n'est pas réécrit.
 
-Un clone qui possède le manifeste mais pas les données reconstruit le snapshot et vérifie l'égalité du résultat. Aucun téléchargement pendant `build`. Un snapshot existant n'est jamais écrasé : changement de sources ou d'implémentation ⇒ nouvel identifiant, par exemple `latros-kb-0003`. Un échec d'import produit un rapport local dans `data/failures/`, sans publier le snapshot.
+Un clone qui possède le manifeste mais pas les données reconstruit le snapshot et vérifie l'égalité du résultat. Aucun téléchargement pendant `build`. Un snapshot existant n'est jamais écrasé : un changement de sources ou d'implémentation nécessite un nouvel identifiant conforme au [plan](docs/plan.md), par exemple `v0.2.1` pour une révision de ce jalon. Un échec d'import produit un rapport local dans `data/failures/`, sans publier le snapshot.
+
+L'étape 2 contient 60 928 concepts et 116 664 assertions maladie–phénotype. Le manifeste conserve 19 avertissements : un concept HPO inactif et 18 couples à fréquences contradictoires. Les règles de conservation et d'exclusion du calcul sont décrites ci-dessous et dans l'ADR.
 
 Les hashes logiques portent sur les lignes triées et les hashes Parquet sur leurs fichiers : ils doivent être identiques à la reconstruction. Les octets du conteneur DuckDB peuvent différer malgré des données identiques ; son SHA-256 sert uniquement à détecter une corruption locale, dans `data/runtime/<snapshot>/integrity.json`, ignoré par Git. Le moteur vérifie ce reçu à chaque ouverture. Conserver le code et les dépendances verrouillées ; ne pas remplacer un manifeste historique pour masquer une dérive.
 
@@ -59,8 +63,8 @@ Les hashes logiques portent sur les lignes triées et les hashes Parquet sur leu
 L'exemple est **inventé**, sans patient réel. La CLI attend des identifiants HPO, pas du texte libre.
 
 ```text
-uv run --offline --no-sync latros diagnose --snapshot latros-kb-0002 --case examples/case.synthetic.json
-uv run --offline --no-sync latros question next --snapshot latros-kb-0002 --case examples/case.synthetic.json
+uv run --offline --no-sync latros diagnose --snapshot v0.2.0 --case examples/case.synthetic.json
+uv run --offline --no-sync latros question next --snapshot v0.2.0 --case examples/case.synthetic.json
 ```
 
 Format d'entrée :

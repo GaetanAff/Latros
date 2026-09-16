@@ -8,6 +8,8 @@ Dernière mise à jour : 16 septembre 2026.
 
 Latros est aujourd'hui un prototype local de recherche, utilisable en ligne de commande, qui prend un cas clinique **déjà structuré en identifiants HPO**, classe des maladies rares ORPHA selon une compatibilité sémantique explicable, puis propose une question discriminante. Il n'est ni un chatbot, ni une interface patient, ni un outil de triage ou de diagnostic clinique validé.
 
+Référence actuelle des données : **`v0.2.0`**, nom du jalon « Premier snapshot médical » dans le [plan d'implémentation](docs/plan.md). Le paquet reste à la version `0.3.0`, car le moteur de l'étape 3 était déjà inclus dans la première livraison. L'ancien snapshot `latros-kb-0002` est conservé.
+
 ## Décisions de cadrage antérieures
 
 - Le projet a été renommé **Latros** ; le nom initial était ClinAtlas.
@@ -16,7 +18,7 @@ Latros est aujourd'hui un prototype local de recherche, utilisable en ligne de c
 - La provenance, la version, la licence et les identifiants originaux doivent être conservés à chaque étape.
 - La première audience est l'équipe recherche/développement, pas des patients.
 - Le premier périmètre est les maladies rares, car HPO/Mondo/Orphadata sont structurés pour ce cas.
-- MedASR et toute intégration vocale sont retirés du périmètre. En particulier, MedASR n'a pas été intégré en raison de son inadéquation pratique pour une première version destinée à des patients francophones.
+- MedASR et toute intégration vocale sont retirés du périmètre à la demande de l'utilisateur. Aucune évaluation de MedASR n'a été réalisée dans cette tranche.
 - MedGemma est reporté à une couche future facultative de NLP/explication, après validation du moteur pur. TxGemma est reporté à un module thérapeutique séparé, futur et non clinique dans l'état actuel.
 - Aucune interface, API web, Docker, LLM local, modèle téléchargé, entraînement, audio ou recommandation thérapeutique n'a été développé dans cette tranche.
 
@@ -90,7 +92,7 @@ Principes appliqués :
 - Un concept HPO obsolète sans remplacement exact est conservé dans les données avec un avertissement, mais ne participe pas au raisonnement. Un lien `consider` n'est pas inventé comme une équivalence.
 - Des fréquences contradictoires pour un même couple maladie–phénotype, venant de records distincts, sont conservées et exposées ; elles sont exclues des pénalités et de la sélection des questions.
 
-Le manifeste canonique versionné est [latros-kb-0002.json](manifests/latros-kb-0002.json). Le snapshot complet lui-même est local et ignoré par Git.
+Le manifeste canonique de la première livraison était [latros-kb-0002.json](manifests/latros-kb-0002.json). Il est conservé ; la référence actuelle est [v0.2.0.json](manifests/v0.2.0.json), établie avec les mêmes données sous le nom du jalon du plan. Les snapshots complets sont locaux et ignorés par Git.
 
 Résultat du build réel effectué le 16 septembre 2026 :
 
@@ -119,7 +121,7 @@ Le contrat `ClinicalCase` contient :
 
 Le moteur `semantic_v1` fait actuellement ceci :
 
-1. Valide et résout les identifiants HPO, synonymes et remplacements uniques.
+1. Valide et résout les identifiants HPO, identifiants alternatifs et remplacements uniques. Les synonymes textuels sont stockés dans la base mais la CLI ne les interprète pas encore.
 2. Refuse les incohérences simples, par exemple un signe enfant présent avec son parent explicitement absent.
 3. Génère des candidats ORPHA ayant au moins une annotation compatible avec un signe présent, en utilisant la hiérarchie HPO.
 4. Calcule un contenu informationnel à partir du corpus du snapshot.
@@ -144,7 +146,7 @@ Les poids internes du questionnement sont uniquement un outil d'utilité : ils n
 
 ## Commandes disponibles maintenant
 
-Après installation avec `uv sync --locked --python 3.11` :
+Après installation avec `uv sync --locked --python 3.11`, lancer ces commandes avec `uv run --offline --no-sync` (omettre `--offline` pour les téléchargements) ou depuis l'environnement virtuel activé :
 
 ```text
 latros sources list
@@ -153,11 +155,11 @@ latros sources fetch --source hpo --release 2026-09-01
 latros sources fetch --source mondo --release 2026-09-01
 latros sources fetch --source orphadata --release 2026-07
 
-latros data build --snapshot latros-kb-0002
-latros data inspect --snapshot latros-kb-0002
+latros data build --snapshot v0.2.0
+latros data inspect --snapshot v0.2.0
 
-latros diagnose --snapshot latros-kb-0002 --case examples/case.synthetic.json
-latros question next --snapshot latros-kb-0002 --case examples/case.synthetic.json
+latros diagnose --snapshot v0.2.0 --case examples/case.synthetic.json
+latros question next --snapshot v0.2.0 --case examples/case.synthetic.json
 ```
 
 L'exemple [case.synthetic.json](examples/case.synthetic.json) est inventé. Il sert seulement à démontrer le format d'entrée. La CLI ne comprend pas encore une phrase libre telle que « j'ai mal à l'oreille » : cette future normalisation reste hors de la tranche actuelle.
@@ -185,7 +187,7 @@ L'exemple [case.synthetic.json](examples/case.synthetic.json) est inventé. Il s
 - Le dépôt contient seulement code, documentation, registre, schémas, manifeste et fixtures inventées.
 - Les licences HPO, Mondo et Orphadata sont indépendantes de la licence du code. HPO est marqué comme restreint dans le registre ; les fichiers de données ne sont pas redistribués dans le dépôt.
 
-## Prochaine discussion recommandée — sans coder
+## Suites possibles hors du plan initial — à discuter
 
 Avant toute nouvelle implémentation, choisir et documenter le prochain sujet :
 
@@ -197,3 +199,32 @@ Avant toute nouvelle implémentation, choisir et documenter le prochain sujet :
 6. Évaluation séparée d'un LLM seul, du moteur pur et d'un système hybride.
 
 Ne pas commencer ces chantiers simultanément : le choix le plus prudent est de valider d'abord la qualité et les limites du moteur pur sur un protocole d'évaluation écrit.
+
+## Journal des livraisons
+
+### 16 septembre 2026 — Première tranche et historique
+
+- `d7ef85c` : implémentation des trois jalons du plan, avec le premier snapshot référencé `latros-kb-0002` et le paquet Python `0.3.0`.
+- `0172228` : création de ce journal et explication de l'état du prototype ; aucune fonctionnalité du moteur ajoutée.
+- Publication dans la pull request #1, sur `feat/clinical-foundation` ; pas de fusion automatique dans `main`.
+
+### 16 septembre 2026 — Étape 2, référence v0.2.0 et suivi du plan
+
+Demande : poursuivre la deuxième étape, utiliser les noms du plan pour les snapshots et actualiser les documents à chaque livraison.
+
+Constat : les importeurs et le snapshot de l'étape 2 existaient déjà, tout comme le moteur de l'étape 3. Cette livraison établit la référence `v0.2.0` à partir des mêmes versions HPO/Mondo/Orphadata. L'ancien snapshot reste disponible et son manifeste est inchangé. Aucune nouvelle source ni fonction clinique n'est ajoutée.
+
+Documents actualisés : README (commandes et référence actuelle), ce journal, `projet.md`, `CONTRIBUTING.md` ; ajout de `docs/plan.md` pour suivre les trois jalons et d'`AGENTS.md` pour rendre la mise à jour documentaire explicite lors des prochaines interventions.
+
+Deux précisions de l'historique sont corrigées : MedASR a été retiré à la demande de l'utilisateur, sans évaluation de ce modèle dans cette tranche ; la CLI résout des identifiants alternatifs HPO, pas encore des synonymes saisis en texte libre.
+
+Validation de livraison :
+
+- Construction de `v0.2.0` par la CLI et inspection vérifiant les fichiers canoniques et le reçu d'intégrité runtime.
+- Sept tables identiques à `latros-kb-0002` : mêmes sources, comptes, hashes logiques, hashes Parquet, règles et avertissements. Seul l'identifiant du snapshot diffère dans les manifestes.
+- Reconstruction hors ligne depuis le manifeste épinglé et les sources locales : manifeste reconstruit strictement identique.
+- Hash de contenu : `1dca4e8f69925e3f49f87c3266c2a05005423ff7b70ad0df5864f735979f7d4a`.
+- 14 tests d'intégration du pipeline réussis à cette étape. La suite complète de 56 tests est également exécutée par la CI à chaque publication de la branche.
+- Anciens manifestes et code du moteur inchangés ; données générées exclues de Git. Le README indique la branche à cloner tant que la pull request #1 n'est pas fusionnée.
+
+Cette livraison complète la même tranche sur `feat/clinical-foundation`, dans la pull request #1. La publication concerne les documents et le manifeste `v0.2.0`, jamais les bases locales.

@@ -4,6 +4,8 @@
 
 **Statut actualisé le 16 septembre 2026 :** ce document conserve la vision initiale. Une première tranche interne de recherche est désormais autorisée et implémentée : maladies rares, CLI Python 3.11, HPO/Mondo/Orphadata, moteur `semantic_v1` et questions adaptatives. Voir [README](README.md) et [ADR 0001](docs/decisions/0001-socle-recherche.md) pour les choix applicables. Les autres composants ci-dessous restent prospectifs.
 
+**Suivi des étapes :** le [plan d'implémentation](docs/plan.md) décrit les jalons `v0.1.0`, `v0.2.0` et `v0.3.0`. Le snapshot de référence de l'étape 2 est `v0.2.0` ; le paquet Python reste `0.3.0`. [history.md](history.md), le README et le plan sont actualisés à chaque livraison.
+
 **Objectif de la phase :** définir l'architecture scientifique, les responsabilités des composants, le modèle de données, les règles de provenance, les méthodes d'évaluation et les limites du projet avant de télécharger des jeux de données ou de coder le moteur.
 
 ---

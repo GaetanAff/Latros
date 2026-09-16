@@ -1,0 +1,48 @@
+# Plan d'implémentation et avancement
+
+Référence : plan « Premières étapes de Latros — socle de données et moteur clinique pur » demandé par l'utilisateur. État au 16 septembre 2026.
+
+Les trois jalons avaient été implémentés ensemble dans la première tranche. La reprise de l'étape 2 consiste à vérifier sa livraison et à établir le snapshot sous le nom du jalon, `v0.2.0`. Elle ne correspond pas à l'ajout de nouvelles sources ou de fonctions cliniques.
+
+## Jalons du plan
+
+| Étape | Nom du plan | État logiciel | Référence des données |
+| --- | --- | --- | --- |
+| 1 | Fondation technique — `v0.1.0` | Implémentée : paquet, CLI sources, registre, téléchargements vérifiés, verrou et CI | Aucun snapshot médical nécessaire à ce jalon |
+| 2 | Premier snapshot médical — `v0.2.0` | Implémentée ; référence versionnée alignée sur le nom du plan | `manifests/v0.2.0.json` |
+| 3 | Moteur pur et interrogatoire — `v0.3.0` | Implémentée dans le paquet `0.3.0` ; évaluation clinique non réalisée | Le moteur utilise le snapshot `v0.2.0` |
+
+Il s'agit des étapes du plan, pas d'une série de releases GitHub publiées. Aucun tag ou changement de version rétroactif du paquet n'est nécessaire pour identifier un snapshot. L'évaluation clinique et les fonctionnalités futures restent à discuter séparément.
+
+## Étape 2 — périmètre livré
+
+- [x] HPO `2026-09-01`, Mondo `2026-09-01`, Orphadata product4 EN/FR `2026-07`, URLs épinglées et SHA-256 attendus dans le registre.
+- [x] Import des concepts, termes, hiérarchies, mappings et associations avec identifiants internes déterministes et identifiants sources conservés.
+- [x] Sept tables : `source_release`, `concept`, `term`, `external_identifier`, `hierarchy_edge`, `mapping`, `disease_phenotype_assertion`.
+- [x] Fréquences sans perte : k/n, pourcentage, intervalle, catégorie, exclusion, manquante.
+- [x] Source, release, record, langue, polarité, fréquence et chaîne d'ingestion conservés pour chaque assertion.
+- [x] Artefacts Parquet et runtime DuckDB utilisé en lecture seule, locaux et ignorés par Git.
+- [x] Manifeste versionné avec sources, hashes, comptes, règles de transformation, erreurs et avertissements.
+- [x] Rejet des identifiants internes non résolus, fréquences invalides, records dupliqués, provenance absente, conflits EN/FR et cycles hiérarchiques.
+- [x] Reconstruction hors ligne et égalité des hashes canoniques vérifiées avec les mêmes sources et dépendances verrouillées.
+
+Un concept obsolète qui existe dans HPO mais n'a pas de remplacement exact reste inactif ; un identifiant réellement inconnu bloque le build. Deux records distincts du producteur peuvent avoir des fréquences contradictoires : leurs assertions sont conservées et signalées, leurs fréquences sont écartées des pénalités/questions. Ces précisions sont actées dans [ADR 0001](decisions/0001-socle-recherche.md).
+
+## Convention de nommage des snapshots
+
+- Référence de l'étape 2 : **`v0.2.0`** dans `--snapshot`, `manifests/v0.2.0.json`, `data/canonical/v0.2.0/` et `data/runtime/v0.2.0/`.
+- Une révision du même jalon reçoit une nouvelle version, par exemple `v0.2.1`, et une entrée dans ce plan et dans l'historique.
+- Chaque nouveau jalon de données reçoit un nom documenté avant sa livraison. Un changement de moteur seul n'impose pas de renommer la base existante utilisée pour l'analyse ; reconstruire avec un code différent peut en revanche nécessiter une nouvelle référence, car le manifeste fixe le hash du code de construction.
+- Le nom d'un snapshot et `latros_version` désignent deux choses différentes. Ici, `snapshot: v0.2.0` est construit avec le paquet `latros_version: 0.3.0`.
+- Un snapshot publié et son manifeste restent immuables. `latros-kb-0002` est une ancienne référence conservée ; `v0.2.0` est une construction distincte dont les hashes de contenu et Parquet doivent être identiques.
+- Les IDs libres des fixtures ou expériences locales restent possibles ; seuls les noms des références livrées suivent cette convention.
+
+## Vérifications de la référence v0.2.0
+
+Le manifeste [v0.2.0.json](../manifests/v0.2.0.json) est la source des comptes et des hashes. La construction par la CLI, l'inspection vérifiant les hashes, la comparaison avec `latros-kb-0002` et une reconstruction depuis le manifeste seul et les sources locales ont réussi. Les sept tables et leurs hashes sont identiques ; le nouveau manifeste ne diffère de l'ancien que par son identifiant. Les 14 tests d'intégration du pipeline ont également réussi.
+
+Les données canoniques sont reproductibles ; le checksum du conteneur DuckDB, dont les octets internes peuvent varier, est enregistré séparément dans un reçu local. Les 19 avertissements du snapshot initial restent présents. Les tests synthétiques du pipeline vérifient ses refus d'entrées invalides ; ils ne mesurent pas la justesse médicale du moteur.
+
+## Mise à jour à chaque livraison
+
+Actualiser ensemble [history.md](../history.md), [README.md](../README.md) et ce plan : état réel des jalons, noms de snapshots, commandes, décisions, vérifications et limites. Si un contrat, une source ou une règle d'import change, actualiser également le schéma, le registre, le manifeste ou l'ADR concernés. Garder les réalisations antérieures dans le journal daté.
