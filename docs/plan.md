@@ -43,6 +43,20 @@ Une première veille des ressources de médecine générale est intégrée au ca
 
 Les futurs manifestes devront aussi déclarer le périmètre, les dépendances entre sources, les familles de preuves, les règles de déduplication et les profils de raisonnement compatibles. Le snapshot et le profil d'agrégation resteront versionnés séparément mais seront liés par leurs hashes dans chaque exécution. La référence historique `v0.2.0` ne sera pas réécrite.
 
+## Trajectoire v0.6 — médicaments et molécules
+
+La future tranche `v0.6` devra distinguer l'exposition réellement rapportée ou observée chez le
+patient, la substance active, le produit ou la présentation commercialisée et la classe
+thérapeutique. Une indication, un effet indésirable, une contre-indication, une interaction ou une
+contrainte d'usage sera une assertion médicale distincte, sourcée et versionnée ; ni un code de
+produit, ni un mapping ne devront devenir une preuve diagnostique ou une recommandation implicite.
+
+ATC, RxNorm et un référentiel français de produits seront évalués comme candidats de
+normalisation, avec audit préalable de couverture, version, licence, redistribution, identifiants
+et reproductibilité. Les premiers tests resteront synthétiques. Cette trajectoire ne crée pas de
+fonction de prescription, de calcul de dose, de choix de traitement ou de contrôle d'interactions :
+ces fonctions exigeraient un périmètre, des sources, des règles et une validation clinique propres.
+
 ## Étape 2 — périmètre livré
 
 - [x] HPO `2026-09-01`, Mondo `2026-09-01`, Orphadata product4 EN/FR `2026-07`, URLs épinglées et SHA-256 attendus dans le registre.

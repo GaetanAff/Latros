@@ -386,3 +386,17 @@ le moteur, ni les contrats, ni les données médicales.
 La pull request [#2 — v0.4 Clinical Knowledge Model](https://github.com/GaetanAff/Latros/pull/2)
 est fusionnée dans `main` après réussite des contrôles GitHub Linux et Windows, pour les événements
 `push` et `pull_request`. Le commit de fusion est `2315431ee62d9fce887812004c9fae89e5e5d20d`.
+
+### 17 septembre 2026 — exigence v0.6 : médicaments et molécules
+
+Le cahier des charges acte que `v0.6` distinguera l'exposition rapportée ou observée chez le patient,
+la substance active, le produit ou la présentation commercialisée et la classe thérapeutique. Les
+indications, effets indésirables, contre-indications, interactions et contraintes d'usage devront
+être des assertions médicales séparées, versionnées et traçables jusqu'à leurs sources ; elles ne
+seront jamais déduites d'un mapping ou d'un identifiant de produit.
+
+ATC, RxNorm et un référentiel français de produits sont seulement des candidats à auditer avant toute
+ingestion. Les critères obligatoires sont la couverture, l'autorité éditrice, la version, la licence,
+la redistribution, les identifiants stables et la reproductibilité. Les tests restent synthétiques
+tant que cette revue n'est pas close. Cette décision n'autorise ni prescription, ni calcul de dose,
+ni recommandation de traitement, ni vérification d'interactions.

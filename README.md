@@ -16,6 +16,11 @@ Le [plan et son avancement](docs/plan.md) distingue fondation `v0.1.0`, premier 
 
 Les futurs snapshots multi-sources devront publier leur périmètre, leurs dépendances, leurs règles de déduplication et leurs profils de raisonnement compatibles. Le snapshot de connaissance et le profil d'agrégation seront versionnés séparément puis liés par leurs hashes dans chaque exécution ; `v0.2.0` reste immuable.
 
+La trajectoire `v0.6` inclut explicitement les médicaments : exposition observée, substance active,
+produit commercialisé, classe thérapeutique et assertions médicales sourcées resteront des objets
+distincts. Cette préparation ne constitue ni une recommandation de traitement, ni une fonction de
+prescription ; le détail est consigné dans le [cahier v0.4](docs/v0.4-clinical-knowledge-model.md).
+
 `v0.4-D` fournit désormais le [schéma canonique v2](schemas/knowledge-model-v2.schema.json) et
 la liste de ses [tables conceptuelles](schemas/canonical-tables-v2.json). L'adaptateur v1 est une
 projection en lecture seule : il distingue enregistrements sources, assertions canoniques et
