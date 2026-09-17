@@ -11,7 +11,7 @@ Les trois jalons avaient été implémentés ensemble dans la première tranche.
 | 1 | Fondation technique — `v0.1.0` | Implémentée : paquet, CLI sources, registre, téléchargements vérifiés, verrou et CI | Aucun snapshot médical nécessaire à ce jalon |
 | 2 | Premier snapshot médical — `v0.2.0` | Implémentée ; référence versionnée alignée sur le nom du plan | `manifests/v0.2.0.json` |
 | 3 | Moteur pur et interrogatoire — `v0.3.0` | Implémentée dans le paquet `0.3.0` ; évaluation clinique non réalisée | Le moteur utilise le snapshot `v0.2.0` |
-| 4 | Clinical Knowledge Model — `v0.4` | `v0.4-F` livré : sorties explicables, couverture, abstention et reçus | La référence reste `v0.2.0` ; aucun snapshot médical v2 publié |
+| 4 | Clinical Knowledge Model — `v0.4` | `v0.4-G` livré : audit v0.5 terminé avec `NO-GO` temporaire documenté | La référence reste `v0.2.0` ; aucun snapshot médical v2 publié |
 
 Il s'agit des étapes du plan, pas d'une série de releases GitHub publiées. Aucun tag ou changement de version rétroactif du paquet n'est nécessaire pour identifier un snapshot. L'évaluation clinique et les fonctionnalités futures restent à discuter séparément.
 
@@ -32,6 +32,12 @@ moteur historique derrière quatre interfaces et un profil hashé, sans changer 
 `v0.4-F` expose les contrats v2 par la CLI en mode automatique ou explicite, avec couverture,
 abstention, preuves par source et reçu déterministe. Le format v1 par défaut d'un cas v1 reste
 strictement identique. Aucun snapshot n'est modifié.
+
+`v0.4-G` vérifie les pages officielles ANS, SNOMED International et HAS. SNOMED CT France reste la
+terminologie candidate et la recommandation HAS le corpus d'assertions candidat, mais l'ingestion
+est en `NO-GO` jusqu'à résolution des licences, droits tiers, redistribution et revue clinique. Le
+détail et les critères de sortie sont conservés dans
+[`docs/source-audits/v0.5-orl.md`](source-audits/v0.5-orl.md).
 
 Une première veille des ressources de médecine générale est intégrée au cahier des charges. Elle sépare terminologies, classifications, standards d'échange, sources d'assertions, règles cliniques, jeux synthétiques et benchmarks. Les matrices Kaggle/Mendeley ne sont pas retenues comme connaissance clinique tant que leur provenance n'est pas démontrée ; SNOMED CT, ICD, FHIR, LOINC, UCUM, UMLS, DDXPlus, Synthea, WHO SMART Guidelines, HealthBench, MIMIC-IV et ClinicDx sont positionnés selon leur rôle et une étape éventuelle, sans décision d'intégration anticipée.
 

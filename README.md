@@ -26,6 +26,11 @@ n'extrait que les observations HPO confirmées et actives ; les propositions et 
 ne participent jamais au score. Le calcul historique n'a pas été déplacé : l'adaptateur appelle
 toujours `Engine` et `question_v1`, dont les sorties v1 restent protégées par les tests d'or.
 
+L'[audit des sources ORL de v0.5](docs/source-audits/v0.5-orl.md) conclut à un `NO-GO`
+temporaire pour toute ingestion réelle : SNOMED France exige les licences adaptées et le modèle de
+redistribution doit être clarifié ; la fiche HAS coélaborée avec des tiers exige une autorisation
+écrite et une double revue clinique. Aucun dataset moins fiable ne la remplace automatiquement.
+
 ## Installation
 
 Prérequis : Git, Python 3.11 et [uv](https://docs.astral.sh/uv/getting-started/installation/) (version utilisée en CI : `0.12.15`). L'installation initiale des dépendances et le téléchargement des sources nécessitent Internet. Ces commandes s'exécutent depuis la racine du dépôt sous PowerShell ou un shell Unix.

@@ -343,3 +343,21 @@ transformations et version logicielle. La CLI choisit automatiquement la sortie 
 v1 et la sortie v2 pour un cas v2 ; des options explicites permettent de forcer le contrat. Huit
 tests supplémentaires portent la suite à 92 tests verts. Aucun reçu n'est persisté, aucun manifeste
 historique ou calcul de `semantic_v1` n'est modifié.
+
+### 17 septembre 2026 — v0.4-G, audit des sources ORL de v0.5
+
+L'audit officiel de SNOMED CT France et de la fiche HAS sur l'angine aiguë adulte est consigné dans
+`docs/source-audits/v0.5-orl.md`. L'édition nationale française de juin 2026 est confirmée comme
+terminologie candidate, mais son téléchargement et son implémentation exigent affiliation et
+licence nationale. La redistribution d'alignements ou dérivés et le modèle de sous-licence de
+Latros doivent être clarifiés avec le NRC.
+
+La fiche HAS contient un premier ensemble structurable, mais elle a été élaborée avec plusieurs
+organisations tierces. Les mentions légales excluent de la réutilisation libre les contenus grevés
+de droits tiers. Une autorisation écrite, une curation atomique et deux relectures dont une clinique
+sont donc des prérequis. DDXPlus est maintenu comme benchmark synthétique éventuel uniquement.
+
+La décision `v0.5` est un `NO-GO` temporaire pour les données réelles. Des fixtures et importeurs
+synthétiques peuvent être préparés, mais aucun snapshot ou score de médecine générale ne doit être
+publié avant levée de toutes les conditions. Aucun téléchargement, ingestion, manifeste ou snapshot
+n'a été créé pendant cet audit.
