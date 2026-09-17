@@ -12,6 +12,14 @@ Le [plan et son avancement](docs/plan.md) distinguent les trois étapes : fondat
 
 Les futurs snapshots multi-sources devront publier leur périmètre, leurs dépendances, leurs règles de déduplication et leurs profils de raisonnement compatibles. Le snapshot de connaissance et le profil d'agrégation seront versionnés séparément puis liés par leurs hashes dans chaque exécution ; `v0.2.0` reste immuable.
 
+`v0.4-D` fournit désormais le [schéma canonique v2](schemas/knowledge-model-v2.schema.json) et
+la liste de ses [tables conceptuelles](schemas/canonical-tables-v2.json). L'adaptateur v1 est une
+projection en lecture seule : il distingue enregistrements sources, assertions canoniques et
+dérivations, conserve chaque provenance bilingue et ne transforme jamais un mapping en preuve
+clinique. Les répétitions sémantiques restent auditables comme lignes sources mais partagent une
+famille de preuve ; elles ne deviennent donc pas plusieurs confirmations indépendantes. Ces
+contrats sont validés sur fixtures inventées et ne constituent pas un nouveau snapshot médical.
+
 ## Installation
 
 Prérequis : Git, Python 3.11 et [uv](https://docs.astral.sh/uv/getting-started/installation/) (version utilisée en CI : `0.12.15`). L'installation initiale des dépendances et le téléchargement des sources nécessitent Internet. Ces commandes s'exécutent depuis la racine du dépôt sous PowerShell ou un shell Unix.

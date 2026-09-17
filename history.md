@@ -289,3 +289,20 @@ migration HPO v1 → v2 est déterministe et idempotente. Le schéma JSON v2 est
 tests dédiés portent la suite à 72 tests verts ; Ruff, formatage, mypy strict et export des schémas
 sont également verts. La CLI, `semantic_v1`, les sorties v1 et le snapshot `v0.2.0` restent
 fonctionnellement inchangés.
+
+### 17 septembre 2026 — v0.4-D, Knowledge Model et projection v1
+
+Le Knowledge Model v2 introduit des contrats séparés pour les releases et artefacts sources, les
+records bruts, les concepts et terminologies, les mappings, les assertions sources et canoniques,
+leurs dérivations, les familles de preuves et les dépendances. Un mapping, même exact, reste un
+objet terminologique et ne produit jamais implicitement une assertion diagnostique.
+
+Les identités sources incluent la release, les hashes d'artefacts, le localisateur du record et son
+ordinal. L'identité canonique exclut libellés et provenance pour permettre une déduplication
+auditée. Les doublons sources sont conservés, mais une signature canonique identique issue de la
+même source partage une famille de preuve. Une dépendance inconnue empêche l'agrégation par défaut.
+
+L'adaptateur du snapshot v1 expose HPO/Mondo/Orphadata sous ces contrats sans réécrire ses sept
+tables. Les provenances EN/FR deviennent deux artefacts d'une seule assertion source. Les schémas
+`knowledge-model-v2.schema.json` et `canonical-tables-v2.json` sont versionnés. Six tests dédiés
+portent la suite à 78 tests verts. Aucun snapshot médical v2 n'est publié et `v0.2.0` reste intact.

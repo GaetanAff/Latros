@@ -1,0 +1,1191 @@
+{
+  "$defs": {
+    "AssertionDerivation": {
+      "additionalProperties": false,
+      "properties": {
+        "canonical_assertion_id": {
+          "minLength": 1,
+          "title": "Canonical Assertion Id",
+          "type": "string"
+        },
+        "derivation_id": {
+          "minLength": 1,
+          "title": "Derivation Id",
+          "type": "string"
+        },
+        "rule_id": {
+          "minLength": 1,
+          "title": "Rule Id",
+          "type": "string"
+        },
+        "rule_version": {
+          "minLength": 1,
+          "title": "Rule Version",
+          "type": "string"
+        },
+        "source_assertion_id": {
+          "minLength": 1,
+          "title": "Source Assertion Id",
+          "type": "string"
+        },
+        "transformations": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Transformations",
+          "type": "array"
+        }
+      },
+      "required": [
+        "derivation_id",
+        "source_assertion_id",
+        "canonical_assertion_id",
+        "rule_id",
+        "rule_version"
+      ],
+      "title": "AssertionDerivation",
+      "type": "object"
+    },
+    "AssertionQualifiers": {
+      "additionalProperties": false,
+      "properties": {
+        "age": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/IntervalObject"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "clinical_context": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Clinical Context"
+        },
+        "evidence_level": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Evidence Level"
+        },
+        "evidence_type": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Evidence Type"
+        },
+        "frequency": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Frequency"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "polarity": {
+          "default": "present",
+          "enum": [
+            "present",
+            "excluded",
+            "unknown"
+          ],
+          "title": "Polarity",
+          "type": "string"
+        },
+        "population": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Population",
+          "type": "array"
+        },
+        "sex": {
+          "anyOf": [
+            {
+              "enum": [
+                "male",
+                "female",
+                "intersex",
+                "any",
+                "unknown"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sex"
+        },
+        "temporal_context": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Temporal Context"
+        }
+      },
+      "title": "AssertionQualifiers",
+      "type": "object"
+    },
+    "CanonicalAssertion": {
+      "additionalProperties": false,
+      "properties": {
+        "canonical_assertion_id": {
+          "minLength": 1,
+          "title": "Canonical Assertion Id",
+          "type": "string"
+        },
+        "object": {
+          "discriminator": {
+            "mapping": {
+              "coded": "#/$defs/CodedObject",
+              "concept": "#/$defs/ConceptObject",
+              "interval": "#/$defs/IntervalObject",
+              "quantity": "#/$defs/QuantityObject"
+            },
+            "propertyName": "kind"
+          },
+          "oneOf": [
+            {
+              "$ref": "#/$defs/ConceptObject"
+            },
+            {
+              "$ref": "#/$defs/CodedObject"
+            },
+            {
+              "$ref": "#/$defs/QuantityObject"
+            },
+            {
+              "$ref": "#/$defs/IntervalObject"
+            }
+          ],
+          "title": "Object"
+        },
+        "qualifiers": {
+          "$ref": "#/$defs/AssertionQualifiers"
+        },
+        "relation": {
+          "enum": [
+            "has_symptom",
+            "has_sign",
+            "has_risk_factor",
+            "has_lab_finding",
+            "has_exam_finding",
+            "has_imaging_finding",
+            "typical_age",
+            "typical_sex",
+            "has_complication"
+          ],
+          "title": "Relation",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": 2,
+          "default": 2,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "subject_concept_id": {
+          "minLength": 1,
+          "title": "Subject Concept Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "canonical_assertion_id",
+        "subject_concept_id",
+        "relation",
+        "object"
+      ],
+      "title": "CanonicalAssertion",
+      "type": "object"
+    },
+    "CodedObject": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "minLength": 1,
+          "title": "Code",
+          "type": "string"
+        },
+        "kind": {
+          "const": "coded",
+          "default": "coded",
+          "title": "Kind",
+          "type": "string"
+        },
+        "system": {
+          "minLength": 1,
+          "title": "System",
+          "type": "string"
+        }
+      },
+      "required": [
+        "system",
+        "code"
+      ],
+      "title": "CodedObject",
+      "type": "object"
+    },
+    "ConceptMappingV2": {
+      "additionalProperties": false,
+      "properties": {
+        "direction": {
+          "enum": [
+            "source_to_target",
+            "bidirectional"
+          ],
+          "title": "Direction",
+          "type": "string"
+        },
+        "evidence": {
+          "additionalProperties": true,
+          "title": "Evidence",
+          "type": "object"
+        },
+        "mapping_id": {
+          "minLength": 1,
+          "title": "Mapping Id",
+          "type": "string"
+        },
+        "original_relation": {
+          "minLength": 1,
+          "title": "Original Relation",
+          "type": "string"
+        },
+        "relation": {
+          "enum": [
+            "exact",
+            "equivalent",
+            "broader",
+            "narrower",
+            "related",
+            "unresolved"
+          ],
+          "title": "Relation",
+          "type": "string"
+        },
+        "resolution_status": {
+          "enum": [
+            "resolved",
+            "ambiguous",
+            "unresolved"
+          ],
+          "title": "Resolution Status",
+          "type": "string"
+        },
+        "source_concept_id": {
+          "minLength": 1,
+          "title": "Source Concept Id",
+          "type": "string"
+        },
+        "source_release_id": {
+          "minLength": 1,
+          "title": "Source Release Id",
+          "type": "string"
+        },
+        "target_code": {
+          "minLength": 1,
+          "title": "Target Code",
+          "type": "string"
+        },
+        "target_concept_id": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Target Concept Id"
+        },
+        "target_system": {
+          "minLength": 1,
+          "title": "Target System",
+          "type": "string"
+        }
+      },
+      "required": [
+        "mapping_id",
+        "source_concept_id",
+        "target_system",
+        "target_code",
+        "direction",
+        "relation",
+        "original_relation",
+        "source_release_id",
+        "evidence",
+        "resolution_status"
+      ],
+      "title": "ConceptMappingV2",
+      "type": "object"
+    },
+    "ConceptObject": {
+      "additionalProperties": false,
+      "properties": {
+        "concept_id": {
+          "minLength": 1,
+          "title": "Concept Id",
+          "type": "string"
+        },
+        "kind": {
+          "const": "concept",
+          "default": "concept",
+          "title": "Kind",
+          "type": "string"
+        }
+      },
+      "required": [
+        "concept_id"
+      ],
+      "title": "ConceptObject",
+      "type": "object"
+    },
+    "ConceptV2": {
+      "additionalProperties": false,
+      "properties": {
+        "concept_id": {
+          "minLength": 1,
+          "title": "Concept Id",
+          "type": "string"
+        },
+        "kind": {
+          "minLength": 1,
+          "title": "Kind",
+          "type": "string"
+        },
+        "primary_code": {
+          "minLength": 1,
+          "title": "Primary Code",
+          "type": "string"
+        },
+        "source_release_id": {
+          "minLength": 1,
+          "title": "Source Release Id",
+          "type": "string"
+        },
+        "status": {
+          "default": "active",
+          "enum": [
+            "active",
+            "obsolete"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "concept_id",
+        "kind",
+        "primary_code",
+        "source_release_id"
+      ],
+      "title": "ConceptV2",
+      "type": "object"
+    },
+    "DesignationV2": {
+      "additionalProperties": false,
+      "properties": {
+        "concept_id": {
+          "minLength": 1,
+          "title": "Concept Id",
+          "type": "string"
+        },
+        "designation_id": {
+          "minLength": 1,
+          "title": "Designation Id",
+          "type": "string"
+        },
+        "language": {
+          "minLength": 1,
+          "title": "Language",
+          "type": "string"
+        },
+        "scope": {
+          "minLength": 1,
+          "title": "Scope",
+          "type": "string"
+        },
+        "source_release_id": {
+          "minLength": 1,
+          "title": "Source Release Id",
+          "type": "string"
+        },
+        "text": {
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "designation_id",
+        "concept_id",
+        "language",
+        "text",
+        "scope",
+        "source_release_id"
+      ],
+      "title": "DesignationV2",
+      "type": "object"
+    },
+    "EvidenceFamily": {
+      "additionalProperties": false,
+      "properties": {
+        "dependency_type": {
+          "enum": [
+            "primary",
+            "derived_from",
+            "republication",
+            "shared_upstream",
+            "unknown"
+          ],
+          "title": "Dependency Type",
+          "type": "string"
+        },
+        "evidence_family_id": {
+          "minLength": 1,
+          "title": "Evidence Family Id",
+          "type": "string"
+        },
+        "primary_reference": {
+          "minLength": 1,
+          "title": "Primary Reference",
+          "type": "string"
+        },
+        "source_assertion_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Source Assertion Ids",
+          "type": "array"
+        },
+        "source_release_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Source Release Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "evidence_family_id",
+        "source_release_ids",
+        "source_assertion_ids",
+        "dependency_type",
+        "primary_reference"
+      ],
+      "title": "EvidenceFamily",
+      "type": "object"
+    },
+    "ExternalIdentifierV2": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "minLength": 1,
+          "title": "Code",
+          "type": "string"
+        },
+        "concept_id": {
+          "minLength": 1,
+          "title": "Concept Id",
+          "type": "string"
+        },
+        "external_identifier_id": {
+          "minLength": 1,
+          "title": "External Identifier Id",
+          "type": "string"
+        },
+        "relation": {
+          "minLength": 1,
+          "title": "Relation",
+          "type": "string"
+        },
+        "source_release_id": {
+          "minLength": 1,
+          "title": "Source Release Id",
+          "type": "string"
+        },
+        "system": {
+          "minLength": 1,
+          "title": "System",
+          "type": "string"
+        }
+      },
+      "required": [
+        "external_identifier_id",
+        "concept_id",
+        "system",
+        "code",
+        "relation",
+        "source_release_id"
+      ],
+      "title": "ExternalIdentifierV2",
+      "type": "object"
+    },
+    "Frequency": {
+      "additionalProperties": false,
+      "properties": {
+        "category": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Category"
+        },
+        "denominator": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Denominator"
+        },
+        "kind": {
+          "enum": [
+            "count",
+            "percentage",
+            "interval",
+            "category",
+            "excluded",
+            "missing"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "lower": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Lower"
+        },
+        "numerator": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Numerator"
+        },
+        "raw": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Raw"
+        },
+        "upper": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Upper"
+        }
+      },
+      "required": [
+        "kind"
+      ],
+      "title": "Frequency",
+      "type": "object"
+    },
+    "HierarchyEdgeV2": {
+      "additionalProperties": false,
+      "properties": {
+        "child_concept_id": {
+          "minLength": 1,
+          "title": "Child Concept Id",
+          "type": "string"
+        },
+        "hierarchy_edge_id": {
+          "minLength": 1,
+          "title": "Hierarchy Edge Id",
+          "type": "string"
+        },
+        "parent_concept_id": {
+          "minLength": 1,
+          "title": "Parent Concept Id",
+          "type": "string"
+        },
+        "relation": {
+          "const": "is_a",
+          "default": "is_a",
+          "title": "Relation",
+          "type": "string"
+        },
+        "source_release_id": {
+          "minLength": 1,
+          "title": "Source Release Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "hierarchy_edge_id",
+        "child_concept_id",
+        "parent_concept_id",
+        "source_release_id"
+      ],
+      "title": "HierarchyEdgeV2",
+      "type": "object"
+    },
+    "IntervalObject": {
+      "additionalProperties": false,
+      "properties": {
+        "high": {
+          "title": "High",
+          "type": "number"
+        },
+        "kind": {
+          "const": "interval",
+          "default": "interval",
+          "title": "Kind",
+          "type": "string"
+        },
+        "low": {
+          "title": "Low",
+          "type": "number"
+        },
+        "unit_code": {
+          "minLength": 1,
+          "title": "Unit Code",
+          "type": "string"
+        },
+        "unit_system": {
+          "minLength": 1,
+          "title": "Unit System",
+          "type": "string"
+        }
+      },
+      "required": [
+        "low",
+        "high",
+        "unit_system",
+        "unit_code"
+      ],
+      "title": "IntervalObject",
+      "type": "object"
+    },
+    "QuantityObject": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "quantity",
+          "default": "quantity",
+          "title": "Kind",
+          "type": "string"
+        },
+        "unit_code": {
+          "minLength": 1,
+          "title": "Unit Code",
+          "type": "string"
+        },
+        "unit_system": {
+          "minLength": 1,
+          "title": "Unit System",
+          "type": "string"
+        },
+        "value": {
+          "title": "Value",
+          "type": "number"
+        }
+      },
+      "required": [
+        "value",
+        "unit_system",
+        "unit_code"
+      ],
+      "title": "QuantityObject",
+      "type": "object"
+    },
+    "SourceArtifactV2": {
+      "additionalProperties": false,
+      "properties": {
+        "artifact_id": {
+          "minLength": 1,
+          "title": "Artifact Id",
+          "type": "string"
+        },
+        "filename": {
+          "minLength": 1,
+          "title": "Filename",
+          "type": "string"
+        },
+        "format": {
+          "minLength": 1,
+          "title": "Format",
+          "type": "string"
+        },
+        "language": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Language"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "source_release_id": {
+          "minLength": 1,
+          "title": "Source Release Id",
+          "type": "string"
+        },
+        "source_url": {
+          "minLength": 1,
+          "title": "Source Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "artifact_id",
+        "source_release_id",
+        "filename",
+        "sha256",
+        "format",
+        "source_url"
+      ],
+      "title": "SourceArtifactV2",
+      "type": "object"
+    },
+    "SourceAssertion": {
+      "additionalProperties": false,
+      "properties": {
+        "artifact_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Artifact Ids",
+          "type": "array"
+        },
+        "object": {
+          "discriminator": {
+            "mapping": {
+              "coded": "#/$defs/CodedObject",
+              "concept": "#/$defs/ConceptObject",
+              "interval": "#/$defs/IntervalObject",
+              "quantity": "#/$defs/QuantityObject"
+            },
+            "propertyName": "kind"
+          },
+          "oneOf": [
+            {
+              "$ref": "#/$defs/ConceptObject"
+            },
+            {
+              "$ref": "#/$defs/CodedObject"
+            },
+            {
+              "$ref": "#/$defs/QuantityObject"
+            },
+            {
+              "$ref": "#/$defs/IntervalObject"
+            }
+          ],
+          "title": "Object"
+        },
+        "qualifiers": {
+          "$ref": "#/$defs/AssertionQualifiers"
+        },
+        "raw_value": {
+          "additionalProperties": true,
+          "title": "Raw Value",
+          "type": "object"
+        },
+        "record_ordinal": {
+          "minimum": 0,
+          "title": "Record Ordinal",
+          "type": "integer"
+        },
+        "relation": {
+          "enum": [
+            "has_symptom",
+            "has_sign",
+            "has_risk_factor",
+            "has_lab_finding",
+            "has_exam_finding",
+            "has_imaging_finding",
+            "typical_age",
+            "typical_sex",
+            "has_complication"
+          ],
+          "title": "Relation",
+          "type": "string"
+        },
+        "source_assertion_id": {
+          "minLength": 1,
+          "title": "Source Assertion Id",
+          "type": "string"
+        },
+        "source_record_id": {
+          "minLength": 1,
+          "title": "Source Record Id",
+          "type": "string"
+        },
+        "source_release_id": {
+          "minLength": 1,
+          "title": "Source Release Id",
+          "type": "string"
+        },
+        "subject_concept_id": {
+          "minLength": 1,
+          "title": "Subject Concept Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_assertion_id",
+        "subject_concept_id",
+        "relation",
+        "object",
+        "source_release_id",
+        "source_record_id",
+        "artifact_ids",
+        "record_ordinal",
+        "raw_value"
+      ],
+      "title": "SourceAssertion",
+      "type": "object"
+    },
+    "SourceDependency": {
+      "additionalProperties": false,
+      "properties": {
+        "dependency_type": {
+          "enum": [
+            "primary",
+            "derived_from",
+            "republication",
+            "shared_upstream",
+            "unknown"
+          ],
+          "title": "Dependency Type",
+          "type": "string"
+        },
+        "evidence": {
+          "minLength": 1,
+          "title": "Evidence",
+          "type": "string"
+        },
+        "source_dependency_id": {
+          "minLength": 1,
+          "title": "Source Dependency Id",
+          "type": "string"
+        },
+        "source_release_id": {
+          "minLength": 1,
+          "title": "Source Release Id",
+          "type": "string"
+        },
+        "upstream_reference": {
+          "minLength": 1,
+          "title": "Upstream Reference",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_dependency_id",
+        "source_release_id",
+        "upstream_reference",
+        "dependency_type",
+        "evidence"
+      ],
+      "title": "SourceDependency",
+      "type": "object"
+    },
+    "SourceRecordV2": {
+      "additionalProperties": false,
+      "properties": {
+        "artifact_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Artifact Ids",
+          "type": "array"
+        },
+        "raw_value": {
+          "additionalProperties": true,
+          "title": "Raw Value",
+          "type": "object"
+        },
+        "record_locator": {
+          "minLength": 1,
+          "title": "Record Locator",
+          "type": "string"
+        },
+        "source_record_id": {
+          "minLength": 1,
+          "title": "Source Record Id",
+          "type": "string"
+        },
+        "source_release_id": {
+          "minLength": 1,
+          "title": "Source Release Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_record_id",
+        "source_release_id",
+        "artifact_ids",
+        "record_locator",
+        "raw_value"
+      ],
+      "title": "SourceRecordV2",
+      "type": "object"
+    },
+    "SourceReleaseV2": {
+      "additionalProperties": false,
+      "properties": {
+        "attribution": {
+          "minLength": 1,
+          "title": "Attribution",
+          "type": "string"
+        },
+        "license_name": {
+          "minLength": 1,
+          "title": "License Name",
+          "type": "string"
+        },
+        "license_url": {
+          "minLength": 1,
+          "title": "License Url",
+          "type": "string"
+        },
+        "redistribution": {
+          "minLength": 1,
+          "title": "Redistribution",
+          "type": "string"
+        },
+        "release": {
+          "minLength": 1,
+          "title": "Release",
+          "type": "string"
+        },
+        "release_date": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Release Date"
+        },
+        "roles": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Roles",
+          "type": "array"
+        },
+        "source_id": {
+          "minLength": 1,
+          "title": "Source Id",
+          "type": "string"
+        },
+        "source_release_id": {
+          "minLength": 1,
+          "title": "Source Release Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_release_id",
+        "source_id",
+        "release",
+        "license_name",
+        "license_url",
+        "attribution",
+        "redistribution"
+      ],
+      "title": "SourceReleaseV2",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "assertion_derivations": {
+      "items": {
+        "$ref": "#/$defs/AssertionDerivation"
+      },
+      "title": "Assertion Derivations",
+      "type": "array"
+    },
+    "canonical_assertions": {
+      "items": {
+        "$ref": "#/$defs/CanonicalAssertion"
+      },
+      "title": "Canonical Assertions",
+      "type": "array"
+    },
+    "concept_mappings": {
+      "items": {
+        "$ref": "#/$defs/ConceptMappingV2"
+      },
+      "title": "Concept Mappings",
+      "type": "array"
+    },
+    "concepts": {
+      "items": {
+        "$ref": "#/$defs/ConceptV2"
+      },
+      "title": "Concepts",
+      "type": "array"
+    },
+    "designations": {
+      "items": {
+        "$ref": "#/$defs/DesignationV2"
+      },
+      "title": "Designations",
+      "type": "array"
+    },
+    "evidence_families": {
+      "items": {
+        "$ref": "#/$defs/EvidenceFamily"
+      },
+      "title": "Evidence Families",
+      "type": "array"
+    },
+    "external_identifiers": {
+      "items": {
+        "$ref": "#/$defs/ExternalIdentifierV2"
+      },
+      "title": "External Identifiers",
+      "type": "array"
+    },
+    "hierarchy_edges": {
+      "items": {
+        "$ref": "#/$defs/HierarchyEdgeV2"
+      },
+      "title": "Hierarchy Edges",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": 2,
+      "default": 2,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "source_artifacts": {
+      "items": {
+        "$ref": "#/$defs/SourceArtifactV2"
+      },
+      "title": "Source Artifacts",
+      "type": "array"
+    },
+    "source_assertions": {
+      "items": {
+        "$ref": "#/$defs/SourceAssertion"
+      },
+      "title": "Source Assertions",
+      "type": "array"
+    },
+    "source_dependencies": {
+      "items": {
+        "$ref": "#/$defs/SourceDependency"
+      },
+      "title": "Source Dependencies",
+      "type": "array"
+    },
+    "source_records": {
+      "items": {
+        "$ref": "#/$defs/SourceRecordV2"
+      },
+      "title": "Source Records",
+      "type": "array"
+    },
+    "source_releases": {
+      "items": {
+        "$ref": "#/$defs/SourceReleaseV2"
+      },
+      "title": "Source Releases",
+      "type": "array"
+    }
+  },
+  "title": "CanonicalKnowledgeV2",
+  "type": "object"
+}

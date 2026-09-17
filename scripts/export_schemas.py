@@ -8,6 +8,7 @@ from latros.clinical.v2 import ClinicalCaseV2
 from latros.common import encoded
 from latros.knowledge.frequency import Frequency
 from latros.knowledge.importers import TABLES
+from latros.knowledge.models_v2 import CANONICAL_TABLES_V2, CanonicalKnowledgeV2
 from latros.sources.registry import Registry
 
 
@@ -22,6 +23,11 @@ def main() -> None:
         "frequency.schema.json": Frequency.model_json_schema(),
         "source-registry.schema.json": Registry.model_json_schema(),
         "canonical-tables.json": {"schema": "canonical_v1", "tables": TABLES},
+        "knowledge-model-v2.schema.json": CanonicalKnowledgeV2.model_json_schema(),
+        "canonical-tables-v2.json": {
+            "schema": "canonical_v2",
+            "tables": CANONICAL_TABLES_V2,
+        },
     }
     for name, document in documents.items():
         path = root / name
