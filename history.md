@@ -323,3 +323,23 @@ refusées plutôt que fusionnées.
 Les sorties du cas v1 et de sa migration v2 sont strictement identiques dans les tests. Six tests
 supplémentaires portent la suite à 84 tests verts, sans modification de `Engine.rank`,
 `Engine.diagnose`, `question_v1`, des formats CLI v1 ou du snapshot `v0.2.0`.
+
+### 17 septembre 2026 — v0.4-F, résultats explicables et reçus
+
+Les résultats v2 distinguent désormais classement, abstention et périmètre. La couverture compte
+les observations confirmées supportées, rend chaque donnée ignorée visible et ne traite jamais une
+proposition comme observation. Les candidats exposent leurs contributions favorables,
+défavorables et inconnues, leurs assertions et provenances, ainsi que les sous-totaux par source et
+famille de preuve. Le score conserve le nom `semantic_v1.compatibility`, non calibré.
+
+Les questions v2 publient leur justification, gain heuristique attendu, couverture, sources et
+assertions. La réponse d'interface `unable_to_assess` est explicitement permise et correspond à
+`unknown + unable_to_assess` dans le cas clinique. Le statut du moteur de sécurité reste séparé et
+fixé à `not_evaluated`.
+
+Chaque exécution v2 inclut un reçu déterministe avec empreinte du cas, hashes du manifeste et du
+contenu de connaissance, profil et paramètres, sources ou familles réellement utilisées, mappings,
+transformations et version logicielle. La CLI choisit automatiquement la sortie historique pour
+v1 et la sortie v2 pour un cas v2 ; des options explicites permettent de forcer le contrat. Huit
+tests supplémentaires portent la suite à 92 tests verts. Aucun reçu n'est persisté, aucun manifeste
+historique ou calcul de `semantic_v1` n'est modifié.

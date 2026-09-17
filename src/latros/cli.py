@@ -1,5 +1,6 @@
 """JSON-only stdout; failures on stderr and a nonzero exit status."""
 
+from enum import StrEnum
 from pathlib import Path
 from typing import Annotated, Any
 
@@ -7,11 +8,14 @@ import httpx
 import typer
 from lxml import etree
 
-from latros.clinical.models import ClinicalCase
+from latros.clinical.loading import ClinicalCaseDocument, load_clinical_case
+from latros.clinical.v2 import ClinicalCaseV2
 from latros.common import LatrosError, encoded
 from latros.knowledge.store import build_snapshot, load_manifest
 from latros.reasoning.engine import Engine
-from latros.reasoning.questions import next_question
+from latros.reasoning.profiles import load_reasoning_profile
+from latros.reasoning.results_v2 import build_differential_v2, build_question_v2
+from latros.reasoning.semantic_v1_adapter import SemanticV1Adapter
 from latros.sources.fetch import fetch_source
 from latros.sources.registry import load_registry
 
@@ -22,6 +26,12 @@ question = typer.Typer(no_args_is_help=True)
 app.add_typer(sources, name="sources")
 app.add_typer(data, name="data")
 app.add_typer(question, name="question")
+
+
+class OutputContract(StrEnum):
+    auto = "auto"
+    v1 = "v1"
+    v2 = "v2"
 
 
 @app.callback()
@@ -75,9 +85,22 @@ def diagnose(
     ctx: typer.Context,
     snapshot: Annotated[str, typer.Option()],
     case: Annotated[Path, typer.Option(exists=True, dir_okay=False)],
+    strategy: Annotated[str, typer.Option("--strategy")] = "semantic_v1",
+    output_contract: Annotated[
+        OutputContract, typer.Option("--output-contract")
+    ] = OutputContract.auto,
 ) -> None:
-    engine = Engine(ctx.obj["root"], snapshot)
-    output(engine.diagnose(ClinicalCase.model_validate_json(case.read_bytes())))
+    case_document = load_clinical_case(case.read_bytes())
+    adapter = _strategy(ctx.obj["root"], snapshot, strategy)
+    if _v2_output(case_document, output_contract):
+        profile = load_reasoning_profile(_profile_path(strategy))
+        output(
+            build_differential_v2(ctx.obj["root"], case_document, adapter, profile).model_dump(
+                mode="json"
+            )
+        )
+    else:
+        output(adapter.diagnose_legacy(case_document))
 
 
 @question.command("next")
@@ -85,9 +108,41 @@ def next_command(
     ctx: typer.Context,
     snapshot: Annotated[str, typer.Option()],
     case: Annotated[Path, typer.Option(exists=True, dir_okay=False)],
+    strategy: Annotated[str, typer.Option("--strategy")] = "semantic_v1",
+    output_contract: Annotated[
+        OutputContract, typer.Option("--output-contract")
+    ] = OutputContract.auto,
 ) -> None:
-    engine = Engine(ctx.obj["root"], snapshot)
-    output(next_question(engine, ClinicalCase.model_validate_json(case.read_bytes())))
+    case_document = load_clinical_case(case.read_bytes())
+    adapter = _strategy(ctx.obj["root"], snapshot, strategy)
+    if _v2_output(case_document, output_contract):
+        profile = load_reasoning_profile(_profile_path(strategy))
+        output(
+            build_question_v2(ctx.obj["root"], case_document, adapter, profile).model_dump(
+                mode="json"
+            )
+        )
+    else:
+        output(adapter.next(case_document).payload)
+
+
+def _strategy(root: Path, snapshot: str, strategy: str) -> SemanticV1Adapter:
+    if strategy != "semantic_v1":
+        raise LatrosError(f"Unknown reasoning strategy: {strategy}")
+    return SemanticV1Adapter(Engine(root, snapshot))
+
+
+def _profile_path(strategy: str) -> Path:
+    path = Path(__file__).resolve().parents[2] / "profiles" / f"{strategy}.json"
+    if not path.is_file():
+        raise LatrosError(f"Reasoning profile is missing: {strategy}")
+    return path
+
+
+def _v2_output(case: ClinicalCaseDocument, output_contract: OutputContract) -> bool:
+    return output_contract is OutputContract.v2 or (
+        output_contract is OutputContract.auto and isinstance(case, ClinicalCaseV2)
+    )
 
 
 def main() -> None:

@@ -11,6 +11,7 @@ from latros.knowledge.importers import TABLES
 from latros.knowledge.models_v2 import CANONICAL_TABLES_V2, CanonicalKnowledgeV2
 from latros.reasoning.interfaces import ReasoningStrategyDescriptor
 from latros.reasoning.profiles import ReasoningProfile
+from latros.reasoning.results_v2 import DifferentialResultV2, QuestionResultV2, RunReceipt
 from latros.sources.registry import Registry
 
 
@@ -34,6 +35,9 @@ def main() -> None:
         "reasoning-strategy-descriptor.schema.json": (
             ReasoningStrategyDescriptor.model_json_schema()
         ),
+        "differential-result-v2.schema.json": DifferentialResultV2.model_json_schema(),
+        "question-result-v2.schema.json": QuestionResultV2.model_json_schema(),
+        "run-receipt.schema.json": RunReceipt.model_json_schema(),
     }
     for name, document in documents.items():
         path = root / name

@@ -4,7 +4,7 @@ Prototype **interne de recherche** pour classer des maladies rares à partir de 
 
 > **Aucun triage n'est effectué.** Toutes les analyses retournent `safety_status: not_evaluated`. Les scores sont des compatibilités sémantiques, jamais des probabilités ou des diagnostics validés. Ne pas utiliser ce prototype pour conseiller un patient.
 
-La version de développement `0.3.0` regroupe le socle technique, le pipeline de données et le moteur pur. `v0.4-C` ajoute maintenant le contrat clinique général versionné et sa migration explicite, sans changer la CLI ni le raisonnement v1. Voir le [journal des ADR](docs/decisions/README.md), la [méthodologie](docs/methodology.md) et [projet.md](projet.md).
+La version de développement `0.3.0` regroupe le socle technique, le pipeline de données et le moteur pur. Les checkpoints `v0.4-C` à `v0.4-F` ajoutent les contrats cliniques et de connaissances généraux, les stratégies versionnées et les sorties explicables v2, tout en conservant le comportement v1. Voir le [journal des ADR](docs/decisions/README.md), la [méthodologie](docs/methodology.md) et [projet.md](projet.md).
 
 Le [plan et son avancement](docs/plan.md) distinguent les trois étapes : fondation `v0.1.0`, premier snapshot médical `v0.2.0`, moteur pur `v0.3.0`. Le snapshot de référence s'appelle maintenant **`v0.2.0`**, conformément au jalon du plan. La version du paquet Python reste `0.3.0`, car le moteur est déjà présent. [history.md](history.md) conserve les réalisations et vérifications datées ; ces documents sont actualisés à chaque livraison.
 
@@ -83,6 +83,7 @@ L'exemple est **inventé**, sans patient réel. La CLI attend des identifiants H
 ```text
 uv run --offline --no-sync latros diagnose --snapshot v0.2.0 --case examples/case.synthetic.json
 uv run --offline --no-sync latros question next --snapshot v0.2.0 --case examples/case.synthetic.json
+uv run --offline --no-sync latros diagnose --snapshot v0.2.0 --case examples/case.synthetic-v2.json
 ```
 
 Format d'entrée :
@@ -106,8 +107,19 @@ Ce JSON non versionné reste le contrat `ClinicalCaseV1`. Le nouveau schéma
 signes, temporalité, constantes, biologie, traitements, antécédents, risques, examens, imagerie et
 contexte familial. Il porte obligatoirement `"schema_version": 2`, sépare les textes sources, les
 propositions d'extraction et les observations confirmées, et ne contient aucune déduction du
-moteur. La CLI continue d'accepter uniquement v1 jusqu'au checkpoint d'adaptation du raisonnement.
-La migration v1 → v2 est déterministe ; aucune conversion silencieuse n'est effectuée par la CLI.
+moteur. La CLI accepte v1 et v2, mais ne transforme jamais silencieusement un fichier v1 : la
+migration explicite reste disponible pour les appelants qui veulent conserver un cas v2.
+
+`--strategy semantic_v1` est la stratégie par défaut. `--output-contract auto` conserve exactement
+la sortie historique pour un cas v1 et retourne le nouveau contrat pour un cas v2. Les options
+explicites `--output-contract v1` et `--output-contract v2` permettent de choisir le format. La
+sortie v2 déclare périmètre, couverture, données utilisées ou ignorées, abstention, arguments par
+source et famille de preuve, `safety.status: not_evaluated` et un reçu reproductible. Son agrégat
+porte `scale_id: semantic_v1.compatibility` et n'est ni un pourcentage ni une probabilité.
+
+Le reçu contient les hashes exacts du manifeste de connaissance et du profil de raisonnement, les
+paramètres effectifs, sources et familles réellement utilisées, mappings, transformations et
+version logicielle. Il est inclus dans le JSON de réponse mais n'est jamais persisté automatiquement.
 
 Le résultat contient les 20 premiers candidats, rang, score brut, contributions favorables/défavorables, assertions sources, fréquences et informations encore inconnues. Les candidats gardent leurs identités ORPHA ; les équivalences Mondo explicites sont listées séparément. Âge et sexe sont conservés dans le contrat mais ignorés par le score.
 
@@ -147,10 +159,11 @@ La CI Linux/Windows utilise uniquement les petits jeux inventés de `tests/conft
 src/latros/sources/     registre et téléchargement vérifié
 src/latros/knowledge/   fréquences, importeurs, validation et snapshots
 src/latros/clinical/    contrat ClinicalCase
-src/latros/reasoning/   semantic_v1 et questions adaptatives
+src/latros/reasoning/   stratégies, profils, semantic_v1, sorties v2 et reçus
 src/latros/cli.py       commandes publiques
 sources/               registre épinglé (versionné)
 schemas/               contrats exportés (versionnés)
+profiles/              profils de raisonnement versionnés et hashés
 manifests/             références de reconstruction (versionnées)
 data/                  sources et snapshots locaux (ignorés)
 tests/                 fixtures synthétiques et tests hors ligne

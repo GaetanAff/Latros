@@ -1,0 +1,600 @@
+{
+  "$defs": {
+    "Abstention": {
+      "additionalProperties": false,
+      "properties": {
+        "explanation": {
+          "minLength": 1,
+          "title": "Explanation",
+          "type": "string"
+        },
+        "reason": {
+          "enum": [
+            "no_supported_present_observation",
+            "insufficient_snapshot_coverage",
+            "insufficient_supported_findings"
+          ],
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "reason",
+        "explanation"
+      ],
+      "title": "Abstention",
+      "type": "object"
+    },
+    "ContributionV2": {
+      "additionalProperties": false,
+      "properties": {
+        "assertion_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Assertion Ids",
+          "type": "array"
+        },
+        "contribution_id": {
+          "minLength": 1,
+          "title": "Contribution Id",
+          "type": "string"
+        },
+        "details": {
+          "additionalProperties": true,
+          "title": "Details",
+          "type": "object"
+        },
+        "direction": {
+          "enum": [
+            "favorable",
+            "unfavorable",
+            "unknown"
+          ],
+          "title": "Direction",
+          "type": "string"
+        },
+        "evidence_family_id": {
+          "minLength": 1,
+          "title": "Evidence Family Id",
+          "type": "string"
+        },
+        "finding": {
+          "minLength": 1,
+          "title": "Finding",
+          "type": "string"
+        },
+        "observation": {
+          "minLength": 1,
+          "title": "Observation",
+          "type": "string"
+        },
+        "provenance": {
+          "items": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "title": "Provenance",
+          "type": "array"
+        },
+        "reason": {
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        },
+        "scale_id": {
+          "minLength": 1,
+          "title": "Scale Id",
+          "type": "string"
+        },
+        "source_release_id": {
+          "minLength": 1,
+          "title": "Source Release Id",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "required": [
+        "contribution_id",
+        "direction",
+        "observation",
+        "finding",
+        "scale_id",
+        "reason",
+        "source_release_id",
+        "assertion_ids",
+        "evidence_family_id",
+        "provenance"
+      ],
+      "title": "ContributionV2",
+      "type": "object"
+    },
+    "CoverageAssessment": {
+      "additionalProperties": false,
+      "properties": {
+        "confirmed_observation_count": {
+          "minimum": 0,
+          "title": "Confirmed Observation Count",
+          "type": "integer"
+        },
+        "coverage_ratio": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Coverage Ratio",
+          "type": "number"
+        },
+        "inputs": {
+          "items": {
+            "$ref": "#/$defs/InputDisposition"
+          },
+          "title": "Inputs",
+          "type": "array"
+        },
+        "proposal_count": {
+          "minimum": 0,
+          "title": "Proposal Count",
+          "type": "integer"
+        },
+        "supported_observation_count": {
+          "minimum": 0,
+          "title": "Supported Observation Count",
+          "type": "integer"
+        },
+        "supported_present_count": {
+          "minimum": 0,
+          "title": "Supported Present Count",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "confirmed_observation_count",
+        "supported_observation_count",
+        "supported_present_count",
+        "proposal_count",
+        "coverage_ratio",
+        "inputs"
+      ],
+      "title": "CoverageAssessment",
+      "type": "object"
+    },
+    "DiagnosticCandidateV2": {
+      "additionalProperties": false,
+      "properties": {
+        "aggregate": {
+          "$ref": "#/$defs/ScoreAggregate"
+        },
+        "candidate_id": {
+          "minLength": 1,
+          "title": "Candidate Id",
+          "type": "string"
+        },
+        "favorable": {
+          "items": {
+            "$ref": "#/$defs/ContributionV2"
+          },
+          "title": "Favorable",
+          "type": "array"
+        },
+        "frequency_conflicts": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Frequency Conflicts",
+          "type": "array"
+        },
+        "label": {
+          "minLength": 1,
+          "title": "Label",
+          "type": "string"
+        },
+        "rank": {
+          "minimum": 1,
+          "title": "Rank",
+          "type": "integer"
+        },
+        "source_views": {
+          "items": {
+            "$ref": "#/$defs/SourceContributionView"
+          },
+          "title": "Source Views",
+          "type": "array"
+        },
+        "terminology_mappings": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Terminology Mappings",
+          "type": "array"
+        },
+        "unfavorable": {
+          "items": {
+            "$ref": "#/$defs/ContributionV2"
+          },
+          "title": "Unfavorable",
+          "type": "array"
+        },
+        "unknown": {
+          "items": {
+            "$ref": "#/$defs/ContributionV2"
+          },
+          "title": "Unknown",
+          "type": "array"
+        }
+      },
+      "required": [
+        "candidate_id",
+        "label",
+        "rank",
+        "aggregate",
+        "favorable",
+        "unfavorable",
+        "unknown",
+        "source_views",
+        "terminology_mappings",
+        "frequency_conflicts"
+      ],
+      "title": "DiagnosticCandidateV2",
+      "type": "object"
+    },
+    "InputDisposition": {
+      "additionalProperties": false,
+      "properties": {
+        "disposition": {
+          "enum": [
+            "used",
+            "ignored",
+            "refused"
+          ],
+          "title": "Disposition",
+          "type": "string"
+        },
+        "input_id": {
+          "minLength": 1,
+          "title": "Input Id",
+          "type": "string"
+        },
+        "input_kind": {
+          "minLength": 1,
+          "title": "Input Kind",
+          "type": "string"
+        },
+        "reason": {
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "input_id",
+        "input_kind",
+        "disposition",
+        "reason"
+      ],
+      "title": "InputDisposition",
+      "type": "object"
+    },
+    "RunReceipt": {
+      "additionalProperties": false,
+      "properties": {
+        "clinical_contract": {
+          "enum": [
+            "clinical_case_v1",
+            "clinical_case_v2"
+          ],
+          "title": "Clinical Contract",
+          "type": "string"
+        },
+        "effective_parameters": {
+          "additionalProperties": true,
+          "title": "Effective Parameters",
+          "type": "object"
+        },
+        "evidence_family_ids_used": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence Family Ids Used",
+          "type": "array"
+        },
+        "ignored_inputs": {
+          "items": {
+            "$ref": "#/$defs/InputDisposition"
+          },
+          "title": "Ignored Inputs",
+          "type": "array"
+        },
+        "input_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Input Sha256",
+          "type": "string"
+        },
+        "mappings_applied": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Mappings Applied",
+          "type": "array"
+        },
+        "operation": {
+          "enum": [
+            "diagnose",
+            "question"
+          ],
+          "title": "Operation",
+          "type": "string"
+        },
+        "profile_id": {
+          "minLength": 1,
+          "title": "Profile Id",
+          "type": "string"
+        },
+        "profile_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Profile Sha256",
+          "type": "string"
+        },
+        "receipt_id": {
+          "minLength": 1,
+          "title": "Receipt Id",
+          "type": "string"
+        },
+        "snapshot_content_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Snapshot Content Sha256",
+          "type": "string"
+        },
+        "snapshot_id": {
+          "minLength": 1,
+          "title": "Snapshot Id",
+          "type": "string"
+        },
+        "snapshot_manifest_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Snapshot Manifest Sha256",
+          "type": "string"
+        },
+        "snapshot_schema_version": {
+          "minimum": 1,
+          "title": "Snapshot Schema Version",
+          "type": "integer"
+        },
+        "software_version": {
+          "minLength": 1,
+          "title": "Software Version",
+          "type": "string"
+        },
+        "source_releases_used": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Source Releases Used",
+          "type": "array"
+        },
+        "strategy_id": {
+          "minLength": 1,
+          "title": "Strategy Id",
+          "type": "string"
+        },
+        "strategy_version": {
+          "minLength": 1,
+          "title": "Strategy Version",
+          "type": "string"
+        },
+        "transformations_applied": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Transformations Applied",
+          "type": "array"
+        },
+        "warnings": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Warnings",
+          "type": "array"
+        }
+      },
+      "required": [
+        "receipt_id",
+        "operation",
+        "clinical_contract",
+        "input_sha256",
+        "snapshot_id",
+        "snapshot_schema_version",
+        "snapshot_manifest_sha256",
+        "snapshot_content_sha256",
+        "strategy_id",
+        "strategy_version",
+        "profile_id",
+        "profile_sha256",
+        "effective_parameters",
+        "source_releases_used",
+        "evidence_family_ids_used",
+        "mappings_applied",
+        "transformations_applied",
+        "software_version",
+        "warnings",
+        "ignored_inputs"
+      ],
+      "title": "RunReceipt",
+      "type": "object"
+    },
+    "SafetyAssessment": {
+      "additionalProperties": false,
+      "properties": {
+        "component": {
+          "const": "separate",
+          "default": "separate",
+          "title": "Component",
+          "type": "string"
+        },
+        "status": {
+          "const": "not_evaluated",
+          "default": "not_evaluated",
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "title": "SafetyAssessment",
+      "type": "object"
+    },
+    "ScoreAggregate": {
+      "additionalProperties": false,
+      "properties": {
+        "calibrated": {
+          "title": "Calibrated",
+          "type": "boolean"
+        },
+        "kind": {
+          "enum": [
+            "compatibility",
+            "probability",
+            "ordinal"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "scale_id": {
+          "minLength": 1,
+          "title": "Scale Id",
+          "type": "string"
+        },
+        "value": {
+          "title": "Value",
+          "type": "number"
+        }
+      },
+      "required": [
+        "value",
+        "scale_id",
+        "kind",
+        "calibrated"
+      ],
+      "title": "ScoreAggregate",
+      "type": "object"
+    },
+    "SourceContributionView": {
+      "additionalProperties": false,
+      "properties": {
+        "contribution_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Contribution Ids",
+          "type": "array"
+        },
+        "evidence_family_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence Family Ids",
+          "type": "array"
+        },
+        "scale_id": {
+          "minLength": 1,
+          "title": "Scale Id",
+          "type": "string"
+        },
+        "source_release_id": {
+          "minLength": 1,
+          "title": "Source Release Id",
+          "type": "string"
+        },
+        "subtotal": {
+          "title": "Subtotal",
+          "type": "number"
+        }
+      },
+      "required": [
+        "source_release_id",
+        "evidence_family_ids",
+        "contribution_ids",
+        "subtotal",
+        "scale_id"
+      ],
+      "title": "SourceContributionView",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "abstention": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Abstention"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "candidates": {
+      "items": {
+        "$ref": "#/$defs/DiagnosticCandidateV2"
+      },
+      "title": "Candidates",
+      "type": "array"
+    },
+    "case_id": {
+      "minLength": 1,
+      "title": "Case Id",
+      "type": "string"
+    },
+    "coverage": {
+      "$ref": "#/$defs/CoverageAssessment"
+    },
+    "run_receipt": {
+      "$ref": "#/$defs/RunReceipt"
+    },
+    "safety": {
+      "$ref": "#/$defs/SafetyAssessment"
+    },
+    "schema_version": {
+      "const": 2,
+      "default": 2,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "scope_status": {
+      "enum": [
+        "in_scope",
+        "partial",
+        "out_of_scope"
+      ],
+      "title": "Scope Status",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "ranked",
+        "abstained"
+      ],
+      "title": "Status",
+      "type": "string"
+    }
+  },
+  "required": [
+    "case_id",
+    "status",
+    "scope_status",
+    "coverage",
+    "candidates",
+    "run_receipt"
+  ],
+  "title": "DifferentialResultV2",
+  "type": "object"
+}

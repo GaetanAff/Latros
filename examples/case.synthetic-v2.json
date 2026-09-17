@@ -1,0 +1,33 @@
+{
+  "case_id": "experience-synthetique-v2",
+  "observation_proposals": [],
+  "observations": [
+    {
+      "acquisition_method": "reported",
+      "certainty": "asserted",
+      "clinical_status": "present",
+      "concept": {
+        "coding": {
+          "code": "HP:0001250",
+          "system": "http://purl.obolibrary.org/obo/hp.owl"
+        },
+        "concept_id": "synthetic-hpo-seizure",
+        "status": "active"
+      },
+      "evaluation_status": "assessed",
+      "experiencer": "patient",
+      "kind": "phenotype",
+      "observation_id": "synthetic-observation-1",
+      "provenance": {
+        "origin_type": "patient_report",
+        "provenance_id": "synthetic-provenance-1"
+      }
+    }
+  ],
+  "question_history": [],
+  "schema_version": 2,
+  "source_statements": [],
+  "subject_context": {
+    "sex": "unknown"
+  }
+}

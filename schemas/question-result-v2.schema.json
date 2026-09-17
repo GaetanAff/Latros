@@ -1,0 +1,397 @@
+{
+  "$defs": {
+    "AdaptiveQuestionV2": {
+      "additionalProperties": false,
+      "properties": {
+        "allowed_answers": {
+          "items": {
+            "enum": [
+              "present",
+              "absent",
+              "unknown",
+              "unable_to_assess"
+            ],
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Allowed Answers",
+          "type": "array"
+        },
+        "assertion_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Assertion Ids",
+          "type": "array"
+        },
+        "concept": {
+          "$ref": "#/$defs/QuestionConcept"
+        },
+        "coverage": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Coverage",
+          "type": "number"
+        },
+        "evaluation_difficulty": {
+          "const": "not_assessed",
+          "default": "not_assessed",
+          "title": "Evaluation Difficulty",
+          "type": "string"
+        },
+        "evidence_family_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence Family Ids",
+          "type": "array"
+        },
+        "expected_contribution": {
+          "additionalProperties": true,
+          "title": "Expected Contribution",
+          "type": "object"
+        },
+        "justification": {
+          "minLength": 1,
+          "title": "Justification",
+          "type": "string"
+        },
+        "question_id": {
+          "minLength": 1,
+          "title": "Question Id",
+          "type": "string"
+        },
+        "source_release_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Source Release Ids",
+          "type": "array"
+        },
+        "text": {
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "question_id",
+        "text",
+        "concept",
+        "allowed_answers",
+        "justification",
+        "expected_contribution",
+        "coverage",
+        "assertion_ids",
+        "source_release_ids",
+        "evidence_family_ids"
+      ],
+      "title": "AdaptiveQuestionV2",
+      "type": "object"
+    },
+    "InputDisposition": {
+      "additionalProperties": false,
+      "properties": {
+        "disposition": {
+          "enum": [
+            "used",
+            "ignored",
+            "refused"
+          ],
+          "title": "Disposition",
+          "type": "string"
+        },
+        "input_id": {
+          "minLength": 1,
+          "title": "Input Id",
+          "type": "string"
+        },
+        "input_kind": {
+          "minLength": 1,
+          "title": "Input Kind",
+          "type": "string"
+        },
+        "reason": {
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "input_id",
+        "input_kind",
+        "disposition",
+        "reason"
+      ],
+      "title": "InputDisposition",
+      "type": "object"
+    },
+    "QuestionConcept": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "minLength": 1,
+          "title": "Code",
+          "type": "string"
+        },
+        "label": {
+          "minLength": 1,
+          "title": "Label",
+          "type": "string"
+        },
+        "label_language": {
+          "minLength": 1,
+          "title": "Label Language",
+          "type": "string"
+        },
+        "system": {
+          "minLength": 1,
+          "title": "System",
+          "type": "string"
+        }
+      },
+      "required": [
+        "system",
+        "code",
+        "label",
+        "label_language"
+      ],
+      "title": "QuestionConcept",
+      "type": "object"
+    },
+    "RunReceipt": {
+      "additionalProperties": false,
+      "properties": {
+        "clinical_contract": {
+          "enum": [
+            "clinical_case_v1",
+            "clinical_case_v2"
+          ],
+          "title": "Clinical Contract",
+          "type": "string"
+        },
+        "effective_parameters": {
+          "additionalProperties": true,
+          "title": "Effective Parameters",
+          "type": "object"
+        },
+        "evidence_family_ids_used": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence Family Ids Used",
+          "type": "array"
+        },
+        "ignored_inputs": {
+          "items": {
+            "$ref": "#/$defs/InputDisposition"
+          },
+          "title": "Ignored Inputs",
+          "type": "array"
+        },
+        "input_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Input Sha256",
+          "type": "string"
+        },
+        "mappings_applied": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Mappings Applied",
+          "type": "array"
+        },
+        "operation": {
+          "enum": [
+            "diagnose",
+            "question"
+          ],
+          "title": "Operation",
+          "type": "string"
+        },
+        "profile_id": {
+          "minLength": 1,
+          "title": "Profile Id",
+          "type": "string"
+        },
+        "profile_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Profile Sha256",
+          "type": "string"
+        },
+        "receipt_id": {
+          "minLength": 1,
+          "title": "Receipt Id",
+          "type": "string"
+        },
+        "snapshot_content_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Snapshot Content Sha256",
+          "type": "string"
+        },
+        "snapshot_id": {
+          "minLength": 1,
+          "title": "Snapshot Id",
+          "type": "string"
+        },
+        "snapshot_manifest_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Snapshot Manifest Sha256",
+          "type": "string"
+        },
+        "snapshot_schema_version": {
+          "minimum": 1,
+          "title": "Snapshot Schema Version",
+          "type": "integer"
+        },
+        "software_version": {
+          "minLength": 1,
+          "title": "Software Version",
+          "type": "string"
+        },
+        "source_releases_used": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Source Releases Used",
+          "type": "array"
+        },
+        "strategy_id": {
+          "minLength": 1,
+          "title": "Strategy Id",
+          "type": "string"
+        },
+        "strategy_version": {
+          "minLength": 1,
+          "title": "Strategy Version",
+          "type": "string"
+        },
+        "transformations_applied": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Transformations Applied",
+          "type": "array"
+        },
+        "warnings": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Warnings",
+          "type": "array"
+        }
+      },
+      "required": [
+        "receipt_id",
+        "operation",
+        "clinical_contract",
+        "input_sha256",
+        "snapshot_id",
+        "snapshot_schema_version",
+        "snapshot_manifest_sha256",
+        "snapshot_content_sha256",
+        "strategy_id",
+        "strategy_version",
+        "profile_id",
+        "profile_sha256",
+        "effective_parameters",
+        "source_releases_used",
+        "evidence_family_ids_used",
+        "mappings_applied",
+        "transformations_applied",
+        "software_version",
+        "warnings",
+        "ignored_inputs"
+      ],
+      "title": "RunReceipt",
+      "type": "object"
+    },
+    "SafetyAssessment": {
+      "additionalProperties": false,
+      "properties": {
+        "component": {
+          "const": "separate",
+          "default": "separate",
+          "title": "Component",
+          "type": "string"
+        },
+        "status": {
+          "const": "not_evaluated",
+          "default": "not_evaluated",
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "title": "SafetyAssessment",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "case_id": {
+      "minLength": 1,
+      "title": "Case Id",
+      "type": "string"
+    },
+    "question": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/AdaptiveQuestionV2"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "run_receipt": {
+      "$ref": "#/$defs/RunReceipt"
+    },
+    "safety": {
+      "$ref": "#/$defs/SafetyAssessment"
+    },
+    "schema_version": {
+      "const": 2,
+      "default": 2,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "scope_status": {
+      "enum": [
+        "in_scope",
+        "partial",
+        "out_of_scope"
+      ],
+      "title": "Scope Status",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "question",
+        "stopped"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "stop_reason": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Stop Reason"
+    }
+  },
+  "required": [
+    "case_id",
+    "status",
+    "scope_status",
+    "question",
+    "run_receipt"
+  ],
+  "title": "QuestionResultV2",
+  "type": "object"
+}

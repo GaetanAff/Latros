@@ -1,0 +1,186 @@
+{
+  "$defs": {
+    "InputDisposition": {
+      "additionalProperties": false,
+      "properties": {
+        "disposition": {
+          "enum": [
+            "used",
+            "ignored",
+            "refused"
+          ],
+          "title": "Disposition",
+          "type": "string"
+        },
+        "input_id": {
+          "minLength": 1,
+          "title": "Input Id",
+          "type": "string"
+        },
+        "input_kind": {
+          "minLength": 1,
+          "title": "Input Kind",
+          "type": "string"
+        },
+        "reason": {
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "input_id",
+        "input_kind",
+        "disposition",
+        "reason"
+      ],
+      "title": "InputDisposition",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "clinical_contract": {
+      "enum": [
+        "clinical_case_v1",
+        "clinical_case_v2"
+      ],
+      "title": "Clinical Contract",
+      "type": "string"
+    },
+    "effective_parameters": {
+      "additionalProperties": true,
+      "title": "Effective Parameters",
+      "type": "object"
+    },
+    "evidence_family_ids_used": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Evidence Family Ids Used",
+      "type": "array"
+    },
+    "ignored_inputs": {
+      "items": {
+        "$ref": "#/$defs/InputDisposition"
+      },
+      "title": "Ignored Inputs",
+      "type": "array"
+    },
+    "input_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Input Sha256",
+      "type": "string"
+    },
+    "mappings_applied": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Mappings Applied",
+      "type": "array"
+    },
+    "operation": {
+      "enum": [
+        "diagnose",
+        "question"
+      ],
+      "title": "Operation",
+      "type": "string"
+    },
+    "profile_id": {
+      "minLength": 1,
+      "title": "Profile Id",
+      "type": "string"
+    },
+    "profile_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Profile Sha256",
+      "type": "string"
+    },
+    "receipt_id": {
+      "minLength": 1,
+      "title": "Receipt Id",
+      "type": "string"
+    },
+    "snapshot_content_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Snapshot Content Sha256",
+      "type": "string"
+    },
+    "snapshot_id": {
+      "minLength": 1,
+      "title": "Snapshot Id",
+      "type": "string"
+    },
+    "snapshot_manifest_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Snapshot Manifest Sha256",
+      "type": "string"
+    },
+    "snapshot_schema_version": {
+      "minimum": 1,
+      "title": "Snapshot Schema Version",
+      "type": "integer"
+    },
+    "software_version": {
+      "minLength": 1,
+      "title": "Software Version",
+      "type": "string"
+    },
+    "source_releases_used": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Source Releases Used",
+      "type": "array"
+    },
+    "strategy_id": {
+      "minLength": 1,
+      "title": "Strategy Id",
+      "type": "string"
+    },
+    "strategy_version": {
+      "minLength": 1,
+      "title": "Strategy Version",
+      "type": "string"
+    },
+    "transformations_applied": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Transformations Applied",
+      "type": "array"
+    },
+    "warnings": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Warnings",
+      "type": "array"
+    }
+  },
+  "required": [
+    "receipt_id",
+    "operation",
+    "clinical_contract",
+    "input_sha256",
+    "snapshot_id",
+    "snapshot_schema_version",
+    "snapshot_manifest_sha256",
+    "snapshot_content_sha256",
+    "strategy_id",
+    "strategy_version",
+    "profile_id",
+    "profile_sha256",
+    "effective_parameters",
+    "source_releases_used",
+    "evidence_family_ids_used",
+    "mappings_applied",
+    "transformations_applied",
+    "software_version",
+    "warnings",
+    "ignored_inputs"
+  ],
+  "title": "RunReceipt",
+  "type": "object"
+}
