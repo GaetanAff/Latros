@@ -248,3 +248,9 @@ Corrections importantes : SNOMED CT est une terminologie clinique et non une mat
 Les jeux Kaggle « Symptoms to diseases », Mendeley « Disease and symptoms dataset 2023 » et SymbiPredict sont conservés comme pistes d'exploration uniquement. Leur format et leur licence déclarée ne compensent pas une provenance médicale insuffisante. DDXPlus est mieux documenté et peut devenir un benchmark synthétique de `v0.5`, mais pas la vérité clinique du moteur. Synthea, WHO SMART Guidelines, LOINC/UCUM, MIMIC-IV et les autres ressources sont répartis entre les étapes `v0.5` à `v0.9` selon leur rôle.
 
 Cette veille ne télécharge et n'intègre aucune donnée. Toute adoption future exige un audit record par record de la provenance, des licences, des dépendances, des biais et de l'indépendance de l'évaluation.
+
+### 17 septembre 2026 — Décision d'agrégation multi-sources
+
+Le cahier des charges prévoit désormais une vue détaillée par source et un agrégat global. Une moyenne simple est exclue : les scores hétérogènes ne sont pas directement comparables, une source absente reste neutre et les republications d'une même preuve sont regroupées avant agrégation. Les poids devront être versionnés, justifiés par domaine et validés avec des tests d'ablation sur un corpus indépendant.
+
+Les résultats resteront des compatibilités tant qu'ils ne seront pas calibrés pour une population clinique définie et validés sur un jeu externe. Aucun score non calibré ne devra être affiché comme pourcentage ou probabilité diagnostique. Cette décision est uniquement documentaire ; aucun moteur ou snapshot n'est modifié.
