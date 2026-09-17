@@ -12,7 +12,7 @@ Les trois jalons avaient été implémentés ensemble dans la première tranche.
 | 2 | Premier snapshot médical — `v0.2.0` | Implémentée ; référence versionnée alignée sur le nom du plan | `manifests/v0.2.0.json` |
 | 3 | Moteur pur et interrogatoire — `v0.3.0` | Implémentée dans le paquet `0.3.0` ; évaluation clinique non réalisée | Le moteur utilise le snapshot `v0.2.0` |
 | 4 | Clinical Knowledge Model — `v0.4.0` | Terminée : checkpoints A–H livrés et revue finale verte | La référence reste `v0.2.0` ; aucun snapshot médical v2 publié |
-| 5 | Snapshot ORL généraliste — `v0.5.0` | En cours : checkpoints techniques A–D terminés ; audit E en `NO-GO` | Aucun snapshot publié ; fixtures inventées uniquement |
+| 5 | Snapshot ORL généraliste — `v0.5.0` | En cours : A–D terminés ; E SNOMED/HAS conservé en `NO-GO` ; E2 sources ouvertes audité en `NO-GO` de publication | Aucun snapshot publié ; fixtures inventées uniquement |
 
 Il s'agit des étapes du plan, pas d'une série de releases GitHub publiées. Aucun tag ou changement de version rétroactif du paquet n'est nécessaire pour identifier un snapshot. L'évaluation clinique et les fonctionnalités futures restent à discuter séparément.
 
@@ -40,6 +40,13 @@ est en `NO-GO` jusqu'à résolution des licences, droits tiers, redistribution e
 détail et les critères de sortie sont conservés dans
 [`docs/source-audits/v0.5-orl.md`](source-audits/v0.5-orl.md).
 
+La stratégie de sources est ensuite réouverte sans effacer ce résultat. L'audit
+[`v0.5-E2`](source-audits/v0.5-orl-open-sources.md) retient DOID/Mondo pour préparer les identités et
+un corpus NHS/nidirect, CDC et MedlinePlus strictement filtré comme voie alternative. Le contenu
+minimal paraît curable, mais aucune assertion réelle n'a encore la double revue requise et certaines
+conditions CDC doivent être clarifiées pour une redistribution depuis la France. La publication
+reste donc en `NO-GO`.
+
 Une première veille des ressources de médecine générale est intégrée au cahier des charges. Elle sépare terminologies, classifications, standards d'échange, sources d'assertions, règles cliniques, jeux synthétiques et benchmarks. Les matrices Kaggle/Mendeley ne sont pas retenues comme connaissance clinique tant que leur provenance n'est pas démontrée ; SNOMED CT, ICD, FHIR, LOINC, UCUM, UMLS, DDXPlus, Synthea, WHO SMART Guidelines, HealthBench, MIMIC-IV et ClinicDx sont positionnés selon leur rôle et une étape éventuelle, sans décision d'intégration anticipée.
 
 Les futurs manifestes devront aussi déclarer le périmètre, les dépendances entre sources, les familles de preuves, les règles de déduplication et les profils de raisonnement compatibles. Le snapshot et le profil d'agrégation resteront versionnés séparément mais seront liés par leurs hashes dans chaque exécution. La référence historique `v0.2.0` ne sera pas réécrite.
@@ -58,7 +65,8 @@ juridique et clinique séparé des sources réelles. `v0.5.0` sera un snapshot O
 | `v0.5-C` | Terminé | Importeurs RF2 et assertions curées synthétiques |
 | `v0.5-D` | Terminé | Stratégie déterministe `general_v1` sur mini-corpus fictif |
 | `v0.5-E` | Terminé — `NO-GO` confirmé | Audit final SNOMED/HAS ORL ; conditions juridiques, cliniques et de couverture non satisfaites |
-| `v0.5-F` | Bloqué par `v0.5-E` | Snapshot médical réel `v0.5.0` |
+| `v0.5-E2` | Terminé — `NO-GO` de publication | Audit DOID/Mondo/MeSH et NHS/CDC/MedlinePlus ; matrice de couverture produite ; curation et double revue absentes |
+| `v0.5-F` | Bloqué par `v0.5-E2` | Snapshot médical réel `v0.5.0` |
 | `v0.5-G` | Bloqué par `v0.5-F` | Validation clinique séparée et clôture |
 
 `general_v1` accepte exclusivement `ClinicalCaseV2`, les concepts identiques ou les mappings
@@ -77,6 +85,13 @@ suffit pas à documenter le différentiel fermé des quatre candidats. Chacun de
 deux assertions diagnostiques explicites et d'une assertion discriminante approuvées. Les licences
 SNOMED, les droits de transformation/redistribution, la double revue et ce seuil de couverture ne
 sont pas satisfaits : F et G ne doivent donc pas commencer.
+
+Le checkpoint E2 confirme une voie juridiquement plus simple sans SNOMED. DOID `v2026-08-31` et
+Mondo `v2026-09-01` sont compatibles avec un import versionné ; MeSH est différé. Les pages ouvertes
+identifiées permettent de préparer au moins deux assertions et un élément discriminant par candidat,
+mais elles ne constituent pas encore un corpus approuvé. Le prochain checkpoint est donc la curation
+réelle sous statut `pending_clinical_review`, avec mappings explicites, captures/hashes, familles de
+preuves et deux reviewers dont un clinicien. F reste interdit jusque-là.
 
 ## Trajectoire v0.6 — médicaments et molécules
 

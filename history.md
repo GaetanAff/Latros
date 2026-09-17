@@ -484,3 +484,25 @@ Contrôles GitHub : le [run #30](https://github.com/GaetanAff/Latros/actions/run
 du checkpoint D et le [run #31](https://github.com/GaetanAff/Latros/actions/runs/35229684808)
 du checkpoint E ont réussi sur `ubuntu-latest` et `windows-latest`. Les deux avertissements de la
 plateforme concernent la transition Node.js interne aux actions GitHub, pas les tests Latros.
+
+### 17 septembre 2026 — v0.5-E2, audit des sources ouvertes
+
+La stratégie du premier snapshot ORL est réouverte sans modifier A à D et sans effacer le `NO-GO`
+SNOMED/HAS. L'audit vérifie les releases et licences officielles de Disease Ontology, Mondo et
+MeSH, puis les conditions de réutilisation NHS, nidirect, CDC et MedlinePlus. DOID `v2026-08-31`
+(CC0) et Mondo `v2026-09-01` (CC BY 4.0) sont retenus pour préparer les identités et mappings ;
+MeSH est juridiquement compatible mais différé comme inutile au premier lot.
+
+La revue des pages cliniques produit une matrice condition × assertion × source × famille de
+preuve. Le seuil de contenu candidat est atteignable pour les quatre conditions, mais les concepts
+aigus doivent être revus explicitement et l'OMA adulte reste moins bien corroborée par des familles
+indépendantes. Les pages nidirect issues du NHS sont classées `republication`, les dépendances NLM
+non résolues restent non agrégeables et les articles A.D.A.M. sont exclus comme contenu protégé.
+
+Le checkpoint E2 se clôt en `NO-GO` de publication : aucun paquet réel ne possède encore les
+captures et hashes, mappings qualifiés, localisations record par record et deux reviewers distincts
+dont un clinicien. La voie suivante est un corpus `pending_clinical_review`, pas F ou G. Aucun
+registre réel, snapshot `v0.5.0`, profil clinique ou donnée protégée n'est ajouté.
+
+Vérification locale : Ruff, formatage, mypy strict, export des schémas et les 117 tests réussissent.
+Les tests d'or v1 et les composants v0.5-A à D restent inchangés.

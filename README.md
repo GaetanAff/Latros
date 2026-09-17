@@ -24,7 +24,8 @@ prescription ; le détail est consigné dans le [cahier v0.4](docs/v0.4-clinical
 `v0.5` est en cours sur une branche dédiée. Ses checkpoints techniques A à D définissent le registre,
 le manifeste, le constructeur, les importeurs et le premier raisonneur général des futurs snapshots
 canoniques v2. Le travail utilise uniquement des fixtures inventées ; la référence médicale reste
-`v0.2.0` et aucun manifeste `v0.5.0` n'existe tant que le `NO-GO` SNOMED/HAS n'est pas levé.
+`v0.2.0` et aucun manifeste `v0.5.0` n'existe tant que le corpus ouvert alternatif n'est pas curé
+et cliniquement relu.
 
 Le constructeur v2 produit désormais les treize tables canoniques, leurs Parquet déterministes et
 un runtime DuckDB en lecture seule à partir d'un `CanonicalKnowledgeV2` validé. Cette capacité est
@@ -64,6 +65,13 @@ redistribution doit être clarifié ; la fiche HAS coélaborée avec des tiers e
 écrite et une double revue clinique. Le contrôle final ajoute qu'un corpus doit couvrir les quatre
 candidats avec au moins deux assertions diagnostiques explicites et une assertion discriminante par
 candidat ; ce minimum n'est pas démontré. Aucun dataset moins fiable ne le remplace automatiquement.
+
+L'[audit alternatif v0.5-E2](docs/source-audits/v0.5-orl-open-sources.md) conserve ce résultat
+historique mais ne fait plus dépendre le pilote de SNOMED/HAS. DOID et Mondo peuvent préparer les
+identités ; des pages NHS/nidirect, CDC et certaines synthèses publiques MedlinePlus rendent le
+minimum de contenu curable. Le verdict de publication reste toutefois `NO-GO` : aucun paquet réel
+n'a encore les mappings, captures/hashes et deux revues requises, dont une clinique. MeSH est
+différé, les articles A.D.A.M. et les sources sans droit de transformation sont exclus.
 
 ## Installation
 

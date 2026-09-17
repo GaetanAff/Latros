@@ -46,3 +46,10 @@ pour la médecine générale restent soumises à des autorisations et à une rev
 
 SNOMED CT France et les documents HAS ORL restent des candidats conditionnels. Cette ADR
 n'autorise aucun téléchargement, aucune ingestion réelle et aucune redistribution.
+
+## Addendum du 17 septembre 2026
+
+L'[ADR 0006](0006-sources-ouvertes-pilote-orl.md) remplace cette stratégie de sources pour le
+premier pilote : DOID/Mondo et un corpus clinique ouvert sont désormais prioritaires. Le `NO-GO`
+SNOMED/HAS reste conservé comme résultat historique et toutes les autres décisions de cette ADR —
+snapshot séparé, fixtures d'abord, barrières juridiques et cliniques — demeurent applicables.
