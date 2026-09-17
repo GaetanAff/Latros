@@ -254,3 +254,9 @@ Cette veille ne télécharge et n'intègre aucune donnée. Toute adoption future
 Le cahier des charges prévoit désormais une vue détaillée par source et un agrégat global. Une moyenne simple est exclue : les scores hétérogènes ne sont pas directement comparables, une source absente reste neutre et les republications d'une même preuve sont regroupées avant agrégation. Les poids devront être versionnés, justifiés par domaine et validés avec des tests d'ablation sur un corpus indépendant.
 
 Les résultats resteront des compatibilités tant qu'ils ne seront pas calibrés pour une population clinique définie et validés sur un jeu externe. Aucun score non calibré ne devra être affiché comme pourcentage ou probabilité diagnostique. Cette décision est uniquement documentaire ; aucun moteur ou snapshot n'est modifié.
+
+### 17 septembre 2026 — Intégration de l'agrégation au contrat des snapshots
+
+Le cahier des charges impose désormais que tout futur manifeste publie le périmètre clinique, les dépendances entre sources, les familles de preuves non indépendantes, les règles de normalisation et de déduplication ainsi que les stratégies et profils d'agrégation compatibles. Chaque exécution devra conserver les hash du snapshot et du profil de raisonnement afin de reproduire le score global et les contributions par source.
+
+Une modification de la connaissance imposera un nouvel identifiant de snapshot. Une modification limitée au moteur, aux poids ou à la calibration conservera éventuellement le snapshot mais recevra une nouvelle version de profil. Le manifeste `v0.2.0` reste immuable et n'est pas migré rétroactivement. Aucun code, donnée ou snapshot n'est modifié dans cette livraison documentaire.
