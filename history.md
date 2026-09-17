@@ -2,7 +2,7 @@
 
 Ce fichier est le journal de continuité du projet. Il décrit ce qui a été décidé et effectivement réalisé, afin de pouvoir reprendre la discussion sans déduire l'état du projet à partir du code seul.
 
-Dernière mise à jour : 16 septembre 2026.
+Dernière mise à jour : 17 septembre 2026.
 
 ## État actuel en une phrase
 
@@ -27,8 +27,8 @@ La vision complète, y compris les futures pistes LLM, est dans [projet.md](proj
 ## Dépôt et manière de travailler
 
 - Dépôt GitHub privé : `GaetanAff/Latros`.
-- Branche stable : `main`.
-- Implémentation effectuée sur `feat/clinical-foundation`.
+- Branche stable : `main`, actualisée avec le socle v0.1–v0.3 et le cadrage v0.4 accepté.
+- Implémentation v0.4 effectuée sur `feat/v0.4-clinical-knowledge-model`.
 - Commit de la tranche : `d7ef85c6fe41c19828318662b8968425abffe6a9` — 16 septembre 2026.
 - Pull request ouverte, sans fusion dans `main` : [#1 — Socle local : données rares, moteur clinique pur et questions adaptatives](https://github.com/GaetanAff/Latros/pull/1).
 - La CI GitHub Linux et Windows est verte pour cette pull request.
@@ -270,3 +270,22 @@ et reçus d'exécution. Deux tests d'or vérifient l'égalité octet par octet d
 
 Cette livraison n'ajoute encore aucun contrat runtime v2 et ne change aucun résultat clinique. Le
 snapshot `v0.2.0`, son manifeste, les sept tables et les formats publics v1 restent inchangés.
+
+### 17 septembre 2026 — v0.4-C, ClinicalCaseV2 et migration
+
+Le contrat historique devient explicitement `ClinicalCaseV1` tout en conservant l'alias public
+`ClinicalCase`. Le nouveau `ClinicalCaseV2` est versionné et sépare le texte source, les propositions
+d'extraction non utilisables pour scorer, les observations confirmées et les réponses aux questions.
+Il couvre les onze catégories cliniques prévues, des valeurs typées, la temporalité, les unités, la
+sévérité, la localisation, la latéralité, le sujet, l'acquisition, la provenance et les corrections.
+
+Les combinaisons incohérentes d'état clinique et d'évaluation sont refusées. Une impossibilité
+d'évaluation est représentée par `unknown + unable_to_assess`. Une correction contradictoire doit
+référencer explicitement l'observation remplacée. Toute origine non directement déclarative exige
+une référence traçable.
+
+Un chargeur distingue v1 sans `schema_version`, v2 explicite et versions inconnues refusées. La
+migration HPO v1 → v2 est déterministe et idempotente. Le schéma JSON v2 est versionné. Quatorze
+tests dédiés portent la suite à 72 tests verts ; Ruff, formatage, mypy strict et export des schémas
+sont également verts. La CLI, `semantic_v1`, les sorties v1 et le snapshot `v0.2.0` restent
+fonctionnellement inchangés.

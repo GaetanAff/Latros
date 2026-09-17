@@ -4,6 +4,7 @@ import argparse
 from pathlib import Path
 
 from latros.clinical.models import ClinicalCase
+from latros.clinical.v2 import ClinicalCaseV2
 from latros.common import encoded
 from latros.knowledge.frequency import Frequency
 from latros.knowledge.importers import TABLES
@@ -17,6 +18,7 @@ def main() -> None:
     root = Path(__file__).resolve().parents[1] / "schemas"
     documents = {
         "clinical-case.schema.json": ClinicalCase.model_json_schema(),
+        "clinical-case-v2.schema.json": ClinicalCaseV2.model_json_schema(),
         "frequency.schema.json": Frequency.model_json_schema(),
         "source-registry.schema.json": Registry.model_json_schema(),
         "canonical-tables.json": {"schema": "canonical_v1", "tables": TABLES},

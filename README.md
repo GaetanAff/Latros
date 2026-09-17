@@ -4,7 +4,7 @@ Prototype **interne de recherche** pour classer des maladies rares à partir de 
 
 > **Aucun triage n'est effectué.** Toutes les analyses retournent `safety_status: not_evaluated`. Les scores sont des compatibilités sémantiques, jamais des probabilités ou des diagnostics validés. Ne pas utiliser ce prototype pour conseiller un patient.
 
-La version de développement `0.3.0` regroupe le socle technique, le pipeline de données et le moteur pur. `v0.4-B` a désormais figé les frontières et la compatibilité avant les nouveaux contrats. Voir le [journal des ADR](docs/decisions/README.md), la [méthodologie](docs/methodology.md) et [projet.md](projet.md).
+La version de développement `0.3.0` regroupe le socle technique, le pipeline de données et le moteur pur. `v0.4-C` ajoute maintenant le contrat clinique général versionné et sa migration explicite, sans changer la CLI ni le raisonnement v1. Voir le [journal des ADR](docs/decisions/README.md), la [méthodologie](docs/methodology.md) et [projet.md](projet.md).
 
 Le [plan et son avancement](docs/plan.md) distinguent les trois étapes : fondation `v0.1.0`, premier snapshot médical `v0.2.0`, moteur pur `v0.3.0`. Le snapshot de référence s'appelle maintenant **`v0.2.0`**, conformément au jalon du plan. La version du paquet Python reste `0.3.0`, car le moteur est déjà présent. [history.md](history.md) conserve les réalisations et vérifications datées ; ces documents sont actualisés à chaque livraison.
 
@@ -86,6 +86,14 @@ Format d'entrée :
   "question_history": []
 }
 ```
+
+Ce JSON non versionné reste le contrat `ClinicalCaseV1`. Le nouveau schéma
+[`ClinicalCaseV2`](schemas/clinical-case-v2.schema.json) est disponible pour préparer symptômes,
+signes, temporalité, constantes, biologie, traitements, antécédents, risques, examens, imagerie et
+contexte familial. Il porte obligatoirement `"schema_version": 2`, sépare les textes sources, les
+propositions d'extraction et les observations confirmées, et ne contient aucune déduction du
+moteur. La CLI continue d'accepter uniquement v1 jusqu'au checkpoint d'adaptation du raisonnement.
+La migration v1 → v2 est déterministe ; aucune conversion silencieuse n'est effectuée par la CLI.
 
 Le résultat contient les 20 premiers candidats, rang, score brut, contributions favorables/défavorables, assertions sources, fréquences et informations encore inconnues. Les candidats gardent leurs identités ORPHA ; les équivalences Mondo explicites sont listées séparément. Âge et sexe sont conservés dans le contrat mais ignorés par le score.
 
