@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="500" viewBox="0 0 1400 500" role="img" aria-labelledby="title desc">
+  <title id="title">Latros logo</title>
+  <desc id="desc">Simple Latros logo with a network-style L icon and the word Latros.</desc>
+  <defs>
+    <style>
+      .wordmark {
+        font-family: Inter, Arial, Helvetica, sans-serif;
+        font-size: 220px;
+        font-weight: 500;
+        fill: #0F6472;
+        letter-spacing: 0;
+      }
+      .connector-teal {
+        fill: none;
+        stroke: #0F6472;
+        stroke-width: 34;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .connector-mix {
+        fill: none;
+        stroke: #6EA07A;
+        stroke-width: 34;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+    </style>
+  </defs>
+
+  <!-- background intentionally transparent -->
+
+  <!-- icon -->
+  <path class="connector-teal" d="M120 112 L120 156"/>
+  <path class="connector-mix" d="M120 204 C120 242, 144 272, 182 272 L208 272"/>
+
+  <circle cx="120" cy="92" r="44" fill="#0F6472"/>
+  <circle cx="120" cy="196" r="44" fill="#B7CFAF"/>
+  <circle cx="228" cy="272" r="44" fill="#0F6472"/>
+
+  <!-- wordmark -->
+  <text x="370" y="255" class="wordmark">Latros</text>
+</svg>

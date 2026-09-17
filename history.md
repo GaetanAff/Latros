@@ -10,6 +10,11 @@ Latros est aujourd'hui un prototype local de recherche, utilisable en ligne de c
 
 Référence actuelle des données : **`v0.2.0`**, nom du jalon « Premier snapshot médical » dans le [plan d'implémentation](docs/plan.md). Le paquet est à la version `0.4.0` ; aucun snapshot médical v2 n'est publié. L'ancien snapshot `latros-kb-0002` est conservé.
 
+## Identité visuelle — 17 septembre 2026
+
+- Le logo officiel `latros-logo.svg` est versionné à la racine du dépôt et affiché dans le README.
+- Il s'agit uniquement d'un actif de documentation : aucun contrat clinique, snapshot, moteur ou résultat de raisonnement n'est modifié.
+
 ## Décisions de cadrage antérieures
 
 - Le projet a été renommé **Latros** ; le nom initial était ClinAtlas.
