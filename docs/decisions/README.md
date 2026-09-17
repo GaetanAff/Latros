@@ -7,7 +7,8 @@ Décisions acceptées :
 - [0001 — Socle local maladies rares et moteur pur](0001-socle-recherche.md) ;
 - [0002 — Contrats cliniques v2 et compatibilité v1](0002-clinical-contracts-v2.md) ;
 - [0003 — Knowledge Model canonique v2](0003-canonical-knowledge-v2.md) ;
-- [0004 — Stratégies, profils et reçus d'exécution](0004-reasoning-artifacts.md).
+- [0004 — Stratégies, profils et reçus d'exécution](0004-reasoning-artifacts.md) ;
+- [0005 — Snapshot canonique v2 et pilote ORL séparé](0005-snapshot-v2-et-pilote-orl.md).
 
 Utiliser un fichier par décision, par exemple :
 

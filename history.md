@@ -400,3 +400,15 @@ ingestion. Les critères obligatoires sont la couverture, l'autorité éditrice,
 la redistribution, les identifiants stables et la reproductibilité. Les tests restent synthétiques
 tant que cette revue n'est pas close. Cette décision n'autorise ni prescription, ni calcul de dose,
 ni recommandation de traitement, ni vérification d'interactions.
+
+### 17 septembre 2026 — v0.5-A, contrats du snapshot canonique v2
+
+L'ADR 0005 retient un snapshot ORL adulte séparé de la référence maladies rares. Le registre v2
+distingue artefacts HTTPS publics et dépôts manuels, refuse les URLs mobiles, les licences non
+revues et les droits d'implémentation non confirmés. Il ne contient aucun mécanisme de stockage de
+secrets.
+
+Le manifeste v2 rend obligatoires le périmètre, la population, les sources, licences, dépendances,
+familles de preuves, règles, tables, profils compatibles, restrictions de redistribution et hashes.
+Deux schémas JSON sont exportés. Quatre tests synthétiques couvrent ces contrats ; aucun importeur,
+artefact médical, manifeste `v0.5.0` ou snapshot réel n'est ajouté.

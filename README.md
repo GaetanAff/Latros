@@ -21,6 +21,11 @@ produit commercialisé, classe thérapeutique et assertions médicales sourcées
 distincts. Cette préparation ne constitue ni une recommandation de traitement, ni une fonction de
 prescription ; le détail est consigné dans le [cahier v0.4](docs/v0.4-clinical-knowledge-model.md).
 
+`v0.5` est en cours sur une branche dédiée. Son premier checkpoint définit le registre et le
+manifeste des futurs snapshots canoniques v2. Le travail technique utilise uniquement des fixtures
+inventées ; la référence médicale reste `v0.2.0` et aucun manifeste `v0.5.0` n'existe tant que le
+`NO-GO` SNOMED/HAS n'est pas levé.
+
 `v0.4-D` fournit désormais le [schéma canonique v2](schemas/knowledge-model-v2.schema.json) et
 la liste de ses [tables conceptuelles](schemas/canonical-tables-v2.json). L'adaptateur v1 est une
 projection en lecture seule : il distingue enregistrements sources, assertions canoniques et

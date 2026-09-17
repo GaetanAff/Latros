@@ -4,7 +4,7 @@
 
 **Statut actualisé le 17 septembre 2026 :** ce document conserve la vision initiale. Une première tranche interne de recherche est désormais autorisée et implémentée : maladies rares, CLI Python 3.11, HPO/Mondo/Orphadata, moteur `semantic_v1` et questions adaptatives. Voir [README](README.md) et [ADR 0001](docs/decisions/0001-socle-recherche.md) pour les choix applicables. Les autres composants ci-dessous restent prospectifs.
 
-**Suivi des étapes :** le [plan d'implémentation](docs/plan.md) décrit les jalons livrés `v0.1.0` à `v0.4.0`. Le [cahier des charges de `v0.4`](docs/v0.4-clinical-knowledge-model.md) documente le modèle clinique et le modèle de connaissances généraux maintenant implémentés. Le snapshot de référence reste `v0.2.0` et le paquet Python est `0.4.0`. [history.md](history.md), le README et le plan sont actualisés à chaque livraison.
+**Suivi des étapes :** le [plan d'implémentation](docs/plan.md) décrit les jalons livrés `v0.1.0` à `v0.4.0` et la tranche `v0.5` en cours. Le [cahier des charges de `v0.4`](docs/v0.4-clinical-knowledge-model.md) documente le modèle clinique et le modèle de connaissances généraux maintenant implémentés ; l'[ADR 0005](docs/decisions/0005-snapshot-v2-et-pilote-orl.md) encadre le futur snapshot ORL séparé. Le snapshot de référence reste `v0.2.0` et le paquet Python est `0.4.0`. [history.md](history.md), le README et le plan sont actualisés à chaque livraison.
 
 **Objectif de la phase :** définir l'architecture scientifique, les responsabilités des composants, le modèle de données, les règles de provenance, les méthodes d'évaluation et les limites du projet avant de télécharger des jeux de données ou de coder le moteur.
 

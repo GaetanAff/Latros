@@ -12,6 +12,7 @@ Les trois jalons avaient été implémentés ensemble dans la première tranche.
 | 2 | Premier snapshot médical — `v0.2.0` | Implémentée ; référence versionnée alignée sur le nom du plan | `manifests/v0.2.0.json` |
 | 3 | Moteur pur et interrogatoire — `v0.3.0` | Implémentée dans le paquet `0.3.0` ; évaluation clinique non réalisée | Le moteur utilise le snapshot `v0.2.0` |
 | 4 | Clinical Knowledge Model — `v0.4.0` | Terminée : checkpoints A–H livrés et revue finale verte | La référence reste `v0.2.0` ; aucun snapshot médical v2 publié |
+| 5 | Snapshot ORL généraliste — `v0.5.0` | En cours : checkpoint A, contrats de registre et manifeste v2 | Aucun snapshot publié ; fixtures inventées uniquement |
 
 Il s'agit des étapes du plan, pas d'une série de releases GitHub publiées. Aucun tag ou changement de version rétroactif du paquet n'est nécessaire pour identifier un snapshot. L'évaluation clinique et les fonctionnalités futures restent à discuter séparément.
 
@@ -42,6 +43,23 @@ détail et les critères de sortie sont conservés dans
 Une première veille des ressources de médecine générale est intégrée au cahier des charges. Elle sépare terminologies, classifications, standards d'échange, sources d'assertions, règles cliniques, jeux synthétiques et benchmarks. Les matrices Kaggle/Mendeley ne sont pas retenues comme connaissance clinique tant que leur provenance n'est pas démontrée ; SNOMED CT, ICD, FHIR, LOINC, UCUM, UMLS, DDXPlus, Synthea, WHO SMART Guidelines, HealthBench, MIMIC-IV et ClinicDx sont positionnés selon leur rôle et une étape éventuelle, sans décision d'intégration anticipée.
 
 Les futurs manifestes devront aussi déclarer le périmètre, les dépendances entre sources, les familles de preuves, les règles de déduplication et les profils de raisonnement compatibles. Le snapshot et le profil d'agrégation resteront versionnés séparément mais seront liés par leurs hashes dans chaque exécution. La référence historique `v0.2.0` ne sera pas réécrite.
+
+## Étape 5 — Snapshot ORL généraliste et `general_v1`
+
+La décision est fixée par l'[ADR 0005](decisions/0005-snapshot-v2-et-pilote-orl.md). Le travail
+avance sur deux pistes : pipeline et raisonnement testés sur données entièrement inventées ; audit
+juridique et clinique séparé des sources réelles. `v0.5.0` sera un snapshot ORL adulte distinct de
+`v0.2.0` ou ne sera pas publié.
+
+| Checkpoint | État | Sortie attendue |
+| --- | --- | --- |
+| `v0.5-A` | Terminé | ADR, registre v2, manifeste v2 et schémas exportés |
+| `v0.5-B` | À faire | Constructeur reproductible des treize tables sur fixtures |
+| `v0.5-C` | À faire | Importeurs RF2 et assertions curées synthétiques |
+| `v0.5-D` | À faire | Stratégie déterministe `general_v1` sur mini-corpus fictif |
+| `v0.5-E` | Bloqué par conditions externes | Audit final SNOMED/HAS ORL et décision GO/NO-GO |
+| `v0.5-F` | Bloqué par `v0.5-E` | Snapshot médical réel `v0.5.0` |
+| `v0.5-G` | Bloqué par `v0.5-F` | Validation clinique séparée et clôture |
 
 ## Trajectoire v0.6 — médicaments et molécules
 

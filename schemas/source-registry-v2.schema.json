@@ -1,0 +1,295 @@
+{
+  "$defs": {
+    "LicenseV2": {
+      "additionalProperties": false,
+      "properties": {
+        "attribution": {
+          "minLength": 1,
+          "title": "Attribution",
+          "type": "string"
+        },
+        "implementation_rights_confirmed": {
+          "title": "Implementation Rights Confirmed",
+          "type": "boolean"
+        },
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "notes": {
+          "default": "",
+          "title": "Notes",
+          "type": "string"
+        },
+        "redistribution": {
+          "enum": [
+            "allowed_with_attribution",
+            "restricted",
+            "prohibited",
+            "unknown"
+          ],
+          "title": "Redistribution",
+          "type": "string"
+        },
+        "url": {
+          "minLength": 1,
+          "title": "Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "url",
+        "attribution",
+        "redistribution",
+        "implementation_rights_confirmed"
+      ],
+      "title": "LicenseV2",
+      "type": "object"
+    },
+    "RegistryArtifactV2": {
+      "additionalProperties": false,
+      "properties": {
+        "access_mode": {
+          "enum": [
+            "public_https",
+            "manual_local"
+          ],
+          "title": "Access Mode",
+          "type": "string"
+        },
+        "filename": {
+          "title": "Filename",
+          "type": "string"
+        },
+        "format": {
+          "enum": [
+            "rf2-concepts-tsv",
+            "rf2-descriptions-tsv",
+            "rf2-relationships-tsv",
+            "curated-assertions-jsonl"
+          ],
+          "title": "Format",
+          "type": "string"
+        },
+        "language": {
+          "anyOf": [
+            {
+              "maxLength": 35,
+              "minLength": 2,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Language"
+        },
+        "product": {
+          "minLength": 1,
+          "title": "Product",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "source_url": {
+          "minLength": 1,
+          "title": "Source Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "filename",
+        "product",
+        "format",
+        "source_url",
+        "sha256",
+        "access_mode"
+      ],
+      "title": "RegistryArtifactV2",
+      "type": "object"
+    },
+    "SnapshotScopeV2": {
+      "additionalProperties": false,
+      "properties": {
+        "domain": {
+          "minLength": 1,
+          "title": "Domain",
+          "type": "string"
+        },
+        "exclusions": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Exclusions",
+          "type": "array"
+        },
+        "observation_types": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Observation Types",
+          "type": "array"
+        },
+        "population": {
+          "minLength": 1,
+          "title": "Population",
+          "type": "string"
+        },
+        "relations": {
+          "items": {
+            "enum": [
+              "has_symptom",
+              "has_sign",
+              "has_risk_factor",
+              "has_lab_finding",
+              "has_exam_finding",
+              "has_imaging_finding",
+              "typical_age",
+              "typical_sex",
+              "has_complication"
+            ],
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Relations",
+          "type": "array"
+        },
+        "scope_id": {
+          "minLength": 1,
+          "title": "Scope Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "scope_id",
+        "domain",
+        "population",
+        "observation_types",
+        "relations"
+      ],
+      "title": "SnapshotScopeV2",
+      "type": "object"
+    },
+    "SourcePackageV2": {
+      "additionalProperties": false,
+      "properties": {
+        "access_date": {
+          "format": "date",
+          "title": "Access Date",
+          "type": "string"
+        },
+        "artifacts": {
+          "items": {
+            "$ref": "#/$defs/RegistryArtifactV2"
+          },
+          "minItems": 1,
+          "title": "Artifacts",
+          "type": "array"
+        },
+        "homepage": {
+          "minLength": 1,
+          "title": "Homepage",
+          "type": "string"
+        },
+        "license": {
+          "$ref": "#/$defs/LicenseV2"
+        },
+        "release": {
+          "title": "Release",
+          "type": "string"
+        },
+        "release_date": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Release Date"
+        },
+        "roles": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Roles",
+          "type": "array"
+        },
+        "source_id": {
+          "title": "Source Id",
+          "type": "string"
+        },
+        "upstream_dependencies": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Upstream Dependencies",
+          "type": "array"
+        }
+      },
+      "required": [
+        "source_id",
+        "roles",
+        "homepage",
+        "release",
+        "access_date",
+        "license",
+        "artifacts"
+      ],
+      "title": "SourcePackageV2",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "canonical_schema_version": {
+      "const": 2,
+      "default": 2,
+      "title": "Canonical Schema Version",
+      "type": "integer"
+    },
+    "compatible_profiles": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Compatible Profiles",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": 2,
+      "default": 2,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "scope": {
+      "$ref": "#/$defs/SnapshotScopeV2"
+    },
+    "sources": {
+      "items": {
+        "$ref": "#/$defs/SourcePackageV2"
+      },
+      "minItems": 1,
+      "title": "Sources",
+      "type": "array"
+    }
+  },
+  "required": [
+    "scope",
+    "compatible_profiles",
+    "sources"
+  ],
+  "title": "RegistryV2",
+  "type": "object"
+}

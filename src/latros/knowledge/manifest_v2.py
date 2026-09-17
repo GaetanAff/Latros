@@ -1,0 +1,42 @@
+"""Machine-readable manifest contract for canonical-v2 knowledge snapshots."""
+
+from typing import Any, Literal, Self
+
+from pydantic import Field, model_validator
+
+from latros.sources.registry import Contract
+from latros.sources.registry_v2 import SnapshotScopeV2, SourcePackageV2
+
+
+class SnapshotTableV2(Contract):
+    rows: int = Field(ge=0)
+    logical_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    parquet_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+
+
+class KnowledgeSnapshotManifestV2(Contract):
+    schema_version: Literal[2] = 2
+    canonical_schema_version: Literal[2] = 2
+    snapshot: str = Field(min_length=1)
+    latros_version: str = Field(min_length=1)
+    build_pipeline_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    duckdb_version: str = Field(min_length=1)
+    scope: SnapshotScopeV2
+    sources: list[SourcePackageV2] = Field(min_length=1)
+    source_dependencies: list[dict[str, Any]]
+    evidence_families: list[dict[str, Any]]
+    rules: dict[str, str]
+    tables: dict[str, SnapshotTableV2]
+    compatible_profiles: list[str] = Field(min_length=1)
+    redistribution: Literal["allowed_with_attribution", "restricted", "prohibited"]
+    content_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    errors: list[str] = Field(default_factory=list)
+    warnings: list[str] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def publication_is_complete(self) -> Self:
+        if self.errors:
+            raise ValueError("A published snapshot manifest cannot contain errors")
+        if not self.tables:
+            raise ValueError("A published snapshot manifest requires canonical tables")
+        return self
