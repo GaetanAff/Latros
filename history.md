@@ -32,11 +32,10 @@ La vision complète, y compris les futures pistes LLM, est dans [projet.md](proj
 ## Dépôt et manière de travailler
 
 - Dépôt GitHub privé : `GaetanAff/Latros`.
-- Branche stable : `main`, actualisée avec le socle v0.1–v0.3 et le cadrage v0.4 accepté.
-- Implémentation v0.4 effectuée sur `feat/v0.4-clinical-knowledge-model`.
-- Commit de la tranche : `d7ef85c6fe41c19828318662b8968425abffe6a9` — 16 septembre 2026.
-- Pull request ouverte, sans fusion dans `main` : [#1 — Socle local : données rares, moteur clinique pur et questions adaptatives](https://github.com/GaetanAff/Latros/pull/1).
-- La CI GitHub Linux et Windows est verte pour cette pull request.
+- Branche stable : `main`, actualisée avec les jalons livrés v0.1 à v0.4.
+- L'implémentation v0.4 a été effectuée sur `feat/v0.4-clinical-knowledge-model`, puis fusionnée par la [pull request #2](https://github.com/GaetanAff/Latros/pull/2).
+- Commit de fusion dans `main` : `2315431ee62d9fce887812004c9fae89e5e5d20d` — 17 septembre 2026.
+- Les quatre contrôles GitHub (push et pull request, Linux et Windows) sont réussis pour le commit final `920a882`.
 - Le dossier local non suivi `FUTUR INTERFACE/` était présent dans l'espace de travail et n'a été ni lu, ni modifié, ni ajouté au commit.
 
 Les règles de contribution sont dans [CONTRIBUTING.md](CONTRIBUTING.md) : branche par fonctionnalité, pull request, `main` stable, aucune donnée de santé ou base brute dans Git.
@@ -374,7 +373,16 @@ distribution Python et reste contrôlé par son hash. La revue finale vérifie l
 tests d'or v1, Ruff, le formatage, mypy strict, les schémas exportés et la construction du paquet.
 
 Les checkpoints A à H sont terminés. Le snapshot et le manifeste `v0.2.0` restent immuables ; aucun
-snapshot médical v2 n'est publié. La maquette, le logo local non suivi, les données sources, les
-artefacts générés et toute donnée patient restent hors de la branche. La prochaine ingestion réelle
-reste bloquée par le `NO-GO` v0.5 documenté ; seules les fixtures synthétiques ou la levée formelle
-des conditions de licence et de revue sont autorisées.
+snapshot médical v2 n'est publié. La maquette, les données sources, les artefacts générés et toute
+donnée patient restent hors de la branche. Le logo officiel versionné est limité à la documentation.
+La prochaine ingestion réelle reste bloquée par le `NO-GO` v0.5 documenté ; seules les fixtures
+synthétiques ou la levée formelle des conditions de licence et de revue sont autorisées.
+
+### 17 septembre 2026 — publication du logo et fusion de v0.4
+
+Le logo officiel `latros-logo.svg` est ajouté au dépôt et affiché dans le README. Il ne modifie ni
+le moteur, ni les contrats, ni les données médicales.
+
+La pull request [#2 — v0.4 Clinical Knowledge Model](https://github.com/GaetanAff/Latros/pull/2)
+est fusionnée dans `main` après réussite des contrôles GitHub Linux et Windows, pour les événements
+`push` et `pull_request`. Le commit de fusion est `2315431ee62d9fce887812004c9fae89e5e5d20d`.
