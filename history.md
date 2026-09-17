@@ -510,3 +510,38 @@ Les tests d'or v1 et les composants v0.5-A à D restent inchangés.
 Contrôle GitHub : le [run #33](https://github.com/GaetanAff/Latros/actions/runs/35233968223)
 du checkpoint E2 a réussi sur `ubuntu-latest` et `windows-latest` en 1 min 20 s. Les deux
 avertissements concernent la transition Node.js interne aux actions GitHub, pas les tests Latros.
+
+### 17 septembre 2026 — v0.5-E3, corpus réel prêt pour revue humaine
+
+Le paquet `curation/v0.5-orl` matérialise le corpus minimal adulte ambulatoire sans créer de
+snapshot. Il contient 17 assertions atomiques : 4 pour la tonsillite aiguë, 5 pour le rhume, 4 pour
+la rhinosinusite aiguë et 4 pour l'otite moyenne aiguë. Chaque candidat dépasse le seuil de deux
+assertions et d'un discriminant. Les 19 concepts internes et 10 mappings DOID/Mondo conservent les
+granularités : angine, pharyngite, tonsillite et pharyngite streptococcique ne sont pas fusionnées ;
+les mappings plus larges ou plus étroits restent non scorants.
+
+Douze reçus enregistrent URL, release, date d'accès, licence, attribution, chemin local et SHA-256.
+Les captures complètes et la représentation exacte des segments restent dans `data/raw/`, hors
+Git. Les assertions proviennent de NHS, de la republication nidirect classée dans la même famille
+NHS, et des seules synthèses Health Topics MedlinePlus autorisées. Les dépendances NLM inconnues
+restent non agrégeables. Les pages CDC sont retirées du paquet courant tant que la redistribution
+internationale n'est pas juridiquement fermée ; ce retrait n'est jamais transformé en preuve
+négative.
+
+Un contrat de curation et trois commandes CLI ajoutent l'audit, le tableau de revue et l'export
+approuvé. Le gate vérifie artefacts et hashes, droits de réutilisation, provenance record par
+record, release/date/localisation, références, doublons, familles, dépendances, mappings, seuils,
+hashes des décisions et attestations locales. Une modification après revue invalide la décision.
+L'export vers l'importeur v2 est impossible tant que le gate ne passe pas.
+
+Le dossier `docs/reviews/v0.5-orl/` liste chaque assertion et mapping ainsi que le rapport
+machine-readable. Aucun reviewer, signature, qualification ou statut `approved` n'est inventé :
+`reviewers.jsonl` et `reviews.jsonl` sont vides, les 17 assertions et 10 mappings sont
+`pending_review`. Le verdict est `ready_for_human_review` mais `blocked` pour publication.
+F et G ne commencent pas ; aucun profil ORL final, manifeste `v0.5.0` ou snapshot médical n'est
+créé.
+
+Cinq tests synthétiques supplémentaires vérifient le blocage du paquet pending, l'ouverture du gate
+avec double revue attestée, l'invalidation après modification, le refus d'un artefact corrompu et
+l'exclusion du contenu thérapeutique. Ruff, formatage, mypy strict, contrôle des schémas et les
+122 tests réussissent localement sous Windows. Les tests d'or v1 restent inchangés.

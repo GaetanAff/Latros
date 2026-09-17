@@ -48,6 +48,23 @@ ces deux blocages.
   inconnues restent non agrégeables.
 - `v0.5-F` et `v0.5-G` restent bloqués tant que la checklist E2 n'est pas entièrement satisfaite.
 
+## Amendement d'exécution du 17 septembre 2026
+
+Le paquet réel minimal est désormais versionné sous `curation/v0.5-orl` avec le statut
+`pending_clinical_review`. Ses 17 assertions et 10 mappings franchissent les seuils techniques,
+mais n'ont aucune approbation humaine. Un gate déterministe vérifie les artefacts locaux, hashes,
+licences, provenance, dépendances, mappings, seuils et attestations avant tout export approuvé.
+
+Le paquet courant utilise NHS, nidirect et les seules synthèses Health Topics MedlinePlus
+réutilisables. CDC reste une source auditée mais n'est pas retenue dans ce paquet tant que la
+condition juridique de redistribution internationale n'est pas fermée. Ce retrait ne doit jamais
+être interprété comme une contradiction médicale.
+
+nidirect reste dans la famille NHS comme `republication`. Les lignes MedlinePlus à dépendance
+`unknown` restent visibles et non agrégeables. L'ADR ne change donc pas de statut : F demeure
+bloqué par les 17 doubles revues d'assertions, les 10 revues de mapping et les attestations réelles,
+dont au moins une qualification clinique.
+
 ## Sources et licences concernées
 
 Voir [`docs/source-audits/v0.5-orl-open-sources.md`](../source-audits/v0.5-orl-open-sources.md) pour

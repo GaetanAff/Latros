@@ -23,9 +23,9 @@ prescription ; le détail est consigné dans le [cahier v0.4](docs/v0.4-clinical
 
 `v0.5` est en cours sur une branche dédiée. Ses checkpoints techniques A à D définissent le registre,
 le manifeste, le constructeur, les importeurs et le premier raisonneur général des futurs snapshots
-canoniques v2. Le travail utilise uniquement des fixtures inventées ; la référence médicale reste
-`v0.2.0` et aucun manifeste `v0.5.0` n'existe tant que le corpus ouvert alternatif n'est pas curé
-et cliniquement relu.
+canoniques v2. Ces composants restent testés sur fixtures inventées. Un paquet ORL réel séparé est
+désormais préparé sous `pending_clinical_review` ; il n'est ni importé ni scoré. La référence
+médicale reste `v0.2.0` et aucun manifeste `v0.5.0` n'existe avant sa double revue clinique.
 
 Le constructeur v2 produit désormais les treize tables canoniques, leurs Parquet déterministes et
 un runtime DuckDB en lecture seule à partir d'un `CanonicalKnowledgeV2` validé. Cette capacité est
@@ -68,10 +68,25 @@ candidat ; ce minimum n'est pas démontré. Aucun dataset moins fiable ne le rem
 
 L'[audit alternatif v0.5-E2](docs/source-audits/v0.5-orl-open-sources.md) conserve ce résultat
 historique mais ne fait plus dépendre le pilote de SNOMED/HAS. DOID et Mondo peuvent préparer les
-identités ; des pages NHS/nidirect, CDC et certaines synthèses publiques MedlinePlus rendent le
-minimum de contenu curable. Le verdict de publication reste toutefois `NO-GO` : aucun paquet réel
-n'a encore les mappings, captures/hashes et deux revues requises, dont une clinique. MeSH est
-différé, les articles A.D.A.M. et les sources sans droit de transformation sont exclus.
+identités ; des pages NHS/nidirect et certaines synthèses publiques MedlinePlus fournissent les
+assertions proposées. Le paquet [`curation/v0.5-orl`](curation/v0.5-orl/README.md) contient 17
+assertions et 10 mappings avec artefacts, empreintes et provenance vérifiés. Les quatre candidats
+atteignent le seuil technique, mais toutes les lignes sont encore `pending_review` : le gate
+retourne `ready_for_human_review` et bloque publication, export, profil ORL final et snapshot.
+CDC reste hors du paquet tant que la redistribution internationale n'est pas clarifiée. MeSH,
+les articles A.D.A.M. et les sources sans droit de transformation sont exclus.
+
+Le [dossier de revue](docs/reviews/v0.5-orl/README.md) expose chaque assertion, mapping, famille et
+blocage. Les commandes suivantes ne créent aucune approbation :
+
+```text
+uv run --offline --no-sync latros curation review-workbook --package curation/v0.5-orl
+uv run --offline --no-sync latros curation audit --package curation/v0.5-orl
+uv run --offline --no-sync latros curation audit --package curation/v0.5-orl --require-publishable
+```
+
+La troisième commande doit échouer jusqu'à présence de deux revues attestées par assertion, dont
+une par un clinicien compétent, ainsi que la revue des mappings.
 
 ## Installation
 

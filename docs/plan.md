@@ -12,7 +12,7 @@ Les trois jalons avaient été implémentés ensemble dans la première tranche.
 | 2 | Premier snapshot médical — `v0.2.0` | Implémentée ; référence versionnée alignée sur le nom du plan | `manifests/v0.2.0.json` |
 | 3 | Moteur pur et interrogatoire — `v0.3.0` | Implémentée dans le paquet `0.3.0` ; évaluation clinique non réalisée | Le moteur utilise le snapshot `v0.2.0` |
 | 4 | Clinical Knowledge Model — `v0.4.0` | Terminée : checkpoints A–H livrés et revue finale verte | La référence reste `v0.2.0` ; aucun snapshot médical v2 publié |
-| 5 | Snapshot ORL généraliste — `v0.5.0` | En cours : A–D terminés ; E SNOMED/HAS conservé en `NO-GO` ; E2 sources ouvertes audité en `NO-GO` de publication | Aucun snapshot publié ; fixtures inventées uniquement |
+| 5 | Snapshot ORL généraliste — `v0.5.0` | En cours : A–D terminés ; E historique en `NO-GO` ; E2 audité ; E3 techniquement prêt pour revue humaine | Paquet réel `pending_clinical_review` ; aucun snapshot publié |
 
 Il s'agit des étapes du plan, pas d'une série de releases GitHub publiées. Aucun tag ou changement de version rétroactif du paquet n'est nécessaire pour identifier un snapshot. L'évaluation clinique et les fonctionnalités futures restent à discuter séparément.
 
@@ -43,9 +43,9 @@ détail et les critères de sortie sont conservés dans
 La stratégie de sources est ensuite réouverte sans effacer ce résultat. L'audit
 [`v0.5-E2`](source-audits/v0.5-orl-open-sources.md) retient DOID/Mondo pour préparer les identités et
 un corpus NHS/nidirect, CDC et MedlinePlus strictement filtré comme voie alternative. Le contenu
-minimal paraît curable, mais aucune assertion réelle n'a encore la double revue requise et certaines
-conditions CDC doivent être clarifiées pour une redistribution depuis la France. La publication
-reste donc en `NO-GO`.
+minimal est maintenant curé dans un paquet réel `pending_clinical_review`. Les pages CDC en sont
+écartées tant que leurs conditions internationales ne sont pas fermées. Aucune assertion n'a encore
+la double revue requise : la publication reste donc en `NO-GO`.
 
 Une première veille des ressources de médecine générale est intégrée au cahier des charges. Elle sépare terminologies, classifications, standards d'échange, sources d'assertions, règles cliniques, jeux synthétiques et benchmarks. Les matrices Kaggle/Mendeley ne sont pas retenues comme connaissance clinique tant que leur provenance n'est pas démontrée ; SNOMED CT, ICD, FHIR, LOINC, UCUM, UMLS, DDXPlus, Synthea, WHO SMART Guidelines, HealthBench, MIMIC-IV et ClinicDx sont positionnés selon leur rôle et une étape éventuelle, sans décision d'intégration anticipée.
 
@@ -66,7 +66,8 @@ juridique et clinique séparé des sources réelles. `v0.5.0` sera un snapshot O
 | `v0.5-D` | Terminé | Stratégie déterministe `general_v1` sur mini-corpus fictif |
 | `v0.5-E` | Terminé — `NO-GO` confirmé | Audit final SNOMED/HAS ORL ; conditions juridiques, cliniques et de couverture non satisfaites |
 | `v0.5-E2` | Terminé — `NO-GO` de publication | Audit DOID/Mondo/MeSH et NHS/CDC/MedlinePlus ; matrice de couverture produite ; curation et double revue absentes |
-| `v0.5-F` | Bloqué par `v0.5-E2` | Snapshot médical réel `v0.5.0` |
+| `v0.5-E3` | Terminé techniquement — revue humaine requise | 17 assertions, 10 mappings, artefacts/hashes, dossier de revue et gate formel ; `ready_for_human_review` |
+| `v0.5-F` | Bloqué par la double revue E3 | Snapshot médical réel `v0.5.0` |
 | `v0.5-G` | Bloqué par `v0.5-F` | Validation clinique séparée et clôture |
 
 `general_v1` accepte exclusivement `ClinicalCaseV2`, les concepts identiques ou les mappings
@@ -88,10 +89,15 @@ sont pas satisfaits : F et G ne doivent donc pas commencer.
 
 Le checkpoint E2 confirme une voie juridiquement plus simple sans SNOMED. DOID `v2026-08-31` et
 Mondo `v2026-09-01` sont compatibles avec un import versionné ; MeSH est différé. Les pages ouvertes
-identifiées permettent de préparer au moins deux assertions et un élément discriminant par candidat,
-mais elles ne constituent pas encore un corpus approuvé. Le prochain checkpoint est donc la curation
-réelle sous statut `pending_clinical_review`, avec mappings explicites, captures/hashes, familles de
-preuves et deux reviewers dont un clinicien. F reste interdit jusque-là.
+identifiées ont permis de préparer au moins deux assertions et un élément discriminant par candidat.
+
+Le checkpoint E3 matérialise cette curation : 17 assertions atomiques et 10 mappings qualifiés,
+captures locales et empreintes, provenance record par record, familles de preuves, dossier de revue
+et gate de publication. Les pages CDC ne participent pas au paquet tant que leur redistribution
+internationale n'est pas clarifiée ; nidirect reste une republication NHS et les dépendances NLM
+inconnues ne sont pas agrégées. Les 17 assertions et 10 mappings sont tous `pending_review`.
+Techniquement le paquet est `ready_for_human_review`, mais F reste interdit jusqu'à deux
+approbations réelles par assertion, dont un clinicien compétent, et la revue des mappings.
 
 ## Trajectoire v0.6 — médicaments et molécules
 
