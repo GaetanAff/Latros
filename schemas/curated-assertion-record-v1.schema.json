@@ -81,6 +81,32 @@
   },
   "additionalProperties": false,
   "properties": {
+    "access_date": {
+      "anyOf": [
+        {
+          "format": "date",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Access Date"
+    },
+    "assertion_id": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Assertion Id"
+    },
     "clinical_context": {
       "anyOf": [
         {
@@ -127,6 +153,51 @@
       ],
       "default": null,
       "title": "Evidence Type"
+    },
+    "laterality": {
+      "anyOf": [
+        {
+          "enum": [
+            "left",
+            "right",
+            "bilateral",
+            "midline",
+            "unspecified"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Laterality"
+    },
+    "location": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Location"
+    },
+    "mapping_notes": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Mapping Notes"
     },
     "object": {
       "$ref": "#/$defs/CuratedCode"
@@ -181,10 +252,75 @@
       "title": "Reviewers",
       "type": "array"
     },
+    "segment_id": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Segment Id"
+    },
+    "severity": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Severity"
+    },
+    "source_id": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Source Id"
+    },
+    "source_release": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Source Release"
+    },
     "source_text_sha256": {
       "pattern": "^[0-9a-f]{64}$",
       "title": "Source Text Sha256",
       "type": "string"
+    },
+    "source_url": {
+      "anyOf": [
+        {
+          "pattern": "^https://",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Source Url"
     },
     "status": {
       "const": "approved",
@@ -193,6 +329,19 @@
     },
     "subject": {
       "$ref": "#/$defs/CuratedCode"
+    },
+    "temporal_context": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Temporal Context"
     }
   },
   "required": [

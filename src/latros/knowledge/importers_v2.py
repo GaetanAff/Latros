@@ -2,6 +2,7 @@
 
 import csv
 from collections import defaultdict
+from datetime import date
 from pathlib import Path
 from typing import Any, Literal, Self
 
@@ -60,21 +61,32 @@ class CuratedEvidenceFamily(Contract):
 
 
 class CuratedAssertionRecord(Contract):
+    assertion_id: str | None = Field(default=None, min_length=1)
     record_id: str = Field(min_length=1)
     record_locator: str = Field(min_length=1)
     source_text_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    source_id: str | None = Field(default=None, min_length=1)
+    source_url: str | None = Field(default=None, pattern=r"^https://")
+    source_release: str | None = Field(default=None, min_length=1)
+    access_date: date | None = None
+    segment_id: str | None = Field(default=None, min_length=1)
     subject: CuratedCode
     relation: RelationType
     object: CuratedCode
     polarity: Literal["present", "excluded", "unknown"] = "present"
     population: list[str] = Field(default_factory=list)
     clinical_context: str | None = Field(default=None, min_length=1)
+    temporal_context: str | None = Field(default=None, min_length=1)
+    severity: str | None = Field(default=None, min_length=1)
+    location: str | None = Field(default=None, min_length=1)
+    laterality: Literal["left", "right", "bilateral", "midline", "unspecified"] | None = None
     evidence_type: str | None = Field(default=None, min_length=1)
     evidence_level: str | None = Field(default=None, min_length=1)
     curator_id: str = Field(min_length=1)
     reviewers: list[CurationReviewer] = Field(min_length=2)
     status: Literal["approved"]
     evidence_family: CuratedEvidenceFamily
+    mapping_notes: str | None = Field(default=None, min_length=1)
 
     @model_validator(mode="after")
     def independent_review_roles(self) -> Self:
@@ -156,7 +168,11 @@ def import_registry_v2(root: Path, registry: RegistryV2) -> CanonicalKnowledgeV2
                 qualifiers = AssertionQualifiers(
                     polarity=curated.polarity,
                     population=curated.population,
+                    temporal_context=curated.temporal_context,
                     clinical_context=curated.clinical_context,
+                    severity=curated.severity,
+                    location=curated.location,
+                    laterality=curated.laterality,
                     evidence_type=curated.evidence_type,
                     evidence_level=curated.evidence_level,
                 )

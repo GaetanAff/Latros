@@ -154,6 +154,9 @@ class AssertionQualifiers(Contract):
     sex: Literal["male", "female", "intersex", "any", "unknown"] | None = None
     temporal_context: str | None = Field(default=None, min_length=1)
     clinical_context: str | None = Field(default=None, min_length=1)
+    severity: str | None = Field(default=None, min_length=1)
+    location: str | None = Field(default=None, min_length=1)
+    laterality: Literal["left", "right", "bilateral", "midline", "unspecified"] | None = None
     evidence_type: str | None = Field(default=None, min_length=1)
     evidence_level: str | None = Field(default=None, min_length=1)
 

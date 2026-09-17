@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "package_id": "v0.5-orl-pending-2026-09-17",
+  "status": "pending_clinical_review",
+  "domain": "adult ambulatory otorhinolaryngology pilot",
+  "population": "adults aged 18 years or older in an ambulatory context",
+  "candidate_codes": [
+    {"system": "urn:latros:orl", "code": "acute-tonsillitis"},
+    {"system": "urn:latros:orl", "code": "common-cold"},
+    {"system": "urn:latros:orl", "code": "acute-rhinosinusitis"},
+    {"system": "urn:latros:orl", "code": "acute-otitis-media"}
+  ],
+  "minimum_assertions_per_candidate": 2,
+  "minimum_discriminating_per_candidate": 1,
+  "source_artifacts_file": "sources.json",
+  "concepts_file": "concepts.jsonl",
+  "mappings_file": "mappings.jsonl",
+  "assertions_file": "assertions.jsonl",
+  "reviewers_file": "reviewers.jsonl",
+  "reviews_file": "reviews.jsonl",
+  "segment_representation_path": "data/raw/v0.5-orl-pending/2026-09-17/segments.json",
+  "segment_representation_sha256": "2c765263671b1faeae5248b8a3904fac81c550ee3fdf8c9ee6bf64d96006ee50",
+  "exclusions": [
+    "treatments, medicines, doses and treatment durations",
+    "children and non-ambulatory populations",
+    "chronic sinusitis",
+    "otitis externa and otitis media with effusion",
+    "streptococcal pharyngitis as an automatic synonym of acute tonsillitis",
+    "CDC-derived assertions until international redistribution conditions are closed"
+  ]
+}

@@ -10,7 +10,12 @@ from lxml import etree
 
 from latros.clinical.loading import ClinicalCaseDocument, load_clinical_case
 from latros.clinical.v2 import ClinicalCaseV2
-from latros.common import LatrosError, encoded
+from latros.common import LatrosError, encoded, write_json
+from latros.knowledge.curation import (
+    audit_curation_package,
+    export_approved_assertions,
+    write_review_workbook,
+)
 from latros.knowledge.importers_v2 import import_registry_v2
 from latros.knowledge.loading import load_manifest_document
 from latros.knowledge.manifest_v2 import KnowledgeSnapshotManifestV2
@@ -31,9 +36,11 @@ app = typer.Typer(no_args_is_help=True, help="Latros — research CLI, safety no
 sources = typer.Typer(no_args_is_help=True)
 data = typer.Typer(no_args_is_help=True)
 question = typer.Typer(no_args_is_help=True)
+curation = typer.Typer(no_args_is_help=True)
 app.add_typer(sources, name="sources")
 app.add_typer(data, name="data")
 app.add_typer(question, name="question")
+app.add_typer(curation, name="curation")
 
 
 class OutputContract(StrEnum):
@@ -105,6 +112,68 @@ def inspect(ctx: typer.Context, snapshot: str = typer.Option(...)) -> None:
         manifest.model_dump(mode="json")
         if isinstance(manifest, KnowledgeSnapshotManifestV2)
         else manifest
+    )
+
+
+@curation.command("audit")
+def audit_curation(
+    ctx: typer.Context,
+    package: Annotated[Path, typer.Option("--package")] = Path("curation/v0.5-orl"),
+    require_publishable: Annotated[bool, typer.Option("--require-publishable")] = False,
+    report_path: Annotated[Path | None, typer.Option("--report")] = None,
+) -> None:
+    """Audit a review package without treating pending work as a snapshot."""
+    package_path = package if package.is_absolute() else ctx.obj["root"] / package
+    report = audit_curation_package(ctx.obj["root"], package_path)
+    report_payload = report.model_dump(mode="json")
+    if report_path is not None:
+        resolved_report_path = (
+            report_path if report_path.is_absolute() else ctx.obj["root"] / report_path
+        )
+        write_json(resolved_report_path, report_payload)
+    output(report_payload)
+    if require_publishable and report.status != "ready_for_publication":
+        raise LatrosError("Curation publication gate is blocked")
+
+
+@curation.command("export-approved")
+def export_curation(
+    ctx: typer.Context,
+    package: Annotated[Path, typer.Option("--package")] = Path("curation/v0.5-orl"),
+    destination: Annotated[Path, typer.Option("--destination")] = Path(
+        "data/staging/v0.5-orl/approved-assertions.jsonl"
+    ),
+) -> None:
+    """Export importer-compatible JSONL only after the publication gate passes."""
+    package_path = package if package.is_absolute() else ctx.obj["root"] / package
+    destination_path = destination if destination.is_absolute() else ctx.obj["root"] / destination
+    records = export_approved_assertions(ctx.obj["root"], package_path, destination_path)
+    output(
+        {
+            "exported": len(records),
+            "destination": str(destination_path),
+            "status": "approved",
+        }
+    )
+
+
+@curation.command("review-workbook")
+def review_workbook(
+    ctx: typer.Context,
+    package: Annotated[Path, typer.Option("--package")] = Path("curation/v0.5-orl"),
+    destination: Annotated[Path, typer.Option("--destination")] = Path(
+        "docs/reviews/v0.5-orl/assertion-review.md"
+    ),
+) -> None:
+    """Generate a review table without recording or implying any approval."""
+    package_path = package if package.is_absolute() else ctx.obj["root"] / package
+    destination_path = destination if destination.is_absolute() else ctx.obj["root"] / destination
+    write_review_workbook(package_path, destination_path)
+    output(
+        {
+            "destination": str(destination_path),
+            "status": "review_workbook_generated",
+        }
     )
 
 

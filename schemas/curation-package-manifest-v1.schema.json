@@ -1,0 +1,134 @@
+{
+  "$defs": {
+    "CuratedCode": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "minLength": 1,
+          "title": "Code",
+          "type": "string"
+        },
+        "system": {
+          "minLength": 1,
+          "title": "System",
+          "type": "string"
+        }
+      },
+      "required": [
+        "system",
+        "code"
+      ],
+      "title": "CuratedCode",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "assertions_file": {
+      "default": "assertions.jsonl",
+      "title": "Assertions File",
+      "type": "string"
+    },
+    "candidate_codes": {
+      "items": {
+        "$ref": "#/$defs/CuratedCode"
+      },
+      "minItems": 1,
+      "title": "Candidate Codes",
+      "type": "array"
+    },
+    "concepts_file": {
+      "default": "concepts.jsonl",
+      "title": "Concepts File",
+      "type": "string"
+    },
+    "domain": {
+      "minLength": 1,
+      "title": "Domain",
+      "type": "string"
+    },
+    "exclusions": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Exclusions",
+      "type": "array"
+    },
+    "mappings_file": {
+      "default": "mappings.jsonl",
+      "title": "Mappings File",
+      "type": "string"
+    },
+    "minimum_assertions_per_candidate": {
+      "default": 2,
+      "minimum": 1,
+      "title": "Minimum Assertions Per Candidate",
+      "type": "integer"
+    },
+    "minimum_discriminating_per_candidate": {
+      "default": 1,
+      "minimum": 1,
+      "title": "Minimum Discriminating Per Candidate",
+      "type": "integer"
+    },
+    "package_id": {
+      "minLength": 1,
+      "title": "Package Id",
+      "type": "string"
+    },
+    "population": {
+      "minLength": 1,
+      "title": "Population",
+      "type": "string"
+    },
+    "reviewers_file": {
+      "default": "reviewers.jsonl",
+      "title": "Reviewers File",
+      "type": "string"
+    },
+    "reviews_file": {
+      "default": "reviews.jsonl",
+      "title": "Reviews File",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "segment_representation_path": {
+      "title": "Segment Representation Path",
+      "type": "string"
+    },
+    "segment_representation_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Segment Representation Sha256",
+      "type": "string"
+    },
+    "source_artifacts_file": {
+      "default": "sources.json",
+      "title": "Source Artifacts File",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "pending_clinical_review",
+        "approved_for_snapshot"
+      ],
+      "title": "Status",
+      "type": "string"
+    }
+  },
+  "required": [
+    "package_id",
+    "status",
+    "domain",
+    "population",
+    "candidate_codes",
+    "segment_representation_path",
+    "segment_representation_sha256"
+  ],
+  "title": "CurationPackageManifest",
+  "type": "object"
+}

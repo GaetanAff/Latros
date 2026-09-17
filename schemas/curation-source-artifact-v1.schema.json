@@ -1,0 +1,182 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "access_date": {
+      "format": "date",
+      "title": "Access Date",
+      "type": "string"
+    },
+    "aggregatable": {
+      "default": false,
+      "title": "Aggregatable",
+      "type": "boolean"
+    },
+    "artifact_id": {
+      "minLength": 1,
+      "title": "Artifact Id",
+      "type": "string"
+    },
+    "attribution": {
+      "minLength": 1,
+      "title": "Attribution",
+      "type": "string"
+    },
+    "capture_kind": {
+      "enum": [
+        "full_capture",
+        "verified_segment_representation"
+      ],
+      "title": "Capture Kind",
+      "type": "string"
+    },
+    "dependency_type": {
+      "anyOf": [
+        {
+          "enum": [
+            "primary",
+            "derived_from",
+            "republication",
+            "shared_upstream",
+            "unknown"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Dependency Type"
+    },
+    "evidence_family_id": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Evidence Family Id"
+    },
+    "legal_status": {
+      "enum": [
+        "approved_for_structured_reuse",
+        "requires_review",
+        "prohibited"
+      ],
+      "title": "Legal Status",
+      "type": "string"
+    },
+    "license_name": {
+      "minLength": 1,
+      "title": "License Name",
+      "type": "string"
+    },
+    "license_url": {
+      "pattern": "^https://",
+      "title": "License Url",
+      "type": "string"
+    },
+    "local_path": {
+      "title": "Local Path",
+      "type": "string"
+    },
+    "notes": {
+      "default": "",
+      "title": "Notes",
+      "type": "string"
+    },
+    "publication_date": {
+      "anyOf": [
+        {
+          "format": "date",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Publication Date"
+    },
+    "redistribution": {
+      "enum": [
+        "allowed_with_attribution",
+        "local_only",
+        "prohibited",
+        "unknown"
+      ],
+      "title": "Redistribution",
+      "type": "string"
+    },
+    "release": {
+      "minLength": 1,
+      "title": "Release",
+      "type": "string"
+    },
+    "role": {
+      "enum": [
+        "terminology",
+        "clinical_assertions",
+        "license_evidence"
+      ],
+      "title": "Role",
+      "type": "string"
+    },
+    "sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Sha256",
+      "type": "string"
+    },
+    "source_id": {
+      "minLength": 1,
+      "title": "Source Id",
+      "type": "string"
+    },
+    "source_url": {
+      "pattern": "^https://",
+      "title": "Source Url",
+      "type": "string"
+    },
+    "title": {
+      "minLength": 1,
+      "title": "Title",
+      "type": "string"
+    },
+    "upstream_reference": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Upstream Reference"
+    }
+  },
+  "required": [
+    "artifact_id",
+    "source_id",
+    "role",
+    "title",
+    "source_url",
+    "release",
+    "access_date",
+    "local_path",
+    "sha256",
+    "capture_kind",
+    "license_name",
+    "license_url",
+    "attribution",
+    "redistribution",
+    "legal_status"
+  ],
+  "title": "SourceArtifactReceipt",
+  "type": "object"
+}

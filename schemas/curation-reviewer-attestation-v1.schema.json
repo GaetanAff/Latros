@@ -1,0 +1,56 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "attestation_path": {
+      "title": "Attestation Path",
+      "type": "string"
+    },
+    "attestation_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Attestation Sha256",
+      "type": "string"
+    },
+    "qualified_clinician": {
+      "default": false,
+      "title": "Qualified Clinician",
+      "type": "boolean"
+    },
+    "reviewer_id": {
+      "minLength": 1,
+      "title": "Reviewer Id",
+      "type": "string"
+    },
+    "roles": {
+      "items": {
+        "enum": [
+          "clinical",
+          "mapping"
+        ],
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Roles",
+      "type": "array"
+    },
+    "verification_date": {
+      "format": "date",
+      "title": "Verification Date",
+      "type": "string"
+    },
+    "verified_by": {
+      "minLength": 1,
+      "title": "Verified By",
+      "type": "string"
+    }
+  },
+  "required": [
+    "reviewer_id",
+    "roles",
+    "attestation_path",
+    "attestation_sha256",
+    "verified_by",
+    "verification_date"
+  ],
+  "title": "ReviewerAttestation",
+  "type": "object"
+}
