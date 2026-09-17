@@ -506,3 +506,7 @@ registre réel, snapshot `v0.5.0`, profil clinique ou donnée protégée n'est a
 
 Vérification locale : Ruff, formatage, mypy strict, export des schémas et les 117 tests réussissent.
 Les tests d'or v1 et les composants v0.5-A à D restent inchangés.
+
+Contrôle GitHub : le [run #33](https://github.com/GaetanAff/Latros/actions/runs/35233968223)
+du checkpoint E2 a réussi sur `ubuntu-latest` et `windows-latest` en 1 min 20 s. Les deux
+avertissements concernent la transition Node.js interne aux actions GitHub, pas les tests Latros.
