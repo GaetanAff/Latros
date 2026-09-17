@@ -545,3 +545,8 @@ Cinq tests synthétiques supplémentaires vérifient le blocage du paquet pendin
 avec double revue attestée, l'invalidation après modification, le refus d'un artefact corrompu et
 l'exclusion du contenu thérapeutique. Ruff, formatage, mypy strict, contrôle des schémas et les
 122 tests réussissent localement sous Windows. Les tests d'or v1 restent inchangés.
+
+Contrôle GitHub : le [run #35](https://github.com/GaetanAff/Latros/actions/runs/35264450810)
+du checkpoint E3 a réussi sur `ubuntu-latest` en 27 s et `windows-latest` en 1 min 18 s.
+L'avertissement de plateforme concerne uniquement la transition Node.js interne aux actions
+GitHub.
