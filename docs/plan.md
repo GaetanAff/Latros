@@ -23,6 +23,8 @@ La limitation actuelle aux maladies rares est explicite. Le snapshot HPO/Mondo/O
 
 L'étape est suivie par checkpoints `v0.4-A` à `v0.4-H` dans le cahier des charges. Seul `v0.4-A`, le cadrage initial, est actuellement en discussion. Aucun code, contrat ou snapshot n'est encore modifié.
 
+Une première veille des ressources de médecine générale est intégrée au cahier des charges. Elle sépare terminologies, classifications, standards d'échange, sources d'assertions, règles cliniques, jeux synthétiques et benchmarks. Les matrices Kaggle/Mendeley ne sont pas retenues comme connaissance clinique tant que leur provenance n'est pas démontrée ; SNOMED CT, ICD, FHIR, LOINC, UCUM, UMLS, DDXPlus, Synthea, WHO SMART Guidelines, HealthBench, MIMIC-IV et ClinicDx sont positionnés selon leur rôle et une étape éventuelle, sans décision d'intégration anticipée.
+
 ## Étape 2 — périmètre livré
 
 - [x] HPO `2026-09-01`, Mondo `2026-09-01`, Orphadata product4 EN/FR `2026-07`, URLs épinglées et SHA-256 attendus dans le registre.

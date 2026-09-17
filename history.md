@@ -238,3 +238,13 @@ Un [cahier des charges dédié](docs/v0.4-clinical-knowledge-model.md) est cré�
 Décision de périmètre : le snapshot `v0.2.0` et `semantic_v1` restent spécialisés maladies rares. Ils ne couvrent pas correctement une plainte courante comme fièvre et mal de gorge. `v0.4` doit préparer l'architecture générale sans import massif ; `v0.5` doit réaliser une première extension étroite vers la médecine générale avec des sources auditées et une stratégie dédiée. Les futurs référentiels ne seront sélectionnés qu'après analyse de leur rôle, licence, provenance, dépendances et risque de double comptage.
 
 Cette livraison est uniquement documentaire : aucun code, schéma, test, manifeste ou snapshot de données n'est modifié. Le socle actuel et la référence `v0.2.0` restent inchangés.
+
+### 17 septembre 2026 — Première veille des ressources de médecine générale
+
+Une liste proposée par un autre LLM est vérifiée avant d'être ajoutée au plan. Le cahier des charges distingue désormais les terminologies, classifications, mappings, standards d'échange, assertions cliniques, recommandations, cas synthétiques, données réelles restreintes et applications complètes.
+
+Corrections importantes : SNOMED CT est une terminologie clinique et non une matrice de probabilités ; les mappings SNOMED–ICD servent à la classification et au reporting, pas à déduire une maladie depuis un symptôme ; FHIR est un standard d'échange ; HealthBench contient des conversations réalistes générées ou adversariales et non 5 000 conversations de patients réels ; ClinicDx est une application LLM/RAG à surveiller, pas une base de connaissances validée.
+
+Les jeux Kaggle « Symptoms to diseases », Mendeley « Disease and symptoms dataset 2023 » et SymbiPredict sont conservés comme pistes d'exploration uniquement. Leur format et leur licence déclarée ne compensent pas une provenance médicale insuffisante. DDXPlus est mieux documenté et peut devenir un benchmark synthétique de `v0.5`, mais pas la vérité clinique du moteur. Synthea, WHO SMART Guidelines, LOINC/UCUM, MIMIC-IV et les autres ressources sont répartis entre les étapes `v0.5` à `v0.9` selon leur rôle.
+
+Cette veille ne télécharge et n'intègre aucune donnée. Toute adoption future exige un audit record par record de la provenance, des licences, des dépendances, des biais et de l'indépendance de l'évaluation.
