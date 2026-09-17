@@ -11,7 +11,7 @@ Les trois jalons avaient été implémentés ensemble dans la première tranche.
 | 1 | Fondation technique — `v0.1.0` | Implémentée : paquet, CLI sources, registre, téléchargements vérifiés, verrou et CI | Aucun snapshot médical nécessaire à ce jalon |
 | 2 | Premier snapshot médical — `v0.2.0` | Implémentée ; référence versionnée alignée sur le nom du plan | `manifests/v0.2.0.json` |
 | 3 | Moteur pur et interrogatoire — `v0.3.0` | Implémentée dans le paquet `0.3.0` ; évaluation clinique non réalisée | Le moteur utilise le snapshot `v0.2.0` |
-| 4 | Clinical Knowledge Model — `v0.4` | `v0.4-G` livré : audit v0.5 terminé avec `NO-GO` temporaire documenté | La référence reste `v0.2.0` ; aucun snapshot médical v2 publié |
+| 4 | Clinical Knowledge Model — `v0.4.0` | Terminée : checkpoints A–H livrés et revue finale verte | La référence reste `v0.2.0` ; aucun snapshot médical v2 publié |
 
 Il s'agit des étapes du plan, pas d'une série de releases GitHub publiées. Aucun tag ou changement de version rétroactif du paquet n'est nécessaire pour identifier un snapshot. L'évaluation clinique et les fonctionnalités futures restent à discuter séparément.
 

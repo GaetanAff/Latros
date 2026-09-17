@@ -4,9 +4,9 @@ Prototype **interne de recherche** pour classer des maladies rares à partir de 
 
 > **Aucun triage n'est effectué.** Toutes les analyses retournent `safety_status: not_evaluated`. Les scores sont des compatibilités sémantiques, jamais des probabilités ou des diagnostics validés. Ne pas utiliser ce prototype pour conseiller un patient.
 
-La version de développement `0.3.0` regroupe le socle technique, le pipeline de données et le moteur pur. Les checkpoints `v0.4-C` à `v0.4-F` ajoutent les contrats cliniques et de connaissances généraux, les stratégies versionnées et les sorties explicables v2, tout en conservant le comportement v1. Voir le [journal des ADR](docs/decisions/README.md), la [méthodologie](docs/methodology.md) et [projet.md](projet.md).
+La version `0.4.0` livre le Clinical Knowledge Model : contrats cliniques et de connaissances généraux, stratégies versionnées, couverture, abstention, sorties explicables et reçus reproductibles, tout en conservant le comportement v1. Voir le [journal des ADR](docs/decisions/README.md), la [méthodologie](docs/methodology.md) et [projet.md](projet.md).
 
-Le [plan et son avancement](docs/plan.md) distinguent les trois étapes : fondation `v0.1.0`, premier snapshot médical `v0.2.0`, moteur pur `v0.3.0`. Le snapshot de référence s'appelle maintenant **`v0.2.0`**, conformément au jalon du plan. La version du paquet Python reste `0.3.0`, car le moteur est déjà présent. [history.md](history.md) conserve les réalisations et vérifications datées ; ces documents sont actualisés à chaque livraison.
+Le [plan et son avancement](docs/plan.md) distingue fondation `v0.1.0`, premier snapshot médical `v0.2.0`, moteur pur `v0.3.0` et modèle général `v0.4.0`. Le snapshot de référence reste **`v0.2.0`** : v0.4 est une évolution logicielle et contractuelle, pas une nouvelle publication de données. [history.md](history.md) conserve les réalisations et vérifications datées.
 
 > **Périmètre critique : maladies rares uniquement.** Le snapshot actuel ne couvre pas la médecine générale. Une plainte courante telle que fièvre et mal de gorge peut conduire à un classement de maladies rares hors périmètre ; ce classement ne doit pas être utilisé comme différentiel de médecine courante. L'extension est planifiée : [`v0.4 Clinical Knowledge Model`](docs/v0.4-clinical-knowledge-model.md) prépare l'architecture générale, puis `v0.5` devra intégrer une première extension étroite avec des sources auditées.
 
@@ -174,7 +174,7 @@ data/                  sources et snapshots locaux (ignorés)
 tests/                 fixtures synthétiques et tests hors ligne
 ```
 
-Suivre [CONTRIBUTING.md](CONTRIBUTING.md) : branches de fonctionnalité, pull requests et `main` stable. Les trois jalons du plan sont réunis ici ; `0.3.0` n'est pas une certification médicale.
+Suivre [CONTRIBUTING.md](CONTRIBUTING.md) : branches de fonctionnalité, pull requests et `main` stable. `0.4.0` reste un prototype de recherche, pas une certification médicale.
 
 ## Confidentialité et licences
 

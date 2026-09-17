@@ -133,10 +133,15 @@ def _strategy(root: Path, snapshot: str, strategy: str) -> SemanticV1Adapter:
 
 
 def _profile_path(strategy: str) -> Path:
-    path = Path(__file__).resolve().parents[2] / "profiles" / f"{strategy}.json"
-    if not path.is_file():
-        raise LatrosError(f"Reasoning profile is missing: {strategy}")
-    return path
+    name = f"{strategy}.json"
+    candidates = [
+        Path(__file__).resolve().parents[2] / "profiles" / name,
+        Path(__file__).resolve().parent / "profiles" / name,
+    ]
+    for path in candidates:
+        if path.is_file():
+            return path
+    raise LatrosError(f"Reasoning profile is missing: {strategy}")
 
 
 def _v2_output(case: ClinicalCaseDocument, output_contract: OutputContract) -> bool:

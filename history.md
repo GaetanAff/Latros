@@ -8,7 +8,7 @@ Dernière mise à jour : 17 septembre 2026.
 
 Latros est aujourd'hui un prototype local de recherche, utilisable en ligne de commande, qui prend un cas clinique **déjà structuré en identifiants HPO**, classe des maladies rares ORPHA selon une compatibilité sémantique explicable, puis propose une question discriminante. Il n'est ni un chatbot, ni une interface patient, ni un outil de triage ou de diagnostic clinique validé.
 
-Référence actuelle des données : **`v0.2.0`**, nom du jalon « Premier snapshot médical » dans le [plan d'implémentation](docs/plan.md). Le paquet reste à la version `0.3.0`, car le moteur de l'étape 3 était déjà inclus dans la première livraison. L'ancien snapshot `latros-kb-0002` est conservé.
+Référence actuelle des données : **`v0.2.0`**, nom du jalon « Premier snapshot médical » dans le [plan d'implémentation](docs/plan.md). Le paquet est à la version `0.4.0` ; aucun snapshot médical v2 n'est publié. L'ancien snapshot `latros-kb-0002` est conservé.
 
 ## Décisions de cadrage antérieures
 
@@ -361,3 +361,15 @@ La décision `v0.5` est un `NO-GO` temporaire pour les données réelles. Des fi
 synthétiques peuvent être préparés, mais aucun snapshot ou score de médecine générale ne doit être
 publié avant levée de toutes les conditions. Aucun téléchargement, ingestion, manifeste ou snapshot
 n'a été créé pendant cet audit.
+
+### 17 septembre 2026 — v0.4-H, clôture de Clinical Knowledge Model
+
+La version du paquet passe à `0.4.0`. Le profil de raisonnement versionné est inclus dans la
+distribution Python et reste contrôlé par son hash. La revue finale vérifie la suite complète, les
+tests d'or v1, Ruff, le formatage, mypy strict, les schémas exportés et la construction du paquet.
+
+Les checkpoints A à H sont terminés. Le snapshot et le manifeste `v0.2.0` restent immuables ; aucun
+snapshot médical v2 n'est publié. La maquette, le logo local non suivi, les données sources, les
+artefacts générés et toute donnée patient restent hors de la branche. La prochaine ingestion réelle
+reste bloquée par le `NO-GO` v0.5 documenté ; seules les fixtures synthétiques ou la levée formelle
+des conditions de licence et de revue sont autorisées.

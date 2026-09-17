@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "latros"
-version = "0.3.0"
+version = "0.4.0"
 description = "Offline research prototype for explainable rare-disease phenotype ranking"
 readme = "README.md"
 requires-python = ">=3.11,<3.12"
@@ -21,6 +21,9 @@ dev = ["pytest>=8,<10", "ruff>=0.11,<1", "mypy>=1.15,<2", "types-PyYAML", "lxml-
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/latros"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"profiles" = "latros/profiles"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
