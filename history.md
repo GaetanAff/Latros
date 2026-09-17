@@ -2,13 +2,18 @@
 
 Ce fichier est le journal de continuité du projet. Il décrit ce qui a été décidé et effectivement réalisé, afin de pouvoir reprendre la discussion sans déduire l'état du projet à partir du code seul.
 
-Dernière mise à jour : 16 septembre 2026.
+Dernière mise à jour : 17 septembre 2026.
 
 ## État actuel en une phrase
 
 Latros est aujourd'hui un prototype local de recherche, utilisable en ligne de commande, qui prend un cas clinique **déjà structuré en identifiants HPO**, classe des maladies rares ORPHA selon une compatibilité sémantique explicable, puis propose une question discriminante. Il n'est ni un chatbot, ni une interface patient, ni un outil de triage ou de diagnostic clinique validé.
 
-Référence actuelle des données : **`v0.2.0`**, nom du jalon « Premier snapshot médical » dans le [plan d'implémentation](docs/plan.md). Le paquet reste à la version `0.3.0`, car le moteur de l'étape 3 était déjà inclus dans la première livraison. L'ancien snapshot `latros-kb-0002` est conservé.
+Référence actuelle des données : **`v0.2.0`**, nom du jalon « Premier snapshot médical » dans le [plan d'implémentation](docs/plan.md). Le paquet est à la version `0.4.0` ; aucun snapshot médical v2 n'est publié. L'ancien snapshot `latros-kb-0002` est conservé.
+
+## Identité visuelle — 17 septembre 2026
+
+- Le logo officiel `latros-logo.svg` est versionné à la racine du dépôt et affiché dans le README.
+- Il s'agit uniquement d'un actif de documentation : aucun contrat clinique, snapshot, moteur ou résultat de raisonnement n'est modifié.
 
 ## Décisions de cadrage antérieures
 
@@ -27,8 +32,8 @@ La vision complète, y compris les futures pistes LLM, est dans [projet.md](proj
 ## Dépôt et manière de travailler
 
 - Dépôt GitHub privé : `GaetanAff/Latros`.
-- Branche stable : `main`.
-- Implémentation effectuée sur `feat/clinical-foundation`.
+- Branche stable : `main`, actualisée avec le socle v0.1–v0.3 et le cadrage v0.4 accepté.
+- Implémentation v0.4 effectuée sur `feat/v0.4-clinical-knowledge-model`.
 - Commit de la tranche : `d7ef85c6fe41c19828318662b8968425abffe6a9` — 16 septembre 2026.
 - Pull request ouverte, sans fusion dans `main` : [#1 — Socle local : données rares, moteur clinique pur et questions adaptatives](https://github.com/GaetanAff/Latros/pull/1).
 - La CI GitHub Linux et Windows est verte pour cette pull request.
@@ -260,3 +265,116 @@ Les résultats resteront des compatibilités tant qu'ils ne seront pas calibrés
 Le cahier des charges impose désormais que tout futur manifeste publie le périmètre clinique, les dépendances entre sources, les familles de preuves non indépendantes, les règles de normalisation et de déduplication ainsi que les stratégies et profils d'agrégation compatibles. Chaque exécution devra conserver les hash du snapshot et du profil de raisonnement afin de reproduire le score global et les contributions par source.
 
 Une modification de la connaissance imposera un nouvel identifiant de snapshot. Une modification limitée au moteur, aux poids ou à la calibration conservera éventuellement le snapshot mais recevra une nouvelle version de profil. Le manifeste `v0.2.0` reste immuable et n'est pas migré rétroactivement. Aucun code, donnée ou snapshot n'est modifié dans cette livraison documentaire.
+
+### 17 septembre 2026 — v0.4-B, frontières et non-régression
+
+Le cadrage v0.4 est approuvé. Les ADR 0002, 0003 et 0004 fixent respectivement les contrats
+cliniques v2, le Knowledge Model canonique et la séparation entre stratégies, profils, snapshots
+et reçus d'exécution. Deux tests d'or vérifient l'égalité octet par octet des sorties complètes de
+`semantic_v1` et `question_v1` sur les fixtures inventées.
+
+Cette livraison n'ajoute encore aucun contrat runtime v2 et ne change aucun résultat clinique. Le
+snapshot `v0.2.0`, son manifeste, les sept tables et les formats publics v1 restent inchangés.
+
+### 17 septembre 2026 — v0.4-C, ClinicalCaseV2 et migration
+
+Le contrat historique devient explicitement `ClinicalCaseV1` tout en conservant l'alias public
+`ClinicalCase`. Le nouveau `ClinicalCaseV2` est versionné et sépare le texte source, les propositions
+d'extraction non utilisables pour scorer, les observations confirmées et les réponses aux questions.
+Il couvre les onze catégories cliniques prévues, des valeurs typées, la temporalité, les unités, la
+sévérité, la localisation, la latéralité, le sujet, l'acquisition, la provenance et les corrections.
+
+Les combinaisons incohérentes d'état clinique et d'évaluation sont refusées. Une impossibilité
+d'évaluation est représentée par `unknown + unable_to_assess`. Une correction contradictoire doit
+référencer explicitement l'observation remplacée. Toute origine non directement déclarative exige
+une référence traçable.
+
+Un chargeur distingue v1 sans `schema_version`, v2 explicite et versions inconnues refusées. La
+migration HPO v1 → v2 est déterministe et idempotente. Le schéma JSON v2 est versionné. Quatorze
+tests dédiés portent la suite à 72 tests verts ; Ruff, formatage, mypy strict et export des schémas
+sont également verts. La CLI, `semantic_v1`, les sorties v1 et le snapshot `v0.2.0` restent
+fonctionnellement inchangés.
+
+### 17 septembre 2026 — v0.4-D, Knowledge Model et projection v1
+
+Le Knowledge Model v2 introduit des contrats séparés pour les releases et artefacts sources, les
+records bruts, les concepts et terminologies, les mappings, les assertions sources et canoniques,
+leurs dérivations, les familles de preuves et les dépendances. Un mapping, même exact, reste un
+objet terminologique et ne produit jamais implicitement une assertion diagnostique.
+
+Les identités sources incluent la release, les hashes d'artefacts, le localisateur du record et son
+ordinal. L'identité canonique exclut libellés et provenance pour permettre une déduplication
+auditée. Les doublons sources sont conservés, mais une signature canonique identique issue de la
+même source partage une famille de preuve. Une dépendance inconnue empêche l'agrégation par défaut.
+
+L'adaptateur du snapshot v1 expose HPO/Mondo/Orphadata sous ces contrats sans réécrire ses sept
+tables. Les provenances EN/FR deviennent deux artefacts d'une seule assertion source. Les schémas
+`knowledge-model-v2.schema.json` et `canonical-tables-v2.json` sont versionnés. Six tests dédiés
+portent la suite à 78 tests verts. Aucun snapshot médical v2 n'est publié et `v0.2.0` reste intact.
+
+### 17 septembre 2026 — v0.4-E, stratégies et compatibilité semantic_v1
+
+Quatre protocoles séparent désormais génération de candidats, scoring, sélection de questions et
+construction d'explications. Leur descripteur rend explicites les capacités, contrats acceptés,
+relations utilisées, nature du score et séparation du futur moteur de sécurité. Le profil
+`semantic_v1-default` est versionné, hashé et compatible avec les manifests de schéma v1.
+
+L'adaptateur `SemanticV1Adapter` appelle directement le moteur et la sélection de questions
+historiques. Sa projection depuis `ClinicalCaseV2` n'utilise que les observations HPO confirmées,
+actives et non remplacées ; elle rapporte les types ou terminologies ignorés et ne lit jamais les
+propositions d'extraction. Des observations temporelles actives multiples pour le même concept sont
+refusées plutôt que fusionnées.
+
+Les sorties du cas v1 et de sa migration v2 sont strictement identiques dans les tests. Six tests
+supplémentaires portent la suite à 84 tests verts, sans modification de `Engine.rank`,
+`Engine.diagnose`, `question_v1`, des formats CLI v1 ou du snapshot `v0.2.0`.
+
+### 17 septembre 2026 — v0.4-F, résultats explicables et reçus
+
+Les résultats v2 distinguent désormais classement, abstention et périmètre. La couverture compte
+les observations confirmées supportées, rend chaque donnée ignorée visible et ne traite jamais une
+proposition comme observation. Les candidats exposent leurs contributions favorables,
+défavorables et inconnues, leurs assertions et provenances, ainsi que les sous-totaux par source et
+famille de preuve. Le score conserve le nom `semantic_v1.compatibility`, non calibré.
+
+Les questions v2 publient leur justification, gain heuristique attendu, couverture, sources et
+assertions. La réponse d'interface `unable_to_assess` est explicitement permise et correspond à
+`unknown + unable_to_assess` dans le cas clinique. Le statut du moteur de sécurité reste séparé et
+fixé à `not_evaluated`.
+
+Chaque exécution v2 inclut un reçu déterministe avec empreinte du cas, hashes du manifeste et du
+contenu de connaissance, profil et paramètres, sources ou familles réellement utilisées, mappings,
+transformations et version logicielle. La CLI choisit automatiquement la sortie historique pour
+v1 et la sortie v2 pour un cas v2 ; des options explicites permettent de forcer le contrat. Huit
+tests supplémentaires portent la suite à 92 tests verts. Aucun reçu n'est persisté, aucun manifeste
+historique ou calcul de `semantic_v1` n'est modifié.
+
+### 17 septembre 2026 — v0.4-G, audit des sources ORL de v0.5
+
+L'audit officiel de SNOMED CT France et de la fiche HAS sur l'angine aiguë adulte est consigné dans
+`docs/source-audits/v0.5-orl.md`. L'édition nationale française de juin 2026 est confirmée comme
+terminologie candidate, mais son téléchargement et son implémentation exigent affiliation et
+licence nationale. La redistribution d'alignements ou dérivés et le modèle de sous-licence de
+Latros doivent être clarifiés avec le NRC.
+
+La fiche HAS contient un premier ensemble structurable, mais elle a été élaborée avec plusieurs
+organisations tierces. Les mentions légales excluent de la réutilisation libre les contenus grevés
+de droits tiers. Une autorisation écrite, une curation atomique et deux relectures dont une clinique
+sont donc des prérequis. DDXPlus est maintenu comme benchmark synthétique éventuel uniquement.
+
+La décision `v0.5` est un `NO-GO` temporaire pour les données réelles. Des fixtures et importeurs
+synthétiques peuvent être préparés, mais aucun snapshot ou score de médecine générale ne doit être
+publié avant levée de toutes les conditions. Aucun téléchargement, ingestion, manifeste ou snapshot
+n'a été créé pendant cet audit.
+
+### 17 septembre 2026 — v0.4-H, clôture de Clinical Knowledge Model
+
+La version du paquet passe à `0.4.0`. Le profil de raisonnement versionné est inclus dans la
+distribution Python et reste contrôlé par son hash. La revue finale vérifie la suite complète, les
+tests d'or v1, Ruff, le formatage, mypy strict, les schémas exportés et la construction du paquet.
+
+Les checkpoints A à H sont terminés. Le snapshot et le manifeste `v0.2.0` restent immuables ; aucun
+snapshot médical v2 n'est publié. La maquette, le logo local non suivi, les données sources, les
+artefacts générés et toute donnée patient restent hors de la branche. La prochaine ingestion réelle
+reste bloquée par le `NO-GO` v0.5 documenté ; seules les fixtures synthétiques ou la levée formelle
+des conditions de licence et de revue sont autorisées.

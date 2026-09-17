@@ -1,0 +1,42 @@
+{
+  "abstention_rules": [
+    "No candidates produces insufficient_supported_findings"
+  ],
+  "accepted_observation_types": [
+    "phenotype"
+  ],
+  "accepted_relations": [
+    "has_sign"
+  ],
+  "aggregation_rules": [
+    "No cross-source aggregation; preserve semantic_v1 arithmetic"
+  ],
+  "compatible_snapshot_ids": [],
+  "compatible_snapshot_schema_versions": [
+    1
+  ],
+  "coverage_rules": [
+    "At least one confirmed, resolvable, present HPO phenotype"
+  ],
+  "out_of_scope_rules": [
+    "No supported present HPO phenotype",
+    "Unsupported observation types are reported and ignored"
+  ],
+  "parameters": {
+    "candidate_limit": 20,
+    "question_candidate_limit": 10,
+    "question_frequency_coverage_minimum": 0.6,
+    "question_limit": 12
+  },
+  "profile_id": "semantic_v1-default",
+  "profile_sha256": "56b557f3fc9a43dfc6a8ce7bd124465a931bc8a4b4fe09ac1f40699d8017c3f5",
+  "schema_version": 1,
+  "score_scale": {
+    "calibrated": false,
+    "description": "Uncalibrated semantic compatibility; never a clinical probability",
+    "kind": "compatibility",
+    "scale_id": "semantic_v1.compatibility"
+  },
+  "strategy_id": "semantic_v1",
+  "strategy_version": "1"
+}

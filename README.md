@@ -1,30 +1,53 @@
 # Latros
 
+<p align="center">
+  <img src="latros-logo.svg" alt="Latros" width="420">
+</p>
+
 Prototype **interne de recherche** pour classer des maladies rares à partir de phénotypes HPO structurés. Moteur local et explicable, sans LLM, sans serveur et sans interface patient.
 
 > **Aucun triage n'est effectué.** Toutes les analyses retournent `safety_status: not_evaluated`. Les scores sont des compatibilités sémantiques, jamais des probabilités ou des diagnostics validés. Ne pas utiliser ce prototype pour conseiller un patient.
 
-La version de développement `0.3.0` regroupe le socle technique, le pipeline de données et le moteur pur. Voir [ADR 0001](docs/decisions/0001-socle-recherche.md) pour les décisions, [méthodologie](docs/methodology.md) pour les calculs et [projet.md](projet.md) pour la vision à long terme.
+La version `0.4.0` livre le Clinical Knowledge Model : contrats cliniques et de connaissances généraux, stratégies versionnées, couverture, abstention, sorties explicables et reçus reproductibles, tout en conservant le comportement v1. Voir le [journal des ADR](docs/decisions/README.md), la [méthodologie](docs/methodology.md) et [projet.md](projet.md).
 
-Le [plan et son avancement](docs/plan.md) distinguent les trois étapes : fondation `v0.1.0`, premier snapshot médical `v0.2.0`, moteur pur `v0.3.0`. Le snapshot de référence s'appelle maintenant **`v0.2.0`**, conformément au jalon du plan. La version du paquet Python reste `0.3.0`, car le moteur est déjà présent. [history.md](history.md) conserve les réalisations et vérifications datées ; ces documents sont actualisés à chaque livraison.
+Le [plan et son avancement](docs/plan.md) distingue fondation `v0.1.0`, premier snapshot médical `v0.2.0`, moteur pur `v0.3.0` et modèle général `v0.4.0`. Le snapshot de référence reste **`v0.2.0`** : v0.4 est une évolution logicielle et contractuelle, pas une nouvelle publication de données. [history.md](history.md) conserve les réalisations et vérifications datées.
 
 > **Périmètre critique : maladies rares uniquement.** Le snapshot actuel ne couvre pas la médecine générale. Une plainte courante telle que fièvre et mal de gorge peut conduire à un classement de maladies rares hors périmètre ; ce classement ne doit pas être utilisé comme différentiel de médecine courante. L'extension est planifiée : [`v0.4 Clinical Knowledge Model`](docs/v0.4-clinical-knowledge-model.md) prépare l'architecture générale, puis `v0.5` devra intégrer une première extension étroite avec des sources auditées.
 
 Les futurs snapshots multi-sources devront publier leur périmètre, leurs dépendances, leurs règles de déduplication et leurs profils de raisonnement compatibles. Le snapshot de connaissance et le profil d'agrégation seront versionnés séparément puis liés par leurs hashes dans chaque exécution ; `v0.2.0` reste immuable.
+
+`v0.4-D` fournit désormais le [schéma canonique v2](schemas/knowledge-model-v2.schema.json) et
+la liste de ses [tables conceptuelles](schemas/canonical-tables-v2.json). L'adaptateur v1 est une
+projection en lecture seule : il distingue enregistrements sources, assertions canoniques et
+dérivations, conserve chaque provenance bilingue et ne transforme jamais un mapping en preuve
+clinique. Les répétitions sémantiques restent auditables comme lignes sources mais partagent une
+famille de preuve ; elles ne deviennent donc pas plusieurs confirmations indépendantes. Ces
+contrats sont validés sur fixtures inventées et ne constituent pas un nouveau snapshot médical.
+
+`v0.4-E` ajoute des interfaces séparées pour génération de candidats, scoring, questionnement et
+explication, ainsi qu'un [profil `semantic_v1` hashé](profiles/semantic_v1.json). L'adaptateur v2
+n'extrait que les observations HPO confirmées et actives ; les propositions et types non supportés
+ne participent jamais au score. Le calcul historique n'a pas été déplacé : l'adaptateur appelle
+toujours `Engine` et `question_v1`, dont les sorties v1 restent protégées par les tests d'or.
+
+L'[audit des sources ORL de v0.5](docs/source-audits/v0.5-orl.md) conclut à un `NO-GO`
+temporaire pour toute ingestion réelle : SNOMED France exige les licences adaptées et le modèle de
+redistribution doit être clarifié ; la fiche HAS coélaborée avec des tiers exige une autorisation
+écrite et une double revue clinique. Aucun dataset moins fiable ne la remplace automatiquement.
 
 ## Installation
 
 Prérequis : Git, Python 3.11 et [uv](https://docs.astral.sh/uv/getting-started/installation/) (version utilisée en CI : `0.12.15`). L'installation initiale des dépendances et le téléchargement des sources nécessitent Internet. Ces commandes s'exécutent depuis la racine du dépôt sous PowerShell ou un shell Unix.
 
 ```text
-git clone --branch feat/clinical-foundation https://github.com/GaetanAff/Latros.git
+git clone https://github.com/GaetanAff/Latros.git
 cd Latros
 uv sync --locked --python 3.11
 uv run --no-sync latros --help
 uv run --no-sync latros sources validate
 ```
 
-Le dépôt est privé : Git doit disposer de votre authentification GitHub. La commande choisit la branche de la [pull request #1](https://github.com/GaetanAff/Latros/pull/1), car `main` ne contient pas encore cette tranche. Après fusion, un clone de `main` pourra être utilisé. `uv.lock` fixe les dépendances ; ne pas le mettre à jour pour reconstruire un snapshot historique. Pour récupérer les évolutions : `git pull --ff-only`, puis `uv sync --locked`.
+Le dépôt est privé : Git doit disposer de votre authentification GitHub. `main` contient maintenant le socle v0.1–v0.3 et le cadrage approuvé de v0.4. `uv.lock` fixe les dépendances ; ne pas le mettre à jour pour reconstruire un snapshot historique. Pour récupérer les évolutions : `git pull --ff-only`, puis `uv sync --locked`.
 
 ## Télécharger les sources épinglées
 
@@ -69,6 +92,7 @@ L'exemple est **inventé**, sans patient réel. La CLI attend des identifiants H
 ```text
 uv run --offline --no-sync latros diagnose --snapshot v0.2.0 --case examples/case.synthetic.json
 uv run --offline --no-sync latros question next --snapshot v0.2.0 --case examples/case.synthetic.json
+uv run --offline --no-sync latros diagnose --snapshot v0.2.0 --case examples/case.synthetic-v2.json
 ```
 
 Format d'entrée :
@@ -86,6 +110,25 @@ Format d'entrée :
   "question_history": []
 }
 ```
+
+Ce JSON non versionné reste le contrat `ClinicalCaseV1`. Le nouveau schéma
+[`ClinicalCaseV2`](schemas/clinical-case-v2.schema.json) est disponible pour préparer symptômes,
+signes, temporalité, constantes, biologie, traitements, antécédents, risques, examens, imagerie et
+contexte familial. Il porte obligatoirement `"schema_version": 2`, sépare les textes sources, les
+propositions d'extraction et les observations confirmées, et ne contient aucune déduction du
+moteur. La CLI accepte v1 et v2, mais ne transforme jamais silencieusement un fichier v1 : la
+migration explicite reste disponible pour les appelants qui veulent conserver un cas v2.
+
+`--strategy semantic_v1` est la stratégie par défaut. `--output-contract auto` conserve exactement
+la sortie historique pour un cas v1 et retourne le nouveau contrat pour un cas v2. Les options
+explicites `--output-contract v1` et `--output-contract v2` permettent de choisir le format. La
+sortie v2 déclare périmètre, couverture, données utilisées ou ignorées, abstention, arguments par
+source et famille de preuve, `safety.status: not_evaluated` et un reçu reproductible. Son agrégat
+porte `scale_id: semantic_v1.compatibility` et n'est ni un pourcentage ni une probabilité.
+
+Le reçu contient les hashes exacts du manifeste de connaissance et du profil de raisonnement, les
+paramètres effectifs, sources et familles réellement utilisées, mappings, transformations et
+version logicielle. Il est inclus dans le JSON de réponse mais n'est jamais persisté automatiquement.
 
 Le résultat contient les 20 premiers candidats, rang, score brut, contributions favorables/défavorables, assertions sources, fréquences et informations encore inconnues. Les candidats gardent leurs identités ORPHA ; les équivalences Mondo explicites sont listées séparément. Âge et sexe sont conservés dans le contrat mais ignorés par le score.
 
@@ -125,16 +168,17 @@ La CI Linux/Windows utilise uniquement les petits jeux inventés de `tests/conft
 src/latros/sources/     registre et téléchargement vérifié
 src/latros/knowledge/   fréquences, importeurs, validation et snapshots
 src/latros/clinical/    contrat ClinicalCase
-src/latros/reasoning/   semantic_v1 et questions adaptatives
+src/latros/reasoning/   stratégies, profils, semantic_v1, sorties v2 et reçus
 src/latros/cli.py       commandes publiques
 sources/               registre épinglé (versionné)
 schemas/               contrats exportés (versionnés)
+profiles/              profils de raisonnement versionnés et hashés
 manifests/             références de reconstruction (versionnées)
 data/                  sources et snapshots locaux (ignorés)
 tests/                 fixtures synthétiques et tests hors ligne
 ```
 
-Suivre [CONTRIBUTING.md](CONTRIBUTING.md) : branches de fonctionnalité, pull requests et `main` stable. Les trois jalons du plan sont réunis ici ; `0.3.0` n'est pas une certification médicale.
+Suivre [CONTRIBUTING.md](CONTRIBUTING.md) : branches de fonctionnalité, pull requests et `main` stable. `0.4.0` reste un prototype de recherche, pas une certification médicale.
 
 ## Confidentialité et licences
 

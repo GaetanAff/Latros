@@ -1,0 +1,3299 @@
+{
+  "$defs": {
+    "AgePoint": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "age",
+          "default": "age",
+          "title": "Kind",
+          "type": "string"
+        },
+        "value": {
+          "$ref": "#/$defs/QuantityValue"
+        }
+      },
+      "required": [
+        "value"
+      ],
+      "title": "AgePoint",
+      "type": "object"
+    },
+    "BooleanValue": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "boolean",
+          "default": "boolean",
+          "title": "Kind",
+          "type": "string"
+        },
+        "value": {
+          "title": "Value",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "value"
+      ],
+      "title": "BooleanValue",
+      "type": "object"
+    },
+    "CodedValue": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "coded",
+          "default": "coded",
+          "title": "Kind",
+          "type": "string"
+        },
+        "value": {
+          "$ref": "#/$defs/ConceptReference"
+        }
+      },
+      "required": [
+        "value"
+      ],
+      "title": "CodedValue",
+      "type": "object"
+    },
+    "Coding": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "minLength": 1,
+          "title": "Code",
+          "type": "string"
+        },
+        "display": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Display"
+        },
+        "system": {
+          "minLength": 1,
+          "title": "System",
+          "type": "string"
+        },
+        "version": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Version"
+        }
+      },
+      "required": [
+        "system",
+        "code"
+      ],
+      "title": "Coding",
+      "type": "object"
+    },
+    "ConceptReference": {
+      "additionalProperties": false,
+      "properties": {
+        "coding": {
+          "$ref": "#/$defs/Coding"
+        },
+        "concept_id": {
+          "minLength": 1,
+          "title": "Concept Id",
+          "type": "string"
+        },
+        "original_coding": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Coding"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "status": {
+          "default": "active",
+          "enum": [
+            "active",
+            "obsolete"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "concept_id",
+        "coding"
+      ],
+      "title": "ConceptReference",
+      "type": "object"
+    },
+    "DatePoint": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "date",
+          "default": "date",
+          "title": "Kind",
+          "type": "string"
+        },
+        "value": {
+          "format": "date",
+          "title": "Value",
+          "type": "string"
+        }
+      },
+      "required": [
+        "value"
+      ],
+      "title": "DatePoint",
+      "type": "object"
+    },
+    "DateTimePoint": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "date_time",
+          "default": "date_time",
+          "title": "Kind",
+          "type": "string"
+        },
+        "value": {
+          "format": "date-time",
+          "title": "Value",
+          "type": "string"
+        }
+      },
+      "required": [
+        "value"
+      ],
+      "title": "DateTimePoint",
+      "type": "object"
+    },
+    "ExamResult": {
+      "additionalProperties": false,
+      "properties": {
+        "acquisition_method": {
+          "enum": [
+            "reported",
+            "observed",
+            "measured",
+            "recorded",
+            "question_answer",
+            "legacy_migration"
+          ],
+          "title": "Acquisition Method",
+          "type": "string"
+        },
+        "body_site": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ConceptReference"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "certainty": {
+          "default": "asserted",
+          "enum": [
+            "asserted",
+            "uncertain"
+          ],
+          "title": "Certainty",
+          "type": "string"
+        },
+        "clinical_status": {
+          "enum": [
+            "present",
+            "absent",
+            "unknown"
+          ],
+          "title": "Clinical Status",
+          "type": "string"
+        },
+        "concept": {
+          "$ref": "#/$defs/ConceptReference"
+        },
+        "evaluation_status": {
+          "enum": [
+            "assessed",
+            "not_assessed",
+            "unable_to_assess"
+          ],
+          "title": "Evaluation Status",
+          "type": "string"
+        },
+        "experiencer": {
+          "default": "patient",
+          "enum": [
+            "patient",
+            "family_member"
+          ],
+          "title": "Experiencer",
+          "type": "string"
+        },
+        "kind": {
+          "const": "exam",
+          "default": "exam",
+          "title": "Kind",
+          "type": "string"
+        },
+        "laterality": {
+          "anyOf": [
+            {
+              "enum": [
+                "left",
+                "right",
+                "bilateral",
+                "midline",
+                "not_applicable"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Laterality"
+        },
+        "observation_id": {
+          "minLength": 1,
+          "title": "Observation Id",
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/ObservationProvenance"
+        },
+        "question_response_id": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Question Response Id"
+        },
+        "severity": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ConceptReference"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "supersedes": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Supersedes"
+        },
+        "temporal": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/TemporalContext"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "uncertainty_reason": {
+          "anyOf": [
+            {
+              "enum": [
+                "unknown_to_subject",
+                "uncertain",
+                "not_asked",
+                "unable_to_assess",
+                "not_applicable",
+                "other"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Uncertainty Reason"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "discriminator": {
+                "mapping": {
+                  "boolean": "#/$defs/BooleanValue",
+                  "coded": "#/$defs/CodedValue",
+                  "quantity": "#/$defs/QuantityValue",
+                  "range": "#/$defs/RangeValue",
+                  "text": "#/$defs/TextValue"
+                },
+                "propertyName": "kind"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/CodedValue"
+                },
+                {
+                  "$ref": "#/$defs/QuantityValue"
+                },
+                {
+                  "$ref": "#/$defs/RangeValue"
+                },
+                {
+                  "$ref": "#/$defs/BooleanValue"
+                },
+                {
+                  "$ref": "#/$defs/TextValue"
+                }
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "required": [
+        "observation_id",
+        "concept",
+        "clinical_status",
+        "evaluation_status",
+        "acquisition_method",
+        "provenance"
+      ],
+      "title": "ExamResult",
+      "type": "object"
+    },
+    "ExtractionMethod": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "rule",
+            "nlp",
+            "llm",
+            "manual"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "parameters": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Parameters",
+          "type": "object"
+        },
+        "tool": {
+          "minLength": 1,
+          "title": "Tool",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "tool",
+        "version"
+      ],
+      "title": "ExtractionMethod",
+      "type": "object"
+    },
+    "FamilyHistoryItem": {
+      "additionalProperties": false,
+      "properties": {
+        "acquisition_method": {
+          "enum": [
+            "reported",
+            "observed",
+            "measured",
+            "recorded",
+            "question_answer",
+            "legacy_migration"
+          ],
+          "title": "Acquisition Method",
+          "type": "string"
+        },
+        "body_site": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ConceptReference"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "certainty": {
+          "default": "asserted",
+          "enum": [
+            "asserted",
+            "uncertain"
+          ],
+          "title": "Certainty",
+          "type": "string"
+        },
+        "clinical_status": {
+          "enum": [
+            "present",
+            "absent",
+            "unknown"
+          ],
+          "title": "Clinical Status",
+          "type": "string"
+        },
+        "concept": {
+          "$ref": "#/$defs/ConceptReference"
+        },
+        "evaluation_status": {
+          "enum": [
+            "assessed",
+            "not_assessed",
+            "unable_to_assess"
+          ],
+          "title": "Evaluation Status",
+          "type": "string"
+        },
+        "experiencer": {
+          "const": "family_member",
+          "default": "family_member",
+          "title": "Experiencer",
+          "type": "string"
+        },
+        "kind": {
+          "const": "family_history",
+          "default": "family_history",
+          "title": "Kind",
+          "type": "string"
+        },
+        "laterality": {
+          "anyOf": [
+            {
+              "enum": [
+                "left",
+                "right",
+                "bilateral",
+                "midline",
+                "not_applicable"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Laterality"
+        },
+        "observation_id": {
+          "minLength": 1,
+          "title": "Observation Id",
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/ObservationProvenance"
+        },
+        "question_response_id": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Question Response Id"
+        },
+        "severity": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ConceptReference"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "supersedes": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Supersedes"
+        },
+        "temporal": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/TemporalContext"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "uncertainty_reason": {
+          "anyOf": [
+            {
+              "enum": [
+                "unknown_to_subject",
+                "uncertain",
+                "not_asked",
+                "unable_to_assess",
+                "not_applicable",
+                "other"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Uncertainty Reason"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "discriminator": {
+                "mapping": {
+                  "boolean": "#/$defs/BooleanValue",
+                  "coded": "#/$defs/CodedValue",
+                  "quantity": "#/$defs/QuantityValue",
+                  "range": "#/$defs/RangeValue",
+                  "text": "#/$defs/TextValue"
+                },
+                "propertyName": "kind"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/CodedValue"
+                },
+                {
+                  "$ref": "#/$defs/QuantityValue"
+                },
+                {
+                  "$ref": "#/$defs/RangeValue"
+                },
+                {
+                  "$ref": "#/$defs/BooleanValue"
+                },
+                {
+                  "$ref": "#/$defs/TextValue"
+                }
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "required": [
+        "observation_id",
+        "concept",
+        "clinical_status",
+        "evaluation_status",
+        "acquisition_method",
+        "provenance"
+      ],
+      "title": "FamilyHistoryItem",
+      "type": "object"
+    },
+    "ImagingResult": {
+      "additionalProperties": false,
+      "properties": {
+        "acquisition_method": {
+          "enum": [
+            "reported",
+            "observed",
+            "measured",
+            "recorded",
+            "question_answer",
+            "legacy_migration"
+          ],
+          "title": "Acquisition Method",
+          "type": "string"
+        },
+        "body_site": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ConceptReference"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "certainty": {
+          "default": "asserted",
+          "enum": [
+            "asserted",
+            "uncertain"
+          ],
+          "title": "Certainty",
+          "type": "string"
+        },
+        "clinical_status": {
+          "enum": [
+            "present",
+            "absent",
+            "unknown"
+          ],
+          "title": "Clinical Status",
+          "type": "string"
+        },
+        "concept": {
+          "$ref": "#/$defs/ConceptReference"
+        },
+        "evaluation_status": {
+          "enum": [
+            "assessed",
+            "not_assessed",
+            "unable_to_assess"
+          ],
+          "title": "Evaluation Status",
+          "type": "string"
+        },
+        "experiencer": {
+          "default": "patient",
+          "enum": [
+            "patient",
+            "family_member"
+          ],
+          "title": "Experiencer",
+          "type": "string"
+        },
+        "kind": {
+          "const": "imaging",
+          "default": "imaging",
+          "title": "Kind",
+          "type": "string"
+        },
+        "laterality": {
+          "anyOf": [
+            {
+              "enum": [
+                "left",
+                "right",
+                "bilateral",
+                "midline",
+                "not_applicable"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Laterality"
+        },
+        "observation_id": {
+          "minLength": 1,
+          "title": "Observation Id",
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/ObservationProvenance"
+        },
+        "question_response_id": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Question Response Id"
+        },
+        "severity": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ConceptReference"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "supersedes": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Supersedes"
+        },
+        "temporal": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/TemporalContext"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "uncertainty_reason": {
+          "anyOf": [
+            {
+              "enum": [
+                "unknown_to_subject",
+                "uncertain",
+                "not_asked",
+                "unable_to_assess",
+                "not_applicable",
+                "other"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Uncertainty Reason"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "discriminator": {
+                "mapping": {
+                  "boolean": "#/$defs/BooleanValue",
+                  "coded": "#/$defs/CodedValue",
+                  "quantity": "#/$defs/QuantityValue",
+                  "range": "#/$defs/RangeValue",
+                  "text": "#/$defs/TextValue"
+                },
+                "propertyName": "kind"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/CodedValue"
+                },
+                {
+                  "$ref": "#/$defs/QuantityValue"
+                },
+                {
+                  "$ref": "#/$defs/RangeValue"
+                },
+                {
+                  "$ref": "#/$defs/BooleanValue"
+                },
+                {
+                  "$ref": "#/$defs/TextValue"
+                }
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "required": [
+        "observation_id",
+        "concept",
+        "clinical_status",
+        "evaluation_status",
+        "acquisition_method",
+        "provenance"
+      ],
+      "title": "ImagingResult",
+      "type": "object"
+    },
+    "LaboratoryResult": {
+      "additionalProperties": false,
+      "properties": {
+        "acquisition_method": {
+          "enum": [
+            "reported",
+            "observed",
+            "measured",
+            "recorded",
+            "question_answer",
+            "legacy_migration"
+          ],
+          "title": "Acquisition Method",
+          "type": "string"
+        },
+        "body_site": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ConceptReference"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "certainty": {
+          "default": "asserted",
+          "enum": [
+            "asserted",
+            "uncertain"
+          ],
+          "title": "Certainty",
+          "type": "string"
+        },
+        "clinical_status": {
+          "enum": [
+            "present",
+            "absent",
+            "unknown"
+          ],
+          "title": "Clinical Status",
+          "type": "string"
+        },
+        "concept": {
+          "$ref": "#/$defs/ConceptReference"
+        },
+        "evaluation_status": {
+          "enum": [
+            "assessed",
+            "not_assessed",
+            "unable_to_assess"
+          ],
+          "title": "Evaluation Status",
+          "type": "string"
+        },
+        "experiencer": {
+          "default": "patient",
+          "enum": [
+            "patient",
+            "family_member"
+          ],
+          "title": "Experiencer",
+          "type": "string"
+        },
+        "kind": {
+          "const": "laboratory",
+          "default": "laboratory",
+          "title": "Kind",
+          "type": "string"
+        },
+        "laterality": {
+          "anyOf": [
+            {
+              "enum": [
+                "left",
+                "right",
+                "bilateral",
+                "midline",
+                "not_applicable"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Laterality"
+        },
+        "observation_id": {
+          "minLength": 1,
+          "title": "Observation Id",
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/ObservationProvenance"
+        },
+        "question_response_id": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Question Response Id"
+        },
+        "reference_range": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/RangeValue"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "severity": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ConceptReference"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "supersedes": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Supersedes"
+        },
+        "temporal": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/TemporalContext"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "uncertainty_reason": {
+          "anyOf": [
+            {
+              "enum": [
+                "unknown_to_subject",
+                "uncertain",
+                "not_asked",
+                "unable_to_assess",
+                "not_applicable",
+                "other"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Uncertainty Reason"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "discriminator": {
+                "mapping": {
+                  "boolean": "#/$defs/BooleanValue",
+                  "coded": "#/$defs/CodedValue",
+                  "quantity": "#/$defs/QuantityValue",
+                  "range": "#/$defs/RangeValue",
+                  "text": "#/$defs/TextValue"
+                },
+                "propertyName": "kind"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/CodedValue"
+                },
+                {
+                  "$ref": "#/$defs/QuantityValue"
+                },
+                {
+                  "$ref": "#/$defs/RangeValue"
+                },
+                {
+                  "$ref": "#/$defs/BooleanValue"
+                },
+                {
+                  "$ref": "#/$defs/TextValue"
+                }
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "required": [
+        "observation_id",
+        "concept",
+        "clinical_status",
+        "evaluation_status",
+        "acquisition_method",
+        "provenance"
+      ],
+      "title": "LaboratoryResult",
+      "type": "object"
+    },
+    "MedicalHistoryItem": {
+      "additionalProperties": false,
+      "properties": {
+        "acquisition_method": {
+          "enum": [
+            "reported",
+            "observed",
+            "measured",
+            "recorded",
+            "question_answer",
+            "legacy_migration"
+          ],
+          "title": "Acquisition Method",
+          "type": "string"
+        },
+        "body_site": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ConceptReference"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "certainty": {
+          "default": "asserted",
+          "enum": [
+            "asserted",
+            "uncertain"
+          ],
+          "title": "Certainty",
+          "type": "string"
+        },
+        "clinical_status": {
+          "enum": [
+            "present",
+            "absent",
+            "unknown"
+          ],
+          "title": "Clinical Status",
+          "type": "string"
+        },
+        "concept": {
+          "$ref": "#/$defs/ConceptReference"
+        },
+        "evaluation_status": {
+          "enum": [
+            "assessed",
+            "not_assessed",
+            "unable_to_assess"
+          ],
+          "title": "Evaluation Status",
+          "type": "string"
+        },
+        "experiencer": {
+          "default": "patient",
+          "enum": [
+            "patient",
+            "family_member"
+          ],
+          "title": "Experiencer",
+          "type": "string"
+        },
+        "kind": {
+          "const": "medical_history",
+          "default": "medical_history",
+          "title": "Kind",
+          "type": "string"
+        },
+        "laterality": {
+          "anyOf": [
+            {
+              "enum": [
+                "left",
+                "right",
+                "bilateral",
+                "midline",
+                "not_applicable"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Laterality"
+        },
+        "observation_id": {
+          "minLength": 1,
+          "title": "Observation Id",
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/ObservationProvenance"
+        },
+        "question_response_id": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Question Response Id"
+        },
+        "severity": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ConceptReference"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "supersedes": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Supersedes"
+        },
+        "temporal": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/TemporalContext"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "uncertainty_reason": {
+          "anyOf": [
+            {
+              "enum": [
+                "unknown_to_subject",
+                "uncertain",
+                "not_asked",
+                "unable_to_assess",
+                "not_applicable",
+                "other"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Uncertainty Reason"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "discriminator": {
+                "mapping": {
+                  "boolean": "#/$defs/BooleanValue",
+                  "coded": "#/$defs/CodedValue",
+                  "quantity": "#/$defs/QuantityValue",
+                  "range": "#/$defs/RangeValue",
+                  "text": "#/$defs/TextValue"
+                },
+                "propertyName": "kind"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/CodedValue"
+                },
+                {
+                  "$ref": "#/$defs/QuantityValue"
+                },
+                {
+                  "$ref": "#/$defs/RangeValue"
+                },
+                {
+                  "$ref": "#/$defs/BooleanValue"
+                },
+                {
+                  "$ref": "#/$defs/TextValue"
+                }
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "required": [
+        "observation_id",
+        "concept",
+        "clinical_status",
+        "evaluation_status",
+        "acquisition_method",
+        "provenance"
+      ],
+      "title": "MedicalHistoryItem",
+      "type": "object"
+    },
+    "MedicationExposure": {
+      "additionalProperties": false,
+      "properties": {
+        "acquisition_method": {
+          "enum": [
+            "reported",
+            "observed",
+            "measured",
+            "recorded",
+            "question_answer",
+            "legacy_migration"
+          ],
+          "title": "Acquisition Method",
+          "type": "string"
+        },
+        "body_site": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ConceptReference"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "certainty": {
+          "default": "asserted",
+          "enum": [
+            "asserted",
+            "uncertain"
+          ],
+          "title": "Certainty",
+          "type": "string"
+        },
+        "clinical_status": {
+          "enum": [
+            "present",
+            "absent",
+            "unknown"
+          ],
+          "title": "Clinical Status",
+          "type": "string"
+        },
+        "concept": {
+          "$ref": "#/$defs/ConceptReference"
+        },
+        "evaluation_status": {
+          "enum": [
+            "assessed",
+            "not_assessed",
+            "unable_to_assess"
+          ],
+          "title": "Evaluation Status",
+          "type": "string"
+        },
+        "experiencer": {
+          "default": "patient",
+          "enum": [
+            "patient",
+            "family_member"
+          ],
+          "title": "Experiencer",
+          "type": "string"
+        },
+        "kind": {
+          "const": "medication",
+          "default": "medication",
+          "title": "Kind",
+          "type": "string"
+        },
+        "laterality": {
+          "anyOf": [
+            {
+              "enum": [
+                "left",
+                "right",
+                "bilateral",
+                "midline",
+                "not_applicable"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Laterality"
+        },
+        "observation_id": {
+          "minLength": 1,
+          "title": "Observation Id",
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/ObservationProvenance"
+        },
+        "question_response_id": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Question Response Id"
+        },
+        "severity": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ConceptReference"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "supersedes": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Supersedes"
+        },
+        "temporal": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/TemporalContext"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "uncertainty_reason": {
+          "anyOf": [
+            {
+              "enum": [
+                "unknown_to_subject",
+                "uncertain",
+                "not_asked",
+                "unable_to_assess",
+                "not_applicable",
+                "other"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Uncertainty Reason"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "discriminator": {
+                "mapping": {
+                  "boolean": "#/$defs/BooleanValue",
+                  "coded": "#/$defs/CodedValue",
+                  "quantity": "#/$defs/QuantityValue",
+                  "range": "#/$defs/RangeValue",
+                  "text": "#/$defs/TextValue"
+                },
+                "propertyName": "kind"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/CodedValue"
+                },
+                {
+                  "$ref": "#/$defs/QuantityValue"
+                },
+                {
+                  "$ref": "#/$defs/RangeValue"
+                },
+                {
+                  "$ref": "#/$defs/BooleanValue"
+                },
+                {
+                  "$ref": "#/$defs/TextValue"
+                }
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "required": [
+        "observation_id",
+        "concept",
+        "clinical_status",
+        "evaluation_status",
+        "acquisition_method",
+        "provenance"
+      ],
+      "title": "MedicationExposure",
+      "type": "object"
+    },
+    "ObservationProposal": {
+      "additionalProperties": false,
+      "properties": {
+        "candidates": {
+          "items": {
+            "$ref": "#/$defs/ProposalCandidate"
+          },
+          "minItems": 1,
+          "title": "Candidates",
+          "type": "array"
+        },
+        "confirmed_observation_id": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confirmed Observation Id"
+        },
+        "method": {
+          "$ref": "#/$defs/ExtractionMethod"
+        },
+        "proposal_id": {
+          "minLength": 1,
+          "title": "Proposal Id",
+          "type": "string"
+        },
+        "source_statement_id": {
+          "minLength": 1,
+          "title": "Source Statement Id",
+          "type": "string"
+        },
+        "span": {
+          "$ref": "#/$defs/TextSpan"
+        },
+        "state": {
+          "default": "proposed",
+          "enum": [
+            "proposed",
+            "accepted",
+            "corrected",
+            "rejected"
+          ],
+          "title": "State",
+          "type": "string"
+        }
+      },
+      "required": [
+        "proposal_id",
+        "source_statement_id",
+        "span",
+        "candidates",
+        "method"
+      ],
+      "title": "ObservationProposal",
+      "type": "object"
+    },
+    "ObservationProvenance": {
+      "additionalProperties": false,
+      "properties": {
+        "origin_type": {
+          "enum": [
+            "patient_report",
+            "clinician_observation",
+            "device",
+            "laboratory",
+            "imaging",
+            "health_record",
+            "question_response",
+            "legacy_case_v1_migration"
+          ],
+          "title": "Origin Type",
+          "type": "string"
+        },
+        "provenance_id": {
+          "minLength": 1,
+          "title": "Provenance Id",
+          "type": "string"
+        },
+        "recorded_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Recorded At"
+        },
+        "source_reference": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Reference"
+        },
+        "source_statement_id": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Statement Id"
+        }
+      },
+      "required": [
+        "provenance_id",
+        "origin_type"
+      ],
+      "title": "ObservationProvenance",
+      "type": "object"
+    },
+    "PhenotypeObservation": {
+      "additionalProperties": false,
+      "properties": {
+        "acquisition_method": {
+          "enum": [
+            "reported",
+            "observed",
+            "measured",
+            "recorded",
+            "question_answer",
+            "legacy_migration"
+          ],
+          "title": "Acquisition Method",
+          "type": "string"
+        },
+        "body_site": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ConceptReference"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "certainty": {
+          "default": "asserted",
+          "enum": [
+            "asserted",
+            "uncertain"
+          ],
+          "title": "Certainty",
+          "type": "string"
+        },
+        "clinical_status": {
+          "enum": [
+            "present",
+            "absent",
+            "unknown"
+          ],
+          "title": "Clinical Status",
+          "type": "string"
+        },
+        "concept": {
+          "$ref": "#/$defs/ConceptReference"
+        },
+        "evaluation_status": {
+          "enum": [
+            "assessed",
+            "not_assessed",
+            "unable_to_assess"
+          ],
+          "title": "Evaluation Status",
+          "type": "string"
+        },
+        "experiencer": {
+          "default": "patient",
+          "enum": [
+            "patient",
+            "family_member"
+          ],
+          "title": "Experiencer",
+          "type": "string"
+        },
+        "kind": {
+          "const": "phenotype",
+          "default": "phenotype",
+          "title": "Kind",
+          "type": "string"
+        },
+        "laterality": {
+          "anyOf": [
+            {
+              "enum": [
+                "left",
+                "right",
+                "bilateral",
+                "midline",
+                "not_applicable"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Laterality"
+        },
+        "observation_id": {
+          "minLength": 1,
+          "title": "Observation Id",
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/ObservationProvenance"
+        },
+        "question_response_id": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Question Response Id"
+        },
+        "severity": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ConceptReference"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "supersedes": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Supersedes"
+        },
+        "temporal": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/TemporalContext"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "uncertainty_reason": {
+          "anyOf": [
+            {
+              "enum": [
+                "unknown_to_subject",
+                "uncertain",
+                "not_asked",
+                "unable_to_assess",
+                "not_applicable",
+                "other"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Uncertainty Reason"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "discriminator": {
+                "mapping": {
+                  "boolean": "#/$defs/BooleanValue",
+                  "coded": "#/$defs/CodedValue",
+                  "quantity": "#/$defs/QuantityValue",
+                  "range": "#/$defs/RangeValue",
+                  "text": "#/$defs/TextValue"
+                },
+                "propertyName": "kind"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/CodedValue"
+                },
+                {
+                  "$ref": "#/$defs/QuantityValue"
+                },
+                {
+                  "$ref": "#/$defs/RangeValue"
+                },
+                {
+                  "$ref": "#/$defs/BooleanValue"
+                },
+                {
+                  "$ref": "#/$defs/TextValue"
+                }
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "required": [
+        "observation_id",
+        "concept",
+        "clinical_status",
+        "evaluation_status",
+        "acquisition_method",
+        "provenance"
+      ],
+      "title": "PhenotypeObservation",
+      "type": "object"
+    },
+    "ProposalCandidate": {
+      "additionalProperties": false,
+      "properties": {
+        "concept": {
+          "$ref": "#/$defs/ConceptReference"
+        },
+        "extraction_confidence": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Extraction Confidence",
+          "type": "number"
+        }
+      },
+      "required": [
+        "concept",
+        "extraction_confidence"
+      ],
+      "title": "ProposalCandidate",
+      "type": "object"
+    },
+    "QuantityValue": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "minLength": 1,
+          "title": "Code",
+          "type": "string"
+        },
+        "comparator": {
+          "default": "eq",
+          "enum": [
+            "eq",
+            "lt",
+            "le",
+            "gt",
+            "ge"
+          ],
+          "title": "Comparator",
+          "type": "string"
+        },
+        "kind": {
+          "const": "quantity",
+          "default": "quantity",
+          "title": "Kind",
+          "type": "string"
+        },
+        "system": {
+          "minLength": 1,
+          "title": "System",
+          "type": "string"
+        },
+        "unit": {
+          "minLength": 1,
+          "title": "Unit",
+          "type": "string"
+        },
+        "value": {
+          "title": "Value",
+          "type": "number"
+        }
+      },
+      "required": [
+        "value",
+        "unit",
+        "system",
+        "code"
+      ],
+      "title": "QuantityValue",
+      "type": "object"
+    },
+    "QuestionResponseV2": {
+      "additionalProperties": false,
+      "properties": {
+        "answered_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Answered At"
+        },
+        "clinical_status": {
+          "enum": [
+            "present",
+            "absent",
+            "unknown"
+          ],
+          "title": "Clinical Status",
+          "type": "string"
+        },
+        "concept": {
+          "$ref": "#/$defs/ConceptReference"
+        },
+        "evaluation_status": {
+          "enum": [
+            "assessed",
+            "not_assessed",
+            "unable_to_assess"
+          ],
+          "title": "Evaluation Status",
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/ObservationProvenance"
+        },
+        "question_id": {
+          "minLength": 1,
+          "title": "Question Id",
+          "type": "string"
+        },
+        "response_id": {
+          "minLength": 1,
+          "title": "Response Id",
+          "type": "string"
+        },
+        "resulting_observation_id": {
+          "minLength": 1,
+          "title": "Resulting Observation Id",
+          "type": "string"
+        },
+        "uncertainty_reason": {
+          "anyOf": [
+            {
+              "enum": [
+                "unknown_to_subject",
+                "uncertain",
+                "not_asked",
+                "unable_to_assess",
+                "not_applicable",
+                "other"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Uncertainty Reason"
+        }
+      },
+      "required": [
+        "response_id",
+        "question_id",
+        "concept",
+        "clinical_status",
+        "evaluation_status",
+        "resulting_observation_id",
+        "provenance"
+      ],
+      "title": "QuestionResponseV2",
+      "type": "object"
+    },
+    "RangeValue": {
+      "additionalProperties": false,
+      "properties": {
+        "high": {
+          "$ref": "#/$defs/QuantityValue"
+        },
+        "kind": {
+          "const": "range",
+          "default": "range",
+          "title": "Kind",
+          "type": "string"
+        },
+        "low": {
+          "$ref": "#/$defs/QuantityValue"
+        }
+      },
+      "required": [
+        "low",
+        "high"
+      ],
+      "title": "RangeValue",
+      "type": "object"
+    },
+    "RiskFactorObservation": {
+      "additionalProperties": false,
+      "properties": {
+        "acquisition_method": {
+          "enum": [
+            "reported",
+            "observed",
+            "measured",
+            "recorded",
+            "question_answer",
+            "legacy_migration"
+          ],
+          "title": "Acquisition Method",
+          "type": "string"
+        },
+        "body_site": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ConceptReference"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "certainty": {
+          "default": "asserted",
+          "enum": [
+            "asserted",
+            "uncertain"
+          ],
+          "title": "Certainty",
+          "type": "string"
+        },
+        "clinical_status": {
+          "enum": [
+            "present",
+            "absent",
+            "unknown"
+          ],
+          "title": "Clinical Status",
+          "type": "string"
+        },
+        "concept": {
+          "$ref": "#/$defs/ConceptReference"
+        },
+        "evaluation_status": {
+          "enum": [
+            "assessed",
+            "not_assessed",
+            "unable_to_assess"
+          ],
+          "title": "Evaluation Status",
+          "type": "string"
+        },
+        "experiencer": {
+          "default": "patient",
+          "enum": [
+            "patient",
+            "family_member"
+          ],
+          "title": "Experiencer",
+          "type": "string"
+        },
+        "kind": {
+          "const": "risk_factor",
+          "default": "risk_factor",
+          "title": "Kind",
+          "type": "string"
+        },
+        "laterality": {
+          "anyOf": [
+            {
+              "enum": [
+                "left",
+                "right",
+                "bilateral",
+                "midline",
+                "not_applicable"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Laterality"
+        },
+        "observation_id": {
+          "minLength": 1,
+          "title": "Observation Id",
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/ObservationProvenance"
+        },
+        "question_response_id": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Question Response Id"
+        },
+        "severity": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ConceptReference"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "supersedes": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Supersedes"
+        },
+        "temporal": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/TemporalContext"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "uncertainty_reason": {
+          "anyOf": [
+            {
+              "enum": [
+                "unknown_to_subject",
+                "uncertain",
+                "not_asked",
+                "unable_to_assess",
+                "not_applicable",
+                "other"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Uncertainty Reason"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "discriminator": {
+                "mapping": {
+                  "boolean": "#/$defs/BooleanValue",
+                  "coded": "#/$defs/CodedValue",
+                  "quantity": "#/$defs/QuantityValue",
+                  "range": "#/$defs/RangeValue",
+                  "text": "#/$defs/TextValue"
+                },
+                "propertyName": "kind"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/CodedValue"
+                },
+                {
+                  "$ref": "#/$defs/QuantityValue"
+                },
+                {
+                  "$ref": "#/$defs/RangeValue"
+                },
+                {
+                  "$ref": "#/$defs/BooleanValue"
+                },
+                {
+                  "$ref": "#/$defs/TextValue"
+                }
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "required": [
+        "observation_id",
+        "concept",
+        "clinical_status",
+        "evaluation_status",
+        "acquisition_method",
+        "provenance"
+      ],
+      "title": "RiskFactorObservation",
+      "type": "object"
+    },
+    "SignObservation": {
+      "additionalProperties": false,
+      "properties": {
+        "acquisition_method": {
+          "enum": [
+            "reported",
+            "observed",
+            "measured",
+            "recorded",
+            "question_answer",
+            "legacy_migration"
+          ],
+          "title": "Acquisition Method",
+          "type": "string"
+        },
+        "body_site": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ConceptReference"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "certainty": {
+          "default": "asserted",
+          "enum": [
+            "asserted",
+            "uncertain"
+          ],
+          "title": "Certainty",
+          "type": "string"
+        },
+        "clinical_status": {
+          "enum": [
+            "present",
+            "absent",
+            "unknown"
+          ],
+          "title": "Clinical Status",
+          "type": "string"
+        },
+        "concept": {
+          "$ref": "#/$defs/ConceptReference"
+        },
+        "evaluation_status": {
+          "enum": [
+            "assessed",
+            "not_assessed",
+            "unable_to_assess"
+          ],
+          "title": "Evaluation Status",
+          "type": "string"
+        },
+        "experiencer": {
+          "default": "patient",
+          "enum": [
+            "patient",
+            "family_member"
+          ],
+          "title": "Experiencer",
+          "type": "string"
+        },
+        "kind": {
+          "const": "sign",
+          "default": "sign",
+          "title": "Kind",
+          "type": "string"
+        },
+        "laterality": {
+          "anyOf": [
+            {
+              "enum": [
+                "left",
+                "right",
+                "bilateral",
+                "midline",
+                "not_applicable"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Laterality"
+        },
+        "observation_id": {
+          "minLength": 1,
+          "title": "Observation Id",
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/ObservationProvenance"
+        },
+        "question_response_id": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Question Response Id"
+        },
+        "severity": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ConceptReference"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "supersedes": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Supersedes"
+        },
+        "temporal": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/TemporalContext"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "uncertainty_reason": {
+          "anyOf": [
+            {
+              "enum": [
+                "unknown_to_subject",
+                "uncertain",
+                "not_asked",
+                "unable_to_assess",
+                "not_applicable",
+                "other"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Uncertainty Reason"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "discriminator": {
+                "mapping": {
+                  "boolean": "#/$defs/BooleanValue",
+                  "coded": "#/$defs/CodedValue",
+                  "quantity": "#/$defs/QuantityValue",
+                  "range": "#/$defs/RangeValue",
+                  "text": "#/$defs/TextValue"
+                },
+                "propertyName": "kind"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/CodedValue"
+                },
+                {
+                  "$ref": "#/$defs/QuantityValue"
+                },
+                {
+                  "$ref": "#/$defs/RangeValue"
+                },
+                {
+                  "$ref": "#/$defs/BooleanValue"
+                },
+                {
+                  "$ref": "#/$defs/TextValue"
+                }
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "required": [
+        "observation_id",
+        "concept",
+        "clinical_status",
+        "evaluation_status",
+        "acquisition_method",
+        "provenance"
+      ],
+      "title": "SignObservation",
+      "type": "object"
+    },
+    "SourceStatement": {
+      "additionalProperties": false,
+      "properties": {
+        "author_type": {
+          "enum": [
+            "patient",
+            "clinician",
+            "other"
+          ],
+          "title": "Author Type",
+          "type": "string"
+        },
+        "language": {
+          "anyOf": [
+            {
+              "maxLength": 35,
+              "minLength": 2,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Language"
+        },
+        "recorded_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Recorded At"
+        },
+        "statement_id": {
+          "minLength": 1,
+          "title": "Statement Id",
+          "type": "string"
+        },
+        "text": {
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "statement_id",
+        "text",
+        "author_type"
+      ],
+      "title": "SourceStatement",
+      "type": "object"
+    },
+    "SubjectContext": {
+      "additionalProperties": false,
+      "properties": {
+        "age": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/QuantityValue"
+            },
+            {
+              "$ref": "#/$defs/RangeValue"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Age"
+        },
+        "sex": {
+          "anyOf": [
+            {
+              "enum": [
+                "male",
+                "female",
+                "intersex",
+                "unknown"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sex"
+        }
+      },
+      "title": "SubjectContext",
+      "type": "object"
+    },
+    "SymptomObservation": {
+      "additionalProperties": false,
+      "properties": {
+        "acquisition_method": {
+          "enum": [
+            "reported",
+            "observed",
+            "measured",
+            "recorded",
+            "question_answer",
+            "legacy_migration"
+          ],
+          "title": "Acquisition Method",
+          "type": "string"
+        },
+        "body_site": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ConceptReference"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "certainty": {
+          "default": "asserted",
+          "enum": [
+            "asserted",
+            "uncertain"
+          ],
+          "title": "Certainty",
+          "type": "string"
+        },
+        "clinical_status": {
+          "enum": [
+            "present",
+            "absent",
+            "unknown"
+          ],
+          "title": "Clinical Status",
+          "type": "string"
+        },
+        "concept": {
+          "$ref": "#/$defs/ConceptReference"
+        },
+        "evaluation_status": {
+          "enum": [
+            "assessed",
+            "not_assessed",
+            "unable_to_assess"
+          ],
+          "title": "Evaluation Status",
+          "type": "string"
+        },
+        "experiencer": {
+          "default": "patient",
+          "enum": [
+            "patient",
+            "family_member"
+          ],
+          "title": "Experiencer",
+          "type": "string"
+        },
+        "kind": {
+          "const": "symptom",
+          "default": "symptom",
+          "title": "Kind",
+          "type": "string"
+        },
+        "laterality": {
+          "anyOf": [
+            {
+              "enum": [
+                "left",
+                "right",
+                "bilateral",
+                "midline",
+                "not_applicable"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Laterality"
+        },
+        "observation_id": {
+          "minLength": 1,
+          "title": "Observation Id",
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/ObservationProvenance"
+        },
+        "question_response_id": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Question Response Id"
+        },
+        "severity": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ConceptReference"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "supersedes": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Supersedes"
+        },
+        "temporal": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/TemporalContext"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "uncertainty_reason": {
+          "anyOf": [
+            {
+              "enum": [
+                "unknown_to_subject",
+                "uncertain",
+                "not_asked",
+                "unable_to_assess",
+                "not_applicable",
+                "other"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Uncertainty Reason"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "discriminator": {
+                "mapping": {
+                  "boolean": "#/$defs/BooleanValue",
+                  "coded": "#/$defs/CodedValue",
+                  "quantity": "#/$defs/QuantityValue",
+                  "range": "#/$defs/RangeValue",
+                  "text": "#/$defs/TextValue"
+                },
+                "propertyName": "kind"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/CodedValue"
+                },
+                {
+                  "$ref": "#/$defs/QuantityValue"
+                },
+                {
+                  "$ref": "#/$defs/RangeValue"
+                },
+                {
+                  "$ref": "#/$defs/BooleanValue"
+                },
+                {
+                  "$ref": "#/$defs/TextValue"
+                }
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "required": [
+        "observation_id",
+        "concept",
+        "clinical_status",
+        "evaluation_status",
+        "acquisition_method",
+        "provenance"
+      ],
+      "title": "SymptomObservation",
+      "type": "object"
+    },
+    "TemporalContext": {
+      "additionalProperties": false,
+      "properties": {
+        "course": {
+          "anyOf": [
+            {
+              "enum": [
+                "acute",
+                "gradual",
+                "continuous",
+                "intermittent",
+                "improving",
+                "worsening",
+                "stable",
+                "recurrent"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Course"
+        },
+        "duration": {
+          "anyOf": [
+            {
+              "pattern": "^P.+$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Duration"
+        },
+        "onset": {
+          "anyOf": [
+            {
+              "discriminator": {
+                "mapping": {
+                  "age": "#/$defs/AgePoint",
+                  "date": "#/$defs/DatePoint",
+                  "date_time": "#/$defs/DateTimePoint"
+                },
+                "propertyName": "kind"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/DatePoint"
+                },
+                {
+                  "$ref": "#/$defs/DateTimePoint"
+                },
+                {
+                  "$ref": "#/$defs/AgePoint"
+                }
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Onset"
+        },
+        "onset_end": {
+          "anyOf": [
+            {
+              "discriminator": {
+                "mapping": {
+                  "age": "#/$defs/AgePoint",
+                  "date": "#/$defs/DatePoint",
+                  "date_time": "#/$defs/DateTimePoint"
+                },
+                "propertyName": "kind"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/DatePoint"
+                },
+                {
+                  "$ref": "#/$defs/DateTimePoint"
+                },
+                {
+                  "$ref": "#/$defs/AgePoint"
+                }
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Onset End"
+        },
+        "recurrence_count": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Recurrence Count"
+        },
+        "trigger": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ConceptReference"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "TemporalContext",
+      "type": "object"
+    },
+    "TextSpan": {
+      "additionalProperties": false,
+      "properties": {
+        "end": {
+          "exclusiveMinimum": 0,
+          "title": "End",
+          "type": "integer"
+        },
+        "start": {
+          "minimum": 0,
+          "title": "Start",
+          "type": "integer"
+        },
+        "text": {
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "start",
+        "end",
+        "text"
+      ],
+      "title": "TextSpan",
+      "type": "object"
+    },
+    "TextValue": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "text",
+          "default": "text",
+          "title": "Kind",
+          "type": "string"
+        },
+        "value": {
+          "minLength": 1,
+          "title": "Value",
+          "type": "string"
+        }
+      },
+      "required": [
+        "value"
+      ],
+      "title": "TextValue",
+      "type": "object"
+    },
+    "VitalMeasurement": {
+      "additionalProperties": false,
+      "properties": {
+        "acquisition_method": {
+          "enum": [
+            "reported",
+            "observed",
+            "measured",
+            "recorded",
+            "question_answer",
+            "legacy_migration"
+          ],
+          "title": "Acquisition Method",
+          "type": "string"
+        },
+        "body_site": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ConceptReference"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "certainty": {
+          "default": "asserted",
+          "enum": [
+            "asserted",
+            "uncertain"
+          ],
+          "title": "Certainty",
+          "type": "string"
+        },
+        "clinical_status": {
+          "enum": [
+            "present",
+            "absent",
+            "unknown"
+          ],
+          "title": "Clinical Status",
+          "type": "string"
+        },
+        "concept": {
+          "$ref": "#/$defs/ConceptReference"
+        },
+        "evaluation_status": {
+          "enum": [
+            "assessed",
+            "not_assessed",
+            "unable_to_assess"
+          ],
+          "title": "Evaluation Status",
+          "type": "string"
+        },
+        "experiencer": {
+          "default": "patient",
+          "enum": [
+            "patient",
+            "family_member"
+          ],
+          "title": "Experiencer",
+          "type": "string"
+        },
+        "kind": {
+          "const": "vital",
+          "default": "vital",
+          "title": "Kind",
+          "type": "string"
+        },
+        "laterality": {
+          "anyOf": [
+            {
+              "enum": [
+                "left",
+                "right",
+                "bilateral",
+                "midline",
+                "not_applicable"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Laterality"
+        },
+        "observation_id": {
+          "minLength": 1,
+          "title": "Observation Id",
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/ObservationProvenance"
+        },
+        "question_response_id": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Question Response Id"
+        },
+        "severity": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ConceptReference"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "supersedes": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Supersedes"
+        },
+        "temporal": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/TemporalContext"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "uncertainty_reason": {
+          "anyOf": [
+            {
+              "enum": [
+                "unknown_to_subject",
+                "uncertain",
+                "not_asked",
+                "unable_to_assess",
+                "not_applicable",
+                "other"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Uncertainty Reason"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "discriminator": {
+                "mapping": {
+                  "boolean": "#/$defs/BooleanValue",
+                  "coded": "#/$defs/CodedValue",
+                  "quantity": "#/$defs/QuantityValue",
+                  "range": "#/$defs/RangeValue",
+                  "text": "#/$defs/TextValue"
+                },
+                "propertyName": "kind"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/CodedValue"
+                },
+                {
+                  "$ref": "#/$defs/QuantityValue"
+                },
+                {
+                  "$ref": "#/$defs/RangeValue"
+                },
+                {
+                  "$ref": "#/$defs/BooleanValue"
+                },
+                {
+                  "$ref": "#/$defs/TextValue"
+                }
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "required": [
+        "observation_id",
+        "concept",
+        "clinical_status",
+        "evaluation_status",
+        "acquisition_method",
+        "provenance"
+      ],
+      "title": "VitalMeasurement",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "case_id": {
+      "maxLength": 120,
+      "minLength": 1,
+      "title": "Case Id",
+      "type": "string"
+    },
+    "observation_proposals": {
+      "items": {
+        "$ref": "#/$defs/ObservationProposal"
+      },
+      "title": "Observation Proposals",
+      "type": "array"
+    },
+    "observations": {
+      "items": {
+        "discriminator": {
+          "mapping": {
+            "exam": "#/$defs/ExamResult",
+            "family_history": "#/$defs/FamilyHistoryItem",
+            "imaging": "#/$defs/ImagingResult",
+            "laboratory": "#/$defs/LaboratoryResult",
+            "medical_history": "#/$defs/MedicalHistoryItem",
+            "medication": "#/$defs/MedicationExposure",
+            "phenotype": "#/$defs/PhenotypeObservation",
+            "risk_factor": "#/$defs/RiskFactorObservation",
+            "sign": "#/$defs/SignObservation",
+            "symptom": "#/$defs/SymptomObservation",
+            "vital": "#/$defs/VitalMeasurement"
+          },
+          "propertyName": "kind"
+        },
+        "oneOf": [
+          {
+            "$ref": "#/$defs/PhenotypeObservation"
+          },
+          {
+            "$ref": "#/$defs/SymptomObservation"
+          },
+          {
+            "$ref": "#/$defs/SignObservation"
+          },
+          {
+            "$ref": "#/$defs/VitalMeasurement"
+          },
+          {
+            "$ref": "#/$defs/LaboratoryResult"
+          },
+          {
+            "$ref": "#/$defs/MedicationExposure"
+          },
+          {
+            "$ref": "#/$defs/MedicalHistoryItem"
+          },
+          {
+            "$ref": "#/$defs/RiskFactorObservation"
+          },
+          {
+            "$ref": "#/$defs/ExamResult"
+          },
+          {
+            "$ref": "#/$defs/ImagingResult"
+          },
+          {
+            "$ref": "#/$defs/FamilyHistoryItem"
+          }
+        ]
+      },
+      "title": "Observations",
+      "type": "array"
+    },
+    "question_history": {
+      "items": {
+        "$ref": "#/$defs/QuestionResponseV2"
+      },
+      "maxItems": 50,
+      "title": "Question History",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": 2,
+      "default": 2,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "source_statements": {
+      "items": {
+        "$ref": "#/$defs/SourceStatement"
+      },
+      "title": "Source Statements",
+      "type": "array"
+    },
+    "subject_context": {
+      "$ref": "#/$defs/SubjectContext"
+    }
+  },
+  "required": [
+    "case_id"
+  ],
+  "title": "ClinicalCaseV2",
+  "type": "object"
+}

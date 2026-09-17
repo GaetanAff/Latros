@@ -1,0 +1,18 @@
+{
+  "schema": "canonical_v2",
+  "tables": {
+    "assertion_derivation": "AssertionDerivation",
+    "canonical_assertion": "CanonicalAssertion",
+    "concept": "ConceptV2",
+    "concept_mapping": "ConceptMappingV2",
+    "designation": "DesignationV2",
+    "evidence_family": "EvidenceFamily",
+    "external_identifier": "ExternalIdentifierV2",
+    "hierarchy_edge": "HierarchyEdgeV2",
+    "source_artifact": "SourceArtifactV2",
+    "source_assertion": "SourceAssertion",
+    "source_dependency": "SourceDependency",
+    "source_record": "SourceRecordV2",
+    "source_release": "SourceReleaseV2"
+  }
+}
