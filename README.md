@@ -26,6 +26,10 @@ manifeste des futurs snapshots canoniques v2. Le travail technique utilise uniqu
 inventées ; la référence médicale reste `v0.2.0` et aucun manifeste `v0.5.0` n'existe tant que le
 `NO-GO` SNOMED/HAS n'est pas levé.
 
+Le constructeur v2 produit désormais les treize tables canoniques, leurs Parquet déterministes et
+un runtime DuckDB en lecture seule à partir d'un `CanonicalKnowledgeV2` validé. Cette capacité est
+encore testée exclusivement sur un mini-corpus fictif nommé `test-v2`.
+
 `v0.4-D` fournit désormais le [schéma canonique v2](schemas/knowledge-model-v2.schema.json) et
 la liste de ses [tables conceptuelles](schemas/canonical-tables-v2.json). L'adaptateur v1 est une
 projection en lecture seule : il distingue enregistrements sources, assertions canoniques et

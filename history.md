@@ -412,3 +412,15 @@ Le manifeste v2 rend obligatoires le périmètre, la population, les sources, li
 familles de preuves, règles, tables, profils compatibles, restrictions de redistribution et hashes.
 Deux schémas JSON sont exportés. Quatre tests synthétiques couvrent ces contrats ; aucun importeur,
 artefact médical, manifeste `v0.5.0` ou snapshot réel n'est ajouté.
+
+### 17 septembre 2026 — v0.5-B, constructeur canonique v2 synthétique
+
+Un stockage v2 séparé publie les treize collections du Knowledge Model sous forme de tables Parquet
+triées et d'un runtime DuckDB en lecture seule. Chaque ligne contient un identifiant stable et le
+JSON canonique du contrat complet. Le manifeste lie hashes logiques, hashes Parquet, périmètre,
+règles, sources et profils ; l'intégrité du conteneur DuckDB reste dans un reçu local distinct.
+
+Le constructeur vérifie tous les artefacts bruts, l'alignement du registre et des objets sources,
+l'immuabilité de l'identifiant, la reconstruction depuis un manifeste épinglé et les checksums au
+chargement. Cinq tests supplémentaires emploient seulement des concepts et assertions inventés.
+Le pipeline v1 n'est pas appelé ni modifié et aucun snapshot médical `v0.5.0` n'est créé.
