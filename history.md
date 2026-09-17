@@ -479,3 +479,8 @@ restent exclus.
 Le checkpoint E est clos avec décision `NO-GO`. Les composants techniques A à D demeurent valides
 sur fixtures, mais F (snapshot médical `v0.5.0`) et G (validation et clôture) ne sont pas commencés.
 Aucun registre médical réel, contenu protégé, manifeste `v0.5.0` ou score clinique n'est publié.
+
+Contrôles GitHub : le [run #30](https://github.com/GaetanAff/Latros/actions/runs/35229429576)
+du checkpoint D et le [run #31](https://github.com/GaetanAff/Latros/actions/runs/35229684808)
+du checkpoint E ont réussi sur `ubuntu-latest` et `windows-latest`. Les deux avertissements de la
+plateforme concernent la transition Node.js interne aux actions GitHub, pas les tests Latros.
