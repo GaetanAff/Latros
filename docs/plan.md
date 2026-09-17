@@ -1,6 +1,6 @@
 # Plan d'implémentation et avancement
 
-Référence : plan « Premières étapes de Latros — socle de données et moteur clinique pur » demandé par l'utilisateur. État au 16 septembre 2026.
+Référence : plan « Premières étapes de Latros — socle de données et moteur clinique pur » demandé par l'utilisateur. État au 17 septembre 2026.
 
 Les trois jalons avaient été implémentés ensemble dans la première tranche. La reprise de l'étape 2 consiste à vérifier sa livraison et à établir le snapshot sous le nom du jalon, `v0.2.0`. Elle ne correspond pas à l'ajout de nouvelles sources ou de fonctions cliniques.
 
@@ -11,8 +11,17 @@ Les trois jalons avaient été implémentés ensemble dans la première tranche.
 | 1 | Fondation technique — `v0.1.0` | Implémentée : paquet, CLI sources, registre, téléchargements vérifiés, verrou et CI | Aucun snapshot médical nécessaire à ce jalon |
 | 2 | Premier snapshot médical — `v0.2.0` | Implémentée ; référence versionnée alignée sur le nom du plan | `manifests/v0.2.0.json` |
 | 3 | Moteur pur et interrogatoire — `v0.3.0` | Implémentée dans le paquet `0.3.0` ; évaluation clinique non réalisée | Le moteur utilise le snapshot `v0.2.0` |
+| 4 | Clinical Knowledge Model — `v0.4` | Cadrage en discussion ; aucune implémentation commencée | La référence reste `v0.2.0` tant qu'aucune nouvelle projection n'est publiée |
 
 Il s'agit des étapes du plan, pas d'une série de releases GitHub publiées. Aucun tag ou changement de version rétroactif du paquet n'est nécessaire pour identifier un snapshot. L'évaluation clinique et les fonctionnalités futures restent à discuter séparément.
+
+## Étape 4 — Clinical Knowledge Model
+
+Le [cahier des charges de v0.4](v0.4-clinical-knowledge-model.md) est la référence de la prochaine tranche. Son objectif est de généraliser les contrats cliniques et de connaissances, la provenance, la gestion des doublons et l'architecture des stratégies sans importer massivement de nouvelles bases ni casser `semantic_v1`.
+
+La limitation actuelle aux maladies rares est explicite. Le snapshot HPO/Mondo/Orphadata ne couvre pas un tableau de médecine courante tel que fièvre et mal de gorge. `v0.4` prépare l'extension ; une première couverture étroite de médecine générale, avec des sources auditées et une stratégie dédiée, est prévue pour `v0.5`.
+
+L'étape est suivie par checkpoints `v0.4-A` à `v0.4-H` dans le cahier des charges. Seul `v0.4-A`, le cadrage initial, est actuellement en discussion. Aucun code, contrat ou snapshot n'est encore modifié.
 
 ## Étape 2 — périmètre livré
 

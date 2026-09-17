@@ -8,6 +8,8 @@ La version de développement `0.3.0` regroupe le socle technique, le pipeline de
 
 Le [plan et son avancement](docs/plan.md) distinguent les trois étapes : fondation `v0.1.0`, premier snapshot médical `v0.2.0`, moteur pur `v0.3.0`. Le snapshot de référence s'appelle maintenant **`v0.2.0`**, conformément au jalon du plan. La version du paquet Python reste `0.3.0`, car le moteur est déjà présent. [history.md](history.md) conserve les réalisations et vérifications datées ; ces documents sont actualisés à chaque livraison.
 
+> **Périmètre critique : maladies rares uniquement.** Le snapshot actuel ne couvre pas la médecine générale. Une plainte courante telle que fièvre et mal de gorge peut conduire à un classement de maladies rares hors périmètre ; ce classement ne doit pas être utilisé comme différentiel de médecine courante. L'extension est planifiée : [`v0.4 Clinical Knowledge Model`](docs/v0.4-clinical-knowledge-model.md) prépare l'architecture générale, puis `v0.5` devra intégrer une première extension étroite avec des sources auditées.
+
 ## Installation
 
 Prérequis : Git, Python 3.11 et [uv](https://docs.astral.sh/uv/getting-started/installation/) (version utilisée en CI : `0.12.15`). L'installation initiale des dépendances et le téléchargement des sources nécessitent Internet. Ces commandes s'exécutent depuis la racine du dépôt sous PowerShell ou un shell Unix.

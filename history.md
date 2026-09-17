@@ -228,3 +228,13 @@ Validation de livraison :
 - Anciens manifestes et code du moteur inchangés ; données générées exclues de Git. Le README indique la branche à cloner tant que la pull request #1 n'est pas fusionnée.
 
 Cette livraison complète la même tranche sur `feat/clinical-foundation`, dans la pull request #1. La publication concerne les documents et le manifeste `v0.2.0`, jamais les bases locales.
+
+### 17 septembre 2026 — Cadrage de v0.4 Clinical Knowledge Model
+
+Demande : préparer la prochaine évolution de Latros sans coder, conserver un suivi durable de chaque étape et confirmer que la limitation actuelle aux maladies rares n'est pas la cible définitive du projet.
+
+Un [cahier des charges dédié](docs/v0.4-clinical-knowledge-model.md) est créé sur la branche `docs/v0.4-clinical-knowledge-model`. Il décrit les invariants, le futur modèle clinique, le Knowledge Model, la provenance, le non-double-comptage, l'architecture multi-stratégies, les tests, les critères d'acceptation et les checkpoints `v0.4-A` à `v0.4-H`.
+
+Décision de périmètre : le snapshot `v0.2.0` et `semantic_v1` restent spécialisés maladies rares. Ils ne couvrent pas correctement une plainte courante comme fièvre et mal de gorge. `v0.4` doit préparer l'architecture générale sans import massif ; `v0.5` doit réaliser une première extension étroite vers la médecine générale avec des sources auditées et une stratégie dédiée. Les futurs référentiels ne seront sélectionnés qu'après analyse de leur rôle, licence, provenance, dépendances et risque de double comptage.
+
+Cette livraison est uniquement documentaire : aucun code, schéma, test, manifeste ou snapshot de données n'est modifié. Le socle actuel et la référence `v0.2.0` restent inchangés.
