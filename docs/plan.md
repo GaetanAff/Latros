@@ -17,7 +17,7 @@ Il s'agit des étapes du plan, pas d'une série de releases GitHub publiées. Au
 
 ## Étape 4 — Clinical Knowledge Model
 
-Le [cahier des charges de v0.4](v0.4-clinical-knowledge-model.md) est la référence de la prochaine tranche. Son objectif est de généraliser les contrats cliniques et de connaissances, la provenance, la gestion des doublons et l'architecture des stratégies sans importer massivement de nouvelles bases ni casser `semantic_v1`.
+Le [cahier des charges de v0.4](v0.4-clinical-knowledge-model.md) est la référence de conception et de livraison de cette tranche. Il a généralisé les contrats cliniques et de connaissances, la provenance, la gestion des doublons et l'architecture des stratégies sans importer massivement de nouvelles bases ni casser `semantic_v1`.
 
 La limitation actuelle aux maladies rares est explicite. Le snapshot HPO/Mondo/Orphadata ne couvre pas un tableau de médecine courante tel que fièvre et mal de gorge. `v0.4` prépare l'extension ; une première couverture étroite de médecine générale, avec des sources auditées et une stratégie dédiée, est prévue pour `v0.5`.
 
