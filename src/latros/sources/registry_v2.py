@@ -27,6 +27,14 @@ ArtifactFormatV2 = Literal[
 ]
 
 
+class RegistryDependencyV2(Contract):
+    upstream_reference: str = Field(min_length=1)
+    dependency_type: Literal[
+        "primary", "derived_from", "republication", "shared_upstream", "unknown"
+    ]
+    evidence: str = Field(min_length=1)
+
+
 class SnapshotScopeV2(Contract):
     scope_id: str = Field(min_length=1)
     domain: str = Field(min_length=1)
@@ -79,12 +87,13 @@ class RegistryArtifactV2(Contract):
 class SourcePackageV2(Contract):
     source_id: str
     roles: list[str] = Field(min_length=1)
+    code_system: str = Field(min_length=1)
     homepage: str = Field(min_length=1)
     release: str
     release_date: date | None = None
     access_date: date
     license: LicenseV2
-    upstream_dependencies: list[str] = Field(default_factory=list)
+    dependencies: list[RegistryDependencyV2] = Field(default_factory=list)
     artifacts: list[RegistryArtifactV2] = Field(min_length=1)
 
     @field_validator("source_id", "release")

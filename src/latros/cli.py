@@ -11,13 +11,20 @@ from lxml import etree
 from latros.clinical.loading import ClinicalCaseDocument, load_clinical_case
 from latros.clinical.v2 import ClinicalCaseV2
 from latros.common import LatrosError, encoded
-from latros.knowledge.store import build_snapshot, load_manifest
+from latros.knowledge.importers_v2 import import_registry_v2
+from latros.knowledge.loading import load_manifest_document
+from latros.knowledge.manifest_v2 import KnowledgeSnapshotManifestV2
+from latros.knowledge.store import build_snapshot
+from latros.knowledge.store_v2 import build_snapshot_v2
 from latros.reasoning.engine import Engine
 from latros.reasoning.profiles import load_reasoning_profile
 from latros.reasoning.results_v2 import build_differential_v2, build_question_v2
 from latros.reasoning.semantic_v1_adapter import SemanticV1Adapter
 from latros.sources.fetch import fetch_source
-from latros.sources.registry import load_registry
+from latros.sources.fetch_v2 import fetch_source_v2
+from latros.sources.loading import load_registry_document
+from latros.sources.registry import Registry
+from latros.sources.registry_v2 import RegistryV2
 
 app = typer.Typer(no_args_is_help=True, help="Latros — research CLI, safety not evaluated.")
 sources = typer.Typer(no_args_is_help=True)
@@ -53,31 +60,51 @@ def output(value: Any) -> None:
 
 @sources.command("list")
 def list_sources(ctx: typer.Context) -> None:
-    output(load_registry(ctx.obj["registry"]).model_dump(mode="json"))
+    output(load_registry_document(ctx.obj["registry"]).model_dump(mode="json"))
 
 
 @sources.command("validate")
 def validate_sources(ctx: typer.Context) -> None:
-    registry = load_registry(ctx.obj["registry"])
-    output({"valid": True, "sources": len(registry.sources), "schema_version": 1})
+    registry = load_registry_document(ctx.obj["registry"])
+    output(
+        {
+            "valid": True,
+            "sources": len(registry.sources),
+            "schema_version": registry.schema_version,
+        }
+    )
 
 
 @sources.command("fetch")
 def fetch(
     ctx: typer.Context, source: str = typer.Option(...), release: str = typer.Option(...)
 ) -> None:
-    registry = load_registry(ctx.obj["registry"])
-    output(fetch_source(ctx.obj["root"], registry.source(source, release)))
+    registry = load_registry_document(ctx.obj["registry"])
+    if isinstance(registry, Registry):
+        output(fetch_source(ctx.obj["root"], registry.source(source, release)))
+    else:
+        output(fetch_source_v2(ctx.obj["root"], registry.source(source, release)))
 
 
 @data.command("build")
 def build(ctx: typer.Context, snapshot: str = typer.Option(...)) -> None:
-    output(build_snapshot(ctx.obj["root"], load_registry(ctx.obj["registry"]), snapshot))
+    registry = load_registry_document(ctx.obj["registry"])
+    if isinstance(registry, RegistryV2):
+        knowledge = import_registry_v2(ctx.obj["root"], registry)
+        result = build_snapshot_v2(ctx.obj["root"], registry, snapshot, knowledge)
+        output(result.model_dump(mode="json"))
+    else:
+        output(build_snapshot(ctx.obj["root"], registry, snapshot))
 
 
 @data.command("inspect")
 def inspect(ctx: typer.Context, snapshot: str = typer.Option(...)) -> None:
-    output(load_manifest(ctx.obj["root"], snapshot))
+    manifest = load_manifest_document(ctx.obj["root"], snapshot)
+    output(
+        manifest.model_dump(mode="json")
+        if isinstance(manifest, KnowledgeSnapshotManifestV2)
+        else manifest
+    )
 
 
 @app.command("diagnose")

@@ -24,6 +24,7 @@ def _registry_payload() -> dict[str, object]:
             {
                 "source_id": "invented-terminology",
                 "roles": ["terminology"],
+                "code_system": "urn:latros:test-terminology",
                 "homepage": "https://example.org/invented-terminology/1",
                 "release": "test-1",
                 "release_date": "2026-09-01",
@@ -36,7 +37,7 @@ def _registry_payload() -> dict[str, object]:
                     "implementation_rights_confirmed": True,
                     "notes": "No external terminology content",
                 },
-                "upstream_dependencies": [],
+                "dependencies": [],
                 "artifacts": [
                     {
                         "filename": "concepts.tsv",

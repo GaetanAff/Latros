@@ -114,6 +114,39 @@
       "title": "RegistryArtifactV2",
       "type": "object"
     },
+    "RegistryDependencyV2": {
+      "additionalProperties": false,
+      "properties": {
+        "dependency_type": {
+          "enum": [
+            "primary",
+            "derived_from",
+            "republication",
+            "shared_upstream",
+            "unknown"
+          ],
+          "title": "Dependency Type",
+          "type": "string"
+        },
+        "evidence": {
+          "minLength": 1,
+          "title": "Evidence",
+          "type": "string"
+        },
+        "upstream_reference": {
+          "minLength": 1,
+          "title": "Upstream Reference",
+          "type": "string"
+        }
+      },
+      "required": [
+        "upstream_reference",
+        "dependency_type",
+        "evidence"
+      ],
+      "title": "RegistryDependencyV2",
+      "type": "object"
+    },
     "SnapshotScopeV2": {
       "additionalProperties": false,
       "properties": {
@@ -193,6 +226,18 @@
           "title": "Artifacts",
           "type": "array"
         },
+        "code_system": {
+          "minLength": 1,
+          "title": "Code System",
+          "type": "string"
+        },
+        "dependencies": {
+          "items": {
+            "$ref": "#/$defs/RegistryDependencyV2"
+          },
+          "title": "Dependencies",
+          "type": "array"
+        },
         "homepage": {
           "minLength": 1,
           "title": "Homepage",
@@ -229,18 +274,12 @@
         "source_id": {
           "title": "Source Id",
           "type": "string"
-        },
-        "upstream_dependencies": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Upstream Dependencies",
-          "type": "array"
         }
       },
       "required": [
         "source_id",
         "roles",
+        "code_system",
         "homepage",
         "release",
         "access_date",

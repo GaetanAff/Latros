@@ -224,6 +224,7 @@ def synthetic_registry_and_knowledge_v2(root: Path) -> tuple[RegistryV2, Canonic
             {
                 "source_id": source_id,
                 "roles": [role],
+                "code_system": f"urn:latros:{source_id}",
                 "homepage": f"https://example.test/{source_id}/test-v2",
                 "release": "test-v2",
                 "release_date": "2026-09-01",
@@ -236,7 +237,7 @@ def synthetic_registry_and_knowledge_v2(root: Path) -> tuple[RegistryV2, Canonic
                     "implementation_rights_confirmed": True,
                     "notes": "No external medical or terminology content",
                 },
-                "upstream_dependencies": [],
+                "dependencies": [],
                 "artifacts": [
                     {
                         "filename": filename,

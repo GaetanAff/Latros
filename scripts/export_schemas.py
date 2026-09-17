@@ -8,6 +8,7 @@ from latros.clinical.v2 import ClinicalCaseV2
 from latros.common import encoded
 from latros.knowledge.frequency import Frequency
 from latros.knowledge.importers import TABLES
+from latros.knowledge.importers_v2 import CuratedAssertionRecord
 from latros.knowledge.manifest_v2 import KnowledgeSnapshotManifestV2
 from latros.knowledge.models_v2 import CANONICAL_TABLES_V2, CanonicalKnowledgeV2
 from latros.reasoning.interfaces import ReasoningStrategyDescriptor
@@ -33,6 +34,7 @@ def main() -> None:
         "knowledge-snapshot-manifest-v2.schema.json": (
             KnowledgeSnapshotManifestV2.model_json_schema()
         ),
+        "curated-assertion-record-v1.schema.json": CuratedAssertionRecord.model_json_schema(),
         "canonical-tables-v2.json": {
             "schema": "canonical_v2",
             "tables": CANONICAL_TABLES_V2,

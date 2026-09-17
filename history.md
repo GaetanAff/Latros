@@ -424,3 +424,20 @@ Le constructeur vérifie tous les artefacts bruts, l'alignement du registre et d
 l'immuabilité de l'identifiant, la reconstruction depuis un manifeste épinglé et les checksums au
 chargement. Cinq tests supplémentaires emploient seulement des concepts et assertions inventés.
 Le pipeline v1 n'est pas appelé ni modifié et aucun snapshot médical `v0.5.0` n'est créé.
+
+### 17 septembre 2026 — v0.5-C, import RF2 et assertions curées
+
+Un chargeur versionné distribue désormais registres et manifestes entre les pipelines v1 et v2.
+La CLI peut valider, préparer, construire et inspecter un registre v2 sans modifier les commandes
+historiques. Les artefacts `manual_local` doivent être acquis par l'opérateur et sont vérifiés par
+hash ; aucun identifiant ou secret d'accès n'est enregistré.
+
+L'importeur RF2 limité lit concepts actifs, descriptions et relations `is_a` d'un sous-ensemble
+explicitement préparé. L'importeur JSONL exige une localisation source, un hash du texte, un
+curateur et deux relecteurs distincts couvrant les rôles clinique et mapping. Il crée séparément
+records, assertions sources, assertions canoniques, dérivations et familles de preuves. Les codes
+inconnus, doublons, cycles, colonnes manquantes et revues invalides sont refusés.
+
+Le schéma du paquet de curation est versionné. Sept tests supplémentaires portent la suite à 108
+tests attendus après ajout des contrôles d'accès public et manuel. Toutes les données utilisées
+restent inventées ; aucun mapping implicite ni contenu thérapeutique n'est importé.

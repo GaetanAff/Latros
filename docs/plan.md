@@ -55,7 +55,7 @@ juridique et clinique séparé des sources réelles. `v0.5.0` sera un snapshot O
 | --- | --- | --- |
 | `v0.5-A` | Terminé | ADR, registre v2, manifeste v2 et schémas exportés |
 | `v0.5-B` | Terminé | Constructeur reproductible des treize tables sur fixtures |
-| `v0.5-C` | À faire | Importeurs RF2 et assertions curées synthétiques |
+| `v0.5-C` | Terminé | Importeurs RF2 et assertions curées synthétiques |
 | `v0.5-D` | À faire | Stratégie déterministe `general_v1` sur mini-corpus fictif |
 | `v0.5-E` | Bloqué par conditions externes | Audit final SNOMED/HAS ORL et décision GO/NO-GO |
 | `v0.5-F` | Bloqué par `v0.5-E` | Snapshot médical réel `v0.5.0` |

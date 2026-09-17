@@ -80,6 +80,7 @@ def pipeline_hash_v2() -> str:
     relative_paths = [
         "knowledge/manifest_v2.py",
         "knowledge/models_v2.py",
+        "knowledge/importers_v2.py",
         "knowledge/store_v2.py",
         "sources/registry_v2.py",
     ]
@@ -211,11 +212,14 @@ def build_snapshot_v2(
             "scope": registry.scope.model_dump(mode="json"),
             "rules": V2_RULES,
         }
-        redistribution: Literal["allowed_with_attribution", "restricted", "prohibited"] = (
-            "restricted"
-            if any(source.license.redistribution == "restricted" for source in registry.sources)
-            else "allowed_with_attribution"
-        )
+        redistributions = {source.license.redistribution for source in registry.sources}
+        redistribution: Literal["allowed_with_attribution", "restricted", "prohibited"]
+        if "prohibited" in redistributions:
+            redistribution = "prohibited"
+        elif "restricted" in redistributions:
+            redistribution = "restricted"
+        else:
+            redistribution = "allowed_with_attribution"
         manifest = KnowledgeSnapshotManifestV2(
             snapshot=snapshot,
             latros_version=__version__,

@@ -30,6 +30,11 @@ Le constructeur v2 produit désormais les treize tables canoniques, leurs Parque
 un runtime DuckDB en lecture seule à partir d'un `CanonicalKnowledgeV2` validé. Cette capacité est
 encore testée exclusivement sur un mini-corpus fictif nommé `test-v2`.
 
+Le registre v2 peut décrire un sous-ensemble RF2 et un paquet JSONL d'assertions curées. Les sources
+protégées utilisent `manual_local` : l'opérateur acquiert le fichier sous sa licence, puis Latros
+vérifie son emplacement et son hash sans stocker de secret. La CLI détecte automatiquement les
+registres et manifestes v1 ou v2. Aucun registre SNOMED/HAS réel n'est encore versionné.
+
 `v0.4-D` fournit désormais le [schéma canonique v2](schemas/knowledge-model-v2.schema.json) et
 la liste de ses [tables conceptuelles](schemas/canonical-tables-v2.json). L'adaptateur v1 est une
 projection en lecture seule : il distingue enregistrements sources, assertions canoniques et

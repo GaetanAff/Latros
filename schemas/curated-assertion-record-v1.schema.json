@@ -1,0 +1,212 @@
+{
+  "$defs": {
+    "CuratedCode": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "minLength": 1,
+          "title": "Code",
+          "type": "string"
+        },
+        "system": {
+          "minLength": 1,
+          "title": "System",
+          "type": "string"
+        }
+      },
+      "required": [
+        "system",
+        "code"
+      ],
+      "title": "CuratedCode",
+      "type": "object"
+    },
+    "CuratedEvidenceFamily": {
+      "additionalProperties": false,
+      "properties": {
+        "dependency_type": {
+          "enum": [
+            "primary",
+            "derived_from",
+            "republication",
+            "shared_upstream",
+            "unknown"
+          ],
+          "title": "Dependency Type",
+          "type": "string"
+        },
+        "family_id": {
+          "minLength": 1,
+          "title": "Family Id",
+          "type": "string"
+        },
+        "primary_reference": {
+          "minLength": 1,
+          "title": "Primary Reference",
+          "type": "string"
+        }
+      },
+      "required": [
+        "family_id",
+        "dependency_type",
+        "primary_reference"
+      ],
+      "title": "CuratedEvidenceFamily",
+      "type": "object"
+    },
+    "CurationReviewer": {
+      "additionalProperties": false,
+      "properties": {
+        "reviewer_id": {
+          "minLength": 1,
+          "title": "Reviewer Id",
+          "type": "string"
+        },
+        "role": {
+          "enum": [
+            "clinical",
+            "mapping"
+          ],
+          "title": "Role",
+          "type": "string"
+        }
+      },
+      "required": [
+        "reviewer_id",
+        "role"
+      ],
+      "title": "CurationReviewer",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "clinical_context": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Clinical Context"
+    },
+    "curator_id": {
+      "minLength": 1,
+      "title": "Curator Id",
+      "type": "string"
+    },
+    "evidence_family": {
+      "$ref": "#/$defs/CuratedEvidenceFamily"
+    },
+    "evidence_level": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Evidence Level"
+    },
+    "evidence_type": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Evidence Type"
+    },
+    "object": {
+      "$ref": "#/$defs/CuratedCode"
+    },
+    "polarity": {
+      "default": "present",
+      "enum": [
+        "present",
+        "excluded",
+        "unknown"
+      ],
+      "title": "Polarity",
+      "type": "string"
+    },
+    "population": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Population",
+      "type": "array"
+    },
+    "record_id": {
+      "minLength": 1,
+      "title": "Record Id",
+      "type": "string"
+    },
+    "record_locator": {
+      "minLength": 1,
+      "title": "Record Locator",
+      "type": "string"
+    },
+    "relation": {
+      "enum": [
+        "has_symptom",
+        "has_sign",
+        "has_risk_factor",
+        "has_lab_finding",
+        "has_exam_finding",
+        "has_imaging_finding",
+        "typical_age",
+        "typical_sex",
+        "has_complication"
+      ],
+      "title": "Relation",
+      "type": "string"
+    },
+    "reviewers": {
+      "items": {
+        "$ref": "#/$defs/CurationReviewer"
+      },
+      "minItems": 2,
+      "title": "Reviewers",
+      "type": "array"
+    },
+    "source_text_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Source Text Sha256",
+      "type": "string"
+    },
+    "status": {
+      "const": "approved",
+      "title": "Status",
+      "type": "string"
+    },
+    "subject": {
+      "$ref": "#/$defs/CuratedCode"
+    }
+  },
+  "required": [
+    "record_id",
+    "record_locator",
+    "source_text_sha256",
+    "subject",
+    "relation",
+    "object",
+    "curator_id",
+    "reviewers",
+    "status",
+    "evidence_family"
+  ],
+  "title": "CuratedAssertionRecord",
+  "type": "object"
+}
