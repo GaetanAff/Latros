@@ -98,6 +98,9 @@ class Abstention(Contract):
         "no_supported_present_observation",
         "insufficient_snapshot_coverage",
         "insufficient_supported_findings",
+        "insufficient_case_coverage",
+        "outside_snapshot_population",
+        "missing_required_context",
     ]
     explanation: str = Field(min_length=1)
 

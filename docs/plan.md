@@ -12,7 +12,7 @@ Les trois jalons avaient été implémentés ensemble dans la première tranche.
 | 2 | Premier snapshot médical — `v0.2.0` | Implémentée ; référence versionnée alignée sur le nom du plan | `manifests/v0.2.0.json` |
 | 3 | Moteur pur et interrogatoire — `v0.3.0` | Implémentée dans le paquet `0.3.0` ; évaluation clinique non réalisée | Le moteur utilise le snapshot `v0.2.0` |
 | 4 | Clinical Knowledge Model — `v0.4.0` | Terminée : checkpoints A–H livrés et revue finale verte | La référence reste `v0.2.0` ; aucun snapshot médical v2 publié |
-| 5 | Snapshot ORL généraliste — `v0.5.0` | En cours : checkpoint A, contrats de registre et manifeste v2 | Aucun snapshot publié ; fixtures inventées uniquement |
+| 5 | Snapshot ORL généraliste — `v0.5.0` | En cours : checkpoints techniques A–D terminés ; audit E en `NO-GO` | Aucun snapshot publié ; fixtures inventées uniquement |
 
 Il s'agit des étapes du plan, pas d'une série de releases GitHub publiées. Aucun tag ou changement de version rétroactif du paquet n'est nécessaire pour identifier un snapshot. L'évaluation clinique et les fonctionnalités futures restent à discuter séparément.
 
@@ -56,10 +56,21 @@ juridique et clinique séparé des sources réelles. `v0.5.0` sera un snapshot O
 | `v0.5-A` | Terminé | ADR, registre v2, manifeste v2 et schémas exportés |
 | `v0.5-B` | Terminé | Constructeur reproductible des treize tables sur fixtures |
 | `v0.5-C` | Terminé | Importeurs RF2 et assertions curées synthétiques |
-| `v0.5-D` | À faire | Stratégie déterministe `general_v1` sur mini-corpus fictif |
+| `v0.5-D` | Terminé | Stratégie déterministe `general_v1` sur mini-corpus fictif |
 | `v0.5-E` | Bloqué par conditions externes | Audit final SNOMED/HAS ORL et décision GO/NO-GO |
 | `v0.5-F` | Bloqué par `v0.5-E` | Snapshot médical réel `v0.5.0` |
 | `v0.5-G` | Bloqué par `v0.5-F` | Validation clinique séparée et clôture |
+
+`general_v1` accepte exclusivement `ClinicalCaseV2`, les concepts identiques ou les mappings
+résolus `exact/equivalent`, et un snapshot canonique v2 qui déclare son profil. Son score
+`general_v1.compatibility` reste une compatibilité non calibrée. Les assertions sont évaluées par
+polarité explicite, moyennées dans chaque famille de preuve puis combinées seulement entre familles
+indépendantes autorisées par le profil. La CLI expose le raisonnement et les questions en contrat v2,
+avec couverture, abstention, sources, familles, mappings et reçu reproductible.
+
+Le profil `general_v1-default` est actuellement lié au corpus inventé `test-v2`. Il sert à vérifier
+les règles du moteur, pas à produire un résultat clinique. Le futur snapshot ORL devra disposer d'un
+profil versionné dont les familles et poids correspondent exactement au corpus approuvé.
 
 ## Trajectoire v0.6 — médicaments et molécules
 

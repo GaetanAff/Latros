@@ -17,6 +17,7 @@ from latros.knowledge.manifest_v2 import KnowledgeSnapshotManifestV2
 from latros.knowledge.store import build_snapshot
 from latros.knowledge.store_v2 import build_snapshot_v2
 from latros.reasoning.engine import Engine
+from latros.reasoning.general_v1 import GeneralV1Strategy
 from latros.reasoning.profiles import load_reasoning_profile
 from latros.reasoning.results_v2 import build_differential_v2, build_question_v2
 from latros.reasoning.semantic_v1_adapter import SemanticV1Adapter
@@ -118,6 +119,18 @@ def diagnose(
     ] = OutputContract.auto,
 ) -> None:
     case_document = load_clinical_case(case.read_bytes())
+    if strategy == "general_v1":
+        if not isinstance(case_document, ClinicalCaseV2):
+            raise LatrosError("general_v1 accepts only ClinicalCaseV2")
+        if output_contract is OutputContract.v1:
+            raise LatrosError("general_v1 has no v1 output contract")
+        profile = load_reasoning_profile(_profile_path(strategy))
+        output(
+            GeneralV1Strategy(ctx.obj["root"], snapshot, profile)
+            .diagnose(case_document)
+            .model_dump(mode="json")
+        )
+        return
     adapter = _strategy(ctx.obj["root"], snapshot, strategy)
     if _v2_output(case_document, output_contract):
         profile = load_reasoning_profile(_profile_path(strategy))
@@ -141,6 +154,18 @@ def next_command(
     ] = OutputContract.auto,
 ) -> None:
     case_document = load_clinical_case(case.read_bytes())
+    if strategy == "general_v1":
+        if not isinstance(case_document, ClinicalCaseV2):
+            raise LatrosError("general_v1 accepts only ClinicalCaseV2")
+        if output_contract is OutputContract.v1:
+            raise LatrosError("general_v1 has no v1 output contract")
+        profile = load_reasoning_profile(_profile_path(strategy))
+        output(
+            GeneralV1Strategy(ctx.obj["root"], snapshot, profile)
+            .question(case_document)
+            .model_dump(mode="json")
+        )
+        return
     adapter = _strategy(ctx.obj["root"], snapshot, strategy)
     if _v2_output(case_document, output_contract):
         profile = load_reasoning_profile(_profile_path(strategy))

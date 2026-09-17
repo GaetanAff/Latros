@@ -441,3 +441,22 @@ inconnus, doublons, cycles, colonnes manquantes et revues invalides sont refusé
 Le schéma du paquet de curation est versionné. Sept tests supplémentaires portent la suite à 108
 tests attendus après ajout des contrôles d'accès public et manuel. Toutes les données utilisées
 restent inventées ; aucun mapping implicite ni contenu thérapeutique n'est importé.
+
+### 17 septembre 2026 — v0.5-D, stratégie générale sur corpus fictif
+
+`general_v1` est ajouté comme stratégie séparée de `semantic_v1`. Il accepte uniquement un
+`ClinicalCaseV2` et un snapshot v2 compatible, résout les concepts identiques ou les mappings
+`exact/equivalent`, puis compare les observations confirmées aux polarités explicites des assertions.
+Les valeurs `unknown`, `not_assessed` et `unable_to_assess` restent sans contribution numérique.
+
+Le score `general_v1.compatibility` est borné entre `-1` et `1`, non calibré et explicitement distinct
+d'une probabilité. Les contributions sont moyennées par famille de preuve ; seules les familles
+indépendantes et pondérées par le profil entrent dans l'agrégat. Les sources, contradictions,
+mappings, éléments ignorés, couverture et reçus restent inspectables. Une dépendance inconnue est
+visible mais exclue du score.
+
+Le moteur s'abstient hors population adulte, sans âge exploitable, sous le seuil de couverture ou
+avec moins de deux observations évaluées. Le questionnement exige des assertions de polarités
+opposées entre au moins deux candidats ; l'absence d'assertion n'est jamais convertie en négation.
+Neuf tests ciblés portent la suite à 117 tests verts. Les fixtures, libellés, codes, candidats et
+familles de preuves sont entièrement inventés ; aucun snapshot médical `v0.5.0` n'est créé.

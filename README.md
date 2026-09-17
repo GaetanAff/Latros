@@ -21,10 +21,10 @@ produit commercialisé, classe thérapeutique et assertions médicales sourcées
 distincts. Cette préparation ne constitue ni une recommandation de traitement, ni une fonction de
 prescription ; le détail est consigné dans le [cahier v0.4](docs/v0.4-clinical-knowledge-model.md).
 
-`v0.5` est en cours sur une branche dédiée. Son premier checkpoint définit le registre et le
-manifeste des futurs snapshots canoniques v2. Le travail technique utilise uniquement des fixtures
-inventées ; la référence médicale reste `v0.2.0` et aucun manifeste `v0.5.0` n'existe tant que le
-`NO-GO` SNOMED/HAS n'est pas levé.
+`v0.5` est en cours sur une branche dédiée. Ses checkpoints techniques A à D définissent le registre,
+le manifeste, le constructeur, les importeurs et le premier raisonneur général des futurs snapshots
+canoniques v2. Le travail utilise uniquement des fixtures inventées ; la référence médicale reste
+`v0.2.0` et aucun manifeste `v0.5.0` n'existe tant que le `NO-GO` SNOMED/HAS n'est pas levé.
 
 Le constructeur v2 produit désormais les treize tables canoniques, leurs Parquet déterministes et
 un runtime DuckDB en lecture seule à partir d'un `CanonicalKnowledgeV2` validé. Cette capacité est
@@ -34,6 +34,15 @@ Le registre v2 peut décrire un sous-ensemble RF2 et un paquet JSONL d'assertion
 protégées utilisent `manual_local` : l'opérateur acquiert le fichier sous sa licence, puis Latros
 vérifie son emplacement et son hash sans stocker de secret. La CLI détecte automatiquement les
 registres et manifestes v1 ou v2. Aucun registre SNOMED/HAS réel n'est encore versionné.
+
+`general_v1` classe les conditions déclarées par un snapshot v2 à partir d'assertions explicites,
+normalise d'abord les contributions au niveau des familles de preuves et publie une compatibilité
+comprise entre `-1` et `1`. Cette valeur n'est jamais une probabilité. Le moteur refuse les cas sans
+âge adulte exploitable, à couverture insuffisante ou avec moins de deux observations évaluées. Il
+ignore numériquement `unknown`, `not_assessed` et `unable_to_assess`, expose les sources séparément
+et ne propose une question que si des polarités opposées distinguent réellement plusieurs candidats.
+Le profil actuel est destiné au corpus fictif `test-v2` ; un profil ORL réel devra être versionné et
+revu après le `GO`.
 
 `v0.4-D` fournit désormais le [schéma canonique v2](schemas/knowledge-model-v2.schema.json) et
 la liste de ses [tables conceptuelles](schemas/canonical-tables-v2.json). L'adaptateur v1 est une

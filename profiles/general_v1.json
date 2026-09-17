@@ -1,0 +1,56 @@
+{
+  "abstention_rules": [
+    "Adult population context is required",
+    "At least two supported findings must be assessed",
+    "Confirmed-observation coverage must be at least 0.50",
+    "At least one independent evidence family must contribute"
+  ],
+  "accepted_observation_types": [
+    "symptom",
+    "sign",
+    "exam",
+    "vital"
+  ],
+  "accepted_relations": [
+    "has_symptom",
+    "has_sign",
+    "has_exam_finding"
+  ],
+  "aggregation_rules": [
+    "Average assessed assertion contributions inside each evidence family",
+    "Combine only independent evidence families using explicit positive weights",
+    "Exclude unknown source dependencies from the aggregate"
+  ],
+  "compatible_snapshot_ids": [],
+  "compatible_snapshot_schema_versions": [
+    2
+  ],
+  "coverage_rules": [
+    "Only confirmed resolved observations count as supported",
+    "Unknown and unevaluable findings have no numeric contribution"
+  ],
+  "out_of_scope_rules": [
+    "Age below 18 years is outside this engineering profile",
+    "Missing or ambiguous age prevents adult-scope reasoning"
+  ],
+  "parameters": {
+    "allow_unlisted_evidence_families": false,
+    "family_weights": {
+      "evidence-family:invented-guidance": 1.0
+    },
+    "minimum_age_years": 18,
+    "minimum_assessed_findings": 2,
+    "minimum_coverage_ratio": 0.5
+  },
+  "profile_id": "general_v1-default",
+  "profile_sha256": "b675f89e1c1aa4fcdb791d20157df2675f76222131db25419876e3796f33a787",
+  "schema_version": 1,
+  "score_scale": {
+    "calibrated": false,
+    "description": "Deterministic family-normalized compatibility from explicit assertions; never a clinical probability",
+    "kind": "compatibility",
+    "scale_id": "general_v1.compatibility"
+  },
+  "strategy_id": "general_v1",
+  "strategy_version": "1"
+}

@@ -12,7 +12,10 @@
           "enum": [
             "no_supported_present_observation",
             "insufficient_snapshot_coverage",
-            "insufficient_supported_findings"
+            "insufficient_supported_findings",
+            "insufficient_case_coverage",
+            "outside_snapshot_population",
+            "missing_required_context"
           ],
           "title": "Reason",
           "type": "string"
