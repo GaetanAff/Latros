@@ -61,7 +61,9 @@ toujours `Engine` et `question_v1`, dont les sorties v1 restent protégées par 
 L'[audit des sources ORL de v0.5](docs/source-audits/v0.5-orl.md) conclut à un `NO-GO`
 temporaire pour toute ingestion réelle : SNOMED France exige les licences adaptées et le modèle de
 redistribution doit être clarifié ; la fiche HAS coélaborée avec des tiers exige une autorisation
-écrite et une double revue clinique. Aucun dataset moins fiable ne la remplace automatiquement.
+écrite et une double revue clinique. Le contrôle final ajoute qu'un corpus doit couvrir les quatre
+candidats avec au moins deux assertions diagnostiques explicites et une assertion discriminante par
+candidat ; ce minimum n'est pas démontré. Aucun dataset moins fiable ne le remplace automatiquement.
 
 ## Installation
 

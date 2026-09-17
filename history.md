@@ -460,3 +460,22 @@ avec moins de deux observations évaluées. Le questionnement exige des assertio
 opposées entre au moins deux candidats ; l'absence d'assertion n'est jamais convertie en négation.
 Neuf tests ciblés portent la suite à 117 tests verts. Les fixtures, libellés, codes, candidats et
 familles de preuves sont entièrement inventés ; aucun snapshot médical `v0.5.0` n'est créé.
+
+### 17 septembre 2026 — v0.5-E, audit final et décision NO-GO
+
+Les pages officielles ANS confirment la release française SNOMED CT de juin 2026 au format RF2/OWL,
+mais aussi l'obligation d'une licence d'affiliation pour l'implémentation, d'une licence nationale
+pour l'édition française et d'un échange avec le NRC pour certains modèles de distribution ou
+d'alignement. Aucune preuve d'acceptation ni réponse écrite applicable à Latros n'est disponible dans
+le dossier projet.
+
+La page HAS angine conserve des éléments diagnostiques potentiels, dont Mac Isaac et le TDR, mais
+son objectif principal est l'antibiothérapie. Les renvois vers rhinopharyngite, sinusite et otite ne
+démontrent pas un corpus différentiel suffisant. La règle de sortie exige désormais, pour chacun des
+quatre candidats, au moins deux assertions diagnostiques explicites et une assertion discriminante,
+avec droits vérifiés et double revue dont un clinicien. Les traitements, molécules, doses et durées
+restent exclus.
+
+Le checkpoint E est clos avec décision `NO-GO`. Les composants techniques A à D demeurent valides
+sur fixtures, mais F (snapshot médical `v0.5.0`) et G (validation et clôture) ne sont pas commencés.
+Aucun registre médical réel, contenu protégé, manifeste `v0.5.0` ou score clinique n'est publié.

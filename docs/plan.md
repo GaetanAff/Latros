@@ -57,7 +57,7 @@ juridique et clinique séparé des sources réelles. `v0.5.0` sera un snapshot O
 | `v0.5-B` | Terminé | Constructeur reproductible des treize tables sur fixtures |
 | `v0.5-C` | Terminé | Importeurs RF2 et assertions curées synthétiques |
 | `v0.5-D` | Terminé | Stratégie déterministe `general_v1` sur mini-corpus fictif |
-| `v0.5-E` | Bloqué par conditions externes | Audit final SNOMED/HAS ORL et décision GO/NO-GO |
+| `v0.5-E` | Terminé — `NO-GO` confirmé | Audit final SNOMED/HAS ORL ; conditions juridiques, cliniques et de couverture non satisfaites |
 | `v0.5-F` | Bloqué par `v0.5-E` | Snapshot médical réel `v0.5.0` |
 | `v0.5-G` | Bloqué par `v0.5-F` | Validation clinique séparée et clôture |
 
@@ -71,6 +71,12 @@ avec couverture, abstention, sources, familles, mappings et reçu reproductible.
 Le profil `general_v1-default` est actuellement lié au corpus inventé `test-v2`. Il sert à vérifier
 les règles du moteur, pas à produire un résultat clinique. Le futur snapshot ORL devra disposer d'un
 profil versionné dont les familles et poids correspondent exactement au corpus approuvé.
+
+Le checkpoint E confirme que la fiche HAS angine, essentiellement orientée antibiothérapie, ne
+suffit pas à documenter le différentiel fermé des quatre candidats. Chacun devra disposer d'au moins
+deux assertions diagnostiques explicites et d'une assertion discriminante approuvées. Les licences
+SNOMED, les droits de transformation/redistribution, la double revue et ce seuil de couverture ne
+sont pas satisfaits : F et G ne doivent donc pas commencer.
 
 ## Trajectoire v0.6 — médicaments et molécules
 
