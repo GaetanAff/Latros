@@ -20,6 +20,12 @@ clinique. Les répétitions sémantiques restent auditables comme lignes sources
 famille de preuve ; elles ne deviennent donc pas plusieurs confirmations indépendantes. Ces
 contrats sont validés sur fixtures inventées et ne constituent pas un nouveau snapshot médical.
 
+`v0.4-E` ajoute des interfaces séparées pour génération de candidats, scoring, questionnement et
+explication, ainsi qu'un [profil `semantic_v1` hashé](profiles/semantic_v1.json). L'adaptateur v2
+n'extrait que les observations HPO confirmées et actives ; les propositions et types non supportés
+ne participent jamais au score. Le calcul historique n'a pas été déplacé : l'adaptateur appelle
+toujours `Engine` et `question_v1`, dont les sorties v1 restent protégées par les tests d'or.
+
 ## Installation
 
 Prérequis : Git, Python 3.11 et [uv](https://docs.astral.sh/uv/getting-started/installation/) (version utilisée en CI : `0.12.15`). L'installation initiale des dépendances et le téléchargement des sources nécessitent Internet. Ces commandes s'exécutent depuis la racine du dépôt sous PowerShell ou un shell Unix.

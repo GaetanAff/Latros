@@ -306,3 +306,20 @@ L'adaptateur du snapshot v1 expose HPO/Mondo/Orphadata sous ces contrats sans r�
 tables. Les provenances EN/FR deviennent deux artefacts d'une seule assertion source. Les schémas
 `knowledge-model-v2.schema.json` et `canonical-tables-v2.json` sont versionnés. Six tests dédiés
 portent la suite à 78 tests verts. Aucun snapshot médical v2 n'est publié et `v0.2.0` reste intact.
+
+### 17 septembre 2026 — v0.4-E, stratégies et compatibilité semantic_v1
+
+Quatre protocoles séparent désormais génération de candidats, scoring, sélection de questions et
+construction d'explications. Leur descripteur rend explicites les capacités, contrats acceptés,
+relations utilisées, nature du score et séparation du futur moteur de sécurité. Le profil
+`semantic_v1-default` est versionné, hashé et compatible avec les manifests de schéma v1.
+
+L'adaptateur `SemanticV1Adapter` appelle directement le moteur et la sélection de questions
+historiques. Sa projection depuis `ClinicalCaseV2` n'utilise que les observations HPO confirmées,
+actives et non remplacées ; elle rapporte les types ou terminologies ignorés et ne lit jamais les
+propositions d'extraction. Des observations temporelles actives multiples pour le même concept sont
+refusées plutôt que fusionnées.
+
+Les sorties du cas v1 et de sa migration v2 sont strictement identiques dans les tests. Six tests
+supplémentaires portent la suite à 84 tests verts, sans modification de `Engine.rank`,
+`Engine.diagnose`, `question_v1`, des formats CLI v1 ou du snapshot `v0.2.0`.

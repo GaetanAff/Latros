@@ -9,6 +9,8 @@ from latros.common import encoded
 from latros.knowledge.frequency import Frequency
 from latros.knowledge.importers import TABLES
 from latros.knowledge.models_v2 import CANONICAL_TABLES_V2, CanonicalKnowledgeV2
+from latros.reasoning.interfaces import ReasoningStrategyDescriptor
+from latros.reasoning.profiles import ReasoningProfile
 from latros.sources.registry import Registry
 
 
@@ -28,6 +30,10 @@ def main() -> None:
             "schema": "canonical_v2",
             "tables": CANONICAL_TABLES_V2,
         },
+        "reasoning-profile.schema.json": ReasoningProfile.model_json_schema(),
+        "reasoning-strategy-descriptor.schema.json": (
+            ReasoningStrategyDescriptor.model_json_schema()
+        ),
     }
     for name, document in documents.items():
         path = root / name

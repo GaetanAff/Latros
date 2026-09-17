@@ -1,0 +1,148 @@
+{
+  "$defs": {
+    "ScoreScale": {
+      "additionalProperties": false,
+      "properties": {
+        "calibrated": {
+          "default": false,
+          "title": "Calibrated",
+          "type": "boolean"
+        },
+        "description": {
+          "minLength": 1,
+          "title": "Description",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "compatibility",
+            "probability",
+            "ordinal"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "scale_id": {
+          "minLength": 1,
+          "title": "Scale Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "scale_id",
+        "kind",
+        "description"
+      ],
+      "title": "ScoreScale",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "abstention_rules": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Abstention Rules",
+      "type": "array"
+    },
+    "accepted_observation_types": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Accepted Observation Types",
+      "type": "array"
+    },
+    "accepted_relations": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Accepted Relations",
+      "type": "array"
+    },
+    "aggregation_rules": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Aggregation Rules",
+      "type": "array"
+    },
+    "compatible_snapshot_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Compatible Snapshot Ids",
+      "type": "array"
+    },
+    "compatible_snapshot_schema_versions": {
+      "items": {
+        "type": "integer"
+      },
+      "minItems": 1,
+      "title": "Compatible Snapshot Schema Versions",
+      "type": "array"
+    },
+    "coverage_rules": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Coverage Rules",
+      "type": "array"
+    },
+    "out_of_scope_rules": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Out Of Scope Rules",
+      "type": "array"
+    },
+    "parameters": {
+      "additionalProperties": true,
+      "title": "Parameters",
+      "type": "object"
+    },
+    "profile_id": {
+      "minLength": 1,
+      "title": "Profile Id",
+      "type": "string"
+    },
+    "profile_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Profile Sha256",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "score_scale": {
+      "$ref": "#/$defs/ScoreScale"
+    },
+    "strategy_id": {
+      "minLength": 1,
+      "title": "Strategy Id",
+      "type": "string"
+    },
+    "strategy_version": {
+      "minLength": 1,
+      "title": "Strategy Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "profile_id",
+    "strategy_id",
+    "strategy_version",
+    "accepted_observation_types",
+    "accepted_relations",
+    "score_scale",
+    "compatible_snapshot_schema_versions",
+    "profile_sha256"
+  ],
+  "title": "ReasoningProfile",
+  "type": "object"
+}

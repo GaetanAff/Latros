@@ -1,0 +1,88 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "accepted_case_versions": {
+      "items": {
+        "type": "integer"
+      },
+      "minItems": 1,
+      "title": "Accepted Case Versions",
+      "type": "array"
+    },
+    "accepted_observation_types": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Accepted Observation Types",
+      "type": "array"
+    },
+    "accepted_relations": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Accepted Relations",
+      "type": "array"
+    },
+    "candidate_generation": {
+      "minLength": 1,
+      "title": "Candidate Generation",
+      "type": "string"
+    },
+    "explanation_strategy": {
+      "minLength": 1,
+      "title": "Explanation Strategy",
+      "type": "string"
+    },
+    "question_strategy": {
+      "minLength": 1,
+      "title": "Question Strategy",
+      "type": "string"
+    },
+    "safety_component": {
+      "const": "separate",
+      "default": "separate",
+      "title": "Safety Component",
+      "type": "string"
+    },
+    "score_kind": {
+      "enum": [
+        "compatibility",
+        "probability",
+        "ordinal"
+      ],
+      "title": "Score Kind",
+      "type": "string"
+    },
+    "score_scale_id": {
+      "minLength": 1,
+      "title": "Score Scale Id",
+      "type": "string"
+    },
+    "strategy_id": {
+      "minLength": 1,
+      "title": "Strategy Id",
+      "type": "string"
+    },
+    "strategy_version": {
+      "minLength": 1,
+      "title": "Strategy Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "strategy_id",
+    "strategy_version",
+    "accepted_case_versions",
+    "accepted_observation_types",
+    "accepted_relations",
+    "score_scale_id",
+    "score_kind",
+    "candidate_generation",
+    "question_strategy",
+    "explanation_strategy"
+  ],
+  "title": "ReasoningStrategyDescriptor",
+  "type": "object"
+}
