@@ -11,7 +11,7 @@ Les trois jalons avaient été implémentés ensemble dans la première tranche.
 | 1 | Fondation technique — `v0.1.0` | Implémentée : paquet, CLI sources, registre, téléchargements vérifiés, verrou et CI | Aucun snapshot médical nécessaire à ce jalon |
 | 2 | Premier snapshot médical — `v0.2.0` | Implémentée ; référence versionnée alignée sur le nom du plan | `manifests/v0.2.0.json` |
 | 3 | Moteur pur et interrogatoire — `v0.3.0` | Implémentée dans le paquet `0.3.0` ; évaluation clinique non réalisée | Le moteur utilise le snapshot `v0.2.0` |
-| 4 | Clinical Knowledge Model — `v0.4` | Cadrage en discussion ; aucune implémentation commencée | La référence reste `v0.2.0` tant qu'aucune nouvelle projection n'est publiée |
+| 4 | Clinical Knowledge Model — `v0.4` | `v0.4-B` livré : frontières, contrats et non-régression v1 actés | La référence reste `v0.2.0` ; aucun snapshot médical v2 publié |
 
 Il s'agit des étapes du plan, pas d'une série de releases GitHub publiées. Aucun tag ou changement de version rétroactif du paquet n'est nécessaire pour identifier un snapshot. L'évaluation clinique et les fonctionnalités futures restent à discuter séparément.
 
@@ -21,7 +21,9 @@ Le [cahier des charges de v0.4](v0.4-clinical-knowledge-model.md) est la référ
 
 La limitation actuelle aux maladies rares est explicite. Le snapshot HPO/Mondo/Orphadata ne couvre pas un tableau de médecine courante tel que fièvre et mal de gorge. `v0.4` prépare l'extension ; une première couverture étroite de médecine générale, avec des sources auditées et une stratégie dédiée, est prévue pour `v0.5`.
 
-L'étape est suivie par checkpoints `v0.4-A` à `v0.4-H` dans le cahier des charges. Seul `v0.4-A`, le cadrage initial, est actuellement en discussion. Aucun code, contrat ou snapshot n'est encore modifié.
+L'étape est suivie par checkpoints `v0.4-A` à `v0.4-H` dans le cahier des charges. Le cadrage
+`v0.4-A` est approuvé et `v0.4-B` fixe les frontières dans les ADR 0002 à 0004. Deux tests d'or
+figent les sorties complètes de `semantic_v1` et `question_v1`. Aucun snapshot n'est modifié.
 
 Une première veille des ressources de médecine générale est intégrée au cahier des charges. Elle sépare terminologies, classifications, standards d'échange, sources d'assertions, règles cliniques, jeux synthétiques et benchmarks. Les matrices Kaggle/Mendeley ne sont pas retenues comme connaissance clinique tant que leur provenance n'est pas démontrée ; SNOMED CT, ICD, FHIR, LOINC, UCUM, UMLS, DDXPlus, Synthea, WHO SMART Guidelines, HealthBench, MIMIC-IV et ClinicDx sont positionnés selon leur rôle et une étape éventuelle, sans décision d'intégration anticipée.
 

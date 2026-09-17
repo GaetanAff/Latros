@@ -4,7 +4,7 @@ Prototype **interne de recherche** pour classer des maladies rares à partir de 
 
 > **Aucun triage n'est effectué.** Toutes les analyses retournent `safety_status: not_evaluated`. Les scores sont des compatibilités sémantiques, jamais des probabilités ou des diagnostics validés. Ne pas utiliser ce prototype pour conseiller un patient.
 
-La version de développement `0.3.0` regroupe le socle technique, le pipeline de données et le moteur pur. Voir [ADR 0001](docs/decisions/0001-socle-recherche.md) pour les décisions, [méthodologie](docs/methodology.md) pour les calculs et [projet.md](projet.md) pour la vision à long terme.
+La version de développement `0.3.0` regroupe le socle technique, le pipeline de données et le moteur pur. `v0.4-B` a désormais figé les frontières et la compatibilité avant les nouveaux contrats. Voir le [journal des ADR](docs/decisions/README.md), la [méthodologie](docs/methodology.md) et [projet.md](projet.md).
 
 Le [plan et son avancement](docs/plan.md) distinguent les trois étapes : fondation `v0.1.0`, premier snapshot médical `v0.2.0`, moteur pur `v0.3.0`. Le snapshot de référence s'appelle maintenant **`v0.2.0`**, conformément au jalon du plan. La version du paquet Python reste `0.3.0`, car le moteur est déjà présent. [history.md](history.md) conserve les réalisations et vérifications datées ; ces documents sont actualisés à chaque livraison.
 
@@ -17,14 +17,14 @@ Les futurs snapshots multi-sources devront publier leur périmètre, leurs dépe
 Prérequis : Git, Python 3.11 et [uv](https://docs.astral.sh/uv/getting-started/installation/) (version utilisée en CI : `0.12.15`). L'installation initiale des dépendances et le téléchargement des sources nécessitent Internet. Ces commandes s'exécutent depuis la racine du dépôt sous PowerShell ou un shell Unix.
 
 ```text
-git clone --branch feat/clinical-foundation https://github.com/GaetanAff/Latros.git
+git clone https://github.com/GaetanAff/Latros.git
 cd Latros
 uv sync --locked --python 3.11
 uv run --no-sync latros --help
 uv run --no-sync latros sources validate
 ```
 
-Le dépôt est privé : Git doit disposer de votre authentification GitHub. La commande choisit la branche de la [pull request #1](https://github.com/GaetanAff/Latros/pull/1), car `main` ne contient pas encore cette tranche. Après fusion, un clone de `main` pourra être utilisé. `uv.lock` fixe les dépendances ; ne pas le mettre à jour pour reconstruire un snapshot historique. Pour récupérer les évolutions : `git pull --ff-only`, puis `uv sync --locked`.
+Le dépôt est privé : Git doit disposer de votre authentification GitHub. `main` contient maintenant le socle v0.1–v0.3 et le cadrage approuvé de v0.4. `uv.lock` fixe les dépendances ; ne pas le mettre à jour pour reconstruire un snapshot historique. Pour récupérer les évolutions : `git pull --ff-only`, puis `uv sync --locked`.
 
 ## Télécharger les sources épinglées
 

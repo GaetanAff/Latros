@@ -260,3 +260,13 @@ Les résultats resteront des compatibilités tant qu'ils ne seront pas calibrés
 Le cahier des charges impose désormais que tout futur manifeste publie le périmètre clinique, les dépendances entre sources, les familles de preuves non indépendantes, les règles de normalisation et de déduplication ainsi que les stratégies et profils d'agrégation compatibles. Chaque exécution devra conserver les hash du snapshot et du profil de raisonnement afin de reproduire le score global et les contributions par source.
 
 Une modification de la connaissance imposera un nouvel identifiant de snapshot. Une modification limitée au moteur, aux poids ou à la calibration conservera éventuellement le snapshot mais recevra une nouvelle version de profil. Le manifeste `v0.2.0` reste immuable et n'est pas migré rétroactivement. Aucun code, donnée ou snapshot n'est modifié dans cette livraison documentaire.
+
+### 17 septembre 2026 — v0.4-B, frontières et non-régression
+
+Le cadrage v0.4 est approuvé. Les ADR 0002, 0003 et 0004 fixent respectivement les contrats
+cliniques v2, le Knowledge Model canonique et la séparation entre stratégies, profils, snapshots
+et reçus d'exécution. Deux tests d'or vérifient l'égalité octet par octet des sorties complètes de
+`semantic_v1` et `question_v1` sur les fixtures inventées.
+
+Cette livraison n'ajoute encore aucun contrat runtime v2 et ne change aucun résultat clinique. Le
+snapshot `v0.2.0`, son manifeste, les sept tables et les formats publics v1 restent inchangés.
