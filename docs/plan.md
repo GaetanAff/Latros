@@ -1,6 +1,6 @@
 # Plan d'implémentation et avancement
 
-Référence : plan « Premières étapes de Latros — socle de données et moteur clinique pur » demandé par l'utilisateur. État au 17 septembre 2026.
+Référence : plan « Premières étapes de Latros — socle de données et moteur clinique pur » demandé par l'utilisateur. État au 18 septembre 2026.
 
 Les trois jalons avaient été implémentés ensemble dans la première tranche. La reprise de l'étape 2 consiste à vérifier sa livraison et à établir le snapshot sous le nom du jalon, `v0.2.0`. Elle ne correspond pas à l'ajout de nouvelles sources ou de fonctions cliniques.
 
@@ -151,7 +151,7 @@ Git et ne promet ni chiffrement, ni comptes, ni stockage de dossiers médicaux r
 | `v0.6-D` | Serveur loopback et transport interne sécurisé | Terminé |
 | `v0.6-E` | Éditeur simple `ClinicalCaseV2` et cinq états d'évaluation | Terminé |
 | `v0.6-F` | Résultats, abstention, provenance, questions et statuts non revus | Terminé |
-| `v0.6-G` | Non-régression, packaging et documentation ; CI Windows/Linux après push | Vérifications locales terminées, CI distante à confirmer |
+| `v0.6-G` | Non-régression, packaging et documentation ; CI Windows/Linux après push | Terminé — contrôles locaux et CI GitHub Ubuntu/Windows verts au run `#35337846570` |
 
 Une évolution ultérieure de cette interface devra prévoir une visualisation avancée de type
 Knowledge Graph, « cerveau médical » ou graphe Obsidian. Elle devra rendre navigables, filtrables et

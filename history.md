@@ -48,6 +48,8 @@ validé n'est publié. L'ancien snapshot `latros-kb-0002` est conservé.
   contenant les actifs/profils et **138 tests** réussis. Un parcours réel temporaire sur
   `v0.5.0-dev-unreviewed` a produit un résultat marqué non revu avec safety `not_evaluated`. Le rendu
   desktop et le panneau non revu ont été vérifiés dans le navigateur local.
+- La CI GitHub du commit `cd3a787` est verte sous Ubuntu et Windows au run `#35337846570` : Ruff,
+  formatage, mypy, schémas, suite pytest et validation des sources ont tous réussi.
 
 ## Roadmap interface R&D et Knowledge Graph — 18 septembre 2026
 
