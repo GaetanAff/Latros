@@ -550,3 +550,30 @@ Contrôle GitHub : le [run #35](https://github.com/GaetanAff/Latros/actions/runs
 du checkpoint E3 a réussi sur `ubuntu-latest` en 27 s et `windows-latest` en 1 min 18 s.
 L'avertissement de plateforme concerne uniquement la transition Node.js interne aux actions
 GitHub.
+
+### 18 septembre 2026 — v0.5-E4, mode ORL local explicitement non revu
+
+Un chemin de recherche locale est ajouté sans modifier le gate officiel. La commande
+`data build --snapshot v0.5.0-dev-unreviewed --allow-unreviewed-research-data` transforme le paquet
+E3 pending en treize tables canoniques, Parquet déterministes et DuckDB local. Elle vérifie les
+douze artefacts et leurs hashes, ainsi que les segments, licences, références, seuils et dépendances.
+Sans flag, avec un autre suffixe ou avec l'identifiant officiel `v0.5.0`, l'override est refusé.
+
+Le manifeste expérimental conserve la liste exacte des 17 assertions et 10 mappings
+`pending_review`, `reviewer_count: 0`, `clinical_validation: false`,
+`human_review_complete: false` et `publishable: false`. Les fichiers de revue restent byte-for-byte
+inchangés. Les mappings exacts/équivalents résolus peuvent être utilisés techniquement sans être
+présentés comme revus ; les relations plus larges/étroites et ambiguës restent non scorantes.
+
+Le profil `general_v1-orl-unreviewed` est limité à ce snapshot. Son unique poids de famille est un
+paramètre d'ingénierie ; nidirect reste une republication NHS et les dépendances NLM inconnues ne
+sont pas agrégées. Diagnostics et questions portent `research_unreviewed: true`, répètent les
+comptes pending dans leur reçu, gardent `general_v1.compatibility` non probabiliste et
+`safety.status: not_evaluated`.
+
+Trois tests supplémentaires couvrent l'override, la séparation du gate officiel, l'absence de faux
+reviewer ou changement de statut et le marquage des résultats. Le manifeste expérimental et un cas
+d'exemple synthétique sont versionnés ; les captures, Parquet, DuckDB et reçus d'intégrité restent
+locaux et hors Git. E4 ne démarre ni F ni G : la publication clinique `v0.5.0` reste bloquée par les
+revues humaines réelles. Ruff, formatage, mypy strict, schémas et les 125 tests réussissent
+localement sous Windows avant push.

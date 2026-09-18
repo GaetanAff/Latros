@@ -12,7 +12,10 @@ La version `0.4.0` livre le Clinical Knowledge Model : contrats cliniques et de 
 
 Le [plan et son avancement](docs/plan.md) distingue fondation `v0.1.0`, premier snapshot médical `v0.2.0`, moteur pur `v0.3.0` et modèle général `v0.4.0`. Le snapshot de référence reste **`v0.2.0`** : v0.4 est une évolution logicielle et contractuelle, pas une nouvelle publication de données. [history.md](history.md) conserve les réalisations et vérifications datées.
 
-> **Périmètre critique : maladies rares uniquement.** Le snapshot actuel ne couvre pas la médecine générale. Une plainte courante telle que fièvre et mal de gorge peut conduire à un classement de maladies rares hors périmètre ; ce classement ne doit pas être utilisé comme différentiel de médecine courante. L'extension est planifiée : [`v0.4 Clinical Knowledge Model`](docs/v0.4-clinical-knowledge-model.md) prépare l'architecture générale, puis `v0.5` devra intégrer une première extension étroite avec des sources auditées.
+> **Périmètre critique : la seule référence médicale publiée reste maladies rares.** Le snapshot
+> officiel `v0.2.0` ne couvre pas la médecine générale. Le snapshot ORL
+> `v0.5.0-dev-unreviewed` décrit ci-dessous est uniquement un outil local d'ingénierie, non relu et
+> non validé cliniquement ; il ne doit jamais être utilisé comme différentiel clinique.
 
 Les futurs snapshots multi-sources devront publier leur périmètre, leurs dépendances, leurs règles de déduplication et leurs profils de raisonnement compatibles. Le snapshot de connaissance et le profil d'agrégation seront versionnés séparément puis liés par leurs hashes dans chaque exécution ; `v0.2.0` reste immuable.
 
@@ -22,14 +25,14 @@ distincts. Cette préparation ne constitue ni une recommandation de traitement, 
 prescription ; le détail est consigné dans le [cahier v0.4](docs/v0.4-clinical-knowledge-model.md).
 
 `v0.5` est en cours sur une branche dédiée. Ses checkpoints techniques A à D définissent le registre,
-le manifeste, le constructeur, les importeurs et le premier raisonneur général des futurs snapshots
-canoniques v2. Ces composants restent testés sur fixtures inventées. Un paquet ORL réel séparé est
-désormais préparé sous `pending_clinical_review` ; il n'est ni importé ni scoré. La référence
-médicale reste `v0.2.0` et aucun manifeste `v0.5.0` n'existe avant sa double revue clinique.
+le manifeste, le constructeur, les importeurs et le premier raisonneur général. Le paquet ORL réel
+reste intégralement `pending_clinical_review`. Un chemin séparé permet désormais de l'importer et de
+le scorer localement sous l'identité non ambiguë `v0.5.0-dev-unreviewed`, uniquement après override
+explicite. Cela ne crée pas `v0.5.0`, ne change aucun statut de revue et ne clôt ni F ni G.
 
-Le constructeur v2 produit désormais les treize tables canoniques, leurs Parquet déterministes et
-un runtime DuckDB en lecture seule à partir d'un `CanonicalKnowledgeV2` validé. Cette capacité est
-encore testée exclusivement sur un mini-corpus fictif nommé `test-v2`.
+Le constructeur v2 produit les treize tables canoniques, leurs Parquet déterministes et un runtime
+DuckDB en lecture seule. La CI le vérifie sur un mini-corpus fictif nommé `test-v2` ; le corpus réel
+pending peut aussi être construit localement dans le mode non validé, sans redistribuer ses captures.
 
 Le registre v2 peut décrire un sous-ensemble RF2 et un paquet JSONL d'assertions curées. Les sources
 protégées utilisent `manual_local` : l'opérateur acquiert le fichier sous sa licence, puis Latros
@@ -42,8 +45,10 @@ comprise entre `-1` et `1`. Cette valeur n'est jamais une probabilité. Le moteu
 âge adulte exploitable, à couverture insuffisante ou avec moins de deux observations évaluées. Il
 ignore numériquement `unknown`, `not_assessed` et `unable_to_assess`, expose les sources séparément
 et ne propose une question que si des polarités opposées distinguent réellement plusieurs candidats.
-Le profil actuel est destiné au corpus fictif `test-v2` ; un profil ORL réel devra être versionné et
-revu après le `GO`.
+Le profil par défaut reste destiné au corpus fictif `test-v2`. Le profil
+[`general_v1-orl-unreviewed`](profiles/general_v1-orl-unreviewed.json) est lié exclusivement au
+snapshot de développement : son poids NHS est un choix d'ingénierie non validé, et les dépendances
+NLM inconnues restent exclues de l'agrégat. Un profil clinique de référence attend toujours le `GO`.
 
 `v0.4-D` fournit désormais le [schéma canonique v2](schemas/knowledge-model-v2.schema.json) et
 la liste de ses [tables conceptuelles](schemas/canonical-tables-v2.json). L'adaptateur v1 est une
@@ -87,6 +92,34 @@ uv run --offline --no-sync latros curation audit --package curation/v0.5-orl --r
 
 La troisième commande doit échouer jusqu'à présence de deux revues attestées par assertion, dont
 une par un clinicien compétent, ainsi que la revue des mappings.
+
+### Deux chemins v0.5 strictement séparés
+
+Le chemin de recherche locale doit être activé volontairement :
+
+```text
+uv run --offline --no-sync latros data build --snapshot v0.5.0-dev-unreviewed --allow-unreviewed-research-data
+uv run --offline --no-sync latros data inspect --snapshot v0.5.0-dev-unreviewed
+uv run --offline --no-sync latros diagnose --snapshot v0.5.0-dev-unreviewed --strategy general_v1 --case examples/case.orl-unreviewed.json
+uv run --offline --no-sync latros question next --snapshot v0.5.0-dev-unreviewed --strategy general_v1 --case examples/case.orl-unreviewed.json
+```
+
+Les douze artefacts épinglés doivent déjà être présents localement aux chemins consignés dans le
+paquet. Sans le flag, le build est refusé. Le flag est lui-même refusé pour tout identifiant qui ne
+se termine pas par `-dev-unreviewed`, en particulier `v0.5.0`. Le
+[manifeste expérimental](manifests/v0.5.0-dev-unreviewed.json) porte
+`validation_status: unreviewed`, `intended_use: local_research_only`, `publishable: false`, les 17
+assertions et 10 mappings pending ainsi que `reviewer_count: 0`. Chaque résultat et reçu répète ce
+statut avec `research_unreviewed: true`; `general_v1.compatibility` reste une compatibilité et
+`safety.status` reste `not_evaluated`.
+
+Le chemin officiel demeure inchangé :
+
+```text
+uv run --offline --no-sync latros data build --snapshot v0.5.0
+```
+
+Cette commande échoue sur le gate de publication jusqu'aux vraies validations humaines prévues.
 
 ## Installation
 

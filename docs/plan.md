@@ -12,7 +12,7 @@ Les trois jalons avaient été implémentés ensemble dans la première tranche.
 | 2 | Premier snapshot médical — `v0.2.0` | Implémentée ; référence versionnée alignée sur le nom du plan | `manifests/v0.2.0.json` |
 | 3 | Moteur pur et interrogatoire — `v0.3.0` | Implémentée dans le paquet `0.3.0` ; évaluation clinique non réalisée | Le moteur utilise le snapshot `v0.2.0` |
 | 4 | Clinical Knowledge Model — `v0.4.0` | Terminée : checkpoints A–H livrés et revue finale verte | La référence reste `v0.2.0` ; aucun snapshot médical v2 publié |
-| 5 | Snapshot ORL généraliste — `v0.5.0` | En cours : A–D terminés ; E historique en `NO-GO` ; E2 audité ; E3 techniquement prêt pour revue humaine | Paquet réel `pending_clinical_review` ; aucun snapshot publié |
+| 5 | Snapshot ORL généraliste — `v0.5.0` | En cours : A–D terminés ; E historique en `NO-GO` ; E2 audité ; E3 prêt pour revue ; mode E4 local non validé disponible | Référence officielle toujours bloquée ; `v0.5.0-dev-unreviewed` est non publiable |
 
 Il s'agit des étapes du plan, pas d'une série de releases GitHub publiées. Aucun tag ou changement de version rétroactif du paquet n'est nécessaire pour identifier un snapshot. L'évaluation clinique et les fonctionnalités futures restent à discuter séparément.
 
@@ -67,6 +67,7 @@ juridique et clinique séparé des sources réelles. `v0.5.0` sera un snapshot O
 | `v0.5-E` | Terminé — `NO-GO` confirmé | Audit final SNOMED/HAS ORL ; conditions juridiques, cliniques et de couverture non satisfaites |
 | `v0.5-E2` | Terminé — `NO-GO` de publication | Audit DOID/Mondo/MeSH et NHS/CDC/MedlinePlus ; matrice de couverture produite ; curation et double revue absentes |
 | `v0.5-E3` | Terminé techniquement — revue humaine requise | 17 assertions, 10 mappings, artefacts/hashes, dossier de revue et gate formel ; `ready_for_human_review` |
+| `v0.5-E4` | Terminé — recherche locale non validée | Snapshot `v0.5.0-dev-unreviewed`, override explicite, profil d'ingénierie et résultats toujours marqués non relus |
 | `v0.5-F` | Bloqué par la double revue E3 | Snapshot médical réel `v0.5.0` |
 | `v0.5-G` | Bloqué par `v0.5-F` | Validation clinique séparée et clôture |
 
@@ -98,6 +99,14 @@ internationale n'est pas clarifiée ; nidirect reste une republication NHS et le
 inconnues ne sont pas agrégées. Les 17 assertions et 10 mappings sont tous `pending_review`.
 Techniquement le paquet est `ready_for_human_review`, mais F reste interdit jusqu'à deux
 approbations réelles par assertion, dont un clinicien compétent, et la revue des mappings.
+
+Le checkpoint E4 ajoute un chemin local distinct sans modifier ce gate. La commande `data build`
+exige `--allow-unreviewed-research-data` et un identifiant terminé par `-dev-unreviewed`. Le
+manifeste, le profil et chaque reçu déclarent l'absence de validation clinique, les 17 assertions et
+10 mappings non revus, zéro reviewer et `publishable: false`. Les statuts sources restent inchangés,
+les mappings non exacts ne scorent pas, les dépendances NLM inconnues restent non agrégeables et le
+moteur de sécurité reste `not_evaluated`. Ce mode sert aux tests de pipeline et d'interface ; il ne
+commence ni F ni G et ne transforme pas le corpus en référence médicale.
 
 ## Trajectoire v0.6 — médicaments et molécules
 

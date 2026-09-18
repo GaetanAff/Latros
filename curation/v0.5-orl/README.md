@@ -21,3 +21,8 @@ redistribution internationale. nidirect est classé comme republication NHS ; Me
 non agrégeable lorsque sa dépendance est inconnue.
 
 Voir [le dossier de revue](../../docs/reviews/v0.5-orl/README.md) pour les commandes et le workflow.
+
+Tant qu'une case manque, aucun manifeste officiel `v0.5.0` n'est autorisé. Pour l'ingénierie locale,
+le paquet peut toutefois alimenter `v0.5.0-dev-unreviewed` avec l'override explicite
+`--allow-unreviewed-research-data`. Ce chemin conserve toutes les lignes `pending_review`, ne crée
+aucun reviewer et marque manifeste, profil et résultats comme non validés et non publiables.
