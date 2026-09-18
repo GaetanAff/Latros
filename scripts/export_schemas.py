@@ -25,6 +25,7 @@ from latros.reasoning.profiles import ReasoningProfile
 from latros.reasoning.results_v2 import DifferentialResultV2, QuestionResultV2, RunReceipt
 from latros.sources.registry import Registry
 from latros.sources.registry_v2 import RegistryV2
+from latros.ui.models import ResearchSession
 
 
 def main() -> None:
@@ -64,6 +65,7 @@ def main() -> None:
         "differential-result-v2.schema.json": DifferentialResultV2.model_json_schema(),
         "question-result-v2.schema.json": QuestionResultV2.model_json_schema(),
         "run-receipt.schema.json": RunReceipt.model_json_schema(),
+        "ui-session-v1.schema.json": ResearchSession.model_json_schema(),
     }
     for name, document in documents.items():
         path = root / name

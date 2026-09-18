@@ -8,8 +8,8 @@ import httpx
 import typer
 from lxml import etree
 
-from latros.clinical.loading import ClinicalCaseDocument, load_clinical_case
-from latros.clinical.v2 import ClinicalCaseV2
+from latros.application.service import ResearchApplicationService
+from latros.clinical.loading import load_clinical_case
 from latros.common import LatrosError, encoded, write_json
 from latros.knowledge.curation import (
     audit_curation_package,
@@ -27,11 +27,6 @@ from latros.knowledge.research_unreviewed import (
 )
 from latros.knowledge.store import build_snapshot
 from latros.knowledge.store_v2 import build_snapshot_v2
-from latros.reasoning.engine import Engine
-from latros.reasoning.general_v1 import GeneralV1Strategy
-from latros.reasoning.profiles import load_reasoning_profile
-from latros.reasoning.results_v2 import build_differential_v2, build_question_v2
-from latros.reasoning.semantic_v1_adapter import SemanticV1Adapter
 from latros.sources.fetch import fetch_source
 from latros.sources.fetch_v2 import fetch_source_v2
 from latros.sources.loading import load_registry_document
@@ -221,6 +216,18 @@ def review_workbook(
     )
 
 
+@app.command("ui")
+def ui_command(
+    ctx: typer.Context,
+    port: Annotated[int, typer.Option(min=1, max=65535)] = 8765,
+    no_open: Annotated[bool, typer.Option("--no-open")] = False,
+) -> None:
+    """Start the loopback-only R&D interface; no telemetry or external network."""
+    from latros.ui.server import run_ui
+
+    run_ui(ctx.obj["root"], port=port, open_browser=not no_open)
+
+
 @app.command("diagnose")
 def diagnose(
     ctx: typer.Context,
@@ -232,28 +239,10 @@ def diagnose(
     ] = OutputContract.auto,
 ) -> None:
     case_document = load_clinical_case(case.read_bytes())
-    if strategy == "general_v1":
-        if not isinstance(case_document, ClinicalCaseV2):
-            raise LatrosError("general_v1 accepts only ClinicalCaseV2")
-        if output_contract is OutputContract.v1:
-            raise LatrosError("general_v1 has no v1 output contract")
-        profile = load_reasoning_profile(_profile_path(strategy, snapshot))
-        output(
-            GeneralV1Strategy(ctx.obj["root"], snapshot, profile)
-            .diagnose(case_document)
-            .model_dump(mode="json")
-        )
-        return
-    adapter = _strategy(ctx.obj["root"], snapshot, strategy)
-    if _v2_output(case_document, output_contract):
-        profile = load_reasoning_profile(_profile_path(strategy, snapshot))
-        output(
-            build_differential_v2(ctx.obj["root"], case_document, adapter, profile).model_dump(
-                mode="json"
-            )
-        )
-    else:
-        output(adapter.diagnose_legacy(case_document))
+    result = ResearchApplicationService(ctx.obj["root"]).diagnose(
+        snapshot, case_document, strategy, output_contract.value
+    )
+    output(result.model_dump(mode="json") if hasattr(result, "model_dump") else result)
 
 
 @question.command("next")
@@ -267,58 +256,10 @@ def next_command(
     ] = OutputContract.auto,
 ) -> None:
     case_document = load_clinical_case(case.read_bytes())
-    if strategy == "general_v1":
-        if not isinstance(case_document, ClinicalCaseV2):
-            raise LatrosError("general_v1 accepts only ClinicalCaseV2")
-        if output_contract is OutputContract.v1:
-            raise LatrosError("general_v1 has no v1 output contract")
-        profile = load_reasoning_profile(_profile_path(strategy, snapshot))
-        output(
-            GeneralV1Strategy(ctx.obj["root"], snapshot, profile)
-            .question(case_document)
-            .model_dump(mode="json")
-        )
-        return
-    adapter = _strategy(ctx.obj["root"], snapshot, strategy)
-    if _v2_output(case_document, output_contract):
-        profile = load_reasoning_profile(_profile_path(strategy, snapshot))
-        output(
-            build_question_v2(ctx.obj["root"], case_document, adapter, profile).model_dump(
-                mode="json"
-            )
-        )
-    else:
-        output(adapter.next(case_document).payload)
-
-
-def _strategy(root: Path, snapshot: str, strategy: str) -> SemanticV1Adapter:
-    if strategy != "semantic_v1":
-        raise LatrosError(f"Unknown reasoning strategy: {strategy}")
-    return SemanticV1Adapter(Engine(root, snapshot))
-
-
-def _profile_path(strategy: str, snapshot: str | None = None) -> Path:
-    name = (
-        "general_v1-orl-unreviewed.json"
-        if strategy == "general_v1"
-        and snapshot is not None
-        and snapshot.endswith(UNREVIEWED_SNAPSHOT_SUFFIX)
-        else f"{strategy}.json"
+    result = ResearchApplicationService(ctx.obj["root"]).next_question(
+        snapshot, case_document, strategy, output_contract.value
     )
-    candidates = [
-        Path(__file__).resolve().parents[2] / "profiles" / name,
-        Path(__file__).resolve().parent / "profiles" / name,
-    ]
-    for path in candidates:
-        if path.is_file():
-            return path
-    raise LatrosError(f"Reasoning profile is missing: {strategy}")
-
-
-def _v2_output(case: ClinicalCaseDocument, output_contract: OutputContract) -> bool:
-    return output_contract is OutputContract.v2 or (
-        output_contract is OutputContract.auto and isinstance(case, ClinicalCaseV2)
-    )
+    output(result.model_dump(mode="json") if hasattr(result, "model_dump") else result)
 
 
 def main() -> None:

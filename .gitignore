@@ -40,6 +40,7 @@ data/canonical/
 data/runtime/
 patient-data/
 review-attestations/
+sessions/
 
 # Local model weights and inference caches
 models/
