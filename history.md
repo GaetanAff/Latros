@@ -2,13 +2,29 @@
 
 Ce fichier est le journal de continuité du projet. Il décrit ce qui a été décidé et effectivement réalisé, afin de pouvoir reprendre la discussion sans déduire l'état du projet à partir du code seul.
 
-Dernière mise à jour : 17 septembre 2026.
+Dernière mise à jour : 18 septembre 2026.
 
 ## État actuel en une phrase
 
 Latros est aujourd'hui un prototype local de recherche, utilisable en ligne de commande, qui prend un cas clinique **déjà structuré en identifiants HPO**, classe des maladies rares ORPHA selon une compatibilité sémantique explicable, puis propose une question discriminante. Il n'est ni un chatbot, ni une interface patient, ni un outil de triage ou de diagnostic clinique validé.
 
 Référence actuelle des données : **`v0.2.0`**, nom du jalon « Premier snapshot médical » dans le [plan d'implémentation](docs/plan.md). Le paquet est à la version `0.4.0` ; aucun snapshot médical v2 n'est publié. L'ancien snapshot `latros-kb-0002` est conservé.
+
+## Roadmap interface R&D et Knowledge Graph — 18 septembre 2026
+
+- La roadmap future est décalée : **v0.6** est une interface interne R&D simple ; temporalité,
+  biologie, constantes, risques et médicaments passent en **v0.7**, le safety/triage en **v0.8**, le
+  NLP/LLM en **v0.9** et l’API/FHIR/interopérabilité en **v0.10**.
+- La première v0.6 inspectera seulement les contrats et moteurs existants. Elle n’est ni une
+  interface patient, ni un produit médical validé, ni une nouvelle logique clinique.
+- Une vue Knowledge Graph avancée est planifiée comme évolution ultérieure, non bloquante pour la
+  première v0.6. Elle devra projeter exclusivement les observations, concepts, assertions,
+  contributions, mappings, sources et provenances réellement présents ; elle ne créera pas de
+  relations ou preuves décoratives.
+- **FUTUR INTERFACE/** reste ignoré par Git, intact et non versionné ; il n’a été ni lu, ni modifié,
+  ni ajouté pendant cette mise à jour documentaire.
+- Vérification réalisée : git diff --check. Aucun code fonctionnel, snapshot, artefact médical ou
+  donnée patient n’a été modifié.
 
 ## Identité visuelle — 17 septembre 2026
 
@@ -249,7 +265,7 @@ Une liste proposée par un autre LLM est vérifiée avant d'être ajoutée au pl
 
 Corrections importantes : SNOMED CT est une terminologie clinique et non une matrice de probabilités ; les mappings SNOMED–ICD servent à la classification et au reporting, pas à déduire une maladie depuis un symptôme ; FHIR est un standard d'échange ; HealthBench contient des conversations réalistes générées ou adversariales et non 5 000 conversations de patients réels ; ClinicDx est une application LLM/RAG à surveiller, pas une base de connaissances validée.
 
-Les jeux Kaggle « Symptoms to diseases », Mendeley « Disease and symptoms dataset 2023 » et SymbiPredict sont conservés comme pistes d'exploration uniquement. Leur format et leur licence déclarée ne compensent pas une provenance médicale insuffisante. DDXPlus est mieux documenté et peut devenir un benchmark synthétique de `v0.5`, mais pas la vérité clinique du moteur. Synthea, WHO SMART Guidelines, LOINC/UCUM, MIMIC-IV et les autres ressources sont répartis entre les étapes `v0.5` à `v0.9` selon leur rôle.
+Les jeux Kaggle « Symptoms to diseases », Mendeley « Disease and symptoms dataset 2023 » et SymbiPredict sont conservés comme pistes d'exploration uniquement. Leur format et leur licence déclarée ne compensent pas une provenance médicale insuffisante. DDXPlus est mieux documenté et peut devenir un benchmark synthétique de `v0.5`, mais pas la vérité clinique du moteur. Synthea, WHO SMART Guidelines, LOINC/UCUM, MIMIC-IV et les autres ressources sont répartis entre les étapes `v0.5` à `v0.10` selon leur rôle.
 
 Cette veille ne télécharge et n'intègre aucune donnée. Toute adoption future exige un audit record par record de la provenance, des licences, des dépendances, des biais et de l'indépendance de l'évaluation.
 
@@ -387,9 +403,10 @@ La pull request [#2 — v0.4 Clinical Knowledge Model](https://github.com/Gaetan
 est fusionnée dans `main` après réussite des contrôles GitHub Linux et Windows, pour les événements
 `push` et `pull_request`. Le commit de fusion est `2315431ee62d9fce887812004c9fae89e5e5d20d`.
 
-### 17 septembre 2026 — exigence v0.6 : médicaments et molécules
+### 17 septembre 2026 — exigence médicaments et molécules (initialement v0.6, décalée en v0.7)
 
-Le cahier des charges acte que `v0.6` distinguera l'exposition rapportée ou observée chez le patient,
+Le cahier des charges avait initialement placé en `v0.6` la distinction entre exposition rapportée
+ou observée chez le patient,
 la substance active, le produit ou la présentation commercialisée et la classe thérapeutique. Les
 indications, effets indésirables, contre-indications, interactions et contraintes d'usage devront
 être des assertions médicales séparées, versionnées et traçables jusqu'à leurs sources ; elles ne
@@ -400,6 +417,9 @@ ingestion. Les critères obligatoires sont la couverture, l'autorité éditrice,
 la redistribution, les identifiants stables et la reproductibilité. Les tests restent synthétiques
 tant que cette revue n'est pas close. Cette décision n'autorise ni prescription, ni calcul de dose,
 ni recommandation de traitement, ni vérification d'interactions.
+
+La roadmap du 18 septembre 2026 conserve intégralement cette exigence mais la décale en `v0.7` ;
+`v0.6` devient d’abord une interface interne R&D sans nouvelle logique médicale.
 
 ### 17 septembre 2026 — v0.5-A, contrats du snapshot canonique v2
 

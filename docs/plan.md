@@ -13,6 +13,11 @@ Les trois jalons avaient été implémentés ensemble dans la première tranche.
 | 3 | Moteur pur et interrogatoire — `v0.3.0` | Implémentée dans le paquet `0.3.0` ; évaluation clinique non réalisée | Le moteur utilise le snapshot `v0.2.0` |
 | 4 | Clinical Knowledge Model — `v0.4.0` | Terminée : checkpoints A–H livrés et revue finale verte | La référence reste `v0.2.0` ; aucun snapshot médical v2 publié |
 | 5 | Snapshot ORL généraliste — `v0.5.0` | En cours : A–D terminés ; E historique en `NO-GO` ; E2 audité ; E3 prêt pour revue ; mode E4 local non validé disponible | Référence officielle toujours bloquée ; `v0.5.0-dev-unreviewed` est non publiable |
+| 6 | Interface interne de test R&D — `v0.6` | Prévue | Couche locale d’inspection des contrats et moteurs existants ; aucun produit utilisateur ni nouvelle logique médicale |
+| 7 | Extension clinique structurée — `v0.7` | Prévue | Temporalité, biologie, constantes, risques et médicaments, après audits ciblés |
+| 8 | Safety / triage séparé — `v0.8` | Prévue | Composant indépendant du différentiel, avec périmètre et validation propres |
+| 9 | NLP / LLM encadré — `v0.9` | Prévue | Structuration, reformulation et explication, jamais source implicite de connaissance |
+| 10 | API, FHIR et interopérabilité — `v0.10` | Prévue | Exposition et échanges des contrats de domaine après validation des étapes précédentes |
 
 Il s'agit des étapes du plan, pas d'une série de releases GitHub publiées. Aucun tag ou changement de version rétroactif du paquet n'est nécessaire pour identifier un snapshot. L'évaluation clinique et les fonctionnalités futures restent à discuter séparément.
 
@@ -108,9 +113,52 @@ les mappings non exacts ne scorent pas, les dépendances NLM inconnues restent n
 moteur de sécurité reste `not_evaluated`. Ce mode sert aux tests de pipeline et d'interface ; il ne
 commence ni F ni G et ne transforme pas le corpus en référence médicale.
 
-## Trajectoire v0.6 — médicaments et molécules
+## Trajectoire v0.6 — interface interne de test R&D
 
-La future tranche `v0.6` devra distinguer l'exposition réellement rapportée ou observée chez le
+`v0.6` sera une interface locale réservée au développement et à la recherche. Elle ne sera ni une
+interface patient, ni un produit utilisateur, ni une interface médicale validée. Son unique rôle
+sera de rendre inspectables les contrats et moteurs déjà disponibles, sans introduire de nouvelle
+logique médicale.
+
+Son périmètre réduit est le suivant :
+
+- saisir ou charger simplement un `ClinicalCaseV2` ;
+- lancer `general_v1` et, seulement lorsqu’un cas et un snapshot y sont compatibles, `semantic_v1` ;
+- afficher les candidats, compatibilités non calibrées, couverture, arguments favorables et
+  défavorables, contradictions, sources, provenance, reçu d’exécution et statut de validation ;
+- rendre `safety_status` visible, y compris sa valeur actuelle `not_evaluated` ;
+- accepter le snapshot expérimental `v0.5.0-dev-unreviewed` en conservant partout son avertissement,
+  son statut non revu et ses limites ;
+- proposer éventuellement une première vue graphe d’inspection reliant observations, conditions,
+  assertions et sources, sans en faire un nouveau moteur de raisonnement.
+
+Une évolution ultérieure de cette interface devra prévoir une visualisation avancée de type
+Knowledge Graph, « cerveau médical » ou graphe Obsidian. Elle devra rendre navigables, filtrables et
+explorables par zoom, clusters et relations réelles les observations et symptômes, signes, maladies
+rares ou courantes, candidats, assertions médicales, arguments favorables ou contradictoires,
+concepts HPO/Mondo/DOID et autres terminologies, sources, provenance, questions discriminantes et
+objets de raisonnement pertinents. Cette visualisation interactive sera une projection fidèle des
+données et contributions réellement présentes dans Latros : elle ne pourra ni inventer une relation,
+ni créer une preuve, ni modifier un score pour améliorer l’esthétique du graphe.
+
+Cette vue avancée ne constitue pas un critère de livraison de la première interface **v0.6**. Celle-ci
+peut commencer par une inspection beaucoup plus simple ; le Knowledge Graph restera une évolution
+planifiée, à cadrer et à tester séparément.
+
+Elle ne doit pas créer de diagnostic, de promesse clinique, de règle de triage, de score
+probabiliste, de source médicale ou de workflow de texte libre. Le dossier `FUTUR INTERFACE/` reste
+hors Git selon les règles du dépôt ; il peut inspirer des contrats ou des écrans conceptuels, mais
+ne constitue pas une implémentation validée et ne sera ni modifié ni versionné dans cette tranche
+sans décision explicite distincte.
+
+Les critères d’acceptation documentaires de cette tranche seront une séparation visible entre
+snapshots validés et non revus, la fidélité aux sorties et reçus des moteurs existants, l’absence de
+vocabulaire diagnostic/probabiliste et l’impossibilité de masquer l’état de sécurité ou les limites
+de couverture.
+
+## Trajectoire v0.7 — médicaments, temporalité et mesures cliniques
+
+La future tranche `v0.7` devra distinguer l'exposition réellement rapportée ou observée chez le
 patient, la substance active, le produit ou la présentation commercialisée et la classe
 thérapeutique. Une indication, un effet indésirable, une contre-indication, une interaction ou une
 contrainte d'usage sera une assertion médicale distincte, sourcée et versionnée ; ni un code de
@@ -121,6 +169,19 @@ normalisation, avec audit préalable de couverture, version, licence, redistribu
 et reproductibilité. Les premiers tests resteront synthétiques. Cette trajectoire ne crée pas de
 fonction de prescription, de calcul de dose, de choix de traitement ou de contrôle d'interactions :
 ces fonctions exigeraient un périmètre, des sources, des règles et une validation clinique propres.
+
+Les mêmes exigences s’appliqueront aux résultats biologiques, constantes, unités, temporalité et
+facteurs de risque : leur représentation est déjà préparée par les contrats, mais leur ingestion,
+leur normalisation et leur usage clinique ne commenceront qu’après les audits propres à `v0.7`.
+
+## Trajectoires v0.8 à v0.10
+
+- **`v0.8` :** composant safety / triage versionné, séparé du différentiel et soumis à un périmètre,
+  des sources et une validation clinique dédiés.
+- **`v0.9` :** NLP / LLM limité à la proposition d’observations structurées, à la reformulation et à
+  l’explication fidèle aux sorties déterministes ; aucune connaissance médicale implicite.
+- **`v0.10` :** API, FHIR et interopérabilité, après stabilisation des contrats ; FHIR reste un
+  format d’échange et non une base de connaissances ou un moteur clinique.
 
 ## Étape 2 — périmètre livré
 
