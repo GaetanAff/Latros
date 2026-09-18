@@ -19,6 +19,12 @@ from latros.knowledge.curation import (
 from latros.knowledge.importers_v2 import import_registry_v2
 from latros.knowledge.loading import load_manifest_document
 from latros.knowledge.manifest_v2 import KnowledgeSnapshotManifestV2
+from latros.knowledge.research_unreviewed import (
+    UNREVIEWED_SNAPSHOT_SUFFIX,
+    UNREVIEWED_WARNING,
+    build_unreviewed_research_snapshot,
+    require_official_gate,
+)
 from latros.knowledge.store import build_snapshot
 from latros.knowledge.store_v2 import build_snapshot_v2
 from latros.reasoning.engine import Engine
@@ -95,7 +101,45 @@ def fetch(
 
 
 @data.command("build")
-def build(ctx: typer.Context, snapshot: str = typer.Option(...)) -> None:
+def build(
+    ctx: typer.Context,
+    snapshot: str = typer.Option(...),
+    allow_unreviewed_research_data: Annotated[
+        bool, typer.Option("--allow-unreviewed-research-data")
+    ] = False,
+    curation_package: Annotated[Path, typer.Option("--curation-package")] = Path(
+        "curation/v0.5-orl"
+    ),
+) -> None:
+    package_path = (
+        curation_package if curation_package.is_absolute() else ctx.obj["root"] / curation_package
+    )
+    if snapshot == "v0.5.0":
+        if allow_unreviewed_research_data:
+            raise LatrosError(
+                "The unreviewed override can never be used to build the official v0.5.0 snapshot"
+            )
+        require_official_gate(ctx.obj["root"], package_path)
+        raise LatrosError("Official v0.5.0 approved snapshot inputs are not configured")
+    if snapshot.endswith(UNREVIEWED_SNAPSHOT_SUFFIX):
+        if not allow_unreviewed_research_data:
+            raise LatrosError(
+                "Unreviewed snapshot refused by default; pass "
+                "--allow-unreviewed-research-data deliberately"
+            )
+        typer.echo(f"WARNING: {UNREVIEWED_WARNING}", err=True)
+        result = build_unreviewed_research_snapshot(
+            ctx.obj["root"],
+            package_path,
+            snapshot,
+            allow_unreviewed_research_data=True,
+        )
+        output(result.model_dump(mode="json"))
+        return
+    if allow_unreviewed_research_data:
+        raise LatrosError(
+            "The unreviewed override may only build a snapshot ending in -dev-unreviewed"
+        )
     registry = load_registry_document(ctx.obj["registry"])
     if isinstance(registry, RegistryV2):
         knowledge = import_registry_v2(ctx.obj["root"], registry)
@@ -193,7 +237,7 @@ def diagnose(
             raise LatrosError("general_v1 accepts only ClinicalCaseV2")
         if output_contract is OutputContract.v1:
             raise LatrosError("general_v1 has no v1 output contract")
-        profile = load_reasoning_profile(_profile_path(strategy))
+        profile = load_reasoning_profile(_profile_path(strategy, snapshot))
         output(
             GeneralV1Strategy(ctx.obj["root"], snapshot, profile)
             .diagnose(case_document)
@@ -202,7 +246,7 @@ def diagnose(
         return
     adapter = _strategy(ctx.obj["root"], snapshot, strategy)
     if _v2_output(case_document, output_contract):
-        profile = load_reasoning_profile(_profile_path(strategy))
+        profile = load_reasoning_profile(_profile_path(strategy, snapshot))
         output(
             build_differential_v2(ctx.obj["root"], case_document, adapter, profile).model_dump(
                 mode="json"
@@ -228,7 +272,7 @@ def next_command(
             raise LatrosError("general_v1 accepts only ClinicalCaseV2")
         if output_contract is OutputContract.v1:
             raise LatrosError("general_v1 has no v1 output contract")
-        profile = load_reasoning_profile(_profile_path(strategy))
+        profile = load_reasoning_profile(_profile_path(strategy, snapshot))
         output(
             GeneralV1Strategy(ctx.obj["root"], snapshot, profile)
             .question(case_document)
@@ -237,7 +281,7 @@ def next_command(
         return
     adapter = _strategy(ctx.obj["root"], snapshot, strategy)
     if _v2_output(case_document, output_contract):
-        profile = load_reasoning_profile(_profile_path(strategy))
+        profile = load_reasoning_profile(_profile_path(strategy, snapshot))
         output(
             build_question_v2(ctx.obj["root"], case_document, adapter, profile).model_dump(
                 mode="json"
@@ -253,8 +297,14 @@ def _strategy(root: Path, snapshot: str, strategy: str) -> SemanticV1Adapter:
     return SemanticV1Adapter(Engine(root, snapshot))
 
 
-def _profile_path(strategy: str) -> Path:
-    name = f"{strategy}.json"
+def _profile_path(strategy: str, snapshot: str | None = None) -> Path:
+    name = (
+        "general_v1-orl-unreviewed.json"
+        if strategy == "general_v1"
+        and snapshot is not None
+        and snapshot.endswith(UNREVIEWED_SNAPSHOT_SUFFIX)
+        else f"{strategy}.json"
+    )
     candidates = [
         Path(__file__).resolve().parents[2] / "profiles" / name,
         Path(__file__).resolve().parent / "profiles" / name,

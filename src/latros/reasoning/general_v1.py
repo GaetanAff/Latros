@@ -241,6 +241,7 @@ class GeneralV1Strategy:
                 coverage=coverage,
                 candidates=[],
                 abstention=Abstention(reason=reason, explanation=explanation),
+                research_unreviewed=self._research_unreviewed,
                 run_receipt=receipt,
             )
         return DifferentialResultV2(
@@ -249,6 +250,7 @@ class GeneralV1Strategy:
             scope_status="in_scope" if coverage.coverage_ratio == 1 else "partial",
             coverage=coverage,
             candidates=candidates,
+            research_unreviewed=self._research_unreviewed,
             run_receipt=receipt,
         )
 
@@ -270,6 +272,7 @@ class GeneralV1Strategy:
                 scope_status="out_of_scope",
                 question=None,
                 stop_reason=population_reason,
+                research_unreviewed=self._research_unreviewed,
                 run_receipt=receipt,
             )
         selected = self._select_question(set(observations))
@@ -288,6 +291,7 @@ class GeneralV1Strategy:
                 scope_status="partial" if coverage.coverage_ratio < 1 else "in_scope",
                 question=None,
                 stop_reason="insufficient_question_evidence",
+                research_unreviewed=self._research_unreviewed,
                 run_receipt=receipt,
             )
         concept_id, assertion_ids, family_ids, source_ids, separation, candidate_coverage = selected
@@ -326,6 +330,7 @@ class GeneralV1Strategy:
             status="question",
             scope_status="partial" if coverage.coverage_ratio < 1 else "in_scope",
             question=question,
+            research_unreviewed=self._research_unreviewed,
             run_receipt=receipt,
         )
 
@@ -732,6 +737,11 @@ class GeneralV1Strategy:
             "independent_evidence_family_aggregation",
         ]
         warnings = ["Some inputs were not used by general_v1"] if ignored else []
+        if self._research_unreviewed:
+            warnings.append(
+                "UNREVIEWED LOCAL RESEARCH DATA: not clinically validated, not publishable, "
+                "and not suitable for clinical use"
+            )
         receipt_payload = {
             "operation": operation,
             "clinical_contract": "clinical_case_v2",
@@ -752,6 +762,12 @@ class GeneralV1Strategy:
             "software_version": __version__,
             "warnings": warnings,
             "ignored_inputs": [item.model_dump(mode="json") for item in ignored],
+            "research_unreviewed": self._research_unreviewed,
+            "knowledge_validation_status": self.manifest.validation_status,
+            "intended_use": self.manifest.intended_use,
+            "unreviewed_assertion_count": len(self.manifest.unreviewed_assertion_ids),
+            "unreviewed_mapping_count": len(self.manifest.unreviewed_mapping_ids),
+            "research_override_used": self.manifest.research_override_used,
         }
         return RunReceipt(
             receipt_id=stable_id(
@@ -776,6 +792,23 @@ class GeneralV1Strategy:
             software_version=__version__,
             warnings=warnings,
             ignored_inputs=ignored,
+            research_unreviewed=self._research_unreviewed,
+            knowledge_validation_status=self.manifest.validation_status,
+            intended_use=self.manifest.intended_use,
+            unreviewed_assertion_count=len(self.manifest.unreviewed_assertion_ids),
+            unreviewed_mapping_count=len(self.manifest.unreviewed_mapping_ids),
+            research_override_used=self.manifest.research_override_used,
+        )
+
+    @property
+    def _research_unreviewed(self) -> bool:
+        return (
+            self.manifest.validation_status == "unreviewed"
+            and self.manifest.intended_use == "local_research_only"
+            and self.manifest.clinical_validation is False
+            and self.manifest.human_review_complete is False
+            and self.manifest.publishable is False
+            and self.manifest.research_override_used
         )
 
     def _check_profile(self) -> None:

@@ -423,6 +423,13 @@ def _release_id(source: SourcePackageV2) -> str:
 
 
 def _raw_path(root: Path, source: SourcePackageV2, artifact: RegistryArtifactV2) -> Path:
+    if artifact.local_path is not None:
+        resolved = (root / artifact.local_path).resolve()
+        try:
+            resolved.relative_to(root.resolve())
+        except ValueError as exc:
+            raise LatrosError("Artifact local_path escapes the project root") from exc
+        return resolved
     return root / "data/raw" / source.source_id / source.release / artifact.filename
 
 

@@ -24,6 +24,11 @@ ArtifactFormatV2 = Literal[
     "rf2-descriptions-tsv",
     "rf2-relationships-tsv",
     "curated-assertions-jsonl",
+    "obographs-json",
+    "html-capture",
+    "curation-jsonl",
+    "curation-package-json",
+    "source-segments-json",
 ]
 
 
@@ -67,6 +72,7 @@ class RegistryArtifactV2(Contract):
     source_url: str = Field(min_length=1)
     sha256: Annotated[str, Field(pattern=r"^[0-9a-f]{64}$")]
     access_mode: AccessMode
+    local_path: str | None = None
 
     @field_validator("filename")
     @classmethod
@@ -82,6 +88,26 @@ class RegistryArtifactV2(Contract):
         if any(part in {"latest", "main", "master"} for part in parsed.path.lower().split("/")):
             raise ValueError("Pin a release, not a moving branch/latest URL")
         return value
+
+    @field_validator("local_path")
+    @classmethod
+    def local_path_is_safe(cls, value: str | None) -> str | None:
+        if value is None:
+            return None
+        path = Path(value)
+        if (
+            path.is_absolute()
+            or not path.parts
+            or any(part in {"", ".", ".."} for part in path.parts)
+        ):
+            raise ValueError("Artifact local_path must be a safe relative path")
+        return path.as_posix()
+
+    @model_validator(mode="after")
+    def local_path_matches_access_mode(self) -> Self:
+        if self.local_path is not None and self.access_mode != "manual_local":
+            raise ValueError("Only manual_local artifacts may override local_path")
+        return self
 
 
 class SourcePackageV2(Contract):

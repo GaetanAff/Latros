@@ -81,6 +81,7 @@ def pipeline_hash_v2() -> str:
         "knowledge/manifest_v2.py",
         "knowledge/models_v2.py",
         "knowledge/importers_v2.py",
+        "knowledge/research_unreviewed.py",
         "knowledge/store_v2.py",
         "sources/registry_v2.py",
     ]
@@ -95,7 +96,16 @@ def snapshot_path_v2(root: Path, snapshot: str) -> Path:
 def verify_raw_v2(root: Path, registry: RegistryV2) -> None:
     for source in registry.sources:
         for artifact in source.artifacts:
-            path = root / "data/raw" / source.source_id / source.release / artifact.filename
+            path = (
+                root / artifact.local_path
+                if artifact.local_path is not None
+                else root / "data/raw" / source.source_id / source.release / artifact.filename
+            )
+            path = path.resolve()
+            try:
+                path.relative_to(root.resolve())
+            except ValueError as exc:
+                raise LatrosError("Artifact local_path escapes the project root") from exc
             if not path.is_file() or sha256(path) != artifact.sha256:
                 raise LatrosError(f"Missing/corrupt v2 source: {path}")
 
@@ -140,8 +150,15 @@ def build_snapshot_v2(
     registry: RegistryV2,
     snapshot: str,
     knowledge: CanonicalKnowledgeV2,
+    *,
+    research_metadata: dict[str, Any] | None = None,
 ) -> KnowledgeSnapshotManifestV2:
     safe_id(snapshot)
+    if snapshot.endswith("-dev-unreviewed") != (research_metadata is not None):
+        raise LatrosError(
+            "A *-dev-unreviewed snapshot requires explicit unreviewed research metadata, "
+            "and that metadata is forbidden for other snapshot IDs"
+        )
     root = root.resolve()
     verify_raw_v2(root, registry)
     _validate_registry_alignment(registry, knowledge)
@@ -155,6 +172,20 @@ def build_snapshot_v2(
             raise LatrosError("Snapshot ID already belongs to different v2 source pins or scope")
         if expected.build_pipeline_sha256 != pipeline_hash_v2():
             raise LatrosError("V2 build implementation changed: use a new snapshot ID")
+        expected_research = {
+            "validation_status": expected.validation_status,
+            "intended_use": expected.intended_use,
+            "clinical_validation": expected.clinical_validation,
+            "human_review_complete": expected.human_review_complete,
+            "publishable": expected.publishable,
+            "research_override_used": expected.research_override_used,
+            "unreviewed_assertion_ids": expected.unreviewed_assertion_ids,
+            "unreviewed_mapping_ids": expected.unreviewed_mapping_ids,
+            "reviewer_count": expected.reviewer_count,
+            "limitations": expected.limitations,
+        }
+        if expected_research != (research_metadata or expected_research):
+            raise LatrosError("Snapshot ID already belongs to different research safeguards")
         if canonical.exists() and runtime.exists():
             return load_manifest_v2(root, snapshot)
     if canonical.exists() or runtime.exists():
@@ -211,6 +242,7 @@ def build_snapshot_v2(
             "tables": logical_hashes,
             "scope": registry.scope.model_dump(mode="json"),
             "rules": V2_RULES,
+            "research_metadata": research_metadata,
         }
         redistributions = {source.license.redistribution for source in registry.sources}
         redistribution: Literal["allowed_with_attribution", "restricted", "prohibited"]
@@ -220,6 +252,9 @@ def build_snapshot_v2(
             redistribution = "restricted"
         else:
             redistribution = "allowed_with_attribution"
+        manifest_payload: dict[str, Any] = {
+            **(research_metadata or {}),
+        }
         manifest = KnowledgeSnapshotManifestV2(
             snapshot=snapshot,
             latros_version=__version__,
@@ -238,7 +273,15 @@ def build_snapshot_v2(
             compatible_profiles=registry.compatible_profiles,
             redistribution=redistribution,
             content_sha256=hashlib.sha256(encoded(identity)).hexdigest(),
-            warnings=[],
+            warnings=(
+                [
+                    "UNREVIEWED LOCAL RESEARCH DATA: not clinically validated, not publishable, "
+                    "and not suitable for clinical use"
+                ]
+                if research_metadata is not None
+                else []
+            ),
+            **manifest_payload,
         )
         if expected is not None and manifest != expected:
             raise LatrosError("Reconstruction differs from pinned v2 manifest")

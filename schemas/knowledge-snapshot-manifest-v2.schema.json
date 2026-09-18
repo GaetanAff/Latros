@@ -68,7 +68,12 @@
             "rf2-concepts-tsv",
             "rf2-descriptions-tsv",
             "rf2-relationships-tsv",
-            "curated-assertions-jsonl"
+            "curated-assertions-jsonl",
+            "obographs-json",
+            "html-capture",
+            "curation-jsonl",
+            "curation-package-json",
+            "source-segments-json"
           ],
           "title": "Format",
           "type": "string"
@@ -86,6 +91,18 @@
           ],
           "default": null,
           "title": "Language"
+        },
+        "local_path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Local Path"
         },
         "product": {
           "minLength": 1,
@@ -330,6 +347,18 @@
       "title": "Canonical Schema Version",
       "type": "integer"
     },
+    "clinical_validation": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Clinical Validation"
+    },
     "compatible_profiles": {
       "items": {
         "type": "string"
@@ -363,10 +392,54 @@
       "title": "Evidence Families",
       "type": "array"
     },
+    "human_review_complete": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Human Review Complete"
+    },
+    "intended_use": {
+      "anyOf": [
+        {
+          "const": "local_research_only",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Intended Use"
+    },
     "latros_version": {
       "minLength": 1,
       "title": "Latros Version",
       "type": "string"
+    },
+    "limitations": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Limitations",
+      "type": "array"
+    },
+    "publishable": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Publishable"
     },
     "redistribution": {
       "enum": [
@@ -376,6 +449,24 @@
       ],
       "title": "Redistribution",
       "type": "string"
+    },
+    "research_override_used": {
+      "default": false,
+      "title": "Research Override Used",
+      "type": "boolean"
+    },
+    "reviewer_count": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Reviewer Count"
     },
     "rules": {
       "additionalProperties": {
@@ -420,6 +511,33 @@
       },
       "title": "Tables",
       "type": "object"
+    },
+    "unreviewed_assertion_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Unreviewed Assertion Ids",
+      "type": "array"
+    },
+    "unreviewed_mapping_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Unreviewed Mapping Ids",
+      "type": "array"
+    },
+    "validation_status": {
+      "anyOf": [
+        {
+          "const": "unreviewed",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Validation Status"
     },
     "warnings": {
       "items": {

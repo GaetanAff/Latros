@@ -9,6 +9,7 @@ from pydantic import ValidationError
 from typer.testing import CliRunner
 
 from latros.cli import app
+from latros.clinical.v2 import ClinicalCaseV2, QuantityValue, SubjectContext, SymptomObservation
 from latros.common import LatrosError, sha256
 from latros.knowledge.curation import (
     CurationAssertionDraft,
@@ -21,6 +22,10 @@ from latros.knowledge.curation import (
     record_hash,
     write_review_workbook,
 )
+from latros.knowledge.research_unreviewed import build_unreviewed_research_snapshot
+from latros.knowledge.store_v2 import read_knowledge_v2
+from latros.reasoning.general_v1 import GeneralV1Strategy
+from latros.reasoning.profiles import ReasoningProfile, reasoning_profile_hash
 
 
 def _write_jsonl(path: Path, rows: Sequence[Any]) -> None:
@@ -358,3 +363,197 @@ def test_cli_require_publishable_fails_for_pending_package(tmp_path: Path) -> No
     assert (tmp_path / "gate-report.json").is_file()
     assert isinstance(result.exception, LatrosError)
     assert "Curation publication gate is blocked" in str(result.exception)
+
+
+def test_unreviewed_snapshot_requires_explicit_override_and_safe_id(tmp_path: Path) -> None:
+    package = _write_package(tmp_path, approved=False)
+    before_assertions = (package / "assertions.jsonl").read_bytes()
+    before_mappings = (package / "mappings.jsonl").read_bytes()
+    before_reviewers = (package / "reviewers.jsonl").read_bytes()
+    before_reviews = (package / "reviews.jsonl").read_bytes()
+
+    with pytest.raises(LatrosError, match="pass --allow-unreviewed"):
+        build_unreviewed_research_snapshot(
+            tmp_path,
+            package,
+            "synthetic-dev-unreviewed",
+            allow_unreviewed_research_data=False,
+        )
+    with pytest.raises(LatrosError, match="ending in -dev-unreviewed"):
+        build_unreviewed_research_snapshot(
+            tmp_path,
+            package,
+            "v0.5.0",
+            allow_unreviewed_research_data=True,
+        )
+
+    manifest = build_unreviewed_research_snapshot(
+        tmp_path,
+        package,
+        "synthetic-dev-unreviewed",
+        allow_unreviewed_research_data=True,
+    )
+
+    assert manifest.validation_status == "unreviewed"
+    assert manifest.intended_use == "local_research_only"
+    assert manifest.clinical_validation is False
+    assert manifest.human_review_complete is False
+    assert manifest.publishable is False
+    assert manifest.research_override_used is True
+    assert manifest.reviewer_count == 0
+    assert manifest.unreviewed_assertion_ids == ["assertion-1", "assertion-2"]
+    assert manifest.unreviewed_mapping_ids == ["mapping-1"]
+    assert (package / "assertions.jsonl").read_bytes() == before_assertions
+    assert (package / "mappings.jsonl").read_bytes() == before_mappings
+    assert (package / "reviewers.jsonl").read_bytes() == before_reviewers == b""
+    assert (package / "reviews.jsonl").read_bytes() == before_reviews == b""
+
+
+def test_cli_separates_official_and_unreviewed_build_paths(tmp_path: Path) -> None:
+    package = _write_package(tmp_path, approved=False)
+    runner = CliRunner()
+    common = ["--root", str(tmp_path), "data", "build"]
+
+    default_refusal = runner.invoke(
+        app,
+        [*common, "--snapshot", "synthetic-dev-unreviewed", "--curation-package", str(package)],
+    )
+    official_override = runner.invoke(
+        app,
+        [
+            *common,
+            "--snapshot",
+            "v0.5.0",
+            "--curation-package",
+            str(package),
+            "--allow-unreviewed-research-data",
+        ],
+    )
+    official_gate = runner.invoke(
+        app,
+        [*common, "--snapshot", "v0.5.0", "--curation-package", str(package)],
+    )
+    experimental = runner.invoke(
+        app,
+        [
+            *common,
+            "--snapshot",
+            "synthetic-dev-unreviewed",
+            "--curation-package",
+            str(package),
+            "--allow-unreviewed-research-data",
+        ],
+    )
+
+    assert default_refusal.exit_code != 0
+    assert "refused by default" in str(default_refusal.exception)
+    assert official_override.exit_code != 0
+    assert "never be used" in str(official_override.exception)
+    assert official_gate.exit_code != 0
+    assert "publication gate is blocked" in str(official_gate.exception)
+    assert experimental.exit_code == 0
+    assert "UNREVIEWED LOCAL RESEARCH DATA" in experimental.stderr
+    assert orjson.loads(experimental.stdout)["publishable"] is False
+
+
+def test_general_v1_result_and_question_cannot_hide_unreviewed_data(tmp_path: Path) -> None:
+    package = _write_package(tmp_path, approved=False)
+    snapshot = "synthetic-dev-unreviewed"
+    build_unreviewed_research_snapshot(
+        tmp_path,
+        package,
+        snapshot,
+        allow_unreviewed_research_data=True,
+    )
+    manifest, knowledge = read_knowledge_v2(tmp_path, snapshot)
+    profile_payload: dict[str, Any] = {
+        "schema_version": 1,
+        "profile_id": "general_v1-orl-unreviewed",
+        "strategy_id": "general_v1",
+        "strategy_version": "1",
+        "accepted_observation_types": ["symptom", "sign", "exam", "vital"],
+        "accepted_relations": ["has_symptom", "has_sign", "has_exam_finding"],
+        "score_scale": {
+            "scale_id": "general_v1.compatibility",
+            "kind": "compatibility",
+            "description": "Synthetic unreviewed compatibility, never a probability",
+            "calibrated": False,
+        },
+        "parameters": {
+            "minimum_age_years": 18,
+            "minimum_assessed_findings": 2,
+            "minimum_coverage_ratio": 0.5,
+            "family_weights": {"invented-primary": 1.0},
+            "allow_unlisted_evidence_families": False,
+        },
+        "aggregation_rules": [],
+        "coverage_rules": [],
+        "out_of_scope_rules": [],
+        "abstention_rules": [],
+        "compatible_snapshot_schema_versions": [2],
+        "compatible_snapshot_ids": [snapshot],
+        "profile_sha256": "0" * 64,
+    }
+    profile_payload["profile_sha256"] = reasoning_profile_hash(profile_payload)
+    strategy = GeneralV1Strategy(
+        tmp_path, snapshot, ReasoningProfile.model_validate(profile_payload)
+    )
+    observations = [
+        _unreviewed_symptom(1, "finding-1"),
+        _unreviewed_symptom(2, "finding-2"),
+    ]
+    case = ClinicalCaseV2(
+        case_id="unreviewed-research-case",
+        subject_context=SubjectContext(
+            age=QuantityValue(
+                value=30,
+                unit="year",
+                system="http://unitsofmeasure.org",
+                code="a",
+            )
+        ),
+        observations=observations,
+    )
+
+    result = strategy.diagnose(case)
+    question = strategy.question(case)
+
+    assert result.status == "ranked"
+    assert result.research_unreviewed is True
+    assert result.safety.status == "not_evaluated"
+    assert result.candidates[0].aggregate.kind == "compatibility"
+    assert result.candidates[0].aggregate.calibrated is False
+    assert result.run_receipt.snapshot_id == snapshot
+    assert result.run_receipt.knowledge_validation_status == "unreviewed"
+    assert result.run_receipt.unreviewed_assertion_count == 2
+    assert result.run_receipt.unreviewed_mapping_count == 1
+    assert result.run_receipt.research_override_used is True
+    assert question.research_unreviewed is True
+    assert question.run_receipt.research_unreviewed is True
+    assert question.safety.status == "not_evaluated"
+    assert all(
+        item.evidence["review_status"] == "pending_review" for item in knowledge.concept_mappings
+    )
+    assert all(
+        item.raw_value["review_status"] == "pending_review" for item in knowledge.source_assertions
+    )
+    assert manifest.reviewer_count == 0
+
+
+def _unreviewed_symptom(index: int, code: str) -> SymptomObservation:
+    return SymptomObservation.model_validate(
+        {
+            "observation_id": f"unreviewed-observation-{index}",
+            "concept": {
+                "concept_id": f"orl:{code}",
+                "coding": {"system": "urn:latros:test", "code": code},
+            },
+            "clinical_status": "present",
+            "evaluation_status": "assessed",
+            "acquisition_method": "reported",
+            "provenance": {
+                "provenance_id": f"unreviewed-provenance-{index}",
+                "origin_type": "patient_report",
+            },
+        }
+    )

@@ -323,6 +323,32 @@
           "title": "Input Sha256",
           "type": "string"
         },
+        "intended_use": {
+          "anyOf": [
+            {
+              "const": "local_research_only",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Intended Use"
+        },
+        "knowledge_validation_status": {
+          "anyOf": [
+            {
+              "const": "unreviewed",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Knowledge Validation Status"
+        },
         "mappings_applied": {
           "items": {
             "type": "string"
@@ -352,6 +378,16 @@
           "minLength": 1,
           "title": "Receipt Id",
           "type": "string"
+        },
+        "research_override_used": {
+          "default": false,
+          "title": "Research Override Used",
+          "type": "boolean"
+        },
+        "research_unreviewed": {
+          "default": false,
+          "title": "Research Unreviewed",
+          "type": "boolean"
         },
         "snapshot_content_sha256": {
           "pattern": "^[0-9a-f]{64}$",
@@ -401,6 +437,18 @@
           },
           "title": "Transformations Applied",
           "type": "array"
+        },
+        "unreviewed_assertion_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Unreviewed Assertion Count",
+          "type": "integer"
+        },
+        "unreviewed_mapping_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Unreviewed Mapping Count",
+          "type": "integer"
         },
         "warnings": {
           "items": {
@@ -559,6 +607,11 @@
     },
     "coverage": {
       "$ref": "#/$defs/CoverageAssessment"
+    },
+    "research_unreviewed": {
+      "default": false,
+      "title": "Research Unreviewed",
+      "type": "boolean"
     },
     "run_receipt": {
       "$ref": "#/$defs/RunReceipt"

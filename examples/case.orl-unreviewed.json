@@ -1,0 +1,86 @@
+{
+  "case_id": "orl-local-research-example",
+  "observation_proposals": [],
+  "observations": [
+    {
+      "acquisition_method": "reported",
+      "certainty": "asserted",
+      "clinical_status": "present",
+      "concept": {
+        "coding": {
+          "code": "runny-nose",
+          "display": "Runny nose",
+          "system": "urn:latros:orl"
+        },
+        "concept_id": "orl:runny-nose",
+        "status": "active"
+      },
+      "evaluation_status": "assessed",
+      "experiencer": "patient",
+      "kind": "symptom",
+      "observation_id": "orl-example-runny-nose",
+      "provenance": {
+        "origin_type": "patient_report",
+        "provenance_id": "orl-example-provenance-1"
+      }
+    },
+    {
+      "acquisition_method": "reported",
+      "certainty": "asserted",
+      "clinical_status": "present",
+      "concept": {
+        "coding": {
+          "code": "nasal-congestion",
+          "display": "Nasal congestion",
+          "system": "urn:latros:orl"
+        },
+        "concept_id": "orl:nasal-congestion",
+        "status": "active"
+      },
+      "evaluation_status": "assessed",
+      "experiencer": "patient",
+      "kind": "symptom",
+      "observation_id": "orl-example-nasal-congestion",
+      "provenance": {
+        "origin_type": "patient_report",
+        "provenance_id": "orl-example-provenance-2"
+      }
+    },
+    {
+      "acquisition_method": "reported",
+      "certainty": "asserted",
+      "clinical_status": "present",
+      "concept": {
+        "coding": {
+          "code": "sore-throat",
+          "display": "Sore throat",
+          "system": "urn:latros:orl"
+        },
+        "concept_id": "orl:sore-throat",
+        "status": "active"
+      },
+      "evaluation_status": "assessed",
+      "experiencer": "patient",
+      "kind": "symptom",
+      "observation_id": "orl-example-sore-throat",
+      "provenance": {
+        "origin_type": "patient_report",
+        "provenance_id": "orl-example-provenance-3"
+      }
+    }
+  ],
+  "question_history": [],
+  "schema_version": 2,
+  "source_statements": [],
+  "subject_context": {
+    "age": {
+      "code": "a",
+      "comparator": "eq",
+      "kind": "quantity",
+      "system": "http://unitsofmeasure.org",
+      "unit": "year",
+      "value": 30
+    },
+    "sex": "unknown"
+  }
+}

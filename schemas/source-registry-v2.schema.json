@@ -68,7 +68,12 @@
             "rf2-concepts-tsv",
             "rf2-descriptions-tsv",
             "rf2-relationships-tsv",
-            "curated-assertions-jsonl"
+            "curated-assertions-jsonl",
+            "obographs-json",
+            "html-capture",
+            "curation-jsonl",
+            "curation-package-json",
+            "source-segments-json"
           ],
           "title": "Format",
           "type": "string"
@@ -86,6 +91,18 @@
           ],
           "default": null,
           "title": "Language"
+        },
+        "local_path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Local Path"
         },
         "product": {
           "minLength": 1,

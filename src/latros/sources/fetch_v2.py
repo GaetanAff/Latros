@@ -16,7 +16,7 @@ def fetch_source_v2(
     public = [artifact for artifact in source.artifacts if artifact.access_mode == "public_https"]
     manual = [artifact for artifact in source.artifacts if artifact.access_mode == "manual_local"]
     for artifact in manual:
-        path = folder / artifact.filename
+        path = _artifact_path(root, source, artifact)
         if not path.is_file():
             raise LatrosError(
                 f"Manual source artifact required at {path}; acquire it under its license"
@@ -32,7 +32,10 @@ def fetch_source_v2(
         _download(client, artifact, folder / artifact.filename)
     payload = source.model_dump(mode="json")
     payload["files"] = [
-        {"filename": artifact.filename, "sha256": sha256(folder / artifact.filename)}
+        {
+            "filename": artifact.filename,
+            "sha256": sha256(_artifact_path(root, source, artifact)),
+        }
         for artifact in source.artifacts
     ]
     write_json(folder / "manifest.json", payload)
@@ -54,3 +57,14 @@ def _download(client: httpx.Client, artifact: RegistryArtifactV2, destination: P
     if sha256(part) != artifact.sha256:
         raise LatrosError(f"SHA-256 mismatch for {artifact.filename}; untrusted .part retained")
     part.replace(destination)
+
+
+def _artifact_path(root: Path, source: SourcePackageV2, artifact: RegistryArtifactV2) -> Path:
+    if artifact.local_path is not None:
+        resolved = (root / artifact.local_path).resolve()
+        try:
+            resolved.relative_to(root.resolve())
+        except ValueError as exc:
+            raise LatrosError("Artifact local_path escapes the project root") from exc
+        return resolved
+    return root / "data/raw" / source.source_id / source.release / artifact.filename
