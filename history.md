@@ -6,9 +6,48 @@ Dernière mise à jour : 18 septembre 2026.
 
 ## État actuel en une phrase
 
-Latros est aujourd'hui un prototype local de recherche, utilisable en ligne de commande, qui prend un cas clinique **déjà structuré en identifiants HPO**, classe des maladies rares ORPHA selon une compatibilité sémantique explicable, puis propose une question discriminante. Il n'est ni un chatbot, ni une interface patient, ni un outil de triage ou de diagnostic clinique validé.
+Latros est aujourd'hui un prototype local de recherche utilisable en ligne de commande ou dans une
+console web R&D locale. Il prend des cas déjà structurés, exécute `semantic_v1` sur le snapshot rare
+ou `general_v1` sur le snapshot ORL expérimental, expose les preuves et propose éventuellement une
+question discriminante. Il n'est ni un chatbot, ni une interface patient, ni un outil de triage ou
+de diagnostic clinique validé.
 
-Référence actuelle des données : **`v0.2.0`**, nom du jalon « Premier snapshot médical » dans le [plan d'implémentation](docs/plan.md). Le paquet est à la version `0.4.0` ; aucun snapshot médical v2 n'est publié. L'ancien snapshot `latros-kb-0002` est conservé.
+Référence médicale publiée : **`v0.2.0`**, nom du jalon « Premier snapshot médical » dans le
+[plan d'implémentation](docs/plan.md). Le paquet est à la version `0.6.0`. Le snapshot v2
+`v0.5.0-dev-unreviewed` reste une expérience locale non publiable ; aucun snapshot clinique v2
+validé n'est publié. L'ancien snapshot `latros-kb-0002` est conservé.
+
+## Interface locale R&D et sessions — 18 septembre 2026
+
+- La branche `feat/v0.6-rd-interface` part du commit v0.5 documentaire `8321b12` et porte le paquet
+  à `0.6.0` sans modifier les données ou les mathématiques de raisonnement.
+- `ResearchApplicationService` devient l'orchestrateur commun de la CLI et de l'interface. Les
+  sorties d'or v1 restent inchangées ; aucun score n'est calculé dans le navigateur.
+- FastAPI/Uvicorn sert une console Jinja2/JavaScript native uniquement sur `127.0.0.1`. Il n'existe
+  ni option d'écoute publique, ni CORS, OpenAPI, CDN, télémétrie ou appel Internet.
+- La découverte n'autorise que les couples snapshot/stratégie compatibles et présents. Le catalogue
+  ne propose que les concepts utilisables par le moteur sélectionné.
+- L'éditeur couvre âge, sexe, observations confirmées et les distinctions `present`, `absent`,
+  `unknown`, `not_assessed` et `unable_to_assess`. Une réponse adaptative devient une observation
+  confirmée avec provenance `question_response` ; aucune question n'est inventée par l'UI.
+- Les résultats affichent abstention, couverture, compatibilité non calibrée, contributions,
+  contradictions, sources, familles, mappings, provenance et reçu. Safety reste
+  `not_evaluated` et n'est jamais reformulé comme une assurance.
+- Le panneau du snapshot ORL affiche sans masquage `research_unreviewed: true`,
+  `clinical_validation: false`, `publishable: false`, 17 assertions et 10 mappings non revus. Le
+  gate officiel `v0.5.0` et tous les statuts de revue restent inchangés.
+- Les sessions utilisent le schéma `ui-session-v1`. L'état courant est écrit atomiquement dans
+  `sessions/<id>/session.json`; chaque analyse/question est un run immuable qui garde le cas et le
+  résultat v2 exacts. Le dossier reste hors Git et n'est pas présenté comme stockage sécurisé.
+- Le dossier `FUTUR INTERFACE/` n'a été ni modifié ni versionné. Le logo, la palette et certains
+  motifs de panneaux ont été adaptés dans des actifs neufs sous `src/latros/ui/`; aucune donnée ou
+  sortie fictive n'a été copiée.
+- L'ADR 0008 et `docs/v0.6-rd-interface.md` documentent l'architecture, le transport interne, les
+  sessions et les limites. Le Knowledge Graph avancé reste reporté.
+- Vérifications locales : Ruff, formatage, mypy strict, schémas, syntaxe JavaScript, aide CLI, wheel
+  contenant les actifs/profils et **138 tests** réussis. Un parcours réel temporaire sur
+  `v0.5.0-dev-unreviewed` a produit un résultat marqué non revu avec safety `not_evaluated`. Le rendu
+  desktop et le panneau non revu ont été vérifiés dans le navigateur local.
 
 ## Roadmap interface R&D et Knowledge Graph — 18 septembre 2026
 

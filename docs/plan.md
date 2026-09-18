@@ -13,7 +13,7 @@ Les trois jalons avaient été implémentés ensemble dans la première tranche.
 | 3 | Moteur pur et interrogatoire — `v0.3.0` | Implémentée dans le paquet `0.3.0` ; évaluation clinique non réalisée | Le moteur utilise le snapshot `v0.2.0` |
 | 4 | Clinical Knowledge Model — `v0.4.0` | Terminée : checkpoints A–H livrés et revue finale verte | La référence reste `v0.2.0` ; aucun snapshot médical v2 publié |
 | 5 | Snapshot ORL généraliste — `v0.5.0` | En cours : A–D terminés ; E historique en `NO-GO` ; E2 audité ; E3 prêt pour revue ; mode E4 local non validé disponible | Référence officielle toujours bloquée ; `v0.5.0-dev-unreviewed` est non publiable |
-| 6 | Interface interne de test R&D — `v0.6` | Prévue | Couche locale d’inspection des contrats et moteurs existants ; aucun produit utilisateur ni nouvelle logique médicale |
+| 6 | Interface interne de test R&D — `v0.6` | Implémentée sur `feat/v0.6-rd-interface` | Console locale, sessions reprenables et inspection fidèle des moteurs ; aucun produit utilisateur ni nouvelle logique médicale |
 | 7 | Extension clinique structurée — `v0.7` | Prévue | Temporalité, biologie, constantes, risques et médicaments, après audits ciblés |
 | 8 | Safety / triage séparé — `v0.8` | Prévue | Composant indépendant du différentiel, avec périmètre et validation propres |
 | 9 | NLP / LLM encadré — `v0.9` | Prévue | Structuration, reformulation et explication, jamais source implicite de connaissance |
@@ -113,24 +113,45 @@ les mappings non exacts ne scorent pas, les dépendances NLM inconnues restent n
 moteur de sécurité reste `not_evaluated`. Ce mode sert aux tests de pipeline et d'interface ; il ne
 commence ni F ni G et ne transforme pas le corpus en référence médicale.
 
-## Trajectoire v0.6 — interface interne de test R&D
+## Étape v0.6 — interface interne de test R&D
 
-`v0.6` sera une interface locale réservée au développement et à la recherche. Elle ne sera ni une
+`v0.6` est une interface locale réservée au développement et à la recherche. Elle n'est ni une
 interface patient, ni un produit utilisateur, ni une interface médicale validée. Son unique rôle
-sera de rendre inspectables les contrats et moteurs déjà disponibles, sans introduire de nouvelle
+est de rendre inspectables les contrats et moteurs déjà disponibles, sans introduire de nouvelle
 logique médicale.
 
-Son périmètre réduit est le suivant :
+Son périmètre livré est le suivant :
 
-- saisir ou charger simplement un `ClinicalCaseV2` ;
+- créer, reprendre et modifier simplement un `ClinicalCaseV2` dans une session locale ;
 - lancer `general_v1` et, seulement lorsqu’un cas et un snapshot y sont compatibles, `semantic_v1` ;
 - afficher les candidats, compatibilités non calibrées, couverture, arguments favorables et
   défavorables, contradictions, sources, provenance, reçu d’exécution et statut de validation ;
 - rendre `safety_status` visible, y compris sa valeur actuelle `not_evaluated` ;
 - accepter le snapshot expérimental `v0.5.0-dev-unreviewed` en conservant partout son avertissement,
   son statut non revu et ses limites ;
-- proposer éventuellement une première vue graphe d’inspection reliant observations, conditions,
-  assertions et sources, sans en faire un nouveau moteur de raisonnement.
+- demander la question suivante au moteur et enregistrer sa réponse comme observation confirmée ;
+- conserver chaque analyse et question dans un historique immuable lié au cas et au reçu exacts.
+
+Le choix d'architecture est fixé par l'[ADR 0008](decisions/0008-interface-locale-rd-et-sessions.md) :
+FastAPI/Uvicorn sur `127.0.0.1`, pages Jinja2 et JavaScript natif, sans Node, CDN, télémétrie, CORS
+ou option d'écoute publique. `ResearchApplicationService` est partagé avec la CLI ; le frontend ne
+calcule aucun score. Le transport `/internal/v1` est interne à l'outil et n'anticipe pas l'API
+publique de v0.10.
+
+Les sessions utilisent le [schéma `ui-session-v1`](../schemas/ui-session-v1.schema.json), des
+écritures atomiques et une révision optimiste. `session.json` conserve l'état courant ; `runs/`
+conserve des copies immuables du cas, de la sélection et de chaque sortie v2. `sessions/` est hors
+Git et ne promet ni chiffrement, ni comptes, ni stockage de dossiers médicaux réels.
+
+| Checkpoint | Livraison | État |
+| --- | --- | --- |
+| `v0.6-A` | ADR, dépendances minimales et service applicatif partagé avec la CLI | Terminé |
+| `v0.6-B` | Découverte des snapshots, compatibilités et catalogue de concepts | Terminé |
+| `v0.6-C` | Sessions versionnées, sauvegarde atomique et runs immuables | Terminé |
+| `v0.6-D` | Serveur loopback et transport interne sécurisé | Terminé |
+| `v0.6-E` | Éditeur simple `ClinicalCaseV2` et cinq états d'évaluation | Terminé |
+| `v0.6-F` | Résultats, abstention, provenance, questions et statuts non revus | Terminé |
+| `v0.6-G` | Non-régression, packaging et documentation ; CI Windows/Linux après push | Vérifications locales terminées, CI distante à confirmer |
 
 Une évolution ultérieure de cette interface devra prévoir une visualisation avancée de type
 Knowledge Graph, « cerveau médical » ou graphe Obsidian. Elle devra rendre navigables, filtrables et
@@ -141,20 +162,20 @@ objets de raisonnement pertinents. Cette visualisation interactive sera une proj
 données et contributions réellement présentes dans Latros : elle ne pourra ni inventer une relation,
 ni créer une preuve, ni modifier un score pour améliorer l’esthétique du graphe.
 
-Cette vue avancée ne constitue pas un critère de livraison de la première interface **v0.6**. Celle-ci
-peut commencer par une inspection beaucoup plus simple ; le Knowledge Graph restera une évolution
-planifiée, à cadrer et à tester séparément.
+Cette vue avancée ne constitue pas un critère de livraison de la première interface **v0.6**. Le
+socle livré conserve les identifiants d'observation, assertion, contribution, candidat, mapping et
+source nécessaires à cette projection future ; le Knowledge Graph reste à cadrer et tester
+séparément.
 
 Elle ne doit pas créer de diagnostic, de promesse clinique, de règle de triage, de score
 probabiliste, de source médicale ou de workflow de texte libre. Le dossier `FUTUR INTERFACE/` reste
-hors Git selon les règles du dépôt ; il peut inspirer des contrats ou des écrans conceptuels, mais
-ne constitue pas une implémentation validée et ne sera ni modifié ni versionné dans cette tranche
-sans décision explicite distincte.
+hors Git et intact. Sa palette et ses motifs de mise en page ont seulement inspiré des actifs
+nouveaux sous `src/latros/ui/`; ses données et comportements fictifs ne sont pas repris.
 
-Les critères d’acceptation documentaires de cette tranche seront une séparation visible entre
+Les critères d’acceptation de cette tranche sont une séparation visible entre
 snapshots validés et non revus, la fidélité aux sorties et reçus des moteurs existants, l’absence de
 vocabulaire diagnostic/probabiliste et l’impossibilité de masquer l’état de sécurité ou les limites
-de couverture.
+de couverture. Les tests UI vérifient le logiciel et les garde-fous, jamais la justesse médicale.
 
 ## Trajectoire v0.7 — médicaments, temporalité et mesures cliniques
 
