@@ -1,7 +1,7 @@
 # Latros
 
 <p align="center">
-  <img src="latros-logo.svg" alt="Latros" width="420">
+  <img src="docs/assets/latros-logo.svg" alt="Latros" width="420">
 </p>
 
 Prototype **interne de recherche** pour explorer des raisonnements cliniques structurés. Les moteurs
@@ -14,9 +14,13 @@ La version `0.6.0` ajoute une interface locale et des sessions reprenables au Cl
 Model, sans modifier les moteurs. Les contrats cliniques et de connaissances, stratégies
 versionnées, couverture, abstention, sorties explicables et reçus reproductibles restent la source
 de vérité. Voir le [journal des ADR](docs/decisions/README.md), la
-[méthodologie](docs/methodology.md) et [projet.md](projet.md).
+[méthodologie](docs/methodology.md) et [vision du projet](docs/projet.md).
 
-Le [plan et son avancement](docs/plan.md) distingue fondation `v0.1.0`, premier snapshot médical `v0.2.0`, moteur pur `v0.3.0` et modèle général `v0.4.0`. Le snapshot de référence reste **`v0.2.0`** : v0.4 est une évolution logicielle et contractuelle, pas une nouvelle publication de données. [history.md](history.md) conserve les réalisations et vérifications datées.
+Le [plan et son avancement](docs/plan.md) distingue fondation `v0.1.0`, premier snapshot médical `v0.2.0`, moteur pur `v0.3.0` et modèle général `v0.4.0`. Le snapshot de référence reste **`v0.2.0`** : v0.4 est une évolution logicielle et contractuelle, pas une nouvelle publication de données. Le [journal du projet](docs/history.md) conserve les réalisations et vérifications datées.
+
+Pour installer, lancer l'interface et réaliser deux essais guidés, suivre le
+**[tutoriel complet](docs/tuto.md)**. L'[index de la documentation](docs/README.md) explique où se
+trouvent ensuite la roadmap, les ADR, les audits et les contrats.
 
 > **Périmètre critique : la seule référence médicale publiée reste maladies rares.** Le snapshot
 > officiel `v0.2.0` ne couvre pas la médecine générale. Le snapshot ORL
@@ -95,6 +99,7 @@ pending. `safety_status: not_evaluated` reste affiché et ne constitue aucune co
 sécurité. Le serveur écoute uniquement sur la boucle locale, ne contient ni télémétrie, ni CDN, ni
 appel externe. Le détail est dans [la documentation v0.6](docs/v0.6-rd-interface.md) et
 [l'ADR 0008](docs/decisions/0008-interface-locale-rd-et-sessions.md).
+Le parcours complet, écran par écran, est disponible dans le [tutoriel](docs/tuto.md).
 
 `v0.4-D` fournit désormais le [schéma canonique v2](schemas/knowledge-model-v2.schema.json) et
 la liste de ses [tables conceptuelles](schemas/canonical-tables-v2.json). L'adaptateur v1 est une
@@ -310,6 +315,7 @@ src/latros/reasoning/   stratégies, profils, semantic_v1, sorties v2 et reçus
 src/latros/application/ orchestration partagée entre CLI et interface
 src/latros/ui/          serveur loopback, sessions et actifs de la console R&D
 src/latros/cli.py       commandes publiques
+docs/                   tutoriel, roadmap, historique, vision, ADR, audits et revues
 sources/               registre épinglé (versionné)
 schemas/               contrats exportés (versionnés)
 profiles/              profils de raisonnement versionnés et hashés

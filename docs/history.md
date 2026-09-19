@@ -2,7 +2,7 @@
 
 Ce fichier est le journal de continuité du projet. Il décrit ce qui a été décidé et effectivement réalisé, afin de pouvoir reprendre la discussion sans déduire l'état du projet à partir du code seul.
 
-Dernière mise à jour : 18 septembre 2026.
+Dernière mise à jour : 19 septembre 2026.
 
 ## État actuel en une phrase
 
@@ -13,9 +13,26 @@ question discriminante. Il n'est ni un chatbot, ni une interface patient, ni un 
 de diagnostic clinique validé.
 
 Référence médicale publiée : **`v0.2.0`**, nom du jalon « Premier snapshot médical » dans le
-[plan d'implémentation](docs/plan.md). Le paquet est à la version `0.6.0`. Le snapshot v2
+[plan d'implémentation](plan.md). Le paquet est à la version `0.6.0`. Le snapshot v2
 `v0.5.0-dev-unreviewed` reste une expérience locale non publiable ; aucun snapshot clinique v2
 validé n'est publié. L'ancien snapshot `latros-kb-0002` est conservé.
+
+## Tutoriel utilisateur et rangement documentaire — 19 septembre 2026
+
+- Un [tutoriel complet](tuto.md) décrit l'installation, la reconstruction ou l'inspection des deux
+  snapshots, deux essais guidés dans l'interface, les états d'observation, les questions
+  adaptatives, les sessions, la lecture des résultats, les tests et le dépannage.
+- Un [index documentaire](README.md) sépare démarrage, suivi du projet, décisions, audits, revues et
+  contrats machine-readable.
+- La vision, l'historique et le logo sont rangés respectivement sous `docs/projet.md`,
+  `docs/history.md` et `docs/assets/latros-logo.svg`. Tous les liens et les consignes de continuité
+  ont été ajustés ; la racine ne conserve que les entrées et fichiers techniques conventionnels.
+- Cette réorganisation ne modifie aucun code, snapshot, profil, manifeste, corpus, statut de revue
+  ou calcul médical. `FUTUR INTERFACE/`, les sessions et les données locales restent hors Git.
+- Vérifications locales : tous les liens Markdown relatifs et le logo du README se résolvent,
+  `git diff --check` est propre, Ruff et le formatage réussissent, mypy valide 41 fichiers, les
+  schémas et le registre sont valides et les **138 tests** réussissent. Un démarrage réel sur le
+  port local `8767` retourne HTTP 200 avec le titre R&D et l'avertissement non revu attendus.
 
 ## Interface locale R&D et sessions — 18 septembre 2026
 
@@ -84,7 +101,7 @@ validé n'est publié. L'ancien snapshot `latros-kb-0002` est conservé.
 - MedGemma est reporté à une couche future facultative de NLP/explication, après validation du moteur pur. TxGemma est reporté à un module thérapeutique séparé, futur et non clinique dans l'état actuel.
 - Aucune interface, API web, Docker, LLM local, modèle téléchargé, entraînement, audio ou recommandation thérapeutique n'a été développé dans cette tranche.
 
-La vision complète, y compris les futures pistes LLM, est dans [projet.md](projet.md). Les décisions applicables à la tranche actuelle sont dans [ADR 0001](docs/decisions/0001-socle-recherche.md).
+La vision complète, y compris les futures pistes LLM, est dans [projet.md](projet.md). Les décisions applicables à la tranche actuelle sont dans [ADR 0001](decisions/0001-socle-recherche.md).
 
 ## Dépôt et manière de travailler
 
@@ -95,7 +112,7 @@ La vision complète, y compris les futures pistes LLM, est dans [projet.md](proj
 - Les quatre contrôles GitHub (push et pull request, Linux et Windows) sont réussis pour le commit final `920a882`.
 - Le dossier local non suivi `FUTUR INTERFACE/` était présent dans l'espace de travail et n'a été ni lu, ni modifié, ni ajouté au commit.
 
-Les règles de contribution sont dans [CONTRIBUTING.md](CONTRIBUTING.md) : branche par fonctionnalité, pull request, `main` stable, aucune donnée de santé ou base brute dans Git.
+Les règles de contribution sont dans [CONTRIBUTING.md](../CONTRIBUTING.md) : branche par fonctionnalité, pull request, `main` stable, aucune donnée de santé ou base brute dans Git.
 
 ## Ce qui a été implémenté
 
@@ -116,7 +133,7 @@ Les règles de contribution sont dans [CONTRIBUTING.md](CONTRIBUTING.md) : branc
 - Les artefacts sont téléchargés vers `data/raw/<source>/<release>/`, jamais versionnés dans Git.
 - Chaque fichier est vérifié par SHA-256. Les sources doivent avoir une version, une licence et une URL HTTPS immuable ; les URLs `latest`, `main` et `master` sont refusées.
 - Les téléchargements incomplets restent en `.part` et peuvent être relancés. Un fichier déjà complet mais corrompu n'est jamais écrasé silencieusement.
-- [sources/registry.yaml](sources/registry.yaml) est le registre versionné des sources, licences, attributions, produits, dépendances amont et hashes.
+- [sources/registry.yaml](../sources/registry.yaml) est le registre versionné des sources, licences, attributions, produits, dépendances amont et hashes.
 
 ### Premier snapshot médical — v0.2.0 intégrée dans la tranche v0.3.0
 
@@ -153,7 +170,7 @@ Principes appliqués :
 - Un concept HPO obsolète sans remplacement exact est conservé dans les données avec un avertissement, mais ne participe pas au raisonnement. Un lien `consider` n'est pas inventé comme une équivalence.
 - Des fréquences contradictoires pour un même couple maladie–phénotype, venant de records distincts, sont conservées et exposées ; elles sont exclues des pénalités et de la sélection des questions.
 
-Le manifeste canonique de la première livraison était [latros-kb-0002.json](manifests/latros-kb-0002.json). Il est conservé ; la référence actuelle est [v0.2.0.json](manifests/v0.2.0.json), établie avec les mêmes données sous le nom du jalon du plan. Les snapshots complets sont locaux et ignorés par Git.
+Le manifeste canonique de la première livraison était [latros-kb-0002.json](../manifests/latros-kb-0002.json). Il est conservé ; la référence actuelle est [v0.2.0.json](../manifests/v0.2.0.json), établie avec les mêmes données sous le nom du jalon du plan. Les snapshots complets sont locaux et ignorés par Git.
 
 Résultat du build réel effectué le 16 septembre 2026 :
 
@@ -203,7 +220,7 @@ Le module `question_v1` :
 - s'arrête après 12 questions, avec moins de deux candidats, ou sans question admissible ;
 - retourne toujours `safety_status: not_evaluated`.
 
-Les poids internes du questionnement sont uniquement un outil d'utilité : ils ne sont pas présentés comme probabilités de maladies. La méthode complète, équations et limites sont dans [docs/methodology.md](docs/methodology.md).
+Les poids internes du questionnement sont uniquement un outil d'utilité : ils ne sont pas présentés comme probabilités de maladies. La méthode complète, équations et limites sont dans [methodology.md](methodology.md).
 
 ## Commandes disponibles maintenant
 
@@ -223,7 +240,7 @@ latros diagnose --snapshot v0.2.0 --case examples/case.synthetic.json
 latros question next --snapshot v0.2.0 --case examples/case.synthetic.json
 ```
 
-L'exemple [case.synthetic.json](examples/case.synthetic.json) est inventé. Il sert seulement à démontrer le format d'entrée. La CLI ne comprend pas encore une phrase libre telle que « j'ai mal à l'oreille » : cette future normalisation reste hors de la tranche actuelle.
+L'exemple [case.synthetic.json](../examples/case.synthetic.json) est inventé. Il sert seulement à démontrer le format d'entrée. La CLI ne comprend pas encore une phrase libre telle que « j'ai mal à l'oreille » : cette future normalisation reste hors de la tranche actuelle.
 
 ## Vérifications effectuées
 
@@ -294,7 +311,7 @@ Cette livraison complète la même tranche sur `feat/clinical-foundation`, dans 
 
 Demande : préparer la prochaine évolution de Latros sans coder, conserver un suivi durable de chaque étape et confirmer que la limitation actuelle aux maladies rares n'est pas la cible définitive du projet.
 
-Un [cahier des charges dédié](docs/v0.4-clinical-knowledge-model.md) est créé sur la branche `docs/v0.4-clinical-knowledge-model`. Il décrit les invariants, le futur modèle clinique, le Knowledge Model, la provenance, le non-double-comptage, l'architecture multi-stratégies, les tests, les critères d'acceptation et les checkpoints `v0.4-A` à `v0.4-H`.
+Un [cahier des charges dédié](v0.4-clinical-knowledge-model.md) est créé sur la branche `docs/v0.4-clinical-knowledge-model`. Il décrit les invariants, le futur modèle clinique, le Knowledge Model, la provenance, le non-double-comptage, l'architecture multi-stratégies, les tests, les critères d'acceptation et les checkpoints `v0.4-A` à `v0.4-H`.
 
 Décision de périmètre : le snapshot `v0.2.0` et `semantic_v1` restent spécialisés maladies rares. Ils ne couvrent pas correctement une plainte courante comme fièvre et mal de gorge. `v0.4` doit préparer l'architecture générale sans import massif ; `v0.5` doit réaliser une première extension étroite vers la médecine générale avec des sources auditées et une stratégie dédiée. Les futurs référentiels ne seront sélectionnés qu'après analyse de leur rôle, licence, provenance, dépendances et risque de double comptage.
 

@@ -1,6 +1,6 @@
 # Plan d'implémentation et avancement
 
-Référence : plan « Premières étapes de Latros — socle de données et moteur clinique pur » demandé par l'utilisateur. État au 18 septembre 2026.
+Référence : plan « Premières étapes de Latros — socle de données et moteur clinique pur » demandé par l'utilisateur. État au 19 septembre 2026.
 
 Les trois jalons avaient été implémentés ensemble dans la première tranche. La reprise de l'étape 2 consiste à vérifier sa livraison et à établir le snapshot sous le nom du jalon, `v0.2.0`. Elle ne correspond pas à l'ajout de nouvelles sources ou de fonctions cliniques.
 
@@ -235,4 +235,4 @@ Les données canoniques sont reproductibles ; le checksum du conteneur DuckDB, d
 
 ## Mise à jour à chaque livraison
 
-Actualiser ensemble [history.md](../history.md), [README.md](../README.md) et ce plan : état réel des jalons, noms de snapshots, commandes, décisions, vérifications et limites. Si un contrat, une source ou une règle d'import change, actualiser également le schéma, le registre, le manifeste ou l'ADR concernés. Garder les réalisations antérieures dans le journal daté.
+Actualiser ensemble [history.md](history.md), [README.md](../README.md) et ce plan : état réel des jalons, noms de snapshots, commandes, décisions, vérifications et limites. Si un contrat, une source ou une règle d'import change, actualiser également le schéma, le registre, le manifeste ou l'ADR concernés. Garder les réalisations antérieures dans le journal daté.
