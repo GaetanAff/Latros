@@ -28,7 +28,11 @@ validé n'est publié. L'ancien snapshot `latros-kb-0002` est conservé.
   `docs/history.md` et `docs/assets/latros-logo.svg`. Tous les liens et les consignes de continuité
   ont été ajustés ; la racine ne conserve que les entrées et fichiers techniques conventionnels.
 - Cette réorganisation ne modifie aucun code, snapshot, profil, manifeste, corpus, statut de revue
-  ou calcul médical. `FUTUR INTERFACE/`, les sessions et les données locales restent hors Git.
+  ou calcul médical. Les sessions et les données locales restent hors Git.
+- L'ancienne maquette locale `FUTUR INTERFACE/`, non suivie par Git et désormais remplacée par
+  l'implémentation autonome `src/latros/ui/`, a été supprimée à la demande du propriétaire. La règle
+  d'ignorance correspondante a également été retirée. Cette suppression n'est pas récupérable par
+  Git, puisque le dossier n'y avait jamais été versionné.
 - Vérifications locales : tous les liens Markdown relatifs et le logo du README se résolvent,
   `git diff --check` est propre, Ruff et le formatage réussissent, mypy valide 41 fichiers, les
   schémas et le registre sont valides et les **138 tests** réussissent. Un démarrage réel sur le
@@ -56,9 +60,10 @@ validé n'est publié. L'ancien snapshot `latros-kb-0002` est conservé.
 - Les sessions utilisent le schéma `ui-session-v1`. L'état courant est écrit atomiquement dans
   `sessions/<id>/session.json`; chaque analyse/question est un run immuable qui garde le cas et le
   résultat v2 exacts. Le dossier reste hors Git et n'est pas présenté comme stockage sécurisé.
-- Le dossier `FUTUR INTERFACE/` n'a été ni modifié ni versionné. Le logo, la palette et certains
-  motifs de panneaux ont été adaptés dans des actifs neufs sous `src/latros/ui/`; aucune donnée ou
-  sortie fictive n'a été copiée.
+- À la livraison initiale, le dossier de maquette n'avait été ni modifié ni versionné. Le logo, la
+  palette et certains motifs de panneaux ont été adaptés dans des actifs neufs sous
+  `src/latros/ui/`; aucune donnée ou sortie fictive n'a été copiée. Le dossier a ensuite été
+  supprimé le 19 septembre 2026.
 - L'ADR 0008 et `docs/v0.6-rd-interface.md` documentent l'architecture, le transport interne, les
   sessions et les limites. Le Knowledge Graph avancé reste reporté.
 - Vérifications locales : Ruff, formatage, mypy strict, schémas, syntaxe JavaScript, aide CLI, wheel
@@ -79,8 +84,9 @@ validé n'est publié. L'ancien snapshot `latros-kb-0002` est conservé.
   première v0.6. Elle devra projeter exclusivement les observations, concepts, assertions,
   contributions, mappings, sources et provenances réellement présents ; elle ne créera pas de
   relations ou preuves décoratives.
-- **FUTUR INTERFACE/** reste ignoré par Git, intact et non versionné ; il n’a été ni lu, ni modifié,
-  ni ajouté pendant cette mise à jour documentaire.
+- À cette date, **FUTUR INTERFACE/** était encore ignoré par Git, intact et non versionné ; il
+  n’avait été ni lu, ni modifié, ni ajouté pendant cette mise à jour documentaire. Il a été supprimé
+  le 19 septembre 2026 après livraison de l'interface autonome.
 - Vérification réalisée : git diff --check. Aucun code fonctionnel, snapshot, artefact médical ou
   donnée patient n’a été modifié.
 

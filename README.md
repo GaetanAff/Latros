@@ -32,9 +32,11 @@ Les futurs snapshots multi-sources devront publier leur périmètre, leurs dépe
 `v0.6` livre maintenant l'interface interne de test R&D : elle saisit un `ClinicalCaseV2`, exécute
 les moteurs déjà disponibles et inspecte leurs résultats, sources, contradictions, couverture et
 statuts de validation. Elle n'est ni une interface patient, ni un produit médical validé, ni une
-nouvelle logique clinique. Le dossier `FUTUR INTERFACE/` reste hors Git ; seuls des motifs visuels
-ont été adaptés dans le paquet suivi. Une vue Knowledge Graph avancée reste planifiée comme
-projection interactive et fidèle des données, assertions, sources et contributions existantes.
+nouvelle logique clinique. Son implémentation autonome et versionnée se trouve sous
+`src/latros/ui/`. L'ancienne maquette locale ayant servi d'inspiration a été supprimée après la
+livraison ; aucun composant actif n'en dépend. Une vue Knowledge Graph avancée reste planifiée
+comme projection interactive et fidèle des données, assertions, sources et contributions
+existantes.
 
 La trajectoire `v0.7` inclut explicitement les médicaments : exposition observée, substance active,
 produit commercialisé, classe thérapeutique et assertions médicales sourcées resteront des objets

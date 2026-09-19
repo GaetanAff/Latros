@@ -31,7 +31,6 @@ env/
 .ipynb_checkpoints/
 wandb/
 mlruns/
-FUTUR INTERFACE/
 
 # Medical data and generated snapshots: version manifests only, never raw data
 data/raw/

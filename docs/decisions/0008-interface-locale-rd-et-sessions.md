@@ -10,9 +10,10 @@ snapshot expérimental `v0.5.0-dev-unreviewed`. Leur manipulation exigeait cepen
 JSON et la CLI. La tranche v0.6 doit fournir un outil interne de test sans créer de logique médicale,
 sans transformer l'interface en API publique et sans masquer les limites des connaissances.
 
-Le dossier local `FUTUR INTERFACE/` contient une maquette fictive. Il reste ignoré et intact. Sa
-palette, son logo, sa disposition en panneaux et certains motifs visuels servent uniquement
-d'inspiration ; aucune donnée, aucun score et aucun comportement fictif ne sont repris.
+Une maquette locale fictive a servi de référence visuelle pendant la conception. Les actifs utiles
+ont été recréés dans le paquet versionné ; aucune donnée, aucun score et aucun comportement fictif
+n'ont été repris. Après livraison, le dossier de maquette a été supprimé : l'interface active est
+entièrement autonome sous `src/latros/ui/`.
 
 ## Décision
 

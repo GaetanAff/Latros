@@ -168,9 +168,9 @@ source nécessaires à cette projection future ; le Knowledge Graph reste à cad
 séparément.
 
 Elle ne doit pas créer de diagnostic, de promesse clinique, de règle de triage, de score
-probabiliste, de source médicale ou de workflow de texte libre. Le dossier `FUTUR INTERFACE/` reste
-hors Git et intact. Sa palette et ses motifs de mise en page ont seulement inspiré des actifs
-nouveaux sous `src/latros/ui/`; ses données et comportements fictifs ne sont pas repris.
+probabiliste, de source médicale ou de workflow de texte libre. L'ancienne maquette locale a été
+supprimée après livraison de v0.6. L'interface officielle, ses actifs et ses comportements sont
+désormais entièrement portés par `src/latros/ui/` et ne dépendent d'aucun dossier externe ou ignoré.
 
 Les critères d’acceptation de cette tranche sont une séparation visible entre
 snapshots validés et non revus, la fidélité aux sorties et reçus des moteurs existants, l’absence de
