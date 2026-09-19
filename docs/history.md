@@ -2,13 +2,93 @@
 
 Ce fichier est le journal de continuité du projet. Il décrit ce qui a été décidé et effectivement réalisé, afin de pouvoir reprendre la discussion sans déduire l'état du projet à partir du code seul.
 
-Dernière mise à jour : 17 septembre 2026.
+Dernière mise à jour : 19 septembre 2026.
 
 ## État actuel en une phrase
 
-Latros est aujourd'hui un prototype local de recherche, utilisable en ligne de commande, qui prend un cas clinique **déjà structuré en identifiants HPO**, classe des maladies rares ORPHA selon une compatibilité sémantique explicable, puis propose une question discriminante. Il n'est ni un chatbot, ni une interface patient, ni un outil de triage ou de diagnostic clinique validé.
+Latros est aujourd'hui un prototype local de recherche utilisable en ligne de commande ou dans une
+console web R&D locale. Il prend des cas déjà structurés, exécute `semantic_v1` sur le snapshot rare
+ou `general_v1` sur le snapshot ORL expérimental, expose les preuves et propose éventuellement une
+question discriminante. Il n'est ni un chatbot, ni une interface patient, ni un outil de triage ou
+de diagnostic clinique validé.
 
-Référence actuelle des données : **`v0.2.0`**, nom du jalon « Premier snapshot médical » dans le [plan d'implémentation](docs/plan.md). Le paquet est à la version `0.4.0` ; aucun snapshot médical v2 n'est publié. L'ancien snapshot `latros-kb-0002` est conservé.
+Référence médicale publiée : **`v0.2.0`**, nom du jalon « Premier snapshot médical » dans le
+[plan d'implémentation](plan.md). Le paquet est à la version `0.6.0`. Le snapshot v2
+`v0.5.0-dev-unreviewed` reste une expérience locale non publiable ; aucun snapshot clinique v2
+validé n'est publié. L'ancien snapshot `latros-kb-0002` est conservé.
+
+## Tutoriel utilisateur et rangement documentaire — 19 septembre 2026
+
+- Un [tutoriel complet](tuto.md) décrit l'installation, la reconstruction ou l'inspection des deux
+  snapshots, deux essais guidés dans l'interface, les états d'observation, les questions
+  adaptatives, les sessions, la lecture des résultats, les tests et le dépannage.
+- Un [index documentaire](README.md) sépare démarrage, suivi du projet, décisions, audits, revues et
+  contrats machine-readable.
+- La vision, l'historique et le logo sont rangés respectivement sous `docs/projet.md`,
+  `docs/history.md` et `docs/assets/latros-logo.svg`. Tous les liens et les consignes de continuité
+  ont été ajustés ; la racine ne conserve que les entrées et fichiers techniques conventionnels.
+- Cette réorganisation ne modifie aucun code, snapshot, profil, manifeste, corpus, statut de revue
+  ou calcul médical. Les sessions et les données locales restent hors Git.
+- L'ancienne maquette locale `FUTUR INTERFACE/`, non suivie par Git et désormais remplacée par
+  l'implémentation autonome `src/latros/ui/`, a été supprimée à la demande du propriétaire. La règle
+  d'ignorance correspondante a également été retirée. Cette suppression n'est pas récupérable par
+  Git, puisque le dossier n'y avait jamais été versionné.
+- Vérifications locales : tous les liens Markdown relatifs et le logo du README se résolvent,
+  `git diff --check` est propre, Ruff et le formatage réussissent, mypy valide 41 fichiers, les
+  schémas et le registre sont valides et les **138 tests** réussissent. Un démarrage réel sur le
+  port local `8767` retourne HTTP 200 avec le titre R&D et l'avertissement non revu attendus.
+
+## Interface locale R&D et sessions — 18 septembre 2026
+
+- La branche `feat/v0.6-rd-interface` part du commit v0.5 documentaire `8321b12` et porte le paquet
+  à `0.6.0` sans modifier les données ou les mathématiques de raisonnement.
+- `ResearchApplicationService` devient l'orchestrateur commun de la CLI et de l'interface. Les
+  sorties d'or v1 restent inchangées ; aucun score n'est calculé dans le navigateur.
+- FastAPI/Uvicorn sert une console Jinja2/JavaScript native uniquement sur `127.0.0.1`. Il n'existe
+  ni option d'écoute publique, ni CORS, OpenAPI, CDN, télémétrie ou appel Internet.
+- La découverte n'autorise que les couples snapshot/stratégie compatibles et présents. Le catalogue
+  ne propose que les concepts utilisables par le moteur sélectionné.
+- L'éditeur couvre âge, sexe, observations confirmées et les distinctions `present`, `absent`,
+  `unknown`, `not_assessed` et `unable_to_assess`. Une réponse adaptative devient une observation
+  confirmée avec provenance `question_response` ; aucune question n'est inventée par l'UI.
+- Les résultats affichent abstention, couverture, compatibilité non calibrée, contributions,
+  contradictions, sources, familles, mappings, provenance et reçu. Safety reste
+  `not_evaluated` et n'est jamais reformulé comme une assurance.
+- Le panneau du snapshot ORL affiche sans masquage `research_unreviewed: true`,
+  `clinical_validation: false`, `publishable: false`, 17 assertions et 10 mappings non revus. Le
+  gate officiel `v0.5.0` et tous les statuts de revue restent inchangés.
+- Les sessions utilisent le schéma `ui-session-v1`. L'état courant est écrit atomiquement dans
+  `sessions/<id>/session.json`; chaque analyse/question est un run immuable qui garde le cas et le
+  résultat v2 exacts. Le dossier reste hors Git et n'est pas présenté comme stockage sécurisé.
+- À la livraison initiale, le dossier de maquette n'avait été ni modifié ni versionné. Le logo, la
+  palette et certains motifs de panneaux ont été adaptés dans des actifs neufs sous
+  `src/latros/ui/`; aucune donnée ou sortie fictive n'a été copiée. Le dossier a ensuite été
+  supprimé le 19 septembre 2026.
+- L'ADR 0008 et `docs/v0.6-rd-interface.md` documentent l'architecture, le transport interne, les
+  sessions et les limites. Le Knowledge Graph avancé reste reporté.
+- Vérifications locales : Ruff, formatage, mypy strict, schémas, syntaxe JavaScript, aide CLI, wheel
+  contenant les actifs/profils et **138 tests** réussis. Un parcours réel temporaire sur
+  `v0.5.0-dev-unreviewed` a produit un résultat marqué non revu avec safety `not_evaluated`. Le rendu
+  desktop et le panneau non revu ont été vérifiés dans le navigateur local.
+- La CI GitHub du commit `cd3a787` est verte sous Ubuntu et Windows au run `#35337846570` : Ruff,
+  formatage, mypy, schémas, suite pytest et validation des sources ont tous réussi.
+
+## Roadmap interface R&D et Knowledge Graph — 18 septembre 2026
+
+- La roadmap future est décalée : **v0.6** est une interface interne R&D simple ; temporalité,
+  biologie, constantes, risques et médicaments passent en **v0.7**, le safety/triage en **v0.8**, le
+  NLP/LLM en **v0.9** et l’API/FHIR/interopérabilité en **v0.10**.
+- La première v0.6 inspectera seulement les contrats et moteurs existants. Elle n’est ni une
+  interface patient, ni un produit médical validé, ni une nouvelle logique clinique.
+- Une vue Knowledge Graph avancée est planifiée comme évolution ultérieure, non bloquante pour la
+  première v0.6. Elle devra projeter exclusivement les observations, concepts, assertions,
+  contributions, mappings, sources et provenances réellement présents ; elle ne créera pas de
+  relations ou preuves décoratives.
+- À cette date, **FUTUR INTERFACE/** était encore ignoré par Git, intact et non versionné ; il
+  n’avait été ni lu, ni modifié, ni ajouté pendant cette mise à jour documentaire. Il a été supprimé
+  le 19 septembre 2026 après livraison de l'interface autonome.
+- Vérification réalisée : git diff --check. Aucun code fonctionnel, snapshot, artefact médical ou
+  donnée patient n’a été modifié.
 
 ## Identité visuelle — 17 septembre 2026
 
@@ -27,7 +107,7 @@ Référence actuelle des données : **`v0.2.0`**, nom du jalon « Premier snapsh
 - MedGemma est reporté à une couche future facultative de NLP/explication, après validation du moteur pur. TxGemma est reporté à un module thérapeutique séparé, futur et non clinique dans l'état actuel.
 - Aucune interface, API web, Docker, LLM local, modèle téléchargé, entraînement, audio ou recommandation thérapeutique n'a été développé dans cette tranche.
 
-La vision complète, y compris les futures pistes LLM, est dans [projet.md](projet.md). Les décisions applicables à la tranche actuelle sont dans [ADR 0001](docs/decisions/0001-socle-recherche.md).
+La vision complète, y compris les futures pistes LLM, est dans [projet.md](projet.md). Les décisions applicables à la tranche actuelle sont dans [ADR 0001](decisions/0001-socle-recherche.md).
 
 ## Dépôt et manière de travailler
 
@@ -38,7 +118,7 @@ La vision complète, y compris les futures pistes LLM, est dans [projet.md](proj
 - Les quatre contrôles GitHub (push et pull request, Linux et Windows) sont réussis pour le commit final `920a882`.
 - Le dossier local non suivi `FUTUR INTERFACE/` était présent dans l'espace de travail et n'a été ni lu, ni modifié, ni ajouté au commit.
 
-Les règles de contribution sont dans [CONTRIBUTING.md](CONTRIBUTING.md) : branche par fonctionnalité, pull request, `main` stable, aucune donnée de santé ou base brute dans Git.
+Les règles de contribution sont dans [CONTRIBUTING.md](../CONTRIBUTING.md) : branche par fonctionnalité, pull request, `main` stable, aucune donnée de santé ou base brute dans Git.
 
 ## Ce qui a été implémenté
 
@@ -59,7 +139,7 @@ Les règles de contribution sont dans [CONTRIBUTING.md](CONTRIBUTING.md) : branc
 - Les artefacts sont téléchargés vers `data/raw/<source>/<release>/`, jamais versionnés dans Git.
 - Chaque fichier est vérifié par SHA-256. Les sources doivent avoir une version, une licence et une URL HTTPS immuable ; les URLs `latest`, `main` et `master` sont refusées.
 - Les téléchargements incomplets restent en `.part` et peuvent être relancés. Un fichier déjà complet mais corrompu n'est jamais écrasé silencieusement.
-- [sources/registry.yaml](sources/registry.yaml) est le registre versionné des sources, licences, attributions, produits, dépendances amont et hashes.
+- [sources/registry.yaml](../sources/registry.yaml) est le registre versionné des sources, licences, attributions, produits, dépendances amont et hashes.
 
 ### Premier snapshot médical — v0.2.0 intégrée dans la tranche v0.3.0
 
@@ -96,7 +176,7 @@ Principes appliqués :
 - Un concept HPO obsolète sans remplacement exact est conservé dans les données avec un avertissement, mais ne participe pas au raisonnement. Un lien `consider` n'est pas inventé comme une équivalence.
 - Des fréquences contradictoires pour un même couple maladie–phénotype, venant de records distincts, sont conservées et exposées ; elles sont exclues des pénalités et de la sélection des questions.
 
-Le manifeste canonique de la première livraison était [latros-kb-0002.json](manifests/latros-kb-0002.json). Il est conservé ; la référence actuelle est [v0.2.0.json](manifests/v0.2.0.json), établie avec les mêmes données sous le nom du jalon du plan. Les snapshots complets sont locaux et ignorés par Git.
+Le manifeste canonique de la première livraison était [latros-kb-0002.json](../manifests/latros-kb-0002.json). Il est conservé ; la référence actuelle est [v0.2.0.json](../manifests/v0.2.0.json), établie avec les mêmes données sous le nom du jalon du plan. Les snapshots complets sont locaux et ignorés par Git.
 
 Résultat du build réel effectué le 16 septembre 2026 :
 
@@ -146,7 +226,7 @@ Le module `question_v1` :
 - s'arrête après 12 questions, avec moins de deux candidats, ou sans question admissible ;
 - retourne toujours `safety_status: not_evaluated`.
 
-Les poids internes du questionnement sont uniquement un outil d'utilité : ils ne sont pas présentés comme probabilités de maladies. La méthode complète, équations et limites sont dans [docs/methodology.md](docs/methodology.md).
+Les poids internes du questionnement sont uniquement un outil d'utilité : ils ne sont pas présentés comme probabilités de maladies. La méthode complète, équations et limites sont dans [methodology.md](methodology.md).
 
 ## Commandes disponibles maintenant
 
@@ -166,7 +246,7 @@ latros diagnose --snapshot v0.2.0 --case examples/case.synthetic.json
 latros question next --snapshot v0.2.0 --case examples/case.synthetic.json
 ```
 
-L'exemple [case.synthetic.json](examples/case.synthetic.json) est inventé. Il sert seulement à démontrer le format d'entrée. La CLI ne comprend pas encore une phrase libre telle que « j'ai mal à l'oreille » : cette future normalisation reste hors de la tranche actuelle.
+L'exemple [case.synthetic.json](../examples/case.synthetic.json) est inventé. Il sert seulement à démontrer le format d'entrée. La CLI ne comprend pas encore une phrase libre telle que « j'ai mal à l'oreille » : cette future normalisation reste hors de la tranche actuelle.
 
 ## Vérifications effectuées
 
@@ -237,7 +317,7 @@ Cette livraison complète la même tranche sur `feat/clinical-foundation`, dans 
 
 Demande : préparer la prochaine évolution de Latros sans coder, conserver un suivi durable de chaque étape et confirmer que la limitation actuelle aux maladies rares n'est pas la cible définitive du projet.
 
-Un [cahier des charges dédié](docs/v0.4-clinical-knowledge-model.md) est créé sur la branche `docs/v0.4-clinical-knowledge-model`. Il décrit les invariants, le futur modèle clinique, le Knowledge Model, la provenance, le non-double-comptage, l'architecture multi-stratégies, les tests, les critères d'acceptation et les checkpoints `v0.4-A` à `v0.4-H`.
+Un [cahier des charges dédié](v0.4-clinical-knowledge-model.md) est créé sur la branche `docs/v0.4-clinical-knowledge-model`. Il décrit les invariants, le futur modèle clinique, le Knowledge Model, la provenance, le non-double-comptage, l'architecture multi-stratégies, les tests, les critères d'acceptation et les checkpoints `v0.4-A` à `v0.4-H`.
 
 Décision de périmètre : le snapshot `v0.2.0` et `semantic_v1` restent spécialisés maladies rares. Ils ne couvrent pas correctement une plainte courante comme fièvre et mal de gorge. `v0.4` doit préparer l'architecture générale sans import massif ; `v0.5` doit réaliser une première extension étroite vers la médecine générale avec des sources auditées et une stratégie dédiée. Les futurs référentiels ne seront sélectionnés qu'après analyse de leur rôle, licence, provenance, dépendances et risque de double comptage.
 
@@ -249,7 +329,7 @@ Une liste proposée par un autre LLM est vérifiée avant d'être ajoutée au pl
 
 Corrections importantes : SNOMED CT est une terminologie clinique et non une matrice de probabilités ; les mappings SNOMED–ICD servent à la classification et au reporting, pas à déduire une maladie depuis un symptôme ; FHIR est un standard d'échange ; HealthBench contient des conversations réalistes générées ou adversariales et non 5 000 conversations de patients réels ; ClinicDx est une application LLM/RAG à surveiller, pas une base de connaissances validée.
 
-Les jeux Kaggle « Symptoms to diseases », Mendeley « Disease and symptoms dataset 2023 » et SymbiPredict sont conservés comme pistes d'exploration uniquement. Leur format et leur licence déclarée ne compensent pas une provenance médicale insuffisante. DDXPlus est mieux documenté et peut devenir un benchmark synthétique de `v0.5`, mais pas la vérité clinique du moteur. Synthea, WHO SMART Guidelines, LOINC/UCUM, MIMIC-IV et les autres ressources sont répartis entre les étapes `v0.5` à `v0.9` selon leur rôle.
+Les jeux Kaggle « Symptoms to diseases », Mendeley « Disease and symptoms dataset 2023 » et SymbiPredict sont conservés comme pistes d'exploration uniquement. Leur format et leur licence déclarée ne compensent pas une provenance médicale insuffisante. DDXPlus est mieux documenté et peut devenir un benchmark synthétique de `v0.5`, mais pas la vérité clinique du moteur. Synthea, WHO SMART Guidelines, LOINC/UCUM, MIMIC-IV et les autres ressources sont répartis entre les étapes `v0.5` à `v0.10` selon leur rôle.
 
 Cette veille ne télécharge et n'intègre aucune donnée. Toute adoption future exige un audit record par record de la provenance, des licences, des dépendances, des biais et de l'indépendance de l'évaluation.
 
@@ -386,3 +466,198 @@ le moteur, ni les contrats, ni les données médicales.
 La pull request [#2 — v0.4 Clinical Knowledge Model](https://github.com/GaetanAff/Latros/pull/2)
 est fusionnée dans `main` après réussite des contrôles GitHub Linux et Windows, pour les événements
 `push` et `pull_request`. Le commit de fusion est `2315431ee62d9fce887812004c9fae89e5e5d20d`.
+
+### 17 septembre 2026 — exigence médicaments et molécules (initialement v0.6, décalée en v0.7)
+
+Le cahier des charges avait initialement placé en `v0.6` la distinction entre exposition rapportée
+ou observée chez le patient,
+la substance active, le produit ou la présentation commercialisée et la classe thérapeutique. Les
+indications, effets indésirables, contre-indications, interactions et contraintes d'usage devront
+être des assertions médicales séparées, versionnées et traçables jusqu'à leurs sources ; elles ne
+seront jamais déduites d'un mapping ou d'un identifiant de produit.
+
+ATC, RxNorm et un référentiel français de produits sont seulement des candidats à auditer avant toute
+ingestion. Les critères obligatoires sont la couverture, l'autorité éditrice, la version, la licence,
+la redistribution, les identifiants stables et la reproductibilité. Les tests restent synthétiques
+tant que cette revue n'est pas close. Cette décision n'autorise ni prescription, ni calcul de dose,
+ni recommandation de traitement, ni vérification d'interactions.
+
+La roadmap du 18 septembre 2026 conserve intégralement cette exigence mais la décale en `v0.7` ;
+`v0.6` devient d’abord une interface interne R&D sans nouvelle logique médicale.
+
+### 17 septembre 2026 — v0.5-A, contrats du snapshot canonique v2
+
+L'ADR 0005 retient un snapshot ORL adulte séparé de la référence maladies rares. Le registre v2
+distingue artefacts HTTPS publics et dépôts manuels, refuse les URLs mobiles, les licences non
+revues et les droits d'implémentation non confirmés. Il ne contient aucun mécanisme de stockage de
+secrets.
+
+Le manifeste v2 rend obligatoires le périmètre, la population, les sources, licences, dépendances,
+familles de preuves, règles, tables, profils compatibles, restrictions de redistribution et hashes.
+Deux schémas JSON sont exportés. Quatre tests synthétiques couvrent ces contrats ; aucun importeur,
+artefact médical, manifeste `v0.5.0` ou snapshot réel n'est ajouté.
+
+### 17 septembre 2026 — v0.5-B, constructeur canonique v2 synthétique
+
+Un stockage v2 séparé publie les treize collections du Knowledge Model sous forme de tables Parquet
+triées et d'un runtime DuckDB en lecture seule. Chaque ligne contient un identifiant stable et le
+JSON canonique du contrat complet. Le manifeste lie hashes logiques, hashes Parquet, périmètre,
+règles, sources et profils ; l'intégrité du conteneur DuckDB reste dans un reçu local distinct.
+
+Le constructeur vérifie tous les artefacts bruts, l'alignement du registre et des objets sources,
+l'immuabilité de l'identifiant, la reconstruction depuis un manifeste épinglé et les checksums au
+chargement. Cinq tests supplémentaires emploient seulement des concepts et assertions inventés.
+Le pipeline v1 n'est pas appelé ni modifié et aucun snapshot médical `v0.5.0` n'est créé.
+
+### 17 septembre 2026 — v0.5-C, import RF2 et assertions curées
+
+Un chargeur versionné distribue désormais registres et manifestes entre les pipelines v1 et v2.
+La CLI peut valider, préparer, construire et inspecter un registre v2 sans modifier les commandes
+historiques. Les artefacts `manual_local` doivent être acquis par l'opérateur et sont vérifiés par
+hash ; aucun identifiant ou secret d'accès n'est enregistré.
+
+L'importeur RF2 limité lit concepts actifs, descriptions et relations `is_a` d'un sous-ensemble
+explicitement préparé. L'importeur JSONL exige une localisation source, un hash du texte, un
+curateur et deux relecteurs distincts couvrant les rôles clinique et mapping. Il crée séparément
+records, assertions sources, assertions canoniques, dérivations et familles de preuves. Les codes
+inconnus, doublons, cycles, colonnes manquantes et revues invalides sont refusés.
+
+Le schéma du paquet de curation est versionné. Sept tests supplémentaires portent la suite à 108
+tests attendus après ajout des contrôles d'accès public et manuel. Toutes les données utilisées
+restent inventées ; aucun mapping implicite ni contenu thérapeutique n'est importé.
+
+### 17 septembre 2026 — v0.5-D, stratégie générale sur corpus fictif
+
+`general_v1` est ajouté comme stratégie séparée de `semantic_v1`. Il accepte uniquement un
+`ClinicalCaseV2` et un snapshot v2 compatible, résout les concepts identiques ou les mappings
+`exact/equivalent`, puis compare les observations confirmées aux polarités explicites des assertions.
+Les valeurs `unknown`, `not_assessed` et `unable_to_assess` restent sans contribution numérique.
+
+Le score `general_v1.compatibility` est borné entre `-1` et `1`, non calibré et explicitement distinct
+d'une probabilité. Les contributions sont moyennées par famille de preuve ; seules les familles
+indépendantes et pondérées par le profil entrent dans l'agrégat. Les sources, contradictions,
+mappings, éléments ignorés, couverture et reçus restent inspectables. Une dépendance inconnue est
+visible mais exclue du score.
+
+Le moteur s'abstient hors population adulte, sans âge exploitable, sous le seuil de couverture ou
+avec moins de deux observations évaluées. Le questionnement exige des assertions de polarités
+opposées entre au moins deux candidats ; l'absence d'assertion n'est jamais convertie en négation.
+Neuf tests ciblés portent la suite à 117 tests verts. Les fixtures, libellés, codes, candidats et
+familles de preuves sont entièrement inventés ; aucun snapshot médical `v0.5.0` n'est créé.
+
+### 17 septembre 2026 — v0.5-E, audit final et décision NO-GO
+
+Les pages officielles ANS confirment la release française SNOMED CT de juin 2026 au format RF2/OWL,
+mais aussi l'obligation d'une licence d'affiliation pour l'implémentation, d'une licence nationale
+pour l'édition française et d'un échange avec le NRC pour certains modèles de distribution ou
+d'alignement. Aucune preuve d'acceptation ni réponse écrite applicable à Latros n'est disponible dans
+le dossier projet.
+
+La page HAS angine conserve des éléments diagnostiques potentiels, dont Mac Isaac et le TDR, mais
+son objectif principal est l'antibiothérapie. Les renvois vers rhinopharyngite, sinusite et otite ne
+démontrent pas un corpus différentiel suffisant. La règle de sortie exige désormais, pour chacun des
+quatre candidats, au moins deux assertions diagnostiques explicites et une assertion discriminante,
+avec droits vérifiés et double revue dont un clinicien. Les traitements, molécules, doses et durées
+restent exclus.
+
+Le checkpoint E est clos avec décision `NO-GO`. Les composants techniques A à D demeurent valides
+sur fixtures, mais F (snapshot médical `v0.5.0`) et G (validation et clôture) ne sont pas commencés.
+Aucun registre médical réel, contenu protégé, manifeste `v0.5.0` ou score clinique n'est publié.
+
+Contrôles GitHub : le [run #30](https://github.com/GaetanAff/Latros/actions/runs/35229429576)
+du checkpoint D et le [run #31](https://github.com/GaetanAff/Latros/actions/runs/35229684808)
+du checkpoint E ont réussi sur `ubuntu-latest` et `windows-latest`. Les deux avertissements de la
+plateforme concernent la transition Node.js interne aux actions GitHub, pas les tests Latros.
+
+### 17 septembre 2026 — v0.5-E2, audit des sources ouvertes
+
+La stratégie du premier snapshot ORL est réouverte sans modifier A à D et sans effacer le `NO-GO`
+SNOMED/HAS. L'audit vérifie les releases et licences officielles de Disease Ontology, Mondo et
+MeSH, puis les conditions de réutilisation NHS, nidirect, CDC et MedlinePlus. DOID `v2026-08-31`
+(CC0) et Mondo `v2026-09-01` (CC BY 4.0) sont retenus pour préparer les identités et mappings ;
+MeSH est juridiquement compatible mais différé comme inutile au premier lot.
+
+La revue des pages cliniques produit une matrice condition × assertion × source × famille de
+preuve. Le seuil de contenu candidat est atteignable pour les quatre conditions, mais les concepts
+aigus doivent être revus explicitement et l'OMA adulte reste moins bien corroborée par des familles
+indépendantes. Les pages nidirect issues du NHS sont classées `republication`, les dépendances NLM
+non résolues restent non agrégeables et les articles A.D.A.M. sont exclus comme contenu protégé.
+
+Le checkpoint E2 se clôt en `NO-GO` de publication : aucun paquet réel ne possède encore les
+captures et hashes, mappings qualifiés, localisations record par record et deux reviewers distincts
+dont un clinicien. La voie suivante est un corpus `pending_clinical_review`, pas F ou G. Aucun
+registre réel, snapshot `v0.5.0`, profil clinique ou donnée protégée n'est ajouté.
+
+Vérification locale : Ruff, formatage, mypy strict, export des schémas et les 117 tests réussissent.
+Les tests d'or v1 et les composants v0.5-A à D restent inchangés.
+
+Contrôle GitHub : le [run #33](https://github.com/GaetanAff/Latros/actions/runs/35233968223)
+du checkpoint E2 a réussi sur `ubuntu-latest` et `windows-latest` en 1 min 20 s. Les deux
+avertissements concernent la transition Node.js interne aux actions GitHub, pas les tests Latros.
+
+### 17 septembre 2026 — v0.5-E3, corpus réel prêt pour revue humaine
+
+Le paquet `curation/v0.5-orl` matérialise le corpus minimal adulte ambulatoire sans créer de
+snapshot. Il contient 17 assertions atomiques : 4 pour la tonsillite aiguë, 5 pour le rhume, 4 pour
+la rhinosinusite aiguë et 4 pour l'otite moyenne aiguë. Chaque candidat dépasse le seuil de deux
+assertions et d'un discriminant. Les 19 concepts internes et 10 mappings DOID/Mondo conservent les
+granularités : angine, pharyngite, tonsillite et pharyngite streptococcique ne sont pas fusionnées ;
+les mappings plus larges ou plus étroits restent non scorants.
+
+Douze reçus enregistrent URL, release, date d'accès, licence, attribution, chemin local et SHA-256.
+Les captures complètes et la représentation exacte des segments restent dans `data/raw/`, hors
+Git. Les assertions proviennent de NHS, de la republication nidirect classée dans la même famille
+NHS, et des seules synthèses Health Topics MedlinePlus autorisées. Les dépendances NLM inconnues
+restent non agrégeables. Les pages CDC sont retirées du paquet courant tant que la redistribution
+internationale n'est pas juridiquement fermée ; ce retrait n'est jamais transformé en preuve
+négative.
+
+Un contrat de curation et trois commandes CLI ajoutent l'audit, le tableau de revue et l'export
+approuvé. Le gate vérifie artefacts et hashes, droits de réutilisation, provenance record par
+record, release/date/localisation, références, doublons, familles, dépendances, mappings, seuils,
+hashes des décisions et attestations locales. Une modification après revue invalide la décision.
+L'export vers l'importeur v2 est impossible tant que le gate ne passe pas.
+
+Le dossier `docs/reviews/v0.5-orl/` liste chaque assertion et mapping ainsi que le rapport
+machine-readable. Aucun reviewer, signature, qualification ou statut `approved` n'est inventé :
+`reviewers.jsonl` et `reviews.jsonl` sont vides, les 17 assertions et 10 mappings sont
+`pending_review`. Le verdict est `ready_for_human_review` mais `blocked` pour publication.
+F et G ne commencent pas ; aucun profil ORL final, manifeste `v0.5.0` ou snapshot médical n'est
+créé.
+
+Cinq tests synthétiques supplémentaires vérifient le blocage du paquet pending, l'ouverture du gate
+avec double revue attestée, l'invalidation après modification, le refus d'un artefact corrompu et
+l'exclusion du contenu thérapeutique. Ruff, formatage, mypy strict, contrôle des schémas et les
+122 tests réussissent localement sous Windows. Les tests d'or v1 restent inchangés.
+
+Contrôle GitHub : le [run #35](https://github.com/GaetanAff/Latros/actions/runs/35264450810)
+du checkpoint E3 a réussi sur `ubuntu-latest` en 27 s et `windows-latest` en 1 min 18 s.
+L'avertissement de plateforme concerne uniquement la transition Node.js interne aux actions
+GitHub.
+
+### 18 septembre 2026 — v0.5-E4, mode ORL local explicitement non revu
+
+Un chemin de recherche locale est ajouté sans modifier le gate officiel. La commande
+`data build --snapshot v0.5.0-dev-unreviewed --allow-unreviewed-research-data` transforme le paquet
+E3 pending en treize tables canoniques, Parquet déterministes et DuckDB local. Elle vérifie les
+douze artefacts et leurs hashes, ainsi que les segments, licences, références, seuils et dépendances.
+Sans flag, avec un autre suffixe ou avec l'identifiant officiel `v0.5.0`, l'override est refusé.
+
+Le manifeste expérimental conserve la liste exacte des 17 assertions et 10 mappings
+`pending_review`, `reviewer_count: 0`, `clinical_validation: false`,
+`human_review_complete: false` et `publishable: false`. Les fichiers de revue restent byte-for-byte
+inchangés. Les mappings exacts/équivalents résolus peuvent être utilisés techniquement sans être
+présentés comme revus ; les relations plus larges/étroites et ambiguës restent non scorantes.
+
+Le profil `general_v1-orl-unreviewed` est limité à ce snapshot. Son unique poids de famille est un
+paramètre d'ingénierie ; nidirect reste une republication NHS et les dépendances NLM inconnues ne
+sont pas agrégées. Diagnostics et questions portent `research_unreviewed: true`, répètent les
+comptes pending dans leur reçu, gardent `general_v1.compatibility` non probabiliste et
+`safety.status: not_evaluated`.
+
+Trois tests supplémentaires couvrent l'override, la séparation du gate officiel, l'absence de faux
+reviewer ou changement de statut et le marquage des résultats. Le manifeste expérimental et un cas
+d'exemple synthétique sont versionnés ; les captures, Parquet, DuckDB et reçus d'intégrité restent
+locaux et hors Git. E4 ne démarre ni F ni G : la publication clinique `v0.5.0` reste bloquée par les
+revues humaines réelles. Ruff, formatage, mypy strict, schémas et les 125 tests réussissent
+localement sous Windows avant push.

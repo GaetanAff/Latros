@@ -1,20 +1,107 @@
 # Latros
 
 <p align="center">
-  <img src="latros-logo.svg" alt="Latros" width="420">
+  <img src="docs/assets/latros-logo.svg" alt="Latros" width="420">
 </p>
 
-Prototype **interne de recherche** pour classer des maladies rares à partir de phénotypes HPO structurés. Moteur local et explicable, sans LLM, sans serveur et sans interface patient.
+Prototype **interne de recherche** pour explorer des raisonnements cliniques structurés. Les moteurs
+sont locaux et explicables, sans LLM. La petite interface web v0.6 est une console R&D locale, pas
+une interface patient.
 
 > **Aucun triage n'est effectué.** Toutes les analyses retournent `safety_status: not_evaluated`. Les scores sont des compatibilités sémantiques, jamais des probabilités ou des diagnostics validés. Ne pas utiliser ce prototype pour conseiller un patient.
 
-La version `0.4.0` livre le Clinical Knowledge Model : contrats cliniques et de connaissances généraux, stratégies versionnées, couverture, abstention, sorties explicables et reçus reproductibles, tout en conservant le comportement v1. Voir le [journal des ADR](docs/decisions/README.md), la [méthodologie](docs/methodology.md) et [projet.md](projet.md).
+La version `0.6.0` ajoute une interface locale et des sessions reprenables au Clinical Knowledge
+Model, sans modifier les moteurs. Les contrats cliniques et de connaissances, stratégies
+versionnées, couverture, abstention, sorties explicables et reçus reproductibles restent la source
+de vérité. Voir le [journal des ADR](docs/decisions/README.md), la
+[méthodologie](docs/methodology.md) et [vision du projet](docs/projet.md).
 
-Le [plan et son avancement](docs/plan.md) distingue fondation `v0.1.0`, premier snapshot médical `v0.2.0`, moteur pur `v0.3.0` et modèle général `v0.4.0`. Le snapshot de référence reste **`v0.2.0`** : v0.4 est une évolution logicielle et contractuelle, pas une nouvelle publication de données. [history.md](history.md) conserve les réalisations et vérifications datées.
+Le [plan et son avancement](docs/plan.md) distingue fondation `v0.1.0`, premier snapshot médical `v0.2.0`, moteur pur `v0.3.0` et modèle général `v0.4.0`. Le snapshot de référence reste **`v0.2.0`** : v0.4 est une évolution logicielle et contractuelle, pas une nouvelle publication de données. Le [journal du projet](docs/history.md) conserve les réalisations et vérifications datées.
 
-> **Périmètre critique : maladies rares uniquement.** Le snapshot actuel ne couvre pas la médecine générale. Une plainte courante telle que fièvre et mal de gorge peut conduire à un classement de maladies rares hors périmètre ; ce classement ne doit pas être utilisé comme différentiel de médecine courante. L'extension est planifiée : [`v0.4 Clinical Knowledge Model`](docs/v0.4-clinical-knowledge-model.md) prépare l'architecture générale, puis `v0.5` devra intégrer une première extension étroite avec des sources auditées.
+Pour installer, lancer l'interface et réaliser deux essais guidés, suivre le
+**[tutoriel complet](docs/tuto.md)**. L'[index de la documentation](docs/README.md) explique où se
+trouvent ensuite la roadmap, les ADR, les audits et les contrats.
+
+> **Périmètre critique : la seule référence médicale publiée reste maladies rares.** Le snapshot
+> officiel `v0.2.0` ne couvre pas la médecine générale. Le snapshot ORL
+> `v0.5.0-dev-unreviewed` décrit ci-dessous est uniquement un outil local d'ingénierie, non relu et
+> non validé cliniquement ; il ne doit jamais être utilisé comme différentiel clinique.
 
 Les futurs snapshots multi-sources devront publier leur périmètre, leurs dépendances, leurs règles de déduplication et leurs profils de raisonnement compatibles. Le snapshot de connaissance et le profil d'agrégation seront versionnés séparément puis liés par leurs hashes dans chaque exécution ; `v0.2.0` reste immuable.
+
+`v0.6` livre maintenant l'interface interne de test R&D : elle saisit un `ClinicalCaseV2`, exécute
+les moteurs déjà disponibles et inspecte leurs résultats, sources, contradictions, couverture et
+statuts de validation. Elle n'est ni une interface patient, ni un produit médical validé, ni une
+nouvelle logique clinique. Son implémentation autonome et versionnée se trouve sous
+`src/latros/ui/`. L'ancienne maquette locale ayant servi d'inspiration a été supprimée après la
+livraison ; aucun composant actif n'en dépend. Une vue Knowledge Graph avancée reste planifiée
+comme projection interactive et fidèle des données, assertions, sources et contributions
+existantes.
+
+La trajectoire `v0.7` inclut explicitement les médicaments : exposition observée, substance active,
+produit commercialisé, classe thérapeutique et assertions médicales sourcées resteront des objets
+distincts. Cette préparation ne constitue ni une recommandation de traitement, ni une fonction de
+prescription ; le détail est consigné dans le [cahier v0.4](docs/v0.4-clinical-knowledge-model.md).
+
+`v0.5` est en cours sur une branche dédiée. Ses checkpoints techniques A à D définissent le registre,
+le manifeste, le constructeur, les importeurs et le premier raisonneur général. Le paquet ORL réel
+reste intégralement `pending_clinical_review`. Un chemin séparé permet désormais de l'importer et de
+le scorer localement sous l'identité non ambiguë `v0.5.0-dev-unreviewed`, uniquement après override
+explicite. Cela ne crée pas `v0.5.0`, ne change aucun statut de revue et ne clôt ni F ni G.
+
+Le constructeur v2 produit les treize tables canoniques, leurs Parquet déterministes et un runtime
+DuckDB en lecture seule. La CI le vérifie sur un mini-corpus fictif nommé `test-v2` ; le corpus réel
+pending peut aussi être construit localement dans le mode non validé, sans redistribuer ses captures.
+
+Le registre v2 peut décrire un sous-ensemble RF2 et un paquet JSONL d'assertions curées. Les sources
+protégées utilisent `manual_local` : l'opérateur acquiert le fichier sous sa licence, puis Latros
+vérifie son emplacement et son hash sans stocker de secret. La CLI détecte automatiquement les
+registres et manifestes v1 ou v2. Aucun registre SNOMED/HAS réel n'est encore versionné.
+
+`general_v1` classe les conditions déclarées par un snapshot v2 à partir d'assertions explicites,
+normalise d'abord les contributions au niveau des familles de preuves et publie une compatibilité
+comprise entre `-1` et `1`. Cette valeur n'est jamais une probabilité. Le moteur refuse les cas sans
+âge adulte exploitable, à couverture insuffisante ou avec moins de deux observations évaluées. Il
+ignore numériquement `unknown`, `not_assessed` et `unable_to_assess`, expose les sources séparément
+et ne propose une question que si des polarités opposées distinguent réellement plusieurs candidats.
+Le profil par défaut reste destiné au corpus fictif `test-v2`. Le profil
+[`general_v1-orl-unreviewed`](profiles/general_v1-orl-unreviewed.json) est lié exclusivement au
+snapshot de développement : son poids NHS est un choix d'ingénierie non validé, et les dépendances
+NLM inconnues restent exclues de l'agrégat. Un profil clinique de référence attend toujours le `GO`.
+
+## Interface locale R&D — v0.6
+
+Construire d'abord les snapshots locaux nécessaires, puis lancer :
+
+```powershell
+uv run --offline --no-sync latros --root . ui
+```
+
+Latros ouvre `http://127.0.0.1:8765/`. Le port peut être changé et l'ouverture automatique
+désactivée :
+
+```powershell
+uv run --offline --no-sync latros --root . ui --port 8766 --no-open
+```
+
+L'interface permet uniquement les couples compatibles, notamment `v0.2.0 + semantic_v1` et
+`v0.5.0-dev-unreviewed + general_v1`. Elle crée un `ClinicalCaseV2`, recherche les concepts
+réellement présents dans le snapshot, conserve les cinq situations d'évaluation, lance le backend
+et affiche candidats, compatibilité brute, couverture, abstention, contributions, contradictions,
+sources, familles, mappings, provenance et reçu.
+
+Les sessions sont sauvegardées sous `sessions/<session_id>/`. L'état courant est dans
+`session.json`; chaque analyse et question est conservée comme run immuable avec une copie exacte du
+cas et du résultat. Ce dossier est ignoré par Git. Il n'est ni chiffré ni adapté aux dossiers
+médicaux réels.
+
+Le snapshot expérimental garde un panneau impossible à masquer avec
+`research_unreviewed: true`, `clinical_validation: false`, `publishable: false` et ses comptes
+pending. `safety_status: not_evaluated` reste affiché et ne constitue aucune conclusion de
+sécurité. Le serveur écoute uniquement sur la boucle locale, ne contient ni télémétrie, ni CDN, ni
+appel externe. Le détail est dans [la documentation v0.6](docs/v0.6-rd-interface.md) et
+[l'ADR 0008](docs/decisions/0008-interface-locale-rd-et-sessions.md).
+Le parcours complet, écran par écran, est disponible dans le [tutoriel](docs/tuto.md).
 
 `v0.4-D` fournit désormais le [schéma canonique v2](schemas/knowledge-model-v2.schema.json) et
 la liste de ses [tables conceptuelles](schemas/canonical-tables-v2.json). L'adaptateur v1 est une
@@ -33,7 +120,59 @@ toujours `Engine` et `question_v1`, dont les sorties v1 restent protégées par 
 L'[audit des sources ORL de v0.5](docs/source-audits/v0.5-orl.md) conclut à un `NO-GO`
 temporaire pour toute ingestion réelle : SNOMED France exige les licences adaptées et le modèle de
 redistribution doit être clarifié ; la fiche HAS coélaborée avec des tiers exige une autorisation
-écrite et une double revue clinique. Aucun dataset moins fiable ne la remplace automatiquement.
+écrite et une double revue clinique. Le contrôle final ajoute qu'un corpus doit couvrir les quatre
+candidats avec au moins deux assertions diagnostiques explicites et une assertion discriminante par
+candidat ; ce minimum n'est pas démontré. Aucun dataset moins fiable ne le remplace automatiquement.
+
+L'[audit alternatif v0.5-E2](docs/source-audits/v0.5-orl-open-sources.md) conserve ce résultat
+historique mais ne fait plus dépendre le pilote de SNOMED/HAS. DOID et Mondo peuvent préparer les
+identités ; des pages NHS/nidirect et certaines synthèses publiques MedlinePlus fournissent les
+assertions proposées. Le paquet [`curation/v0.5-orl`](curation/v0.5-orl/README.md) contient 17
+assertions et 10 mappings avec artefacts, empreintes et provenance vérifiés. Les quatre candidats
+atteignent le seuil technique, mais toutes les lignes sont encore `pending_review` : le gate
+retourne `ready_for_human_review` et bloque publication, export, profil ORL final et snapshot.
+CDC reste hors du paquet tant que la redistribution internationale n'est pas clarifiée. MeSH,
+les articles A.D.A.M. et les sources sans droit de transformation sont exclus.
+
+Le [dossier de revue](docs/reviews/v0.5-orl/README.md) expose chaque assertion, mapping, famille et
+blocage. Les commandes suivantes ne créent aucune approbation :
+
+```text
+uv run --offline --no-sync latros curation review-workbook --package curation/v0.5-orl
+uv run --offline --no-sync latros curation audit --package curation/v0.5-orl
+uv run --offline --no-sync latros curation audit --package curation/v0.5-orl --require-publishable
+```
+
+La troisième commande doit échouer jusqu'à présence de deux revues attestées par assertion, dont
+une par un clinicien compétent, ainsi que la revue des mappings.
+
+### Deux chemins v0.5 strictement séparés
+
+Le chemin de recherche locale doit être activé volontairement :
+
+```text
+uv run --offline --no-sync latros data build --snapshot v0.5.0-dev-unreviewed --allow-unreviewed-research-data
+uv run --offline --no-sync latros data inspect --snapshot v0.5.0-dev-unreviewed
+uv run --offline --no-sync latros diagnose --snapshot v0.5.0-dev-unreviewed --strategy general_v1 --case examples/case.orl-unreviewed.json
+uv run --offline --no-sync latros question next --snapshot v0.5.0-dev-unreviewed --strategy general_v1 --case examples/case.orl-unreviewed.json
+```
+
+Les douze artefacts épinglés doivent déjà être présents localement aux chemins consignés dans le
+paquet. Sans le flag, le build est refusé. Le flag est lui-même refusé pour tout identifiant qui ne
+se termine pas par `-dev-unreviewed`, en particulier `v0.5.0`. Le
+[manifeste expérimental](manifests/v0.5.0-dev-unreviewed.json) porte
+`validation_status: unreviewed`, `intended_use: local_research_only`, `publishable: false`, les 17
+assertions et 10 mappings pending ainsi que `reviewer_count: 0`. Chaque résultat et reçu répète ce
+statut avec `research_unreviewed: true`; `general_v1.compatibility` reste une compatibilité et
+`safety.status` reste `not_evaluated`.
+
+Le chemin officiel demeure inchangé :
+
+```text
+uv run --offline --no-sync latros data build --snapshot v0.5.0
+```
+
+Cette commande échoue sur le gate de publication jusqu'aux vraies validations humaines prévues.
 
 ## Installation
 
@@ -47,7 +186,10 @@ uv run --no-sync latros --help
 uv run --no-sync latros sources validate
 ```
 
-Le dépôt est privé : Git doit disposer de votre authentification GitHub. `main` contient les jalons livrés v0.1 à v0.4, y compris le Clinical Knowledge Model et le logo officiel. `uv.lock` fixe les dépendances ; ne pas le mettre à jour pour reconstruire un snapshot historique. Pour récupérer les évolutions : `git pull --ff-only`, puis `uv sync --locked`.
+Le dépôt est privé : Git doit disposer de votre authentification GitHub. La branche v0.6 est empilée
+sur le travail v0.5 non fusionné ; `main` ne doit être actualisé qu'après revue des branches
+précédentes. `uv.lock` fixe les dépendances ; ne pas le mettre à jour pour reconstruire un snapshot
+historique. Pour récupérer les évolutions : `git pull --ff-only`, puis `uv sync --locked`.
 
 ## Télécharger les sources épinglées
 
@@ -150,7 +292,10 @@ Les questions utilisent une réduction d'entropie **heuristique**, avec des poid
 
 L'import conserve et signale les fréquences contradictoires entre enregistrements distincts : elles ne servent ni aux pénalités ni aux questions. Un phénotype obsolète sans remplacement exact est conservé mais exclu du calcul. Les versions EN/FR d'un même enregistrement ne comptent qu'une fois. Les libellés HPO anglais présents dans le produit français restent identifiés comme anglais lorsqu'ils correspondent à un libellé anglais connu.
 
-**Limites :** biais maladies rares et annotations, signes corrélés, temporalité/contexte non utilisés, questions techniques, aucune validation clinique. Les tests synthétiques vérifient le logiciel, pas sa justesse médicale. Aucun LLM, MedGemma, TxGemma, moteur de sécurité, audio, interface, entraînement ou conseil thérapeutique dans cette version.
+**Limites :** biais maladies rares et annotations, signes corrélés, temporalité/contexte encore peu
+utilisés, questions techniques, aucune validation clinique. Les tests synthétiques vérifient le
+logiciel, pas sa justesse médicale. L'interface v0.6 n'ajoute ni LLM, MedGemma, TxGemma, moteur de
+sécurité, audio, entraînement ou conseil thérapeutique.
 
 ## Développement et tests
 
@@ -169,16 +314,21 @@ src/latros/sources/     registre et téléchargement vérifié
 src/latros/knowledge/   fréquences, importeurs, validation et snapshots
 src/latros/clinical/    contrat ClinicalCase
 src/latros/reasoning/   stratégies, profils, semantic_v1, sorties v2 et reçus
+src/latros/application/ orchestration partagée entre CLI et interface
+src/latros/ui/          serveur loopback, sessions et actifs de la console R&D
 src/latros/cli.py       commandes publiques
+docs/                   tutoriel, roadmap, historique, vision, ADR, audits et revues
 sources/               registre épinglé (versionné)
 schemas/               contrats exportés (versionnés)
 profiles/              profils de raisonnement versionnés et hashés
 manifests/             références de reconstruction (versionnées)
 data/                  sources et snapshots locaux (ignorés)
+sessions/              cas et historique de runs locaux (ignorés)
 tests/                 fixtures synthétiques et tests hors ligne
 ```
 
-Suivre [CONTRIBUTING.md](CONTRIBUTING.md) : branches de fonctionnalité, pull requests et `main` stable. `0.4.0` reste un prototype de recherche, pas une certification médicale.
+Suivre [CONTRIBUTING.md](CONTRIBUTING.md) : branches de fonctionnalité, pull requests et `main`
+stable. `0.6.0` reste un prototype de recherche, pas une certification médicale.
 
 ## Confidentialité et licences
 

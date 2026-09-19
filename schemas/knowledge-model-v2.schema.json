@@ -110,6 +110,38 @@
           ],
           "default": null
         },
+        "laterality": {
+          "anyOf": [
+            {
+              "enum": [
+                "left",
+                "right",
+                "bilateral",
+                "midline",
+                "unspecified"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Laterality"
+        },
+        "location": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Location"
+        },
         "polarity": {
           "default": "present",
           "enum": [
@@ -126,6 +158,19 @@
           },
           "title": "Population",
           "type": "array"
+        },
+        "severity": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Severity"
         },
         "sex": {
           "anyOf": [

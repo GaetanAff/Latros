@@ -1,0 +1,201 @@
+{
+  "$defs": {
+    "CandidateCoverage": {
+      "additionalProperties": false,
+      "properties": {
+        "assertions_approved": {
+          "minimum": 0,
+          "title": "Assertions Approved",
+          "type": "integer"
+        },
+        "assertions_discriminating": {
+          "minimum": 0,
+          "title": "Assertions Discriminating",
+          "type": "integer"
+        },
+        "assertions_pending_review": {
+          "minimum": 0,
+          "title": "Assertions Pending Review",
+          "type": "integer"
+        },
+        "assertions_total": {
+          "minimum": 0,
+          "title": "Assertions Total",
+          "type": "integer"
+        },
+        "candidate": {
+          "$ref": "#/$defs/CuratedCode"
+        },
+        "content_threshold_met": {
+          "title": "Content Threshold Met",
+          "type": "boolean"
+        },
+        "evidence_families": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence Families",
+          "type": "array"
+        },
+        "publication_threshold_met": {
+          "title": "Publication Threshold Met",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "candidate",
+        "assertions_total",
+        "assertions_discriminating",
+        "assertions_pending_review",
+        "assertions_approved",
+        "evidence_families",
+        "content_threshold_met",
+        "publication_threshold_met"
+      ],
+      "title": "CandidateCoverage",
+      "type": "object"
+    },
+    "CuratedCode": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "minLength": 1,
+          "title": "Code",
+          "type": "string"
+        },
+        "system": {
+          "minLength": 1,
+          "title": "System",
+          "type": "string"
+        }
+      },
+      "required": [
+        "system",
+        "code"
+      ],
+      "title": "CuratedCode",
+      "type": "object"
+    },
+    "PublicationBlocker": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "minLength": 1,
+          "title": "Code",
+          "type": "string"
+        },
+        "item_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Item Id"
+        },
+        "message": {
+          "minLength": 1,
+          "title": "Message",
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "message"
+      ],
+      "title": "PublicationBlocker",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "artifacts_verified": {
+      "title": "Artifacts Verified",
+      "type": "boolean"
+    },
+    "assertions_by_family": {
+      "additionalProperties": {
+        "type": "integer"
+      },
+      "title": "Assertions By Family",
+      "type": "object"
+    },
+    "assertions_by_status": {
+      "additionalProperties": {
+        "type": "integer"
+      },
+      "title": "Assertions By Status",
+      "type": "object"
+    },
+    "blockers": {
+      "items": {
+        "$ref": "#/$defs/PublicationBlocker"
+      },
+      "title": "Blockers",
+      "type": "array"
+    },
+    "candidates": {
+      "items": {
+        "$ref": "#/$defs/CandidateCoverage"
+      },
+      "title": "Candidates",
+      "type": "array"
+    },
+    "package_id": {
+      "title": "Package Id",
+      "type": "string"
+    },
+    "package_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Package Sha256",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "status": {
+      "enum": [
+        "ready_for_publication",
+        "blocked"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "technical_status": {
+      "enum": [
+        "ready_for_human_review",
+        "not_ready_for_human_review",
+        "publication_ready"
+      ],
+      "title": "Technical Status",
+      "type": "string"
+    },
+    "totals": {
+      "additionalProperties": {
+        "type": "integer"
+      },
+      "title": "Totals",
+      "type": "object"
+    }
+  },
+  "required": [
+    "package_id",
+    "package_sha256",
+    "status",
+    "technical_status",
+    "artifacts_verified",
+    "totals",
+    "assertions_by_status",
+    "assertions_by_family",
+    "candidates",
+    "blockers"
+  ],
+  "title": "CurationPublicationReport",
+  "type": "object"
+}

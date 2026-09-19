@@ -1,0 +1,57 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "comment": {
+      "default": "",
+      "title": "Comment",
+      "type": "string"
+    },
+    "decision": {
+      "enum": [
+        "approved",
+        "approved_with_change",
+        "rejected"
+      ],
+      "title": "Decision",
+      "type": "string"
+    },
+    "item_id": {
+      "minLength": 1,
+      "title": "Item Id",
+      "type": "string"
+    },
+    "item_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Item Sha256",
+      "type": "string"
+    },
+    "item_type": {
+      "enum": [
+        "assertion",
+        "mapping"
+      ],
+      "title": "Item Type",
+      "type": "string"
+    },
+    "reviewed_at": {
+      "format": "date-time",
+      "title": "Reviewed At",
+      "type": "string"
+    },
+    "reviewer_id": {
+      "minLength": 1,
+      "title": "Reviewer Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "item_type",
+    "item_id",
+    "item_sha256",
+    "reviewer_id",
+    "decision",
+    "reviewed_at"
+  ],
+  "title": "ReviewDecision",
+  "type": "object"
+}

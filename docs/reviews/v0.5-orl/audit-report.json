@@ -1,0 +1,249 @@
+{
+  "artifacts_verified": true,
+  "assertions_by_family": {
+    "nhs_conditions": 14,
+    "nlm_medlineplus": 3
+  },
+  "assertions_by_status": {
+    "pending_review": 17
+  },
+  "blockers": [
+    {
+      "code": "assertion_review_incomplete",
+      "item_id": "orl-a001",
+      "message": "Assertion requires two attested approvals, including a qualified clinician"
+    },
+    {
+      "code": "assertion_review_incomplete",
+      "item_id": "orl-a002",
+      "message": "Assertion requires two attested approvals, including a qualified clinician"
+    },
+    {
+      "code": "assertion_review_incomplete",
+      "item_id": "orl-a003",
+      "message": "Assertion requires two attested approvals, including a qualified clinician"
+    },
+    {
+      "code": "assertion_review_incomplete",
+      "item_id": "orl-a004",
+      "message": "Assertion requires two attested approvals, including a qualified clinician"
+    },
+    {
+      "code": "assertion_review_incomplete",
+      "item_id": "orl-a005",
+      "message": "Assertion requires two attested approvals, including a qualified clinician"
+    },
+    {
+      "code": "assertion_review_incomplete",
+      "item_id": "orl-a006",
+      "message": "Assertion requires two attested approvals, including a qualified clinician"
+    },
+    {
+      "code": "assertion_review_incomplete",
+      "item_id": "orl-a007",
+      "message": "Assertion requires two attested approvals, including a qualified clinician"
+    },
+    {
+      "code": "assertion_review_incomplete",
+      "item_id": "orl-a008",
+      "message": "Assertion requires two attested approvals, including a qualified clinician"
+    },
+    {
+      "code": "assertion_review_incomplete",
+      "item_id": "orl-a009",
+      "message": "Assertion requires two attested approvals, including a qualified clinician"
+    },
+    {
+      "code": "assertion_review_incomplete",
+      "item_id": "orl-a010",
+      "message": "Assertion requires two attested approvals, including a qualified clinician"
+    },
+    {
+      "code": "assertion_review_incomplete",
+      "item_id": "orl-a011",
+      "message": "Assertion requires two attested approvals, including a qualified clinician"
+    },
+    {
+      "code": "assertion_review_incomplete",
+      "item_id": "orl-a012",
+      "message": "Assertion requires two attested approvals, including a qualified clinician"
+    },
+    {
+      "code": "assertion_review_incomplete",
+      "item_id": "orl-a013",
+      "message": "Assertion requires two attested approvals, including a qualified clinician"
+    },
+    {
+      "code": "assertion_review_incomplete",
+      "item_id": "orl-a014",
+      "message": "Assertion requires two attested approvals, including a qualified clinician"
+    },
+    {
+      "code": "assertion_review_incomplete",
+      "item_id": "orl-a015",
+      "message": "Assertion requires two attested approvals, including a qualified clinician"
+    },
+    {
+      "code": "assertion_review_incomplete",
+      "item_id": "orl-a016",
+      "message": "Assertion requires two attested approvals, including a qualified clinician"
+    },
+    {
+      "code": "assertion_review_incomplete",
+      "item_id": "orl-a017",
+      "message": "Assertion requires two attested approvals, including a qualified clinician"
+    },
+    {
+      "code": "candidate_publication_threshold",
+      "item_id": "urn:latros:orl|acute-otitis-media",
+      "message": "Candidate lacks enough fully approved assertions"
+    },
+    {
+      "code": "candidate_publication_threshold",
+      "item_id": "urn:latros:orl|acute-rhinosinusitis",
+      "message": "Candidate lacks enough fully approved assertions"
+    },
+    {
+      "code": "candidate_publication_threshold",
+      "item_id": "urn:latros:orl|acute-tonsillitis",
+      "message": "Candidate lacks enough fully approved assertions"
+    },
+    {
+      "code": "candidate_publication_threshold",
+      "item_id": "urn:latros:orl|common-cold",
+      "message": "Candidate lacks enough fully approved assertions"
+    },
+    {
+      "code": "mapping_review_incomplete",
+      "item_id": "orl-map-001",
+      "message": "Mapping lacks an approved decision from an attested mapping reviewer"
+    },
+    {
+      "code": "mapping_review_incomplete",
+      "item_id": "orl-map-002",
+      "message": "Mapping lacks an approved decision from an attested mapping reviewer"
+    },
+    {
+      "code": "mapping_review_incomplete",
+      "item_id": "orl-map-003",
+      "message": "Mapping lacks an approved decision from an attested mapping reviewer"
+    },
+    {
+      "code": "mapping_review_incomplete",
+      "item_id": "orl-map-004",
+      "message": "Mapping lacks an approved decision from an attested mapping reviewer"
+    },
+    {
+      "code": "mapping_review_incomplete",
+      "item_id": "orl-map-005",
+      "message": "Mapping lacks an approved decision from an attested mapping reviewer"
+    },
+    {
+      "code": "mapping_review_incomplete",
+      "item_id": "orl-map-006",
+      "message": "Mapping lacks an approved decision from an attested mapping reviewer"
+    },
+    {
+      "code": "mapping_review_incomplete",
+      "item_id": "orl-map-007",
+      "message": "Mapping lacks an approved decision from an attested mapping reviewer"
+    },
+    {
+      "code": "mapping_review_incomplete",
+      "item_id": "orl-map-008",
+      "message": "Mapping lacks an approved decision from an attested mapping reviewer"
+    },
+    {
+      "code": "mapping_review_incomplete",
+      "item_id": "orl-map-009",
+      "message": "Mapping lacks an approved decision from an attested mapping reviewer"
+    },
+    {
+      "code": "mapping_review_incomplete",
+      "item_id": "orl-map-010",
+      "message": "Mapping lacks an approved decision from an attested mapping reviewer"
+    },
+    {
+      "code": "package_status_pending",
+      "item_id": "v0.5-orl-pending-2026-09-17",
+      "message": "Package manifest is not approved for snapshot publication"
+    }
+  ],
+  "candidates": [
+    {
+      "assertions_approved": 0,
+      "assertions_discriminating": 2,
+      "assertions_pending_review": 4,
+      "assertions_total": 4,
+      "candidate": {
+        "code": "acute-tonsillitis",
+        "system": "urn:latros:orl"
+      },
+      "content_threshold_met": true,
+      "evidence_families": [
+        "nhs_conditions"
+      ],
+      "publication_threshold_met": false
+    },
+    {
+      "assertions_approved": 0,
+      "assertions_discriminating": 1,
+      "assertions_pending_review": 5,
+      "assertions_total": 5,
+      "candidate": {
+        "code": "common-cold",
+        "system": "urn:latros:orl"
+      },
+      "content_threshold_met": true,
+      "evidence_families": [
+        "nhs_conditions",
+        "nlm_medlineplus"
+      ],
+      "publication_threshold_met": false
+    },
+    {
+      "assertions_approved": 0,
+      "assertions_discriminating": 3,
+      "assertions_pending_review": 4,
+      "assertions_total": 4,
+      "candidate": {
+        "code": "acute-rhinosinusitis",
+        "system": "urn:latros:orl"
+      },
+      "content_threshold_met": true,
+      "evidence_families": [
+        "nhs_conditions"
+      ],
+      "publication_threshold_met": false
+    },
+    {
+      "assertions_approved": 0,
+      "assertions_discriminating": 2,
+      "assertions_pending_review": 4,
+      "assertions_total": 4,
+      "candidate": {
+        "code": "acute-otitis-media",
+        "system": "urn:latros:orl"
+      },
+      "content_threshold_met": true,
+      "evidence_families": [
+        "nhs_conditions",
+        "nlm_medlineplus"
+      ],
+      "publication_threshold_met": false
+    }
+  ],
+  "package_id": "v0.5-orl-pending-2026-09-17",
+  "package_sha256": "d0de12d4c04a0302c16020929015f6e9f5c20fb9227ca5a4f91355060b12c10f",
+  "schema_version": 1,
+  "status": "blocked",
+  "technical_status": "ready_for_human_review",
+  "totals": {
+    "assertions": 17,
+    "concepts": 19,
+    "mappings": 10,
+    "reviewers": 0,
+    "reviews": 0,
+    "source_artifacts": 12
+  }
+}

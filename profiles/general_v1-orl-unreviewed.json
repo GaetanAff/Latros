@@ -1,0 +1,62 @@
+{
+  "abstention_rules": [
+    "Adult population context is required",
+    "At least two supported findings must be assessed",
+    "Confirmed-observation coverage must be at least 0.50",
+    "At least one configured independent evidence family must contribute"
+  ],
+  "accepted_observation_types": [
+    "symptom",
+    "sign",
+    "exam",
+    "vital"
+  ],
+  "accepted_relations": [
+    "has_symptom",
+    "has_sign",
+    "has_exam_finding"
+  ],
+  "aggregation_rules": [
+    "Engineering-only profile over pending_review assertions",
+    "Average assessed assertion contributions inside the NHS evidence family",
+    "Treat nidirect republication as part of the NHS family, never as independent confirmation",
+    "Exclude NLM and every unknown source dependency from the aggregate",
+    "Weights are unvalidated engineering parameters, not clinical probabilities"
+  ],
+  "compatible_snapshot_ids": [
+    "v0.5.0-dev-unreviewed"
+  ],
+  "compatible_snapshot_schema_versions": [
+    2
+  ],
+  "coverage_rules": [
+    "Only confirmed resolved observations count as supported",
+    "Unknown and unevaluable findings have no numeric contribution",
+    "Exact/equivalent mappings may resolve technically but remain explicitly unreviewed"
+  ],
+  "out_of_scope_rules": [
+    "Age below 18 years is outside this engineering profile",
+    "Missing or ambiguous age prevents adult-scope reasoning",
+    "This profile is local_research_only and has no clinical validation"
+  ],
+  "parameters": {
+    "allow_unlisted_evidence_families": false,
+    "family_weights": {
+      "nhs_conditions": 1.0
+    },
+    "minimum_age_years": 18,
+    "minimum_assessed_findings": 2,
+    "minimum_coverage_ratio": 0.5
+  },
+  "profile_id": "general_v1-orl-unreviewed",
+  "profile_sha256": "fa721d3b22829c9e261c79d47b322325121bc7746f339a0ab34e6be777b17aec",
+  "schema_version": 1,
+  "score_scale": {
+    "calibrated": false,
+    "description": "Unreviewed deterministic compatibility for local engineering research; never a clinical probability",
+    "kind": "compatibility",
+    "scale_id": "general_v1.compatibility"
+  },
+  "strategy_id": "general_v1",
+  "strategy_version": "1"
+}

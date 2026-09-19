@@ -2,11 +2,11 @@
 
 ## Périmètre actuel
 
-Le socle de recherche maladies rares est autorisé par le plan d'implémentation et [ADR 0001](docs/decisions/0001-socle-recherche.md). Python 3.11, uv, Pydantic, Typer, DuckDB/Parquet sont retenus pour cette tranche. Pas d'interface patient, de LLM, de triage ou de données patient réelles. La vision de phase 0 reste documentée dans `projet.md` mais n'interdit plus l'implémentation de ce périmètre.
+Le socle de recherche maladies rares est autorisé par le plan d'implémentation et [ADR 0001](docs/decisions/0001-socle-recherche.md). Python 3.11, uv, Pydantic, Typer, DuckDB/Parquet sont retenus pour cette tranche. Pas d'interface patient, de LLM, de triage ou de données patient réelles. La vision de phase 0 reste documentée dans `docs/projet.md` mais n'interdit plus l'implémentation de ce périmètre.
 
 ## Avant une modification
 
-1. Vérifier si le sujet est déjà traité dans [projet.md](projet.md).
+1. Vérifier si le sujet est déjà traité dans [docs/projet.md](docs/projet.md).
 2. Créer ou commenter une issue pour les décisions qui modifient le périmètre, les données, les licences ou la sécurité clinique.
 3. Documenter les arbitrages importants dans `docs/decisions/`.
 4. Ne jamais committer de données personnelles, de poids de modèles, de jeux de données sous licence restrictive ou de secrets.
@@ -14,7 +14,7 @@ Le socle de recherche maladies rares est autorisé par le plan d'implémentation
 
 ## Documentation à chaque livraison
 
-Actualiser `history.md`, `README.md` et `docs/plan.md` avec les changements réellement effectués, les commandes utilisables, les vérifications et les limites. Ajouter une entrée datée à l'historique sans effacer les anciennes réalisations. Mettre également à jour `projet.md`, les ADR, schémas, registre ou manifestes lorsque leurs informations changent. Une demande de discussion seule n'implique pas de modification du code.
+Actualiser `docs/history.md`, `README.md` et `docs/plan.md` avec les changements réellement effectués, les commandes utilisables, les vérifications et les limites. Ajouter une entrée datée à l'historique sans effacer les anciennes réalisations. Mettre également à jour `docs/projet.md`, les ADR, schémas, registre ou manifestes lorsque leurs informations changent. Une demande de discussion seule n'implique pas de modification du code.
 
 Les références de snapshots reprennent les versions du plan. Un identifiant publié est immuable ; une révision reçoit un nouvel identifiant documenté. La version du paquet Python et celle d'un snapshot restent distinctes.
 

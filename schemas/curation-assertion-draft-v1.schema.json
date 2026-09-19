@@ -1,0 +1,291 @@
+{
+  "$defs": {
+    "CuratedCode": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "minLength": 1,
+          "title": "Code",
+          "type": "string"
+        },
+        "system": {
+          "minLength": 1,
+          "title": "System",
+          "type": "string"
+        }
+      },
+      "required": [
+        "system",
+        "code"
+      ],
+      "title": "CuratedCode",
+      "type": "object"
+    },
+    "DraftCurator": {
+      "additionalProperties": false,
+      "properties": {
+        "curator_id": {
+          "minLength": 1,
+          "title": "Curator Id",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "human",
+            "automated_assistance"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "method": {
+          "minLength": 1,
+          "title": "Method",
+          "type": "string"
+        }
+      },
+      "required": [
+        "curator_id",
+        "kind",
+        "method"
+      ],
+      "title": "DraftCurator",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "access_date": {
+      "format": "date",
+      "title": "Access Date",
+      "type": "string"
+    },
+    "assertion_id": {
+      "minLength": 1,
+      "title": "Assertion Id",
+      "type": "string"
+    },
+    "clinical_context": {
+      "minLength": 1,
+      "title": "Clinical Context",
+      "type": "string"
+    },
+    "condition_source": {
+      "minLength": 1,
+      "title": "Condition Source",
+      "type": "string"
+    },
+    "curator": {
+      "$ref": "#/$defs/DraftCurator"
+    },
+    "dependency_type": {
+      "enum": [
+        "primary",
+        "derived_from",
+        "republication",
+        "shared_upstream",
+        "unknown"
+      ],
+      "title": "Dependency Type",
+      "type": "string"
+    },
+    "discriminating_against": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Discriminating Against",
+      "type": "array"
+    },
+    "evidence_family_id": {
+      "minLength": 1,
+      "title": "Evidence Family Id",
+      "type": "string"
+    },
+    "is_discriminating": {
+      "default": false,
+      "title": "Is Discriminating",
+      "type": "boolean"
+    },
+    "laterality": {
+      "anyOf": [
+        {
+          "enum": [
+            "left",
+            "right",
+            "bilateral",
+            "midline",
+            "unspecified"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Laterality"
+    },
+    "location": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Location"
+    },
+    "mapping_notes": {
+      "minLength": 1,
+      "title": "Mapping Notes",
+      "type": "string"
+    },
+    "object": {
+      "$ref": "#/$defs/CuratedCode"
+    },
+    "observation_source": {
+      "minLength": 1,
+      "title": "Observation Source",
+      "type": "string"
+    },
+    "polarity": {
+      "default": "present",
+      "enum": [
+        "present",
+        "excluded",
+        "unknown"
+      ],
+      "title": "Polarity",
+      "type": "string"
+    },
+    "population": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Population",
+      "type": "array"
+    },
+    "record_locator": {
+      "minLength": 1,
+      "title": "Record Locator",
+      "type": "string"
+    },
+    "relation": {
+      "enum": [
+        "has_symptom",
+        "has_sign",
+        "has_risk_factor",
+        "has_lab_finding",
+        "has_exam_finding",
+        "has_imaging_finding",
+        "typical_age",
+        "typical_sex",
+        "has_complication"
+      ],
+      "title": "Relation",
+      "type": "string"
+    },
+    "review_status": {
+      "default": "pending_review",
+      "enum": [
+        "pending_review",
+        "approved",
+        "approved_with_change",
+        "rejected"
+      ],
+      "title": "Review Status",
+      "type": "string"
+    },
+    "segment_id": {
+      "minLength": 1,
+      "title": "Segment Id",
+      "type": "string"
+    },
+    "severity": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Severity"
+    },
+    "source_artifact_id": {
+      "minLength": 1,
+      "title": "Source Artifact Id",
+      "type": "string"
+    },
+    "source_release": {
+      "minLength": 1,
+      "title": "Source Release",
+      "type": "string"
+    },
+    "source_segment_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Source Segment Sha256",
+      "type": "string"
+    },
+    "source_url": {
+      "pattern": "^https://",
+      "title": "Source Url",
+      "type": "string"
+    },
+    "subject": {
+      "$ref": "#/$defs/CuratedCode"
+    },
+    "temporal_context": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Temporal Context"
+    },
+    "therapeutic_content": {
+      "default": false,
+      "title": "Therapeutic Content",
+      "type": "boolean"
+    },
+    "upstream_reference": {
+      "minLength": 1,
+      "title": "Upstream Reference",
+      "type": "string"
+    }
+  },
+  "required": [
+    "assertion_id",
+    "condition_source",
+    "subject",
+    "observation_source",
+    "object",
+    "relation",
+    "population",
+    "clinical_context",
+    "source_artifact_id",
+    "source_url",
+    "record_locator",
+    "segment_id",
+    "source_segment_sha256",
+    "access_date",
+    "source_release",
+    "evidence_family_id",
+    "dependency_type",
+    "upstream_reference",
+    "curator",
+    "mapping_notes"
+  ],
+  "title": "CurationAssertionDraft",
+  "type": "object"
+}

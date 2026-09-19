@@ -1,0 +1,567 @@
+{
+  "$defs": {
+    "LicenseV2": {
+      "additionalProperties": false,
+      "properties": {
+        "attribution": {
+          "minLength": 1,
+          "title": "Attribution",
+          "type": "string"
+        },
+        "implementation_rights_confirmed": {
+          "title": "Implementation Rights Confirmed",
+          "type": "boolean"
+        },
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "notes": {
+          "default": "",
+          "title": "Notes",
+          "type": "string"
+        },
+        "redistribution": {
+          "enum": [
+            "allowed_with_attribution",
+            "restricted",
+            "prohibited",
+            "unknown"
+          ],
+          "title": "Redistribution",
+          "type": "string"
+        },
+        "url": {
+          "minLength": 1,
+          "title": "Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "url",
+        "attribution",
+        "redistribution",
+        "implementation_rights_confirmed"
+      ],
+      "title": "LicenseV2",
+      "type": "object"
+    },
+    "RegistryArtifactV2": {
+      "additionalProperties": false,
+      "properties": {
+        "access_mode": {
+          "enum": [
+            "public_https",
+            "manual_local"
+          ],
+          "title": "Access Mode",
+          "type": "string"
+        },
+        "filename": {
+          "title": "Filename",
+          "type": "string"
+        },
+        "format": {
+          "enum": [
+            "rf2-concepts-tsv",
+            "rf2-descriptions-tsv",
+            "rf2-relationships-tsv",
+            "curated-assertions-jsonl",
+            "obographs-json",
+            "html-capture",
+            "curation-jsonl",
+            "curation-package-json",
+            "source-segments-json"
+          ],
+          "title": "Format",
+          "type": "string"
+        },
+        "language": {
+          "anyOf": [
+            {
+              "maxLength": 35,
+              "minLength": 2,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Language"
+        },
+        "local_path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Local Path"
+        },
+        "product": {
+          "minLength": 1,
+          "title": "Product",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "source_url": {
+          "minLength": 1,
+          "title": "Source Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "filename",
+        "product",
+        "format",
+        "source_url",
+        "sha256",
+        "access_mode"
+      ],
+      "title": "RegistryArtifactV2",
+      "type": "object"
+    },
+    "RegistryDependencyV2": {
+      "additionalProperties": false,
+      "properties": {
+        "dependency_type": {
+          "enum": [
+            "primary",
+            "derived_from",
+            "republication",
+            "shared_upstream",
+            "unknown"
+          ],
+          "title": "Dependency Type",
+          "type": "string"
+        },
+        "evidence": {
+          "minLength": 1,
+          "title": "Evidence",
+          "type": "string"
+        },
+        "upstream_reference": {
+          "minLength": 1,
+          "title": "Upstream Reference",
+          "type": "string"
+        }
+      },
+      "required": [
+        "upstream_reference",
+        "dependency_type",
+        "evidence"
+      ],
+      "title": "RegistryDependencyV2",
+      "type": "object"
+    },
+    "SnapshotScopeV2": {
+      "additionalProperties": false,
+      "properties": {
+        "domain": {
+          "minLength": 1,
+          "title": "Domain",
+          "type": "string"
+        },
+        "exclusions": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Exclusions",
+          "type": "array"
+        },
+        "observation_types": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Observation Types",
+          "type": "array"
+        },
+        "population": {
+          "minLength": 1,
+          "title": "Population",
+          "type": "string"
+        },
+        "relations": {
+          "items": {
+            "enum": [
+              "has_symptom",
+              "has_sign",
+              "has_risk_factor",
+              "has_lab_finding",
+              "has_exam_finding",
+              "has_imaging_finding",
+              "typical_age",
+              "typical_sex",
+              "has_complication"
+            ],
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Relations",
+          "type": "array"
+        },
+        "scope_id": {
+          "minLength": 1,
+          "title": "Scope Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "scope_id",
+        "domain",
+        "population",
+        "observation_types",
+        "relations"
+      ],
+      "title": "SnapshotScopeV2",
+      "type": "object"
+    },
+    "SnapshotTableV2": {
+      "additionalProperties": false,
+      "properties": {
+        "logical_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Logical Sha256",
+          "type": "string"
+        },
+        "parquet_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Parquet Sha256",
+          "type": "string"
+        },
+        "rows": {
+          "minimum": 0,
+          "title": "Rows",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "rows",
+        "logical_sha256",
+        "parquet_sha256"
+      ],
+      "title": "SnapshotTableV2",
+      "type": "object"
+    },
+    "SourcePackageV2": {
+      "additionalProperties": false,
+      "properties": {
+        "access_date": {
+          "format": "date",
+          "title": "Access Date",
+          "type": "string"
+        },
+        "artifacts": {
+          "items": {
+            "$ref": "#/$defs/RegistryArtifactV2"
+          },
+          "minItems": 1,
+          "title": "Artifacts",
+          "type": "array"
+        },
+        "code_system": {
+          "minLength": 1,
+          "title": "Code System",
+          "type": "string"
+        },
+        "dependencies": {
+          "items": {
+            "$ref": "#/$defs/RegistryDependencyV2"
+          },
+          "title": "Dependencies",
+          "type": "array"
+        },
+        "homepage": {
+          "minLength": 1,
+          "title": "Homepage",
+          "type": "string"
+        },
+        "license": {
+          "$ref": "#/$defs/LicenseV2"
+        },
+        "release": {
+          "title": "Release",
+          "type": "string"
+        },
+        "release_date": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Release Date"
+        },
+        "roles": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Roles",
+          "type": "array"
+        },
+        "source_id": {
+          "title": "Source Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_id",
+        "roles",
+        "code_system",
+        "homepage",
+        "release",
+        "access_date",
+        "license",
+        "artifacts"
+      ],
+      "title": "SourcePackageV2",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "build_pipeline_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Build Pipeline Sha256",
+      "type": "string"
+    },
+    "canonical_schema_version": {
+      "const": 2,
+      "default": 2,
+      "title": "Canonical Schema Version",
+      "type": "integer"
+    },
+    "clinical_validation": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Clinical Validation"
+    },
+    "compatible_profiles": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Compatible Profiles",
+      "type": "array"
+    },
+    "content_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Content Sha256",
+      "type": "string"
+    },
+    "duckdb_version": {
+      "minLength": 1,
+      "title": "Duckdb Version",
+      "type": "string"
+    },
+    "errors": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Errors",
+      "type": "array"
+    },
+    "evidence_families": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Evidence Families",
+      "type": "array"
+    },
+    "human_review_complete": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Human Review Complete"
+    },
+    "intended_use": {
+      "anyOf": [
+        {
+          "const": "local_research_only",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Intended Use"
+    },
+    "latros_version": {
+      "minLength": 1,
+      "title": "Latros Version",
+      "type": "string"
+    },
+    "limitations": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Limitations",
+      "type": "array"
+    },
+    "publishable": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Publishable"
+    },
+    "redistribution": {
+      "enum": [
+        "allowed_with_attribution",
+        "restricted",
+        "prohibited"
+      ],
+      "title": "Redistribution",
+      "type": "string"
+    },
+    "research_override_used": {
+      "default": false,
+      "title": "Research Override Used",
+      "type": "boolean"
+    },
+    "reviewer_count": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Reviewer Count"
+    },
+    "rules": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Rules",
+      "type": "object"
+    },
+    "schema_version": {
+      "const": 2,
+      "default": 2,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "scope": {
+      "$ref": "#/$defs/SnapshotScopeV2"
+    },
+    "snapshot": {
+      "minLength": 1,
+      "title": "Snapshot",
+      "type": "string"
+    },
+    "source_dependencies": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Source Dependencies",
+      "type": "array"
+    },
+    "sources": {
+      "items": {
+        "$ref": "#/$defs/SourcePackageV2"
+      },
+      "minItems": 1,
+      "title": "Sources",
+      "type": "array"
+    },
+    "tables": {
+      "additionalProperties": {
+        "$ref": "#/$defs/SnapshotTableV2"
+      },
+      "title": "Tables",
+      "type": "object"
+    },
+    "unreviewed_assertion_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Unreviewed Assertion Ids",
+      "type": "array"
+    },
+    "unreviewed_mapping_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Unreviewed Mapping Ids",
+      "type": "array"
+    },
+    "validation_status": {
+      "anyOf": [
+        {
+          "const": "unreviewed",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Validation Status"
+    },
+    "warnings": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Warnings",
+      "type": "array"
+    }
+  },
+  "required": [
+    "snapshot",
+    "latros_version",
+    "build_pipeline_sha256",
+    "duckdb_version",
+    "scope",
+    "sources",
+    "source_dependencies",
+    "evidence_families",
+    "rules",
+    "tables",
+    "compatible_profiles",
+    "redistribution",
+    "content_sha256"
+  ],
+  "title": "KnowledgeSnapshotManifestV2",
+  "type": "object"
+}

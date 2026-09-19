@@ -1,6 +1,6 @@
 # Plan d'implémentation et avancement
 
-Référence : plan « Premières étapes de Latros — socle de données et moteur clinique pur » demandé par l'utilisateur. État au 17 septembre 2026.
+Référence : plan « Premières étapes de Latros — socle de données et moteur clinique pur » demandé par l'utilisateur. État au 19 septembre 2026.
 
 Les trois jalons avaient été implémentés ensemble dans la première tranche. La reprise de l'étape 2 consiste à vérifier sa livraison et à établir le snapshot sous le nom du jalon, `v0.2.0`. Elle ne correspond pas à l'ajout de nouvelles sources ou de fonctions cliniques.
 
@@ -12,6 +12,12 @@ Les trois jalons avaient été implémentés ensemble dans la première tranche.
 | 2 | Premier snapshot médical — `v0.2.0` | Implémentée ; référence versionnée alignée sur le nom du plan | `manifests/v0.2.0.json` |
 | 3 | Moteur pur et interrogatoire — `v0.3.0` | Implémentée dans le paquet `0.3.0` ; évaluation clinique non réalisée | Le moteur utilise le snapshot `v0.2.0` |
 | 4 | Clinical Knowledge Model — `v0.4.0` | Terminée : checkpoints A–H livrés et revue finale verte | La référence reste `v0.2.0` ; aucun snapshot médical v2 publié |
+| 5 | Snapshot ORL généraliste — `v0.5.0` | En cours : A–D terminés ; E historique en `NO-GO` ; E2 audité ; E3 prêt pour revue ; mode E4 local non validé disponible | Référence officielle toujours bloquée ; `v0.5.0-dev-unreviewed` est non publiable |
+| 6 | Interface interne de test R&D — `v0.6` | Implémentée sur `feat/v0.6-rd-interface` | Console locale, sessions reprenables et inspection fidèle des moteurs ; aucun produit utilisateur ni nouvelle logique médicale |
+| 7 | Extension clinique structurée — `v0.7` | Prévue | Temporalité, biologie, constantes, risques et médicaments, après audits ciblés |
+| 8 | Safety / triage séparé — `v0.8` | Prévue | Composant indépendant du différentiel, avec périmètre et validation propres |
+| 9 | NLP / LLM encadré — `v0.9` | Prévue | Structuration, reformulation et explication, jamais source implicite de connaissance |
+| 10 | API, FHIR et interopérabilité — `v0.10` | Prévue | Exposition et échanges des contrats de domaine après validation des étapes précédentes |
 
 Il s'agit des étapes du plan, pas d'une série de releases GitHub publiées. Aucun tag ou changement de version rétroactif du paquet n'est nécessaire pour identifier un snapshot. L'évaluation clinique et les fonctionnalités futures restent à discuter séparément.
 
@@ -39,9 +45,164 @@ est en `NO-GO` jusqu'à résolution des licences, droits tiers, redistribution e
 détail et les critères de sortie sont conservés dans
 [`docs/source-audits/v0.5-orl.md`](source-audits/v0.5-orl.md).
 
+La stratégie de sources est ensuite réouverte sans effacer ce résultat. L'audit
+[`v0.5-E2`](source-audits/v0.5-orl-open-sources.md) retient DOID/Mondo pour préparer les identités et
+un corpus NHS/nidirect, CDC et MedlinePlus strictement filtré comme voie alternative. Le contenu
+minimal est maintenant curé dans un paquet réel `pending_clinical_review`. Les pages CDC en sont
+écartées tant que leurs conditions internationales ne sont pas fermées. Aucune assertion n'a encore
+la double revue requise : la publication reste donc en `NO-GO`.
+
 Une première veille des ressources de médecine générale est intégrée au cahier des charges. Elle sépare terminologies, classifications, standards d'échange, sources d'assertions, règles cliniques, jeux synthétiques et benchmarks. Les matrices Kaggle/Mendeley ne sont pas retenues comme connaissance clinique tant que leur provenance n'est pas démontrée ; SNOMED CT, ICD, FHIR, LOINC, UCUM, UMLS, DDXPlus, Synthea, WHO SMART Guidelines, HealthBench, MIMIC-IV et ClinicDx sont positionnés selon leur rôle et une étape éventuelle, sans décision d'intégration anticipée.
 
 Les futurs manifestes devront aussi déclarer le périmètre, les dépendances entre sources, les familles de preuves, les règles de déduplication et les profils de raisonnement compatibles. Le snapshot et le profil d'agrégation resteront versionnés séparément mais seront liés par leurs hashes dans chaque exécution. La référence historique `v0.2.0` ne sera pas réécrite.
+
+## Étape 5 — Snapshot ORL généraliste et `general_v1`
+
+La décision est fixée par l'[ADR 0005](decisions/0005-snapshot-v2-et-pilote-orl.md). Le travail
+avance sur deux pistes : pipeline et raisonnement testés sur données entièrement inventées ; audit
+juridique et clinique séparé des sources réelles. `v0.5.0` sera un snapshot ORL adulte distinct de
+`v0.2.0` ou ne sera pas publié.
+
+| Checkpoint | État | Sortie attendue |
+| --- | --- | --- |
+| `v0.5-A` | Terminé | ADR, registre v2, manifeste v2 et schémas exportés |
+| `v0.5-B` | Terminé | Constructeur reproductible des treize tables sur fixtures |
+| `v0.5-C` | Terminé | Importeurs RF2 et assertions curées synthétiques |
+| `v0.5-D` | Terminé | Stratégie déterministe `general_v1` sur mini-corpus fictif |
+| `v0.5-E` | Terminé — `NO-GO` confirmé | Audit final SNOMED/HAS ORL ; conditions juridiques, cliniques et de couverture non satisfaites |
+| `v0.5-E2` | Terminé — `NO-GO` de publication | Audit DOID/Mondo/MeSH et NHS/CDC/MedlinePlus ; matrice de couverture produite ; curation et double revue absentes |
+| `v0.5-E3` | Terminé techniquement — revue humaine requise | 17 assertions, 10 mappings, artefacts/hashes, dossier de revue et gate formel ; `ready_for_human_review` |
+| `v0.5-E4` | Terminé — recherche locale non validée | Snapshot `v0.5.0-dev-unreviewed`, override explicite, profil d'ingénierie et résultats toujours marqués non relus |
+| `v0.5-F` | Bloqué par la double revue E3 | Snapshot médical réel `v0.5.0` |
+| `v0.5-G` | Bloqué par `v0.5-F` | Validation clinique séparée et clôture |
+
+`general_v1` accepte exclusivement `ClinicalCaseV2`, les concepts identiques ou les mappings
+résolus `exact/equivalent`, et un snapshot canonique v2 qui déclare son profil. Son score
+`general_v1.compatibility` reste une compatibilité non calibrée. Les assertions sont évaluées par
+polarité explicite, moyennées dans chaque famille de preuve puis combinées seulement entre familles
+indépendantes autorisées par le profil. La CLI expose le raisonnement et les questions en contrat v2,
+avec couverture, abstention, sources, familles, mappings et reçu reproductible.
+
+Le profil `general_v1-default` est actuellement lié au corpus inventé `test-v2`. Il sert à vérifier
+les règles du moteur, pas à produire un résultat clinique. Le futur snapshot ORL devra disposer d'un
+profil versionné dont les familles et poids correspondent exactement au corpus approuvé.
+
+Le checkpoint E confirme que la fiche HAS angine, essentiellement orientée antibiothérapie, ne
+suffit pas à documenter le différentiel fermé des quatre candidats. Chacun devra disposer d'au moins
+deux assertions diagnostiques explicites et d'une assertion discriminante approuvées. Les licences
+SNOMED, les droits de transformation/redistribution, la double revue et ce seuil de couverture ne
+sont pas satisfaits : F et G ne doivent donc pas commencer.
+
+Le checkpoint E2 confirme une voie juridiquement plus simple sans SNOMED. DOID `v2026-08-31` et
+Mondo `v2026-09-01` sont compatibles avec un import versionné ; MeSH est différé. Les pages ouvertes
+identifiées ont permis de préparer au moins deux assertions et un élément discriminant par candidat.
+
+Le checkpoint E3 matérialise cette curation : 17 assertions atomiques et 10 mappings qualifiés,
+captures locales et empreintes, provenance record par record, familles de preuves, dossier de revue
+et gate de publication. Les pages CDC ne participent pas au paquet tant que leur redistribution
+internationale n'est pas clarifiée ; nidirect reste une republication NHS et les dépendances NLM
+inconnues ne sont pas agrégées. Les 17 assertions et 10 mappings sont tous `pending_review`.
+Techniquement le paquet est `ready_for_human_review`, mais F reste interdit jusqu'à deux
+approbations réelles par assertion, dont un clinicien compétent, et la revue des mappings.
+
+Le checkpoint E4 ajoute un chemin local distinct sans modifier ce gate. La commande `data build`
+exige `--allow-unreviewed-research-data` et un identifiant terminé par `-dev-unreviewed`. Le
+manifeste, le profil et chaque reçu déclarent l'absence de validation clinique, les 17 assertions et
+10 mappings non revus, zéro reviewer et `publishable: false`. Les statuts sources restent inchangés,
+les mappings non exacts ne scorent pas, les dépendances NLM inconnues restent non agrégeables et le
+moteur de sécurité reste `not_evaluated`. Ce mode sert aux tests de pipeline et d'interface ; il ne
+commence ni F ni G et ne transforme pas le corpus en référence médicale.
+
+## Étape v0.6 — interface interne de test R&D
+
+`v0.6` est une interface locale réservée au développement et à la recherche. Elle n'est ni une
+interface patient, ni un produit utilisateur, ni une interface médicale validée. Son unique rôle
+est de rendre inspectables les contrats et moteurs déjà disponibles, sans introduire de nouvelle
+logique médicale.
+
+Son périmètre livré est le suivant :
+
+- créer, reprendre et modifier simplement un `ClinicalCaseV2` dans une session locale ;
+- lancer `general_v1` et, seulement lorsqu’un cas et un snapshot y sont compatibles, `semantic_v1` ;
+- afficher les candidats, compatibilités non calibrées, couverture, arguments favorables et
+  défavorables, contradictions, sources, provenance, reçu d’exécution et statut de validation ;
+- rendre `safety_status` visible, y compris sa valeur actuelle `not_evaluated` ;
+- accepter le snapshot expérimental `v0.5.0-dev-unreviewed` en conservant partout son avertissement,
+  son statut non revu et ses limites ;
+- demander la question suivante au moteur et enregistrer sa réponse comme observation confirmée ;
+- conserver chaque analyse et question dans un historique immuable lié au cas et au reçu exacts.
+
+Le choix d'architecture est fixé par l'[ADR 0008](decisions/0008-interface-locale-rd-et-sessions.md) :
+FastAPI/Uvicorn sur `127.0.0.1`, pages Jinja2 et JavaScript natif, sans Node, CDN, télémétrie, CORS
+ou option d'écoute publique. `ResearchApplicationService` est partagé avec la CLI ; le frontend ne
+calcule aucun score. Le transport `/internal/v1` est interne à l'outil et n'anticipe pas l'API
+publique de v0.10.
+
+Les sessions utilisent le [schéma `ui-session-v1`](../schemas/ui-session-v1.schema.json), des
+écritures atomiques et une révision optimiste. `session.json` conserve l'état courant ; `runs/`
+conserve des copies immuables du cas, de la sélection et de chaque sortie v2. `sessions/` est hors
+Git et ne promet ni chiffrement, ni comptes, ni stockage de dossiers médicaux réels.
+
+| Checkpoint | Livraison | État |
+| --- | --- | --- |
+| `v0.6-A` | ADR, dépendances minimales et service applicatif partagé avec la CLI | Terminé |
+| `v0.6-B` | Découverte des snapshots, compatibilités et catalogue de concepts | Terminé |
+| `v0.6-C` | Sessions versionnées, sauvegarde atomique et runs immuables | Terminé |
+| `v0.6-D` | Serveur loopback et transport interne sécurisé | Terminé |
+| `v0.6-E` | Éditeur simple `ClinicalCaseV2` et cinq états d'évaluation | Terminé |
+| `v0.6-F` | Résultats, abstention, provenance, questions et statuts non revus | Terminé |
+| `v0.6-G` | Non-régression, packaging et documentation ; CI Windows/Linux après push | Terminé — contrôles locaux et CI GitHub Ubuntu/Windows verts au run `#35337846570` |
+
+Une évolution ultérieure de cette interface devra prévoir une visualisation avancée de type
+Knowledge Graph, « cerveau médical » ou graphe Obsidian. Elle devra rendre navigables, filtrables et
+explorables par zoom, clusters et relations réelles les observations et symptômes, signes, maladies
+rares ou courantes, candidats, assertions médicales, arguments favorables ou contradictoires,
+concepts HPO/Mondo/DOID et autres terminologies, sources, provenance, questions discriminantes et
+objets de raisonnement pertinents. Cette visualisation interactive sera une projection fidèle des
+données et contributions réellement présentes dans Latros : elle ne pourra ni inventer une relation,
+ni créer une preuve, ni modifier un score pour améliorer l’esthétique du graphe.
+
+Cette vue avancée ne constitue pas un critère de livraison de la première interface **v0.6**. Le
+socle livré conserve les identifiants d'observation, assertion, contribution, candidat, mapping et
+source nécessaires à cette projection future ; le Knowledge Graph reste à cadrer et tester
+séparément.
+
+Elle ne doit pas créer de diagnostic, de promesse clinique, de règle de triage, de score
+probabiliste, de source médicale ou de workflow de texte libre. L'ancienne maquette locale a été
+supprimée après livraison de v0.6. L'interface officielle, ses actifs et ses comportements sont
+désormais entièrement portés par `src/latros/ui/` et ne dépendent d'aucun dossier externe ou ignoré.
+
+Les critères d’acceptation de cette tranche sont une séparation visible entre
+snapshots validés et non revus, la fidélité aux sorties et reçus des moteurs existants, l’absence de
+vocabulaire diagnostic/probabiliste et l’impossibilité de masquer l’état de sécurité ou les limites
+de couverture. Les tests UI vérifient le logiciel et les garde-fous, jamais la justesse médicale.
+
+## Trajectoire v0.7 — médicaments, temporalité et mesures cliniques
+
+La future tranche `v0.7` devra distinguer l'exposition réellement rapportée ou observée chez le
+patient, la substance active, le produit ou la présentation commercialisée et la classe
+thérapeutique. Une indication, un effet indésirable, une contre-indication, une interaction ou une
+contrainte d'usage sera une assertion médicale distincte, sourcée et versionnée ; ni un code de
+produit, ni un mapping ne devront devenir une preuve diagnostique ou une recommandation implicite.
+
+ATC, RxNorm et un référentiel français de produits seront évalués comme candidats de
+normalisation, avec audit préalable de couverture, version, licence, redistribution, identifiants
+et reproductibilité. Les premiers tests resteront synthétiques. Cette trajectoire ne crée pas de
+fonction de prescription, de calcul de dose, de choix de traitement ou de contrôle d'interactions :
+ces fonctions exigeraient un périmètre, des sources, des règles et une validation clinique propres.
+
+Les mêmes exigences s’appliqueront aux résultats biologiques, constantes, unités, temporalité et
+facteurs de risque : leur représentation est déjà préparée par les contrats, mais leur ingestion,
+leur normalisation et leur usage clinique ne commenceront qu’après les audits propres à `v0.7`.
+
+## Trajectoires v0.8 à v0.10
+
+- **`v0.8` :** composant safety / triage versionné, séparé du différentiel et soumis à un périmètre,
+  des sources et une validation clinique dédiés.
+- **`v0.9` :** NLP / LLM limité à la proposition d’observations structurées, à la reformulation et à
+  l’explication fidèle aux sorties déterministes ; aucune connaissance médicale implicite.
+- **`v0.10` :** API, FHIR et interopérabilité, après stabilisation des contrats ; FHIR reste un
+  format d’échange et non une base de connaissances ou un moteur clinique.
 
 ## Étape 2 — périmètre livré
 
@@ -74,4 +235,4 @@ Les données canoniques sont reproductibles ; le checksum du conteneur DuckDB, d
 
 ## Mise à jour à chaque livraison
 
-Actualiser ensemble [history.md](../history.md), [README.md](../README.md) et ce plan : état réel des jalons, noms de snapshots, commandes, décisions, vérifications et limites. Si un contrat, une source ou une règle d'import change, actualiser également le schéma, le registre, le manifeste ou l'ADR concernés. Garder les réalisations antérieures dans le journal daté.
+Actualiser ensemble [history.md](history.md), [README.md](../README.md) et ce plan : état réel des jalons, noms de snapshots, commandes, décisions, vérifications et limites. Si un contrat, une source ou une règle d'import change, actualiser également le schéma, le registre, le manifeste ou l'ADR concernés. Garder les réalisations antérieures dans le journal daté.

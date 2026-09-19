@@ -98,6 +98,9 @@ class Abstention(Contract):
         "no_supported_present_observation",
         "insufficient_snapshot_coverage",
         "insufficient_supported_findings",
+        "insufficient_case_coverage",
+        "outside_snapshot_population",
+        "missing_required_context",
     ]
     explanation: str = Field(min_length=1)
 
@@ -123,6 +126,34 @@ class RunReceipt(Contract):
     software_version: str = Field(min_length=1)
     warnings: list[str]
     ignored_inputs: list[InputDisposition]
+    research_unreviewed: bool = False
+    knowledge_validation_status: Literal["unreviewed"] | None = None
+    intended_use: Literal["local_research_only"] | None = None
+    unreviewed_assertion_count: int = Field(default=0, ge=0)
+    unreviewed_mapping_count: int = Field(default=0, ge=0)
+    research_override_used: bool = False
+
+    @model_validator(mode="after")
+    def unreviewed_receipt_is_explicit(self) -> Self:
+        if self.research_unreviewed:
+            if (
+                self.knowledge_validation_status != "unreviewed"
+                or self.intended_use != "local_research_only"
+                or not self.research_override_used
+                or self.unreviewed_assertion_count < 1
+            ):
+                raise ValueError("Unreviewed run receipt safeguards are incomplete")
+        elif any(
+            (
+                self.knowledge_validation_status is not None,
+                self.intended_use is not None,
+                self.unreviewed_assertion_count,
+                self.unreviewed_mapping_count,
+                self.research_override_used,
+            )
+        ):
+            raise ValueError("Reviewed receipt cannot contain unreviewed research markers")
+        return self
 
 
 class DifferentialResultV2(Contract):
@@ -134,6 +165,7 @@ class DifferentialResultV2(Contract):
     candidates: list[DiagnosticCandidateV2]
     abstention: Abstention | None = None
     safety: SafetyAssessment = Field(default_factory=SafetyAssessment)
+    research_unreviewed: bool = False
     run_receipt: RunReceipt
 
     @model_validator(mode="after")
@@ -142,6 +174,8 @@ class DifferentialResultV2(Contract):
             raise ValueError("A ranked result requires candidates and no abstention")
         if self.status == "abstained" and self.abstention is None:
             raise ValueError("An abstained result requires a reason")
+        if self.research_unreviewed != self.run_receipt.research_unreviewed:
+            raise ValueError("Result and run receipt research markers disagree")
         return self
 
 
@@ -176,6 +210,7 @@ class QuestionResultV2(Contract):
     question: AdaptiveQuestionV2 | None
     stop_reason: str | None = None
     safety: SafetyAssessment = Field(default_factory=SafetyAssessment)
+    research_unreviewed: bool = False
     run_receipt: RunReceipt
 
     @model_validator(mode="after")
@@ -184,6 +219,8 @@ class QuestionResultV2(Contract):
             raise ValueError("Question status and payload disagree")
         if self.status == "stopped" and self.stop_reason is None:
             raise ValueError("Stopped question selection requires a reason")
+        if self.research_unreviewed != self.run_receipt.research_unreviewed:
+            raise ValueError("Result and run receipt research markers disagree")
         return self
 
 

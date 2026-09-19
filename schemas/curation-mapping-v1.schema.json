@@ -1,0 +1,118 @@
+{
+  "$defs": {
+    "CuratedCode": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "minLength": 1,
+          "title": "Code",
+          "type": "string"
+        },
+        "system": {
+          "minLength": 1,
+          "title": "System",
+          "type": "string"
+        }
+      },
+      "required": [
+        "system",
+        "code"
+      ],
+      "title": "CuratedCode",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "confidence": {
+      "enum": [
+        "high",
+        "medium",
+        "low",
+        "not_assessed"
+      ],
+      "title": "Confidence",
+      "type": "string"
+    },
+    "direction": {
+      "enum": [
+        "source_to_target",
+        "bidirectional"
+      ],
+      "title": "Direction",
+      "type": "string"
+    },
+    "mapping_id": {
+      "minLength": 1,
+      "title": "Mapping Id",
+      "type": "string"
+    },
+    "provenance_note": {
+      "minLength": 1,
+      "title": "Provenance Note",
+      "type": "string"
+    },
+    "record_locator": {
+      "minLength": 1,
+      "title": "Record Locator",
+      "type": "string"
+    },
+    "relation": {
+      "enum": [
+        "exact",
+        "equivalent",
+        "broader",
+        "narrower",
+        "related",
+        "unresolved"
+      ],
+      "title": "Relation",
+      "type": "string"
+    },
+    "resolution_status": {
+      "enum": [
+        "resolved",
+        "ambiguous",
+        "unresolved"
+      ],
+      "title": "Resolution Status",
+      "type": "string"
+    },
+    "review_status": {
+      "default": "pending_review",
+      "enum": [
+        "pending_review",
+        "approved",
+        "approved_with_change",
+        "rejected"
+      ],
+      "title": "Review Status",
+      "type": "string"
+    },
+    "source": {
+      "$ref": "#/$defs/CuratedCode"
+    },
+    "source_artifact_id": {
+      "minLength": 1,
+      "title": "Source Artifact Id",
+      "type": "string"
+    },
+    "target": {
+      "$ref": "#/$defs/CuratedCode"
+    }
+  },
+  "required": [
+    "mapping_id",
+    "source",
+    "target",
+    "direction",
+    "relation",
+    "resolution_status",
+    "source_artifact_id",
+    "record_locator",
+    "provenance_note",
+    "confidence"
+  ],
+  "title": "CurationMapping",
+  "type": "object"
+}

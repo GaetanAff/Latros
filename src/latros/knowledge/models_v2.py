@@ -154,6 +154,9 @@ class AssertionQualifiers(Contract):
     sex: Literal["male", "female", "intersex", "any", "unknown"] | None = None
     temporal_context: str | None = Field(default=None, min_length=1)
     clinical_context: str | None = Field(default=None, min_length=1)
+    severity: str | None = Field(default=None, min_length=1)
+    location: str | None = Field(default=None, min_length=1)
+    laterality: Literal["left", "right", "bilateral", "midline", "unspecified"] | None = None
     evidence_type: str | None = Field(default=None, min_length=1)
     evidence_level: str | None = Field(default=None, min_length=1)
 
@@ -285,6 +288,7 @@ class CanonicalKnowledgeV2(Contract):
                 _require(assertion_id, source_assertions, "evidence family assertion")
         for dependency in self.source_dependencies:
             _require(dependency.source_release_id, releases, "dependency source release")
+        _require_acyclic_hierarchy(self.hierarchy_edges)
         return self
 
 
@@ -379,3 +383,25 @@ def _require(identifier: str, values: set[str], label: str) -> None:
 def _require_object(value: AssertionObject, concepts: set[str]) -> None:
     if isinstance(value, ConceptObject):
         _require(value.concept_id, concepts, "assertion object concept")
+
+
+def _require_acyclic_hierarchy(edges: list[HierarchyEdgeV2]) -> None:
+    parents: dict[str, list[str]] = {}
+    for edge in edges:
+        parents.setdefault(edge.child_concept_id, []).append(edge.parent_concept_id)
+    visiting: set[str] = set()
+    visited: set[str] = set()
+
+    def visit(concept_id: str) -> None:
+        if concept_id in visiting:
+            raise ValueError(f"Hierarchy cycle detected at concept: {concept_id}")
+        if concept_id in visited:
+            return
+        visiting.add(concept_id)
+        for parent_id in parents.get(concept_id, []):
+            visit(parent_id)
+        visiting.remove(concept_id)
+        visited.add(concept_id)
+
+    for child_id in parents:
+        visit(child_id)

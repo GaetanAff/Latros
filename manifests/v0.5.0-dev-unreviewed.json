@@ -1,0 +1,816 @@
+{
+  "build_pipeline_sha256": "183eea410db6ad80cc56fd1343ea6eba26bda632d32a2a94c863962c02b6f7b9",
+  "canonical_schema_version": 2,
+  "clinical_validation": false,
+  "compatible_profiles": [
+    "general_v1-orl-unreviewed"
+  ],
+  "content_sha256": "a5319b07d7db3bd74687cbb43682c0b518e6aeb0bc2d2edf7c4c7851d0663f16",
+  "duckdb_version": "1.5.5",
+  "errors": [],
+  "evidence_families": [
+    {
+      "dependency_type": "primary",
+      "evidence_family_id": "nhs_conditions",
+      "primary_reference": "nhs_conditions;nhs_historical_otitis_media",
+      "source_assertion_ids": [
+        "source_assertion:03f715da06ee4a2def98fa3778136091ce2f002c2d8d6dad4d70283e31e99890",
+        "source_assertion:1c4b79efd045ab67b856ce4f74208e755366e6ebd3782a795896610859688702",
+        "source_assertion:2d7c79f7845ad13638316eac305cca1f1ce40a21bf8180c278244f9e195df86c",
+        "source_assertion:32fdf235fef25eb699dfbd507556ee71337b7ac2126b0000577c0d4999e1126c",
+        "source_assertion:5abd4563e3d91fa1247f85faf670d4b39d1a8304c8a5f75386fc42393f65af82",
+        "source_assertion:6a536bb84f93b1cf51d455bbe87026bd7143ed4cdd349178d277d67593fb36d7",
+        "source_assertion:7143a9a0964278df62d9c34cc5c5712d721f25c4190c0bb1963c9e170e9b7e19",
+        "source_assertion:8d323951d101eacbda469b75cd26fac4df6d30a74a4f4c86c3744cb98df05d8a",
+        "source_assertion:b4bf1549104b7666d95241602b7147b2eec2c022d284c7f40234fbcc21395c52",
+        "source_assertion:b74c6882c3fd1e6e7ab6add375527d57cac5ffac3ae0cef649f47f4d3640639f",
+        "source_assertion:b9c4023215e5d671747d03609a91ed3d07c09439f0fe8e584458d1fe1aa8ae26",
+        "source_assertion:dfb2d956a9fe933a35ab6e4f54e3bb2ada67c217bf3abea9ae74724066490a1e",
+        "source_assertion:e9ce206903dc4169308348bcb51950bade2295fb4a8f004be54bbd502e45bd90",
+        "source_assertion:f46b5ea7f469cff215f0f2de8dec6f42f231dbb11611870c1c433771ff708b11"
+      ],
+      "source_release_ids": [
+        "nhs:page-review-2024-01-31",
+        "nhs:page-review-2024-03-08",
+        "nhs:page-review-2024-03-22",
+        "nidirect:access-2026-09-17"
+      ]
+    },
+    {
+      "dependency_type": "unknown",
+      "evidence_family_id": "nlm_medlineplus",
+      "primary_reference": "unknown_editorial_upstream",
+      "source_assertion_ids": [
+        "source_assertion:3271be70bd517e4cd487a2d033599dcbace0848c747900a0459edba149cc5746",
+        "source_assertion:4254f62402657465ef42d18a292ee2e458cb1b4bfd9925e9936986be0638db85",
+        "source_assertion:78fe33ca6d98d546bee40f279b04ff743b91de6e272707a3a36c50f3adcbca46"
+      ],
+      "source_release_ids": [
+        "nlm-medlineplus:page-update-2022-11-16",
+        "nlm-medlineplus:page-update-2025-12-04"
+      ]
+    }
+  ],
+  "human_review_complete": false,
+  "intended_use": "local_research_only",
+  "latros_version": "0.4.0",
+  "limitations": [
+    "UNREVIEWED LOCAL RESEARCH DATA: assertions and terminology mappings have not completed human clinical review; this snapshot is not clinically validated or publishable",
+    "All clinical assertions retain their actual pending_review status.",
+    "All terminology mappings retain their actual pending_review status.",
+    "Exact/equivalent mappings may resolve codes technically but are not human-validated.",
+    "Broader, narrower, related, ambiguous and unresolved mappings never score.",
+    "general_v1.compatibility is not a diagnostic probability.",
+    "Safety and triage are not evaluated."
+  ],
+  "publishable": false,
+  "redistribution": "restricted",
+  "research_override_used": true,
+  "reviewer_count": 0,
+  "rules": {
+    "deduplication": "source_rows_preserved; canonical_signature_deduplicated",
+    "evidence": "aggregate_independent_families_only; unknown_dependency_excluded",
+    "mapping": "resolved_exact_or_equivalent_only_for_reasoning",
+    "ordering": "stable_identifier_ascending",
+    "row_encoding": "canonical_json_sorted_keys",
+    "runtime_integrity": "local_receipt; manifest_and_canonical_hashes_define_identity",
+    "safety": "not_evaluated",
+    "schema": "canonical_v2"
+  },
+  "schema_version": 2,
+  "scope": {
+    "domain": "adult ambulatory otorhinolaryngology pilot",
+    "exclusions": [
+      "treatments, medicines, doses and treatment durations",
+      "children and non-ambulatory populations",
+      "chronic sinusitis",
+      "otitis externa and otitis media with effusion",
+      "streptococcal pharyngitis as an automatic synonym of acute tonsillitis",
+      "CDC-derived assertions until international redistribution conditions are closed"
+    ],
+    "observation_types": [
+      "symptom",
+      "sign",
+      "exam",
+      "vital"
+    ],
+    "population": "adults aged 18 years or older in an ambulatory context",
+    "relations": [
+      "has_exam_finding",
+      "has_sign",
+      "has_symptom"
+    ],
+    "scope_id": "adult-ambulatory-orl-unreviewed"
+  },
+  "snapshot": "v0.5.0-dev-unreviewed",
+  "source_dependencies": [
+    {
+      "dependency_type": "primary",
+      "evidence": "Curation receipt doid-2026-08-31; actual dependency metadata preserved without human approval",
+      "source_dependency_id": "source_dependency:1dcf5e94be6f790ed2706d7b99eed61cf5acae8b421c82f699becb09b8c58d51",
+      "source_release_id": "doid:v2026-08-31",
+      "upstream_reference": "doid:v2026-08-31"
+    },
+    {
+      "dependency_type": "primary",
+      "evidence": "Curation receipt mondo-2026-09-01; actual dependency metadata preserved without human approval",
+      "source_dependency_id": "source_dependency:addefe9cf0cbdce081a2b10b210fb4aff5a989b0faf6c88e49bfcfe76075f643",
+      "source_release_id": "mondo:v2026-09-01",
+      "upstream_reference": "mondo:v2026-09-01"
+    },
+    {
+      "dependency_type": "primary",
+      "evidence": "Curation receipt nhs-terms; actual dependency metadata preserved without human approval",
+      "source_dependency_id": "source_dependency:2fc60f961741b079cab93452a7e7c732b5435b26a6515f5f40a9a61f63bbf76b",
+      "source_release_id": "nhs:access-2026-09-17",
+      "upstream_reference": "nhs:access-2026-09-17"
+    },
+    {
+      "dependency_type": "primary",
+      "evidence": "Curation receipt nhs-tonsillitis; actual dependency metadata preserved without human approval",
+      "source_dependency_id": "source_dependency:b34c1ca0535ba67d564f6bf33c49a26f53df378df8fb237f716cb38756385672",
+      "source_release_id": "nhs:page-review-2024-03-08",
+      "upstream_reference": "nhs_conditions"
+    },
+    {
+      "dependency_type": "primary",
+      "evidence": "Curation receipt nhs-common-cold; actual dependency metadata preserved without human approval",
+      "source_dependency_id": "source_dependency:9067f70e75531531bef0027ca056b7b94ba46ee594b4e3aec29c20f07d2bea9d",
+      "source_release_id": "nhs:page-review-2024-03-22",
+      "upstream_reference": "nhs_conditions"
+    },
+    {
+      "dependency_type": "primary",
+      "evidence": "Curation receipt nhs-sinusitis; actual dependency metadata preserved without human approval",
+      "source_dependency_id": "source_dependency:0571c1ea3ceb255e176abe31ac15873e50151942cc94cb145c1f0bec40e7e04b",
+      "source_release_id": "nhs:page-review-2024-01-31",
+      "upstream_reference": "nhs_conditions"
+    },
+    {
+      "dependency_type": "primary",
+      "evidence": "Curation receipt nlm-using-content; actual dependency metadata preserved without human approval",
+      "source_dependency_id": "source_dependency:d6baf2adda26c39f499b5aee4f2ddec2e55600bebdf843c1e61e46e02e1b6481",
+      "source_release_id": "nlm-medlineplus:page-update-2022-10-26",
+      "upstream_reference": "nlm-medlineplus:page-update-2022-10-26"
+    },
+    {
+      "dependency_type": "unknown",
+      "evidence": "Curation receipt nlm-common-cold; actual dependency metadata preserved without human approval",
+      "source_dependency_id": "source_dependency:f0c5dab1d813382bcc7b12aa03e30b090b1f55d9a680e7c75aa29f09cda855ed",
+      "source_release_id": "nlm-medlineplus:page-update-2022-11-16",
+      "upstream_reference": "unknown_editorial_upstream"
+    },
+    {
+      "dependency_type": "shared_upstream",
+      "evidence": "Curation receipt nlm-sinusitis; actual dependency metadata preserved without human approval",
+      "source_dependency_id": "source_dependency:0872b7621621560cfaa70d9e4fbe37eb790ddfb89e12db76b6086c06654da88f",
+      "source_release_id": "nlm-medlineplus:page-update-2025-06-29",
+      "upstream_reference": "cdc_sinus_infection"
+    },
+    {
+      "dependency_type": "unknown",
+      "evidence": "Curation receipt nlm-ear-infections; actual dependency metadata preserved without human approval",
+      "source_dependency_id": "source_dependency:00b24d0b99e4f8702a3a2b11d2bd3149f15d401f6123925f2c0df94b41196943",
+      "source_release_id": "nlm-medlineplus:page-update-2025-12-04",
+      "upstream_reference": "unknown_editorial_upstream"
+    },
+    {
+      "dependency_type": "primary",
+      "evidence": "Curation receipt nidirect-crown-copyright; actual dependency metadata preserved without human approval",
+      "source_dependency_id": "source_dependency:5bc64c4ccab614a05c07c936569da67ab6d459685c1057c3aed51c7eed0a481f",
+      "source_release_id": "nidirect:access-2026-09-17",
+      "upstream_reference": "nidirect:access-2026-09-17"
+    },
+    {
+      "dependency_type": "republication",
+      "evidence": "Curation receipt nidirect-otitis-media; actual dependency metadata preserved without human approval",
+      "source_dependency_id": "source_dependency:a45f03843865daddbb72c4b310f4ecf7c333887c59abe08b7a10432eceada69e",
+      "source_release_id": "nidirect:access-2026-09-17",
+      "upstream_reference": "nhs_historical_otitis_media"
+    },
+    {
+      "dependency_type": "derived_from",
+      "evidence": "Latros structured curation package; review status preserved",
+      "source_dependency_id": "source_dependency:c76d633cf22545669422e93a488e4b4de03fd72e1837449d6cd51519fb4afeb6",
+      "source_release_id": "latros-curation:v0.5-orl-pending-2026-09-17",
+      "upstream_reference": "v0.5-orl-pending-2026-09-17"
+    }
+  ],
+  "sources": [
+    {
+      "access_date": "2026-09-17",
+      "artifacts": [
+        {
+          "access_mode": "manual_local",
+          "filename": "doid.json",
+          "format": "obographs-json",
+          "language": "en",
+          "local_path": "data/raw/doid/2026-08-31/doid.json",
+          "product": "curation-source:doid-2026-08-31",
+          "sha256": "8238cb4d3f758e89fa9a74eaf14b606d5d0b2a36f184ab7a7ea92a8dbcb4626e",
+          "source_url": "https://raw.githubusercontent.com/DiseaseOntology/HumanDiseaseOntology/v2026-08-31/src/ontology/doid.json"
+        }
+      ],
+      "code_system": "urn:latros:source:doid",
+      "dependencies": [],
+      "homepage": "https://raw.githubusercontent.com/DiseaseOntology/HumanDiseaseOntology/v2026-08-31/src/ontology/doid.json",
+      "license": {
+        "attribution": "Disease Ontology, release v2026-08-31",
+        "implementation_rights_confirmed": true,
+        "name": "CC0-1.0",
+        "notes": "Terminology and mappings only; never diagnostic evidence.",
+        "redistribution": "allowed_with_attribution",
+        "url": "https://creativecommons.org/publicdomain/zero/1.0/"
+      },
+      "release": "v2026-08-31",
+      "release_date": "2026-08-31",
+      "roles": [
+        "terminology"
+      ],
+      "source_id": "doid"
+    },
+    {
+      "access_date": "2026-09-17",
+      "artifacts": [
+        {
+          "access_mode": "manual_local",
+          "filename": "mondo.json",
+          "format": "obographs-json",
+          "language": "en",
+          "local_path": "data/raw/mondo/2026-09-01/mondo.json",
+          "product": "curation-source:mondo-2026-09-01",
+          "sha256": "ba19a3be2a384f21d2a09eaa726daedf6f06b9747ae011ab81d29fcd4dd8d3ee",
+          "source_url": "https://github.com/monarch-initiative/mondo/releases/download/v2026-09-01/mondo.json"
+        }
+      ],
+      "code_system": "urn:latros:source:mondo",
+      "dependencies": [],
+      "homepage": "https://github.com/monarch-initiative/mondo/releases/download/v2026-09-01/mondo.json",
+      "license": {
+        "attribution": "Mondo Disease Ontology contributors, release v2026-09-01",
+        "implementation_rights_confirmed": true,
+        "name": "CC-BY-4.0",
+        "notes": "Terminology and mappings only; never diagnostic evidence.",
+        "redistribution": "allowed_with_attribution",
+        "url": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      "release": "v2026-09-01",
+      "release_date": "2026-09-01",
+      "roles": [
+        "terminology"
+      ],
+      "source_id": "mondo"
+    },
+    {
+      "access_date": "2026-09-17",
+      "artifacts": [
+        {
+          "access_mode": "manual_local",
+          "filename": "terms.html",
+          "format": "html-capture",
+          "language": "en",
+          "local_path": "data/raw/nhs/2026-09-17/terms.html",
+          "product": "curation-source:nhs-terms",
+          "sha256": "a48f0d5bf7cc56ed676c72d125087bf5f19cd7e444baf47f60642a61cbd631ae",
+          "source_url": "https://www.nhs.uk/our-policies/terms-and-conditions/"
+        }
+      ],
+      "code_system": "urn:latros:source:nhs",
+      "dependencies": [],
+      "homepage": "https://www.nhs.uk/our-policies/terms-and-conditions/",
+      "license": {
+        "attribution": "Contains public sector information licensed under the Open Government Licence v3.0; source NHS website",
+        "implementation_rights_confirmed": true,
+        "name": "Open Government Licence v3.0 with NHS exclusions",
+        "notes": "Logos, images, video, personal data, device content and identified third-party content are excluded.",
+        "redistribution": "allowed_with_attribution",
+        "url": "https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
+      },
+      "release": "access-2026-09-17",
+      "release_date": null,
+      "roles": [
+        "license_evidence"
+      ],
+      "source_id": "nhs"
+    },
+    {
+      "access_date": "2026-09-17",
+      "artifacts": [
+        {
+          "access_mode": "manual_local",
+          "filename": "sinusitis.html",
+          "format": "html-capture",
+          "language": "en",
+          "local_path": "data/raw/nhs/2026-09-17/sinusitis.html",
+          "product": "curation-source:nhs-sinusitis",
+          "sha256": "29b12621d59dced29d6223359665d0400b0e1663cf9f7f7496cbc9ddfc407a65",
+          "source_url": "https://www.nhs.uk/conditions/sinusitis-sinus-infection/"
+        }
+      ],
+      "code_system": "urn:latros:source:nhs",
+      "dependencies": [
+        {
+          "dependency_type": "primary",
+          "evidence": "Pinned curation receipt nhs-sinusitis",
+          "upstream_reference": "nhs_conditions"
+        }
+      ],
+      "homepage": "https://www.nhs.uk/conditions/sinusitis-sinus-infection/",
+      "license": {
+        "attribution": "Information adapted from the NHS website; accessed 17 September 2026",
+        "implementation_rights_confirmed": true,
+        "name": "Open Government Licence v3.0 with NHS exclusions",
+        "notes": "Acute scope is enforced by the Latros candidate and review; chronic sinusitis is excluded.",
+        "redistribution": "allowed_with_attribution",
+        "url": "https://www.nhs.uk/our-policies/terms-and-conditions/"
+      },
+      "release": "page-review-2024-01-31",
+      "release_date": "2024-01-31",
+      "roles": [
+        "clinical_assertions"
+      ],
+      "source_id": "nhs"
+    },
+    {
+      "access_date": "2026-09-17",
+      "artifacts": [
+        {
+          "access_mode": "manual_local",
+          "filename": "tonsillitis.html",
+          "format": "html-capture",
+          "language": "en",
+          "local_path": "data/raw/nhs/2026-09-17/tonsillitis.html",
+          "product": "curation-source:nhs-tonsillitis",
+          "sha256": "bc95356822277299810ffcf5bed6a1f6d615f942871b1a171cad736a62c21e5c",
+          "source_url": "https://www.nhs.uk/conditions/tonsillitis/"
+        }
+      ],
+      "code_system": "urn:latros:source:nhs",
+      "dependencies": [
+        {
+          "dependency_type": "primary",
+          "evidence": "Pinned curation receipt nhs-tonsillitis",
+          "upstream_reference": "nhs_conditions"
+        }
+      ],
+      "homepage": "https://www.nhs.uk/conditions/tonsillitis/",
+      "license": {
+        "attribution": "Information adapted from the NHS website; accessed 17 September 2026",
+        "implementation_rights_confirmed": true,
+        "name": "Open Government Licence v3.0 with NHS exclusions",
+        "notes": "Only structured symptom assertions; no NHS clinical approval is claimed for the adaptation.",
+        "redistribution": "allowed_with_attribution",
+        "url": "https://www.nhs.uk/our-policies/terms-and-conditions/"
+      },
+      "release": "page-review-2024-03-08",
+      "release_date": "2024-03-08",
+      "roles": [
+        "clinical_assertions"
+      ],
+      "source_id": "nhs"
+    },
+    {
+      "access_date": "2026-09-17",
+      "artifacts": [
+        {
+          "access_mode": "manual_local",
+          "filename": "common-cold.html",
+          "format": "html-capture",
+          "language": "en",
+          "local_path": "data/raw/nhs/2026-09-17/common-cold.html",
+          "product": "curation-source:nhs-common-cold",
+          "sha256": "d90954e58adbf887d1474c3a7ff36854e69328339409dae3b29273fb13618fb7",
+          "source_url": "https://www.nhs.uk/conditions/common-cold/"
+        }
+      ],
+      "code_system": "urn:latros:source:nhs",
+      "dependencies": [
+        {
+          "dependency_type": "primary",
+          "evidence": "Pinned curation receipt nhs-common-cold",
+          "upstream_reference": "nhs_conditions"
+        }
+      ],
+      "homepage": "https://www.nhs.uk/conditions/common-cold/",
+      "license": {
+        "attribution": "Information adapted from the NHS website; accessed 17 September 2026",
+        "implementation_rights_confirmed": true,
+        "name": "Open Government Licence v3.0 with NHS exclusions",
+        "notes": "Only structured symptom and temporal assertions.",
+        "redistribution": "allowed_with_attribution",
+        "url": "https://www.nhs.uk/our-policies/terms-and-conditions/"
+      },
+      "release": "page-review-2024-03-22",
+      "release_date": "2024-03-22",
+      "roles": [
+        "clinical_assertions"
+      ],
+      "source_id": "nhs"
+    },
+    {
+      "access_date": "2026-09-17",
+      "artifacts": [
+        {
+          "access_mode": "manual_local",
+          "filename": "crown-copyright.html",
+          "format": "html-capture",
+          "language": "en",
+          "local_path": "data/raw/nidirect/2026-09-17/crown-copyright.html",
+          "product": "curation-source:nidirect-crown-copyright",
+          "sha256": "99fe5d16d0f65f9dd79c8c874c0617c4ee44e846cbefa880ba871a795f284f69",
+          "source_url": "https://www.nidirect.gov.uk/articles/crown-copyright"
+        },
+        {
+          "access_mode": "manual_local",
+          "filename": "otitis-media.html",
+          "format": "html-capture",
+          "language": "en",
+          "local_path": "data/raw/nidirect/2026-09-17/otitis-media.html",
+          "product": "curation-source:nidirect-otitis-media",
+          "sha256": "25ffdfc1487cb1242a9b57c9326e5f6e555bf5093fa3986a10e3e996e67c915a",
+          "source_url": "https://www.nidirect.gov.uk/conditions/middle-ear-infection-otitis-media"
+        }
+      ],
+      "code_system": "urn:latros:source:nidirect",
+      "dependencies": [
+        {
+          "dependency_type": "republication",
+          "evidence": "Pinned curation receipt nidirect-otitis-media",
+          "upstream_reference": "nhs_historical_otitis_media"
+        }
+      ],
+      "homepage": "https://www.nidirect.gov.uk/articles/crown-copyright",
+      "license": {
+        "attribution": "Source: nidirect, Northern Ireland government services; Source: nidirect; page states adaptation from original NHS website content",
+        "implementation_rights_confirmed": true,
+        "name": "Open Government Licence v3.0 with stated exclusions",
+        "notes": "Logos, images and third-party content are excluded. Used because adult AOM specificity was insufficient in the initial three-source set; never counted independently from NHS.",
+        "redistribution": "allowed_with_attribution",
+        "url": "https://www.nidirect.gov.uk/articles/crown-copyright"
+      },
+      "release": "access-2026-09-17",
+      "release_date": null,
+      "roles": [
+        "clinical_assertions",
+        "license_evidence"
+      ],
+      "source_id": "nidirect"
+    },
+    {
+      "access_date": "2026-09-17",
+      "artifacts": [
+        {
+          "access_mode": "manual_local",
+          "filename": "using-content.html",
+          "format": "html-capture",
+          "language": "en",
+          "local_path": "data/raw/nlm-medlineplus/2026-09-17/using-content.html",
+          "product": "curation-source:nlm-using-content",
+          "sha256": "8a3aa76bfa4eedfcbf7e46d757fe01207b547ae57f95fee38b99d8da2579b1c8",
+          "source_url": "https://medlineplus.gov/about/using/usingcontent/"
+        }
+      ],
+      "code_system": "urn:latros:source:nlm-medlineplus",
+      "dependencies": [],
+      "homepage": "https://medlineplus.gov/about/using/usingcontent/",
+      "license": {
+        "attribution": "Source: MedlinePlus, National Library of Medicine",
+        "implementation_rights_confirmed": true,
+        "name": "United States public domain for MedlinePlus Health Topic summaries",
+        "notes": "A.D.A.M., ASHP, logos, most images and third-party linked content remain excluded.",
+        "redistribution": "allowed_with_attribution",
+        "url": "https://medlineplus.gov/about/using/usingcontent/"
+      },
+      "release": "page-update-2022-10-26",
+      "release_date": "2022-10-26",
+      "roles": [
+        "license_evidence"
+      ],
+      "source_id": "nlm-medlineplus"
+    },
+    {
+      "access_date": "2026-09-17",
+      "artifacts": [
+        {
+          "access_mode": "manual_local",
+          "filename": "common-cold.html",
+          "format": "html-capture",
+          "language": "en",
+          "local_path": "data/raw/nlm-medlineplus/2026-09-17/common-cold.html",
+          "product": "curation-source:nlm-common-cold",
+          "sha256": "d6ade24259a265d0d5477eb403bec3b96280a9b1b656a179aca55a4daf193857",
+          "source_url": "https://medlineplus.gov/commoncold.html"
+        }
+      ],
+      "code_system": "urn:latros:source:nlm-medlineplus",
+      "dependencies": [
+        {
+          "dependency_type": "unknown",
+          "evidence": "Pinned curation receipt nlm-common-cold",
+          "upstream_reference": "unknown_editorial_upstream"
+        }
+      ],
+      "homepage": "https://medlineplus.gov/commoncold.html",
+      "license": {
+        "attribution": "Source: MedlinePlus, National Library of Medicine",
+        "implementation_rights_confirmed": true,
+        "name": "United States public domain for MedlinePlus Health Topic summaries",
+        "notes": "Visible for provenance but excluded from aggregation until editorial dependencies are resolved.",
+        "redistribution": "allowed_with_attribution",
+        "url": "https://medlineplus.gov/about/using/usingcontent/"
+      },
+      "release": "page-update-2022-11-16",
+      "release_date": "2022-11-16",
+      "roles": [
+        "clinical_assertions"
+      ],
+      "source_id": "nlm-medlineplus"
+    },
+    {
+      "access_date": "2026-09-17",
+      "artifacts": [
+        {
+          "access_mode": "manual_local",
+          "filename": "sinusitis.html",
+          "format": "html-capture",
+          "language": "en",
+          "local_path": "data/raw/nlm-medlineplus/2026-09-17/sinusitis.html",
+          "product": "curation-source:nlm-sinusitis",
+          "sha256": "9323af38c1d820f9fd69f8eff3e493827f9043cd024f98d6c0753e30e341e2dd",
+          "source_url": "https://medlineplus.gov/sinusitis.html"
+        }
+      ],
+      "code_system": "urn:latros:source:nlm-medlineplus",
+      "dependencies": [
+        {
+          "dependency_type": "shared_upstream",
+          "evidence": "Pinned curation receipt nlm-sinusitis",
+          "upstream_reference": "cdc_sinus_infection"
+        }
+      ],
+      "homepage": "https://medlineplus.gov/sinusitis.html",
+      "license": {
+        "attribution": "Source: MedlinePlus, National Library of Medicine",
+        "implementation_rights_confirmed": true,
+        "name": "United States public domain for MedlinePlus Health Topic summaries",
+        "notes": "The page links CDC as Start Here; retained for acute-duration context and excluded from independent aggregation.",
+        "redistribution": "allowed_with_attribution",
+        "url": "https://medlineplus.gov/about/using/usingcontent/"
+      },
+      "release": "page-update-2025-06-29",
+      "release_date": "2025-06-29",
+      "roles": [
+        "clinical_assertions"
+      ],
+      "source_id": "nlm-medlineplus"
+    },
+    {
+      "access_date": "2026-09-17",
+      "artifacts": [
+        {
+          "access_mode": "manual_local",
+          "filename": "ear-infections.html",
+          "format": "html-capture",
+          "language": "en",
+          "local_path": "data/raw/nlm-medlineplus/2026-09-17/ear-infections.html",
+          "product": "curation-source:nlm-ear-infections",
+          "sha256": "9acc372143401a48657028680c097f1468c079505755abcc07051484f87d4124",
+          "source_url": "https://medlineplus.gov/earinfections.html"
+        }
+      ],
+      "code_system": "urn:latros:source:nlm-medlineplus",
+      "dependencies": [
+        {
+          "dependency_type": "unknown",
+          "evidence": "Pinned curation receipt nlm-ear-infections",
+          "upstream_reference": "unknown_editorial_upstream"
+        }
+      ],
+      "homepage": "https://medlineplus.gov/earinfections.html",
+      "license": {
+        "attribution": "Source: MedlinePlus, National Library of Medicine",
+        "implementation_rights_confirmed": true,
+        "name": "United States public domain for MedlinePlus Health Topic summaries",
+        "notes": "Adult-compatible but broad otitis-media summary; exact acute applicability requires clinical review.",
+        "redistribution": "allowed_with_attribution",
+        "url": "https://medlineplus.gov/about/using/usingcontent/"
+      },
+      "release": "page-update-2025-12-04",
+      "release_date": "2025-12-04",
+      "roles": [
+        "clinical_assertions"
+      ],
+      "source_id": "nlm-medlineplus"
+    },
+    {
+      "access_date": "2026-09-17",
+      "artifacts": [
+        {
+          "access_mode": "manual_local",
+          "filename": "package-manifest.json",
+          "format": "curation-package-json",
+          "language": "en",
+          "local_path": "curation/v0.5-orl/manifest.json",
+          "product": "curation-package:manifest.json",
+          "sha256": "06f244c5af53a6282ee842f2b101aeb3aabbfebfb7a948b32d1475b0ff13745b",
+          "source_url": "https://github.com/GaetanAff/Latros"
+        },
+        {
+          "access_mode": "manual_local",
+          "filename": "package-sources.json",
+          "format": "curation-package-json",
+          "language": "en",
+          "local_path": "curation/v0.5-orl/sources.json",
+          "product": "curation-package:sources.json",
+          "sha256": "73f09102c262aca76dfc847728cbe68760552aa718718ea2fef90994e90f7288",
+          "source_url": "https://github.com/GaetanAff/Latros"
+        },
+        {
+          "access_mode": "manual_local",
+          "filename": "package-concepts.jsonl",
+          "format": "curation-jsonl",
+          "language": "en",
+          "local_path": "curation/v0.5-orl/concepts.jsonl",
+          "product": "curation-package:concepts.jsonl",
+          "sha256": "f083f0c47f004a5872cc28e5a494da4c9e036b93ba5f1a658c3f334af641addb",
+          "source_url": "https://github.com/GaetanAff/Latros"
+        },
+        {
+          "access_mode": "manual_local",
+          "filename": "package-mappings.jsonl",
+          "format": "curation-jsonl",
+          "language": "en",
+          "local_path": "curation/v0.5-orl/mappings.jsonl",
+          "product": "curation-package:mappings.jsonl",
+          "sha256": "54b7f3e48356b38bf92b5b6c8c86afdb66ac5a61755e45ddc4a2d53f8940fe80",
+          "source_url": "https://github.com/GaetanAff/Latros"
+        },
+        {
+          "access_mode": "manual_local",
+          "filename": "package-assertions.jsonl",
+          "format": "curation-jsonl",
+          "language": "en",
+          "local_path": "curation/v0.5-orl/assertions.jsonl",
+          "product": "curation-package:assertions.jsonl",
+          "sha256": "fd45ad77f5b1adbf374b86beaccd020054baaba6f6c9ae64a8a9a958189e5d0b",
+          "source_url": "https://github.com/GaetanAff/Latros"
+        },
+        {
+          "access_mode": "manual_local",
+          "filename": "package-reviewers.jsonl",
+          "format": "curation-jsonl",
+          "language": "en",
+          "local_path": "curation/v0.5-orl/reviewers.jsonl",
+          "product": "curation-package:reviewers.jsonl",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "source_url": "https://github.com/GaetanAff/Latros"
+        },
+        {
+          "access_mode": "manual_local",
+          "filename": "package-reviews.jsonl",
+          "format": "curation-jsonl",
+          "language": "en",
+          "local_path": "curation/v0.5-orl/reviews.jsonl",
+          "product": "curation-package:reviews.jsonl",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "source_url": "https://github.com/GaetanAff/Latros"
+        },
+        {
+          "access_mode": "manual_local",
+          "filename": "source-segments.json",
+          "format": "source-segments-json",
+          "language": "en",
+          "local_path": "data/raw/v0.5-orl-pending/2026-09-17/segments.json",
+          "product": "curation-package:segments.json",
+          "sha256": "2c765263671b1faeae5248b8a3904fac81c550ee3fdf8c9ee6bf64d96006ee50",
+          "source_url": "https://github.com/GaetanAff/Latros"
+        }
+      ],
+      "code_system": "urn:latros:orl",
+      "dependencies": [
+        {
+          "dependency_type": "derived_from",
+          "evidence": "Pinned package hash and source-level provenance",
+          "upstream_reference": "v0.5-orl-pending-2026-09-17"
+        }
+      ],
+      "homepage": "https://github.com/GaetanAff/Latros",
+      "license": {
+        "attribution": "Latros local research curation; upstream provenance retained per assertion",
+        "implementation_rights_confirmed": true,
+        "name": "Project-internal research curation metadata",
+        "notes": "Not clinically reviewed; not a redistributable clinical reference snapshot.",
+        "redistribution": "restricted",
+        "url": "https://github.com/GaetanAff/Latros"
+      },
+      "release": "v0.5-orl-pending-2026-09-17",
+      "release_date": null,
+      "roles": [
+        "curation_metadata"
+      ],
+      "source_id": "latros-curation"
+    }
+  ],
+  "tables": {
+    "assertion_derivation": {
+      "logical_sha256": "4bb04fa1f1d687e6a10844d934548608366a7423932d3e16aa327a3608769cc2",
+      "parquet_sha256": "a0295ca2159631fd514bfc881ae6c11cbad80cb6b04ea76618e23254e72e46ed",
+      "rows": 17
+    },
+    "canonical_assertion": {
+      "logical_sha256": "d70606b984b58d039077155a04ac068807dd863ab6683ac5163022bf60f1f6ba",
+      "parquet_sha256": "21de2c7de22c39023c64a8bc3415bd805359cf09a47a15d29b2c6f56e3e794de",
+      "rows": 17
+    },
+    "concept": {
+      "logical_sha256": "a3cf877cc2c1d9b4d458cd63c113b5ad260493c03cbdcd3f08e8aee886032743",
+      "parquet_sha256": "73606c9605ef38f1cd245bf9544426028d4637181d8cc7782053dedf3ab029e6",
+      "rows": 19
+    },
+    "concept_mapping": {
+      "logical_sha256": "c39842fa1bb99a7b8a37fd8c4e741f9e01abe6e1b225813bcb701c124c25b1cf",
+      "parquet_sha256": "81185aae81bb45db31654a8f08c96213d0d4d5a04c567da5af4600a35292e118",
+      "rows": 10
+    },
+    "designation": {
+      "logical_sha256": "f947e5792da9d6cd506dbbd34a16df33a38077d7a6936085cfbe81aae98f60cf",
+      "parquet_sha256": "b5aa00cd8ce3a32a89d848607b91af436ea4802f451461cc20ac2aad586c6781",
+      "rows": 19
+    },
+    "evidence_family": {
+      "logical_sha256": "a4d138ecee27d6709e12f446034509c4764bc4210303107070f352e3c1b20f49",
+      "parquet_sha256": "81de7d0d1213eac3608019d0626e8b3de07218eca1af0ddab02ff999a0b5d257",
+      "rows": 2
+    },
+    "external_identifier": {
+      "logical_sha256": "d787a3277fa1c60c3f5369da4ff9be7507e748aef9e65785c41dcdc15a8dddbe",
+      "parquet_sha256": "27c69a9bc3753abf5c9c8b5ead902b555164e1ea7e1385528e576b47772d5dcc",
+      "rows": 19
+    },
+    "hierarchy_edge": {
+      "logical_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "parquet_sha256": "d1d4f019918e30cf17d66cdd260120c2a963c89b65bae14ef6889a9e40fa863c",
+      "rows": 0
+    },
+    "source_artifact": {
+      "logical_sha256": "a6a2eaca5f4d30625eed0abee51c5aaa296604a018d3e09903fc74f5a39f673e",
+      "parquet_sha256": "c31e19165caa0195f2662bb940b92d0190bd2b9331f5be350b8fe2a50d317cc9",
+      "rows": 20
+    },
+    "source_assertion": {
+      "logical_sha256": "91378f3095f5a4ce6d23d228bfcfa500b73aebc0ffa3da314b03835b5ebba8ec",
+      "parquet_sha256": "07f02f6daa2ecef31172db908126c091ae255af57ea7b14303064424bf33899d",
+      "rows": 17
+    },
+    "source_dependency": {
+      "logical_sha256": "f8d6b2c719d5159818566c22e00e6b17d984604c9cad5c7c855f613c4dee6dd4",
+      "parquet_sha256": "323f56d577387dab1441e616bf79ee03980415f31ff76141b28a167785c0ceb0",
+      "rows": 13
+    },
+    "source_record": {
+      "logical_sha256": "3b5a23a467a01bc8e7d03c29337eb595c3ae78e36559f31b6647ebea1215d3fa",
+      "parquet_sha256": "e08e4c033ed989c0f002d04409208da8552b2eaacd363033098f5e9e51393a5f",
+      "rows": 17
+    },
+    "source_release": {
+      "logical_sha256": "7b356ccf90421164d405b3a9db3961ca9c39a065d390ca811ca2744cba4a488a",
+      "parquet_sha256": "4e82ac102ba8d369f34df47822fa6d00028278537cc58d803a4df5fa23cc22b1",
+      "rows": 12
+    }
+  },
+  "unreviewed_assertion_ids": [
+    "orl-a001",
+    "orl-a002",
+    "orl-a003",
+    "orl-a004",
+    "orl-a005",
+    "orl-a006",
+    "orl-a007",
+    "orl-a008",
+    "orl-a009",
+    "orl-a010",
+    "orl-a011",
+    "orl-a012",
+    "orl-a013",
+    "orl-a014",
+    "orl-a015",
+    "orl-a016",
+    "orl-a017"
+  ],
+  "unreviewed_mapping_ids": [
+    "orl-map-001",
+    "orl-map-002",
+    "orl-map-003",
+    "orl-map-004",
+    "orl-map-005",
+    "orl-map-006",
+    "orl-map-007",
+    "orl-map-008",
+    "orl-map-009",
+    "orl-map-010"
+  ],
+  "validation_status": "unreviewed",
+  "warnings": [
+    "UNREVIEWED LOCAL RESEARCH DATA: not clinically validated, not publishable, and not suitable for clinical use"
+  ]
+}

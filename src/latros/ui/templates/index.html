@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+    <title>Latros — Interface R&D locale</title>
+    <link rel="icon" href="/assets/latros-logo.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="/assets/style.css">
+    <script src="/assets/app.js" defer></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <img src="/assets/latros-logo.svg" alt="Latros" class="brand-logo">
+      <div>
+        <p class="eyebrow">Interface interne v0.6 · version {{ version }}</p>
+        <h1>Console de recherche locale</h1>
+      </div>
+      <div class="topbar-actions">
+        <span class="offline-pill">● hors ligne</span>
+        <button id="theme-toggle" class="quiet-button" type="button">Thème</button>
+      </div>
+    </header>
+
+    <section class="warning-banner" role="alert">
+      <strong>R&D uniquement — aucune validation clinique.</strong>
+      Cette interface expose les sorties existantes de Latros. Elle ne fournit ni diagnostic,
+      ni triage, ni recommandation de traitement. Tout snapshot expérimental affiche
+      <strong>DONNÉES NON REVUES</strong> sans possibilité de masquer ce statut.
+    </section>
+
+    <main class="workspace">
+      <aside class="panel sidebar" aria-label="Configuration de session">
+        <section>
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Sauvegarde locale</p>
+              <h2>Session</h2>
+            </div>
+            <button id="new-session" class="icon-button" type="button" title="Nouvelle session">+</button>
+          </div>
+          <label for="session-select">Session enregistrée</label>
+          <select id="session-select"></select>
+          <p id="save-status" class="hint">Chargement…</p>
+        </section>
+
+        <section>
+          <p class="eyebrow">Exécution</p>
+          <h2>Moteur et snapshot</h2>
+          <label for="snapshot-select">Snapshot</label>
+          <select id="snapshot-select"></select>
+          <label for="strategy-select">Stratégie</label>
+          <select id="strategy-select"></select>
+          <button id="apply-selection" class="secondary-button" type="button">Appliquer</button>
+          <div id="snapshot-status" class="status-card compact"></div>
+        </section>
+
+        <section>
+          <p class="eyebrow">ClinicalCaseV2</p>
+          <h2>Contexte du cas</h2>
+          <div class="field-row">
+            <div>
+              <label for="age-input">Âge (années)</label>
+              <input id="age-input" type="number" min="0" max="130" step="0.1" inputmode="decimal">
+            </div>
+            <div>
+              <label for="sex-select">Sexe</label>
+              <select id="sex-select">
+                <option value="">Non renseigné</option>
+                <option value="female">Féminin</option>
+                <option value="male">Masculin</option>
+                <option value="intersex">Intersexe</option>
+                <option value="unknown">Inconnu</option>
+              </select>
+            </div>
+          </div>
+          <button id="save-case" class="secondary-button" type="button">Enregistrer le cas</button>
+        </section>
+
+        <section>
+          <p class="eyebrow">Observations confirmées</p>
+          <h2>Ajouter une observation</h2>
+          <label for="concept-query">Rechercher dans le snapshot</label>
+          <div class="search-row">
+            <input id="concept-query" type="search" placeholder="Libellé ou code">
+            <button id="concept-search" class="icon-button" type="button" title="Rechercher">⌕</button>
+          </div>
+          <div id="concept-results" class="concept-results"></div>
+          <div id="selected-concept" class="selected-concept muted">Aucun concept sélectionné</div>
+          <label for="observation-state">État observé</label>
+          <select id="observation-state">
+            <option value="present">Présent · évalué</option>
+            <option value="absent">Absent · évalué</option>
+            <option value="unknown">Inconnu · évalué</option>
+            <option value="not_assessed">Non évalué</option>
+            <option value="unable_to_assess">Impossible à évaluer</option>
+          </select>
+          <button id="add-observation" class="primary-button" type="button">Ajouter</button>
+          <div id="observation-list" class="observation-list"></div>
+        </section>
+      </aside>
+
+      <section class="content-column">
+        <section class="panel action-panel">
+          <div>
+            <p class="eyebrow">Analyse déterministe</p>
+            <h2>Exécuter Latros</h2>
+            <p class="muted">Les calculs restent dans le backend. L’interface ne modifie aucun score.</p>
+          </div>
+          <div class="action-buttons">
+            <button id="run-analysis" class="primary-button" type="button">Lancer l’analyse</button>
+            <button id="next-question" class="secondary-button" type="button">Question suivante</button>
+          </div>
+        </section>
+
+        <section id="validation-panel" class="panel status-panel">
+          <p class="eyebrow">Statut de validation</p>
+          <div id="validation-content">Aucune exécution.</div>
+        </section>
+
+        <section class="panel safety-panel">
+          <p class="eyebrow">Composant safety séparé</p>
+          <div class="safety-value"><span>SAFETY STATUS</span><strong id="safety-status">not_evaluated</strong></div>
+          <p>Aucune conclusion de sécurité ou d’urgence n’est produite par cette interface.</p>
+        </section>
+
+        <section class="panel">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Sortie moteur</p>
+              <h2>Résultats</h2>
+            </div>
+            <div id="run-meta" class="run-meta"></div>
+          </div>
+          <div id="result-summary" class="empty-state">
+            Lancez une analyse pour inspecter couverture, abstention et candidats.
+          </div>
+          <div id="candidate-list" class="candidate-list"></div>
+        </section>
+
+        <section class="panel">
+          <p class="eyebrow">Interrogatoire adaptatif</p>
+          <h2>Question proposée par le moteur</h2>
+          <div id="question-panel" class="empty-state">Aucune question demandée.</div>
+        </section>
+      </section>
+
+      <aside class="panel details" aria-label="Détails et provenance">
+        <p class="eyebrow">Debug et explicabilité</p>
+        <h2>Détails du candidat</h2>
+        <div id="candidate-details" class="empty-state">
+          Sélectionnez un candidat pour examiner ses contributions et sa provenance.
+        </div>
+      </aside>
+    </main>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>
