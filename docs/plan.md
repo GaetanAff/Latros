@@ -1,6 +1,6 @@
 # Plan d'implémentation et avancement
 
-Référence : plan « Premières étapes de Latros — socle de données et moteur clinique pur » demandé par l'utilisateur. État au 19 septembre 2026.
+Référence : plan « Premières étapes de Latros — socle de données et moteur clinique pur » demandé par l'utilisateur. État au 20 septembre 2026.
 
 Les trois jalons avaient été implémentés ensemble dans la première tranche. La reprise de l'étape 2 consiste à vérifier sa livraison et à établir le snapshot sous le nom du jalon, `v0.2.0`. Elle ne correspond pas à l'ajout de nouvelles sources ou de fonctions cliniques.
 
@@ -13,8 +13,8 @@ Les trois jalons avaient été implémentés ensemble dans la première tranche.
 | 3 | Moteur pur et interrogatoire — `v0.3.0` | Implémentée dans le paquet `0.3.0` ; évaluation clinique non réalisée | Le moteur utilise le snapshot `v0.2.0` |
 | 4 | Clinical Knowledge Model — `v0.4.0` | Terminée : checkpoints A–H livrés et revue finale verte | La référence reste `v0.2.0` ; aucun snapshot médical v2 publié |
 | 5 | Snapshot ORL généraliste — `v0.5.0` | En cours : A–D terminés ; E historique en `NO-GO` ; E2 audité ; E3 prêt pour revue ; mode E4 local non validé disponible | Référence officielle toujours bloquée ; `v0.5.0-dev-unreviewed` est non publiable |
-| 6 | Interface interne de test R&D — `v0.6` | Implémentée sur `feat/v0.6-rd-interface` | Console locale, sessions reprenables et inspection fidèle des moteurs ; aucun produit utilisateur ni nouvelle logique médicale |
-| 7 | Extension clinique structurée — `v0.7` | Prévue | Temporalité, biologie, constantes, risques et médicaments, après audits ciblés |
+| 6 | Interface interne de test R&D — `v0.6` | Terminée et fusionnée dans `main` | Console locale, sessions reprenables et inspection fidèle des moteurs ; aucun produit utilisateur ni nouvelle logique médicale |
+| 7 | Fabrique souveraine généraliste — `v0.7` | En cours : cadrage, registre généralisé, candidats et parseur MedlinePlus local livrés | Premier snapshot réservé : `v0.7.0-general-dev-unreviewed`, non encore construit ; biologie et médicaments restent des sous-tranches futures de v0.7 |
 | 8 | Safety / triage séparé — `v0.8` | Prévue | Composant indépendant du différentiel, avec périmètre et validation propres |
 | 9 | NLP / LLM encadré — `v0.9` | Prévue | Structuration, reformulation et explication, jamais source implicite de connaissance |
 | 10 | API, FHIR et interopérabilité — `v0.10` | Prévue | Exposition et échanges des contrats de domaine après validation des étapes précédentes |
@@ -177,7 +177,31 @@ snapshots validés et non revus, la fidélité aux sorties et reçus des moteurs
 vocabulaire diagnostic/probabiliste et l’impossibilité de masquer l’état de sécurité ou les limites
 de couverture. Les tests UI vérifient le logiciel et les garde-fous, jamais la justesse médicale.
 
-## Trajectoire v0.7 — médicaments, temporalité et mesures cliniques
+## Étape v0.7 — fabrique souveraine généraliste
+
+L'[ADR 0009](decisions/0009-fabrique-souveraine-generaliste.md) fixe l'invariant offline-first et
+l'[audit des distributions](source-audits/v0.7-sovereign-general.md) retient MedlinePlus XML, MeSH
+XML et une release locale Monarch comme première cible. CDC est différé avec le statut
+`NOT SUITABLE FOR SOVEREIGN INGESTION`. Le pilote ORL reste un corpus historique de régression et
+ne sera pas restauré comme dépendance du nouveau snapshot.
+
+| Checkpoint | État | Sortie attendue |
+| --- | --- | --- |
+| `v0.7-A` | Terminé | Audit officiel, ADR souverain et identifiant `v0.7.0-general-dev-unreviewed` réservé |
+| `v0.7-B` | Terminé | Registre multi-source enrichi : rôles fermés, producteur, importeur, droits, capture et formats |
+| `v0.7-C` | Terminé | Contrat séparé de candidate assertion et parseur local MedlinePlus sur fixtures inventées |
+| `v0.7-D` | À faire | Captures réelles MedlinePlus/MeSH/Monarch épinglées, hashes et licences finalisés |
+| `v0.7-E` | À faire | Importeurs MeSH/Monarch, mappings, normalisation et déduplication inter-sources |
+| `v0.7-F` | À faire | Snapshot généraliste DEV, profil `general_v1`, métriques de couverture et reconstruction offline |
+| `v0.7-G` | À faire | Revue clinique et décision distincte sur une éventuelle publication |
+
+Le parseur MedlinePlus transforme uniquement le XML local en enregistrements sources fidèles. Un
+agent ou extracteur peut ensuite proposer un `CandidateAssertion`, mais `agent_extracted` n'est pas
+`approved`. Une assertion n'est utilisable qu'après revue enregistrée et mappings résolus
+`exact/equivalent`. Les treize tables canoniques v2 et les manifestes historiques ne sont pas
+réécrits.
+
+### Sous-tranches v0.7 — médicaments, temporalité et mesures cliniques
 
 La future tranche `v0.7` devra distinguer l'exposition réellement rapportée ou observée chez le
 patient, la substance active, le produit ou la présentation commercialisée et la classe

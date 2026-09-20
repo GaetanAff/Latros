@@ -7,7 +7,7 @@ storing credentials.
 
 from datetime import date
 from pathlib import Path
-from typing import Annotated, Literal, Self
+from typing import Annotated, Literal, Self, get_args
 from urllib.parse import ParseResult, urlparse
 
 import yaml
@@ -19,6 +19,21 @@ from latros.sources.registry import Contract
 
 AccessMode = Literal["public_https", "manual_local"]
 Redistribution = Literal["allowed_with_attribution", "restricted", "prohibited", "unknown"]
+TransformationRights = Literal["allowed", "restricted", "prohibited", "unknown"]
+SourceRole = Literal[
+    "terminology",
+    "clinical_assertion_source",
+    "aggregated_knowledge",
+    "rare_disease_knowledge",
+    "laboratory_terminology",
+    "drug_terminology",
+    "drug_clinical_knowledge",
+    "safety_rule_source",
+    "classification",
+    "benchmark",
+    "synthetic_test_data",
+    "curation_metadata",
+]
 ArtifactFormatV2 = Literal[
     "rf2-concepts-tsv",
     "rf2-descriptions-tsv",
@@ -29,7 +44,19 @@ ArtifactFormatV2 = Literal[
     "curation-jsonl",
     "curation-package-json",
     "source-segments-json",
+    "medlineplus-health-topics-xml",
+    "medlineplus-health-topics-xml-zip",
+    "mesh-descriptors-xml",
+    "mesh-qualifiers-xml",
+    "mesh-supplemental-records-xml",
+    "monarch-kg-duckdb",
+    "kgx-nodes-tsv-gzip",
+    "kgx-edges-tsv-gzip",
+    "jsonl-gzip",
+    "rdf-ntriples-gzip",
 ]
+
+_SOURCE_ROLES = set(get_args(SourceRole))
 
 
 class RegistryDependencyV2(Contract):
@@ -55,6 +82,8 @@ class LicenseV2(Contract):
     attribution: str = Field(min_length=1)
     redistribution: Redistribution
     implementation_rights_confirmed: bool
+    transformation_rights: TransformationRights | None = None
+    restrictions: list[str] = Field(default_factory=list)
     notes: str = ""
 
     @field_validator("url")
@@ -73,6 +102,7 @@ class RegistryArtifactV2(Contract):
     sha256: Annotated[str, Field(pattern=r"^[0-9a-f]{64}$")]
     access_mode: AccessMode
     local_path: str | None = None
+    size_bytes: int | None = Field(default=None, ge=0)
 
     @field_validator("filename")
     @classmethod
@@ -112,12 +142,16 @@ class RegistryArtifactV2(Contract):
 
 class SourcePackageV2(Contract):
     source_id: str
+    producer: str | None = Field(default=None, min_length=1)
     roles: list[str] = Field(min_length=1)
     code_system: str = Field(min_length=1)
     homepage: str = Field(min_length=1)
     release: str
     release_date: date | None = None
     access_date: date
+    importer: str | None = Field(default=None, min_length=1)
+    release_identity_method: Literal["publisher_release", "dated_capture"] = "publisher_release"
+    capture_identity: str | None = Field(default=None, min_length=1)
     license: LicenseV2
     dependencies: list[RegistryDependencyV2] = Field(default_factory=list)
     artifacts: list[RegistryArtifactV2] = Field(min_length=1)
@@ -144,6 +178,8 @@ class SourcePackageV2(Contract):
             raise ValueError("Implementation rights must be confirmed before registry publication")
         if self.license.redistribution == "unknown":
             raise ValueError("Source redistribution status must be reviewed")
+        if self.release_identity_method == "dated_capture" and self.capture_identity is None:
+            raise ValueError("A dated capture requires an explicit capture_identity")
         return self
 
 
@@ -159,6 +195,18 @@ class RegistryV2(Contract):
         identities = [(source.source_id, source.release) for source in self.sources]
         if len(set(identities)) != len(identities):
             raise ValueError("Duplicate source/release")
+        for source in self.sources:
+            if source.producer is None:
+                raise ValueError(f"Source producer is required: {source.source_id}")
+            if source.importer is None:
+                raise ValueError(f"Source importer is required: {source.source_id}")
+            if source.license.transformation_rights is None:
+                raise ValueError(f"Source transformation rights are required: {source.source_id}")
+            unknown_roles = set(source.roles) - _SOURCE_ROLES
+            if unknown_roles:
+                raise ValueError(
+                    f"Unknown source roles for {source.source_id}: {sorted(unknown_roles)}"
+                )
         return self
 
     def source(self, source_id: str, release: str) -> SourcePackageV2:

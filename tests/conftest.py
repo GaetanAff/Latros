@@ -39,8 +39,23 @@ def no_network(monkeypatch):
     def denied(*args, **kwargs):
         raise AssertionError("Tests must not access the network")
 
+    original_connect = socket.socket.connect
+    original_connect_ex = socket.socket.connect_ex
+
+    def loopback_connect(instance, address):
+        if isinstance(address, tuple) and address[0] in {"127.0.0.1", "::1"}:
+            return original_connect(instance, address)
+        raise AssertionError("Tests must not access non-loopback networks")
+
+    def loopback_connect_ex(instance, address):
+        if isinstance(address, tuple) and address[0] in {"127.0.0.1", "::1"}:
+            return original_connect_ex(instance, address)
+        raise AssertionError("Tests must not access non-loopback networks")
+
     monkeypatch.setattr(socket, "create_connection", denied)
     monkeypatch.setattr(socket, "getaddrinfo", denied)
+    monkeypatch.setattr(socket.socket, "connect", loopback_connect)
+    monkeypatch.setattr(socket.socket, "connect_ex", loopback_connect_ex)
 
 
 def uri(identifier):
@@ -214,7 +229,7 @@ def synthetic_registry_and_knowledge_v2(root: Path) -> tuple[RegistryV2, Canonic
         ("invented-terminology", "terminology", "concepts.tsv", "rf2-concepts-tsv"),
         (
             "invented-guidance",
-            "diagnostic_assertions",
+            "clinical_assertion_source",
             "assertions.jsonl",
             "curated-assertions-jsonl",
         ),
@@ -223,18 +238,22 @@ def synthetic_registry_and_knowledge_v2(root: Path) -> tuple[RegistryV2, Canonic
         sources.append(
             {
                 "source_id": source_id,
+                "producer": "Latros tests",
                 "roles": [role],
                 "code_system": f"urn:latros:{source_id}",
                 "homepage": f"https://example.test/{source_id}/test-v2",
                 "release": "test-v2",
                 "release_date": "2026-09-01",
                 "access_date": "2026-09-17",
+                "importer": "latros.tests.synthetic_v2",
                 "license": {
                     "name": "Synthetic test fixture",
                     "url": "https://example.test/licenses/synthetic-v2",
                     "attribution": "Invented by Latros tests",
                     "redistribution": "allowed_with_attribution",
                     "implementation_rights_confirmed": True,
+                    "transformation_rights": "allowed",
+                    "restrictions": [],
                     "notes": "No external medical or terminology content",
                 },
                 "dependencies": [],

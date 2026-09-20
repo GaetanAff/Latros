@@ -43,7 +43,16 @@ produit commercialisé, classe thérapeutique et assertions médicales sourcées
 distincts. Cette préparation ne constitue ni une recommandation de traitement, ni une fonction de
 prescription ; le détail est consigné dans le [cahier v0.4](docs/v0.4-clinical-knowledge-model.md).
 
-`v0.5` est en cours sur une branche dédiée. Ses checkpoints techniques A à D définissent le registre,
+La priorité immédiate de `v0.7` est désormais la
+[fabrique généraliste souveraine](docs/decisions/0009-fabrique-souveraine-generaliste.md). Une source
+n'entre dans le pipeline que sous forme de distribution locale épinglée et vérifiée par SHA-256 ;
+seule la commande explicite `sources fetch` peut utiliser Internet. MedlinePlus Health Topics XML,
+MeSH XML et une release locale Monarch sont les premières cibles. CDC est différé tant qu'aucun
+export généraliste officiel adapté n'est disponible. L'identifiant
+`v0.7.0-general-dev-unreviewed` est réservé mais aucun snapshot portant ce nom n'est encore construit.
+Voir l'[audit des distributions](docs/source-audits/v0.7-sovereign-general.md).
+
+`v0.5` reste historiquement incomplet sur `main`. Ses checkpoints techniques A à D définissent le registre,
 le manifeste, le constructeur, les importeurs et le premier raisonneur général. Le paquet ORL réel
 reste intégralement `pending_clinical_review`. Un chemin séparé permet désormais de l'importer et de
 le scorer localement sous l'identité non ambiguë `v0.5.0-dev-unreviewed`, uniquement après override
@@ -57,6 +66,15 @@ Le registre v2 peut décrire un sous-ensemble RF2 et un paquet JSONL d'assertion
 protégées utilisent `manual_local` : l'opérateur acquiert le fichier sous sa licence, puis Latros
 vérifie son emplacement et son hash sans stocker de secret. La CLI détecte automatiquement les
 registres et manifestes v1 ou v2. Aucun registre SNOMED/HAS réel n'est encore versionné.
+
+Le registre v2 exige maintenant, pour tout nouveau build, producteur, rôle fermé, release ou identité
+de capture, date, URL, hash, format, licence, droits de transformation/redistribution, restrictions
+et importeur. Les anciens manifestes restent lisibles. Le nouveau
+[contrat de candidate assertion](schemas/candidate-assertion-v1.schema.json) conserve extraction,
+mappings proposés, temporalité, contexte, quantité/unité, famille de preuve, groupe de dépendance,
+review status et chaîne de transformation sans modifier les tables canoniques publiées.
+Le [contrat de topic MedlinePlus](schemas/medlineplus-topic-record-v1.schema.json) conserve les
+identifiants MeSH et les locators avant toute extraction.
 
 `general_v1` classe les conditions déclarées par un snapshot v2 à partir d'assertions explicites,
 normalise d'abord les contributions au niveau des familles de preuves et publie une compatibilité

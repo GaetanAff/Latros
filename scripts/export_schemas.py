@@ -6,6 +6,7 @@ from pathlib import Path
 from latros.clinical.models import ClinicalCase
 from latros.clinical.v2 import ClinicalCaseV2
 from latros.common import encoded
+from latros.knowledge.candidates import CandidateAssertion
 from latros.knowledge.curation import (
     CurationAssertionDraft,
     CurationMapping,
@@ -19,6 +20,7 @@ from latros.knowledge.frequency import Frequency
 from latros.knowledge.importers import TABLES
 from latros.knowledge.importers_v2 import CuratedAssertionRecord
 from latros.knowledge.manifest_v2 import KnowledgeSnapshotManifestV2
+from latros.knowledge.medlineplus import MedlinePlusTopicRecord
 from latros.knowledge.models_v2 import CANONICAL_TABLES_V2, CanonicalKnowledgeV2
 from latros.reasoning.interfaces import ReasoningStrategyDescriptor
 from latros.reasoning.profiles import ReasoningProfile
@@ -45,6 +47,8 @@ def main() -> None:
             KnowledgeSnapshotManifestV2.model_json_schema()
         ),
         "curated-assertion-record-v1.schema.json": CuratedAssertionRecord.model_json_schema(),
+        "candidate-assertion-v1.schema.json": CandidateAssertion.model_json_schema(),
+        "medlineplus-topic-record-v1.schema.json": MedlinePlusTopicRecord.model_json_schema(),
         "curation-package-manifest-v1.schema.json": CurationPackageManifest.model_json_schema(),
         "curation-source-artifact-v1.schema.json": SourceArtifactReceipt.model_json_schema(),
         "curation-assertion-draft-v1.schema.json": CurationAssertionDraft.model_json_schema(),

@@ -12,6 +12,7 @@ Décisions acceptées :
 - [0006 — Sources ouvertes du pilote ORL](0006-sources-ouvertes-pilote-orl.md) ;
 - [0007 — Mode local ORL non revu](0007-mode-recherche-orl-non-revu.md).
 - [0008 — Interface locale R&D et sessions reproductibles](0008-interface-locale-rd-et-sessions.md).
+- [0009 — Fabrique de connaissances généraliste souveraine](0009-fabrique-souveraine-generaliste.md).
 
 Utiliser un fichier par décision, par exemple :
 

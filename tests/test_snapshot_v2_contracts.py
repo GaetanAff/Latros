@@ -23,18 +23,22 @@ def _registry_payload() -> dict[str, object]:
         "sources": [
             {
                 "source_id": "invented-terminology",
+                "producer": "Latros tests",
                 "roles": ["terminology"],
                 "code_system": "urn:latros:test-terminology",
                 "homepage": "https://example.org/invented-terminology/1",
                 "release": "test-1",
                 "release_date": "2026-09-01",
                 "access_date": "2026-09-17",
+                "importer": "latros.tests.synthetic_v2",
                 "license": {
                     "name": "Synthetic test fixture",
                     "url": "https://example.org/invented-license/1",
                     "attribution": "Invented by Latros tests",
                     "redistribution": "allowed_with_attribution",
                     "implementation_rights_confirmed": True,
+                    "transformation_rights": "allowed",
+                    "restrictions": [],
                     "notes": "No external terminology content",
                 },
                 "dependencies": [],
@@ -60,6 +64,7 @@ def test_registry_v2_accepts_manual_synthetic_source() -> None:
     assert registry.schema_version == 2
     assert registry.sources[0].access_date == date(2026, 9, 17)
     assert registry.sources[0].artifacts[0].access_mode == "manual_local"
+    assert registry.sources[0].producer == "Latros tests"
 
 
 def test_registry_v2_refuses_unreviewed_rights_and_moving_urls() -> None:
@@ -73,6 +78,24 @@ def test_registry_v2_refuses_unreviewed_rights_and_moving_urls() -> None:
     source = payload["sources"][0]  # type: ignore[index]
     source["artifacts"][0]["source_url"] = "https://example.org/latest/concepts.tsv"  # type: ignore[index]
     with pytest.raises(ValidationError, match="moving branch"):
+        RegistryV2.model_validate(payload)
+
+    payload = _registry_payload()
+    source = payload["sources"][0]  # type: ignore[index]
+    source["roles"] = ["diagnostic_assertions"]  # type: ignore[index]
+    with pytest.raises(ValidationError, match="Unknown source roles"):
+        RegistryV2.model_validate(payload)
+
+    payload = _registry_payload()
+    source = payload["sources"][0]  # type: ignore[index]
+    del source["importer"]  # type: ignore[index]
+    with pytest.raises(ValidationError, match="Source importer"):
+        RegistryV2.model_validate(payload)
+
+    payload = _registry_payload()
+    source = payload["sources"][0]  # type: ignore[index]
+    source["release_identity_method"] = "dated_capture"  # type: ignore[index]
+    with pytest.raises(ValidationError, match="capture_identity"):
         RegistryV2.model_validate(payload)
 
 

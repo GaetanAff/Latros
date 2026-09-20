@@ -2,7 +2,7 @@
 
 Ce fichier est le journal de continuité du projet. Il décrit ce qui a été décidé et effectivement réalisé, afin de pouvoir reprendre la discussion sans déduire l'état du projet à partir du code seul.
 
-Dernière mise à jour : 19 septembre 2026.
+Dernière mise à jour : 20 septembre 2026.
 
 ## État actuel en une phrase
 
@@ -16,6 +16,33 @@ Référence médicale publiée : **`v0.2.0`**, nom du jalon « Premier snapshot 
 [plan d'implémentation](plan.md). Le paquet est à la version `0.6.0`. Le snapshot v2
 `v0.5.0-dev-unreviewed` reste une expérience locale non publiable ; aucun snapshot clinique v2
 validé n'est publié. L'ancien snapshot `latros-kb-0002` est conservé.
+
+## Fondation de la fabrique souveraine généraliste — 20 septembre 2026
+
+- `main` a été resynchronisée au commit `4025beb` puis le travail a commencé sur
+  `codex/sovereign-general-kb`. Le dossier local non suivi `FUTUR INTERFACE/` a été préservé.
+- L'ADR 0009 interdit les API médicales pendant build, runtime, diagnostic, questions, interface et
+  consultation des sources. Seul un `sources fetch` explicite peut utiliser le réseau.
+- L'audit officiel retient MedlinePlus Health Topics XML complet, MeSH XML annuel et les releases
+  datées Monarch. CDC est marqué `NOT SUITABLE FOR SOVEREIGN INGESTION` pour cette tranche.
+- Le registre v2 exige désormais, lors de sa validation, un producteur, un importeur, des rôles
+  fermés et des droits de transformation documentés. Il accepte les formats MedlinePlus, MeSH,
+  Monarch/KGX, JSONL et RDF nécessaires, ainsi qu'une identité de capture datée. Les champs restent
+  optionnels lors de la lecture des anciens manifestes afin de préserver leur immutabilité.
+- Un contrat séparé `CandidateAssertion` conserve source, locator, hashes, sujet/objet, prédicat,
+  polarité, contexte, temporalité, quantité/unité, familles/dépendances, mappings proposés,
+  extracteur, statut de revue et transformations. Un candidat d'agent n'est jamais utilisable ; une
+  approbation exige des reviewers et des mappings résolus `exact/equivalent`.
+- Un parseur streaming MedlinePlus lit uniquement un fichier XML local, refuse réseau et DTD,
+  détecte les doublons et conserve titres, synonymes, MeSH, résumé, groupes, liens et locator exact.
+  Il ne crée aucune assertion clinique approuvée.
+- L'identifiant `v0.7.0-general-dev-unreviewed` est réservé mais non construit. Les dumps, hashes
+  réels, importeurs MeSH/Monarch, normalisation, déduplication, profil et métriques restent à faire.
+- Vérifications hors réseau : Ruff et formatage verts, mypy strict sur 43 fichiers, schémas à jour,
+  **143 tests** réussis avec blocage de DNS, `create_connection` et des connexions socket hors
+  loopback ; les sockets internes `127.0.0.1`/`::1` nécessaires à l'interface locale restent permis.
+  L'ancien manifeste ORL reste lisible sans réécriture. Un démarrage réel de l'interface sur
+  `127.0.0.1:8768` a retourné HTTP 200 avec le titre Latros et le statut safety visible.
 
 ## Tutoriel utilisateur et rangement documentaire — 19 septembre 2026
 

@@ -1459,6 +1459,15 @@ Les points les plus importants à préserver sont :
 
 MedGemma 1.5 est particulièrement intéressant pour l'extraction médicale locale, les documents, les comparaisons LLM et, plus tard, la multimodalité. TxGemma peut compléter le projet dans un espace de recherche thérapeutique clairement isolé, mais ne doit pas intervenir dans le diagnostic différentiel principal ni produire de recommandations de traitement au patient.
 
+### Invariant ajouté — souveraineté locale
+
+La fabrique de connaissances de Latros repose exclusivement sur des distributions officielles
+téléchargeables, figées et vérifiées. Après acquisition initiale, reconstruire un snapshot, lancer
+les moteurs, poser les questions et utiliser l'interface ne doit provoquer aucun accès réseau. Les
+API externes ne constituent pas une architecture de données acceptable. MedlinePlus XML, MeSH XML
+et les releases Monarch ouvrent la première extension généraliste ; le pilote ORL reste un corpus
+historique de régression.
+
 ---
 
 ## 29. Sources de référence consultées
