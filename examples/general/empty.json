@@ -1,0 +1,9 @@
+{
+  "case_id": "synthetic-general-empty",
+  "observation_proposals": [],
+  "observations": [],
+  "question_history": [],
+  "schema_version": 2,
+  "source_statements": [],
+  "subject_context": {"age": {"code": "a", "comparator": "eq", "kind": "quantity", "system": "http://unitsofmeasure.org", "unit": "year", "value": 30}, "sex": "unknown"}
+}

@@ -2,20 +2,56 @@
 
 Ce fichier est le journal de continuité du projet. Il décrit ce qui a été décidé et effectivement réalisé, afin de pouvoir reprendre la discussion sans déduire l'état du projet à partir du code seul.
 
-Dernière mise à jour : 20 septembre 2026.
+Dernière mise à jour : 21 septembre 2026.
 
 ## État actuel en une phrase
 
 Latros est aujourd'hui un prototype local de recherche utilisable en ligne de commande ou dans une
 console web R&D locale. Il prend des cas déjà structurés, exécute `semantic_v1` sur le snapshot rare
-ou `general_v1` sur le snapshot ORL expérimental, expose les preuves et propose éventuellement une
-question discriminante. Il n'est ni un chatbot, ni une interface patient, ni un outil de triage ou
-de diagnostic clinique validé.
+ou `general_v1` sur les snapshots expérimentaux ORL et généraliste, expose les preuves et propose
+éventuellement une question discriminante. Il n'est ni un chatbot, ni une interface patient, ni un
+outil de triage ou de diagnostic clinique validé.
 
 Référence médicale publiée : **`v0.2.0`**, nom du jalon « Premier snapshot médical » dans le
 [plan d'implémentation](plan.md). Le paquet est à la version `0.6.0`. Le snapshot v2
 `v0.5.0-dev-unreviewed` reste une expérience locale non publiable ; aucun snapshot clinique v2
-validé n'est publié. L'ancien snapshot `latros-kb-0002` est conservé.
+validé n'est publié. `v0.7.0-general-dev-unreviewed` est le nouveau corpus généraliste DEV local,
+également non publiable. L'ancien snapshot `latros-kb-0002` est conservé.
+
+## Premier snapshot généraliste souverain — 21 septembre 2026
+
+- Le registre `sources/registry-general-v0.7.yaml` épingle sept sources et huit artefacts : HPO
+  2026-09-01, Mondo 2026-09-01, DOID 2026-08-31, Orphadata 2026-07, MeSH 2026,
+  MedlinePlus 2026-09-19 et Monarch KG 2026-09-02. Les tailles, URLs officielles, licences et
+  SHA-256 exacts sont consignés ; aucun lien `latest` n'entre dans le manifeste.
+- Les importeurs locaux ajoutent les descriptors, synonymes et hiérarchies MeSH sans assertion
+  diagnostique, puis 266 957 associations Monarch maladie–phénotype avec source primaire,
+  agrégateur et locator. Les assertions Orphanet republiées par Monarch partagent une famille de
+  dépendance au lieu de compter comme confirmations indépendantes.
+- Les 2 033 topics MedlinePlus anglais et espagnols sont conservés comme records. L'extracteur
+  déterministe anglais produit 7 736 candidats HPO exacts ; 2 630 ont des mappings maladie et objet
+  techniquement exacts, 5 106 restent rejetés/auditables, et aucun candidat n'est cliniquement
+  approuvé. Les pages espagnoles ne sont pas soumises au matcher HPO anglais.
+- Le snapshot `v0.7.0-general-dev-unreviewed` contient 106 835 concepts, 55 243 maladies,
+  500 093 désignations, 47 423 mappings, 416 764 records sources, 386 251 assertions sources et
+  385 886 assertions canoniques. Le manifeste porte `clinical_validation: false`,
+  `publishable: false`, `research_unreviewed: true` et le hash de contenu
+  `bfda708aba44dcc5d12896ac7523d9d6bb577dea53bdc3810e499c15f64b1fb0`.
+- Un profil `general_v1-general-unreviewed` lie explicitement ce snapshot. Le service applicatif
+  met en cache sa stratégie lourde dans un même processus. Sept cas synthétiques couvrent tableau
+  respiratoire, ambiguïté, hors corpus, insuffisance, vide, contradictions et multi-système ; le
+  pilote ORL reste une régression historique séparée.
+- La reconstruction complète a réussi depuis `data/raw/` sans accès réseau. Les gros dumps, Parquet,
+  DuckDB et candidats de staging restent ignorés par Git. Le rapport de couverture détaille les
+  métriques et rappelle que ce corpus plus vaste n'est pas une validation médicale.
+- Limite détectée : le chargement Python/Pydantic complet du runtime de près de 2 Go prend plusieurs
+  minutes et peut dépasser 10 Go de mémoire lors du premier diagnostic. L'interface fonctionne et
+  réutilise ensuite le cache, mais une lecture DuckDB paresseuse est nécessaire avant tout usage
+  plus large.
+- Vérifications finales : registre et schémas valides, Ruff et formatage verts, mypy strict sur 46
+  fichiers, **146 tests** réussis avec blocage réseau, reconstruction complète puis second build
+  idempotent au même hash de contenu, question adaptative réelle marquée `research_unreviewed` et
+  `safety: not_evaluated`, interface locale HTTP 200 avec le couple v0.7/general_v1 disponible.
 
 ## Fondation de la fabrique souveraine généraliste — 20 septembre 2026
 

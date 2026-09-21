@@ -1,6 +1,6 @@
 # Plan d'implémentation et avancement
 
-Référence : plan « Premières étapes de Latros — socle de données et moteur clinique pur » demandé par l'utilisateur. État au 20 septembre 2026.
+Référence : plan « Premières étapes de Latros — socle de données et moteur clinique pur » demandé par l'utilisateur. État au 21 septembre 2026.
 
 Les trois jalons avaient été implémentés ensemble dans la première tranche. La reprise de l'étape 2 consiste à vérifier sa livraison et à établir le snapshot sous le nom du jalon, `v0.2.0`. Elle ne correspond pas à l'ajout de nouvelles sources ou de fonctions cliniques.
 
@@ -14,7 +14,7 @@ Les trois jalons avaient été implémentés ensemble dans la première tranche.
 | 4 | Clinical Knowledge Model — `v0.4.0` | Terminée : checkpoints A–H livrés et revue finale verte | La référence reste `v0.2.0` ; aucun snapshot médical v2 publié |
 | 5 | Snapshot ORL généraliste — `v0.5.0` | En cours : A–D terminés ; E historique en `NO-GO` ; E2 audité ; E3 prêt pour revue ; mode E4 local non validé disponible | Référence officielle toujours bloquée ; `v0.5.0-dev-unreviewed` est non publiable |
 | 6 | Interface interne de test R&D — `v0.6` | Terminée et fusionnée dans `main` | Console locale, sessions reprenables et inspection fidèle des moteurs ; aucun produit utilisateur ni nouvelle logique médicale |
-| 7 | Fabrique souveraine généraliste — `v0.7` | En cours : cadrage, registre généralisé, candidats et parseur MedlinePlus local livrés | Premier snapshot réservé : `v0.7.0-general-dev-unreviewed`, non encore construit ; biologie et médicaments restent des sous-tranches futures de v0.7 |
+| 7 | Fabrique souveraine généraliste — `v0.7` | Tranche technique D–F terminée ; revue clinique G non commencée | `v0.7.0-general-dev-unreviewed` construit localement, reproductible, non validé et non publiable ; biologie et médicaments restent futures |
 | 8 | Safety / triage séparé — `v0.8` | Prévue | Composant indépendant du différentiel, avec périmètre et validation propres |
 | 9 | NLP / LLM encadré — `v0.9` | Prévue | Structuration, reformulation et explication, jamais source implicite de connaissance |
 | 10 | API, FHIR et interopérabilité — `v0.10` | Prévue | Exposition et échanges des contrats de domaine après validation des étapes précédentes |
@@ -190,16 +190,18 @@ ne sera pas restauré comme dépendance du nouveau snapshot.
 | `v0.7-A` | Terminé | Audit officiel, ADR souverain et identifiant `v0.7.0-general-dev-unreviewed` réservé |
 | `v0.7-B` | Terminé | Registre multi-source enrichi : rôles fermés, producteur, importeur, droits, capture et formats |
 | `v0.7-C` | Terminé | Contrat séparé de candidate assertion et parseur local MedlinePlus sur fixtures inventées |
-| `v0.7-D` | À faire | Captures réelles MedlinePlus/MeSH/Monarch épinglées, hashes et licences finalisés |
-| `v0.7-E` | À faire | Importeurs MeSH/Monarch, mappings, normalisation et déduplication inter-sources |
-| `v0.7-F` | À faire | Snapshot généraliste DEV, profil `general_v1`, métriques de couverture et reconstruction offline |
+| `v0.7-D` | Terminé | Sept sources réelles épinglées ; MedlinePlus 2026-09-19, MeSH 2026 et Monarch 2026-09-02 vérifiés par hash |
+| `v0.7-E` | Terminé | Importeurs locaux MeSH/Monarch, extraction candidate MedlinePlus, mappings exacts et déduplication/dépendances |
+| `v0.7-F` | Terminé | Snapshot généraliste DEV, profil `general_v1`, rapport de couverture, cas synthétiques et reconstruction offline |
 | `v0.7-G` | À faire | Revue clinique et décision distincte sur une éventuelle publication |
 
-Le parseur MedlinePlus transforme uniquement le XML local en enregistrements sources fidèles. Un
-agent ou extracteur peut ensuite proposer un `CandidateAssertion`, mais `agent_extracted` n'est pas
-`approved`. Une assertion n'est utilisable qu'après revue enregistrée et mappings résolus
-`exact/equivalent`. Les treize tables canoniques v2 et les manifestes historiques ne sont pas
-réécrits.
+Le parseur MedlinePlus transforme uniquement le XML local en enregistrements sources fidèles. Le
+premier extracteur déterministe applique des correspondances HPO anglaises exactes aux seuls topics
+anglais, tout en conservant les 2 033 records anglais et espagnols. Les candidats techniquement
+éligibles du snapshot DEV restent `unreviewed`; ils ne deviennent jamais `approved`. Seuls les
+mappings résolus `exact/equivalent` participent au scoring. Les treize tables canoniques v2 et les
+manifestes historiques ne sont pas réécrits. Les résultats chiffrés sont consignés dans le
+[rapport v0.7](reports/v0.7-general-coverage.md).
 
 ### Sous-tranches v0.7 — médicaments, temporalité et mesures cliniques
 

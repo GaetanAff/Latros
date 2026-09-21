@@ -47,10 +47,12 @@ La priorité immédiate de `v0.7` est désormais la
 [fabrique généraliste souveraine](docs/decisions/0009-fabrique-souveraine-generaliste.md). Une source
 n'entre dans le pipeline que sous forme de distribution locale épinglée et vérifiée par SHA-256 ;
 seule la commande explicite `sources fetch` peut utiliser Internet. MedlinePlus Health Topics XML,
-MeSH XML et une release locale Monarch sont les premières cibles. CDC est différé tant qu'aucun
-export généraliste officiel adapté n'est disponible. L'identifiant
-`v0.7.0-general-dev-unreviewed` est réservé mais aucun snapshot portant ce nom n'est encore construit.
-Voir l'[audit des distributions](docs/source-audits/v0.7-sovereign-general.md).
+MeSH XML et une release locale Monarch constituent maintenant, avec HPO, Mondo, DOID et Orphadata,
+le premier snapshot `v0.7.0-general-dev-unreviewed`. Il est local, reproductible et consommable par
+`general_v1`, mais reste une base de recherche **non relue, non validée et non publiable**. CDC est
+différé tant qu'aucun export généraliste officiel adapté n'est disponible. Voir l'[audit des
+distributions](docs/source-audits/v0.7-sovereign-general.md) et le [rapport de
+couverture](docs/reports/v0.7-general-coverage.md).
 
 `v0.5` reste historiquement incomplet sur `main`. Ses checkpoints techniques A à D définissent le registre,
 le manifeste, le constructeur, les importeurs et le premier raisonneur général. Le paquet ORL réel
@@ -103,7 +105,8 @@ uv run --offline --no-sync latros --root . ui --port 8766 --no-open
 ```
 
 L'interface permet uniquement les couples compatibles, notamment `v0.2.0 + semantic_v1` et
-`v0.5.0-dev-unreviewed + general_v1`. Elle crée un `ClinicalCaseV2`, recherche les concepts
+`v0.5.0-dev-unreviewed + general_v1` ainsi que
+`v0.7.0-general-dev-unreviewed + general_v1`. Elle crée un `ClinicalCaseV2`, recherche les concepts
 réellement présents dans le snapshot, conserve les cinq situations d'évaluation, lance le backend
 et affiche candidats, compatibilité brute, couverture, abstention, contributions, contradictions,
 sources, familles, mappings, provenance et reçu.
@@ -221,6 +224,32 @@ uv run --no-sync latros sources fetch --source orphadata --release 2026-07
 ```
 
 Le registre fournit versions, URLs officielles, produits, attributions, restrictions et SHA-256 attendus. Aucun lien `latest`. Les fichiers aboutissent à `data/raw/<source>/<release>/`, avec un manifeste local. Les fichiers complets déjà vérifiés sont réutilisés. Après interruption, relancer la commande : le fichier `.part` repart de zéro, sans retélécharger les autres fichiers valides. Un hash incorrect ou un fichier existant corrompu provoque un refus, sans écrasement du fichier complet.
+
+Le registre généraliste est séparé et s'utilise explicitement :
+
+```text
+uv run --no-sync latros --registry sources/registry-general-v0.7.yaml sources validate
+uv run --no-sync latros --registry sources/registry-general-v0.7.yaml sources fetch --source medlineplus --release 2026-09-19
+uv run --no-sync latros --registry sources/registry-general-v0.7.yaml sources fetch --source mesh --release 2026
+uv run --no-sync latros --registry sources/registry-general-v0.7.yaml sources fetch --source monarch --release 2026-09-02
+```
+
+Après acquisition de ses sept sources, le build et le runtime ne nécessitent plus Internet :
+
+```text
+uv run --offline --no-sync latros --registry sources/registry-general-v0.7.yaml data build --snapshot v0.7.0-general-dev-unreviewed --allow-unreviewed-research-data
+uv run --offline --no-sync latros --registry sources/registry-general-v0.7.yaml data inspect --snapshot v0.7.0-general-dev-unreviewed
+uv run --offline --no-sync latros diagnose --snapshot v0.7.0-general-dev-unreviewed --strategy general_v1 --case examples/general/respiratory-common.json
+uv run --offline --no-sync latros question next --snapshot v0.7.0-general-dev-unreviewed --strategy general_v1 --case examples/general/respiratory-common.json
+uv run --offline --no-sync latros --root . ui --no-open
+```
+
+Les dumps restent sous `data/raw/` et les tables/runtime générés sous `data/`; ils sont ignorés par
+Git. Seuls le registre, le manifeste, les hashes, les importeurs, les schémas, les tests et la
+documentation sont versionnés. Le premier chargement complet du snapshot généraliste est encore
+coûteux en mémoire ; le service applicatif le met en cache pour les appels suivants du même
+processus. Cette limite de performance n'altère pas la reproductibilité, mais doit être corrigée
+avant tout élargissement d'usage.
 
 | Source | Version | Utilisation |
 | --- | --- | --- |

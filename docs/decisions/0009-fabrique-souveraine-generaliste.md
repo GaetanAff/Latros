@@ -1,6 +1,6 @@
 # ADR 0009 — Fabrique de connaissances généraliste souveraine
 
-Statut : accepté
+Statut : accepté et implémenté pour la tranche DEV v0.7 D–F
 Date : 20 septembre 2026
 
 ## Contexte
@@ -28,9 +28,9 @@ un client d'API médicale ni perdre les invariants des ADR 0001 à 0008.
   dépendances doivent être conservées. Aucun moteur spécifique à une source n'est créé.
 - `general_v1` reste le moteur cible ; ses mathématiques, son abstention, sa couverture, ses familles
   de preuves et son vocabulaire de compatibilité non probabiliste ne sont pas reconstruits.
-- Le premier identifiant réservé est `v0.7.0-general-dev-unreviewed`. Il ne désigne aucun snapshot
-  publié et ne sera créé qu'après acquisition locale, normalisation et manifeste complet. Le pilote
-  ORL reste un corpus historique de régression, sans dépendance du futur snapshot généraliste.
+- Le premier identifiant est `v0.7.0-general-dev-unreviewed`. Il désigne un snapshot local de
+  recherche effectivement construit, mais ni cliniquement validé ni publiable. Le pilote ORL reste
+  un corpus historique de régression, sans dépendance du snapshot généraliste.
 - CDC est marqué `NOT SUITABLE FOR SOVEREIGN INGESTION` tant qu'aucune distribution officielle,
   générale, figée et juridiquement réutilisable n'est identifiée. Les API et le crawl du site ne
   sont pas des contournements acceptables.

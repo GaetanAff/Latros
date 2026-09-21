@@ -10,6 +10,28 @@ L'identifiant interne d'un concept est le SHA-256 d'un tuple contenant son ident
 
 HPO/Mondo apportent les classes de leur namespace, termes, identifiants alternatifs, remplacements et arêtes `is_a`. Les axiomes OWL complexes et arêtes inter-ontologies ne sont pas interprétés. Les mappings ORPHA restent des liens qualifiés avec leur expression source. Leurs cibles sont des références externes, pas des clés étrangères exigeant que toute maladie Mondo existe dans product4.
 
+## Fabrique généraliste DEV v0.7
+
+Le pipeline souverain sépare cinq états : record source fidèle, `CandidateAssertion`, mapping,
+assertion canonique candidate et assertion techniquement utilisable dans un snapshot DEV. Le statut
+`unreviewed` n'est jamais converti automatiquement en `approved`. Une candidate MedlinePlus exige
+des mappings maladie et observation résolus `exact/equivalent`, une provenance complète, un hash
+d'artefact valide, une polarité et une relation supportées. Les échecs restent dans le JSONL de
+staging avec une raison explicite.
+
+La déduplication conserve chaque assertion source puis calcule une signature canonique sur sujet,
+relation, objet et qualificateurs. Les familles de preuve et groupes de dépendance sont une seconde
+dimension : deux lignes sémantiquement proches provenant du même amont ne deviennent pas deux
+confirmations. Monarch garde `primary_knowledge_source` et `aggregator_knowledge_source`; les lignes
+Orphanet partagent ainsi la famille de l'amont Orphanet avec Orphadata. Une dépendance `unknown`,
+comme l'éditorial MedlinePlus non ventilé, reste visible mais exclue de l'agrégat indépendant.
+
+MeSH est importé comme terminologie/indexation uniquement. MedlinePlus produit des candidates à
+partir des topics anglais et de correspondances HPO exactes déterministes. Monarch produit des
+assertions maladie–phénotype directes lorsque les deux identifiants existent déjà localement. Aucun
+de ces importeurs ne change les mathématiques de `general_v1`, et aucun build ou runtime n'effectue
+de requête réseau.
+
 Les maladies associées sont des concepts ORPHA ; Mondo ne les fusionne pas automatiquement. Les maladies sans annotation product4 ne sont pas candidates. EN/FR de même identifiant doivent porter la même assertion ; les deux provenances restent présentes sans double comptage. HPO obsolète sans remplacement exact : conservé dans les tables, exclu du moteur, refusé comme entrée clinique.
 
 Chaque assertion conserve identifiants originaux, polarité, fréquence structurée, release, langues des artefacts, hashes, records, libellés de fréquence, référence Orphanet et chaîne d'ingestion. Les publications individuelles ne sont pas inventées si le produit ne les fournit pas. Le qualificatif source « diagnostic criterion » est conservé mais non pondéré.

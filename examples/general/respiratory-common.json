@@ -1,0 +1,55 @@
+{
+  "case_id": "synthetic-general-respiratory-common",
+  "observation_proposals": [],
+  "observations": [
+    {
+      "acquisition_method": "reported",
+      "certainty": "asserted",
+      "clinical_status": "present",
+      "concept": {
+        "coding": {"code": "HP:0012735", "display": "Cough", "system": "http://purl.obolibrary.org/obo/hp.owl"},
+        "concept_id": "concept:663110b9081464bd750ba8b137ceb1b0564bd7fde1be836fbfc8324f5b9515c2",
+        "status": "active"
+      },
+      "evaluation_status": "assessed",
+      "experiencer": "patient",
+      "kind": "symptom",
+      "observation_id": "synthetic-respiratory-cough",
+      "provenance": {"origin_type": "patient_report", "provenance_id": "synthetic-respiratory-p1"}
+    },
+    {
+      "acquisition_method": "observed",
+      "certainty": "asserted",
+      "clinical_status": "present",
+      "concept": {
+        "coding": {"code": "HP:0001945", "display": "Fever", "system": "http://purl.obolibrary.org/obo/hp.owl"},
+        "concept_id": "concept:e8024e6f99d2cd9015ad2bf202e9159638315b5ca23f55603af0d137b5a7e28a",
+        "status": "active"
+      },
+      "evaluation_status": "assessed",
+      "experiencer": "patient",
+      "kind": "sign",
+      "observation_id": "synthetic-respiratory-fever",
+      "provenance": {"origin_type": "clinician_observation", "provenance_id": "synthetic-respiratory-p2"}
+    },
+    {
+      "acquisition_method": "reported",
+      "certainty": "asserted",
+      "clinical_status": "present",
+      "concept": {
+        "coding": {"code": "HP:0033050", "display": "Sore throat", "system": "http://purl.obolibrary.org/obo/hp.owl"},
+        "concept_id": "concept:95d1948870dc53a3a43152498f5716804902f159958b3bc9c7d7ffc313e54b26",
+        "status": "active"
+      },
+      "evaluation_status": "assessed",
+      "experiencer": "patient",
+      "kind": "symptom",
+      "observation_id": "synthetic-respiratory-sore-throat",
+      "provenance": {"origin_type": "patient_report", "provenance_id": "synthetic-respiratory-p3"}
+    }
+  ],
+  "question_history": [],
+  "schema_version": 2,
+  "source_statements": [],
+  "subject_context": {"age": {"code": "a", "comparator": "eq", "kind": "quantity", "system": "http://unitsofmeasure.org", "unit": "year", "value": 35}, "sex": "unknown"}
+}
