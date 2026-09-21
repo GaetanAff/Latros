@@ -44,6 +44,7 @@ class ResearchApplicationService:
     def __init__(self, root: Path) -> None:
         self.root = root.resolve()
         self._catalog_cache: dict[tuple[str, str], list[ConceptOption]] = {}
+        self._general_cache: dict[str, GeneralV1Strategy] = {}
 
     def diagnose(
         self,
@@ -58,8 +59,7 @@ class ResearchApplicationService:
                 raise LatrosError("general_v1 accepts only ClinicalCaseV2")
             if output_contract == "v1":
                 raise LatrosError("general_v1 has no v1 output contract")
-            profile = self.profile(strategy, snapshot)
-            return GeneralV1Strategy(self.root, snapshot, profile).diagnose(case)
+            return self._general_strategy(snapshot).diagnose(case)
         adapter = self._semantic_strategy(snapshot, strategy)
         if self._v2_output(case, output_contract):
             return build_differential_v2(self.root, case, adapter, self.profile(strategy, snapshot))
@@ -78,12 +78,23 @@ class ResearchApplicationService:
                 raise LatrosError("general_v1 accepts only ClinicalCaseV2")
             if output_contract == "v1":
                 raise LatrosError("general_v1 has no v1 output contract")
-            profile = self.profile(strategy, snapshot)
-            return GeneralV1Strategy(self.root, snapshot, profile).question(case)
+            return self._general_strategy(snapshot).question(case)
         adapter = self._semantic_strategy(snapshot, strategy)
         if self._v2_output(case, output_contract):
             return build_question_v2(self.root, case, adapter, self.profile(strategy, snapshot))
         return adapter.next(case).payload
+
+    def _general_strategy(self, snapshot: str) -> GeneralV1Strategy:
+        """Load a large general snapshot once per application service process."""
+        strategy = self._general_cache.get(snapshot)
+        if strategy is None:
+            strategy = GeneralV1Strategy(
+                self.root,
+                snapshot,
+                self.profile("general_v1", snapshot),
+            )
+            self._general_cache[snapshot] = strategy
+        return strategy
 
     def capabilities(self) -> ApplicationCapabilities:
         snapshots = self._snapshot_capabilities()
@@ -166,13 +177,12 @@ class ResearchApplicationService:
         return matches[0]
 
     def profile(self, strategy: str, snapshot: str | None = None) -> ReasoningProfile:
-        name = (
-            "general_v1-orl-unreviewed.json"
-            if strategy == "general_v1"
-            and snapshot is not None
-            and snapshot.endswith("-dev-unreviewed")
-            else f"{strategy}.json"
-        )
+        if strategy == "general_v1" and snapshot == "v0.5.0-dev-unreviewed":
+            name = "general_v1-orl-unreviewed.json"
+        elif strategy == "general_v1" and snapshot == "v0.7.0-general-dev-unreviewed":
+            name = "general_v1-general-unreviewed.json"
+        else:
+            name = f"{strategy}.json"
         candidates = [
             Path(__file__).resolve().parents[3] / "profiles" / name,
             Path(__file__).resolve().parents[1] / "profiles" / name,
@@ -297,9 +307,11 @@ class ResearchApplicationService:
                 inferred = kinds.get(concept.concept_id, set())
                 identifier = identifiers.get(concept.concept_id)
                 designation = labels.get(concept.concept_id)
-                if concept.status != "active" or len(inferred) != 1 or identifier is None:
+                if concept.status != "active" or not inferred or identifier is None:
                     continue
-                kind = next(iter(inferred))
+                # An HPO feature may be asserted as both reported symptom and observed sign.
+                # Prefer the aggregatable sign path while keeping the concept searchable.
+                kind = "sign" if "sign" in inferred else sorted(inferred)[0]
                 if kind not in {"symptom", "sign", "exam", "vital"}:
                     continue
                 catalog.append(

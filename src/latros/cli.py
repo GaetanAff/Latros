@@ -16,6 +16,7 @@ from latros.knowledge.curation import (
     export_approved_assertions,
     write_review_workbook,
 )
+from latros.knowledge.general_factory import build_general_snapshot
 from latros.knowledge.importers_v2 import import_registry_v2
 from latros.knowledge.loading import load_manifest_document
 from latros.knowledge.manifest_v2 import KnowledgeSnapshotManifestV2
@@ -116,12 +117,22 @@ def build(
             )
         require_official_gate(ctx.obj["root"], package_path)
         raise LatrosError("Official v0.5.0 approved snapshot inputs are not configured")
+    if snapshot.endswith(UNREVIEWED_SNAPSHOT_SUFFIX) and not allow_unreviewed_research_data:
+        raise LatrosError(
+            "Unreviewed snapshot refused by default; pass "
+            "--allow-unreviewed-research-data deliberately"
+        )
+    registry = (
+        load_registry_document(ctx.obj["registry"]) if ctx.obj["registry"].is_file() else None
+    )
+    if snapshot.endswith(UNREVIEWED_SNAPSHOT_SUFFIX) and isinstance(registry, RegistryV2):
+        typer.echo(f"WARNING: {UNREVIEWED_WARNING}", err=True)
+        result = build_general_snapshot(
+            ctx.obj["root"], registry, snapshot, allow_unreviewed_research_data=True
+        )
+        output(result.model_dump(mode="json"))
+        return
     if snapshot.endswith(UNREVIEWED_SNAPSHOT_SUFFIX):
-        if not allow_unreviewed_research_data:
-            raise LatrosError(
-                "Unreviewed snapshot refused by default; pass "
-                "--allow-unreviewed-research-data deliberately"
-            )
         typer.echo(f"WARNING: {UNREVIEWED_WARNING}", err=True)
         result = build_unreviewed_research_snapshot(
             ctx.obj["root"],
@@ -135,7 +146,8 @@ def build(
         raise LatrosError(
             "The unreviewed override may only build a snapshot ending in -dev-unreviewed"
         )
-    registry = load_registry_document(ctx.obj["registry"])
+    if registry is None:
+        registry = load_registry_document(ctx.obj["registry"])
     if isinstance(registry, RegistryV2):
         knowledge = import_registry_v2(ctx.obj["root"], registry)
         result = build_snapshot_v2(ctx.obj["root"], registry, snapshot, knowledge)

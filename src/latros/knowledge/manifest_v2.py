@@ -42,6 +42,7 @@ class KnowledgeSnapshotManifestV2(Contract):
     unreviewed_mapping_ids: list[str] = Field(default_factory=list)
     reviewer_count: int | None = Field(default=None, ge=0)
     limitations: list[str] = Field(default_factory=list)
+    metrics: dict[str, Any] = Field(default_factory=dict)
 
     @model_validator(mode="after")
     def publication_is_complete(self) -> Self:

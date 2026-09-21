@@ -64,6 +64,13 @@ def test_agent_candidate_is_not_usable_without_review() -> None:
     )
 
 
+def test_unreviewed_candidate_can_be_technically_eligible_without_being_approved() -> None:
+    candidate = _candidate(review_status="unreviewed")
+
+    assert candidate.technically_eligible is True
+    assert candidate.usable is False
+
+
 def test_approved_candidate_requires_reviewers_and_exact_resolved_mappings() -> None:
     with pytest.raises(ValidationError, match="recorded reviewers"):
         _candidate(review_status="approved")

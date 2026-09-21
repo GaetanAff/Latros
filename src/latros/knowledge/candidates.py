@@ -9,6 +9,7 @@ from latros.knowledge.frequency import Frequency
 from latros.sources.registry import Contract
 
 CandidateStatus = Literal[
+    "unreviewed",
     "agent_extracted",
     "pending_mapping",
     "normalized_unreviewed",
@@ -73,7 +74,7 @@ class CandidateAssertion(Contract):
     subject_mapping: MappingProposal | None = None
     object_mapping: MappingProposal | None = None
     extraction: ExtractionProvenance
-    review_status: CandidateStatus
+    review_status: CandidateStatus = "unreviewed"
     reviewer_ids: list[str] = Field(default_factory=list)
     transformation_chain: list[str] = Field(default_factory=list)
 
@@ -91,6 +92,17 @@ class CandidateAssertion(Contract):
     def usable(self) -> bool:
         mappings = (self.subject_mapping, self.object_mapping)
         return self.review_status == "approved" and all(
+            item is not None
+            and item.status == "resolved"
+            and item.relation in {"exact", "equivalent"}
+            for item in mappings
+        )
+
+    @property
+    def technically_eligible(self) -> bool:
+        """Whether mappings permit DEV scoring, without implying clinical approval."""
+        mappings = (self.subject_mapping, self.object_mapping)
+        return self.review_status != "rejected" and all(
             item is not None
             and item.status == "resolved"
             and item.relation in {"exact", "equivalent"}

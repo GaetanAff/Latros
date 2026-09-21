@@ -47,13 +47,16 @@ ArtifactFormatV2 = Literal[
     "medlineplus-health-topics-xml",
     "medlineplus-health-topics-xml-zip",
     "mesh-descriptors-xml",
+    "mesh-descriptors-xml-gzip",
     "mesh-qualifiers-xml",
     "mesh-supplemental-records-xml",
+    "monarch-kg-tar-gzip",
     "monarch-kg-duckdb",
     "kgx-nodes-tsv-gzip",
     "kgx-edges-tsv-gzip",
     "jsonl-gzip",
     "rdf-ntriples-gzip",
+    "orphadata-product4-xml",
 ]
 
 _SOURCE_ROLES = set(get_args(SourceRole))

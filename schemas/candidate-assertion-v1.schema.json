@@ -378,7 +378,9 @@
       "title": "Quantitative Value"
     },
     "review_status": {
+      "default": "unreviewed",
       "enum": [
+        "unreviewed",
         "agent_extracted",
         "pending_mapping",
         "normalized_unreviewed",
@@ -523,8 +525,7 @@
     "object_type",
     "evidence_family",
     "dependency_group",
-    "extraction",
-    "review_status"
+    "extraction"
   ],
   "title": "CandidateAssertion",
   "type": "object"

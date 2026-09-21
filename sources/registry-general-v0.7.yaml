@@ -1,0 +1,234 @@
+schema_version: 2
+canonical_schema_version: 2
+scope:
+  scope_id: general-medicine-dev-unreviewed
+  domain: general medicine research knowledge base
+  population: adults only for the current general_v1 engineering profile
+  observation_types: [symptom, sign, exam, vital]
+  relations: [has_symptom, has_sign, has_exam_finding]
+  exclusions:
+    - clinical validation
+    - treatment recommendations
+    - safety and triage
+    - laboratory result interpretation
+    - medication reasoning
+    - pediatric and pregnancy-specific reasoning
+compatible_profiles: [general_v1-general-unreviewed]
+sources:
+  - source_id: hpo
+    producer: Human Phenotype Ontology Consortium
+    roles: [terminology]
+    code_system: http://purl.obolibrary.org/obo/hp.owl
+    homepage: https://hpo.jax.org/
+    release: '2026-09-01'
+    release_date: '2026-09-01'
+    access_date: '2026-09-20'
+    importer: latros.knowledge.importers.import_ontology
+    license:
+      name: LicenseRef-HPO
+      url: https://hpo.jax.org/app/license
+      attribution: Human Phenotype Ontology Consortium; release 2026-09-01
+      redistribution: restricted
+      implementation_rights_confirmed: true
+      transformation_rights: allowed
+      restrictions: [Respect HPO terms; HPOA and OMIM-derived annotations are excluded from this artifact]
+    artifacts:
+      - filename: hp.json
+        product: HPO ontology
+        format: obographs-json
+        language: en
+        source_url: https://github.com/obophenotype/human-phenotype-ontology/releases/download/v2026-09-01/hp.json
+        sha256: a7b3a012e7b4007a35a7cf8da35f2373b54cc16907f80d13d62470d31f833501
+        access_mode: public_https
+        size_bytes: 21915519
+
+  - source_id: mondo
+    producer: Mondo Disease Ontology contributors
+    roles: [terminology, classification]
+    code_system: http://purl.obolibrary.org/obo/mondo.owl
+    homepage: https://mondo.monarchinitiative.org/
+    release: '2026-09-01'
+    release_date: '2026-09-01'
+    access_date: '2026-09-20'
+    importer: latros.knowledge.importers.import_ontology
+    license:
+      name: CC-BY-4.0
+      url: https://creativecommons.org/licenses/by/4.0/
+      attribution: Mondo Disease Ontology contributors; release 2026-09-01
+      redistribution: allowed_with_attribution
+      implementation_rights_confirmed: true
+      transformation_rights: allowed
+      restrictions: [Preserve provenance of upstream ontology cross-references]
+    dependencies:
+      - upstream_reference: Disease Ontology, Orphanet and other source ontologies declared by Mondo
+        dependency_type: derived_from
+        evidence: Mondo ontology metadata and per-node xrefs
+    artifacts:
+      - filename: mondo.json
+        product: Mondo ontology
+        format: obographs-json
+        language: en
+        source_url: https://github.com/monarch-initiative/mondo/releases/download/v2026-09-01/mondo.json
+        sha256: ba19a3be2a384f21d2a09eaa726daedf6f06b9747ae011ab81d29fcd4dd8d3ee
+        access_mode: public_https
+        size_bytes: 107586061
+
+  - source_id: doid
+    producer: Human Disease Ontology
+    roles: [terminology, classification]
+    code_system: http://purl.obolibrary.org/obo/doid.owl
+    homepage: https://www.disease-ontology.org/
+    release: '2026-08-31'
+    release_date: '2026-08-31'
+    access_date: '2026-09-20'
+    importer: latros.knowledge.general_factory._import_ontology
+    license:
+      name: CC0-1.0
+      url: https://creativecommons.org/publicdomain/zero/1.0/
+      attribution: Human Disease Ontology; release v2026-08-31
+      redistribution: allowed_with_attribution
+      implementation_rights_confirmed: true
+      transformation_rights: allowed
+      restrictions: []
+    artifacts:
+      - filename: doid.json
+        product: Human Disease Ontology OBOGraphs JSON
+        format: obographs-json
+        language: en
+        source_url: https://raw.githubusercontent.com/DiseaseOntology/HumanDiseaseOntology/v2026-08-31/src/ontology/doid.json
+        sha256: 8238cb4d3f758e89fa9a74eaf14b606d5d0b2a36f184ab7a7ea92a8dbcb4626e
+        access_mode: public_https
+        size_bytes: 24089611
+
+  - source_id: orphadata
+    producer: Orphanet / INSERM
+    roles: [rare_disease_knowledge]
+    code_system: https://www.orpha.net
+    homepage: https://sciences.orphadata.com/phenotypes/
+    release: '2026-07'
+    release_date: '2026-06-29'
+    access_date: '2026-09-20'
+    importer: latros.knowledge.importers.import_orphadata
+    license:
+      name: CC-BY-4.0
+      url: https://creativecommons.org/licenses/by/4.0/
+      attribution: 'Orphadata: Free access data from Orphanet. INSERM; July 2026; archive commit 463f51d0db1d754b53e96027dd098a3d96a9c79c.'
+      redistribution: allowed_with_attribution
+      implementation_rights_confirmed: true
+      transformation_rights: allowed
+      restrictions: [Preserve Orphadata attribution and HPO provenance]
+    dependencies:
+      - upstream_reference: hpo:2026-09-01
+        dependency_type: derived_from
+        evidence: Orphadata Product 4 uses HPO identifiers
+    artifacts:
+      - filename: en_product4.xml
+        product: Orphadata Science product 4
+        format: orphadata-product4-xml
+        language: en
+        source_url: https://media.githubusercontent.com/media/Orphanet/Orphadata_aggregated/463f51d0db1d754b53e96027dd098a3d96a9c79c/Rare%20diseases%20with%20associated%20phenotypes/en_product4.xml
+        sha256: 4f44e8a61201399911aa1ba44a293c0ccaa5ce11272c47d40862255cb72f6b32
+        access_mode: public_https
+        size_bytes: 47893357
+      - filename: fr_product4.xml
+        product: Orphadata Science product 4
+        format: orphadata-product4-xml
+        language: fr
+        source_url: https://media.githubusercontent.com/media/Orphanet/Orphadata_aggregated/463f51d0db1d754b53e96027dd098a3d96a9c79c/Rare%20diseases%20with%20associated%20phenotypes/fr_product4.xml
+        sha256: 526123718342e00b1905b79ed9de265a9fc51fc8bbe57a7e3852100f65fb4bd8
+        access_mode: public_https
+        size_bytes: 47999029
+
+  - source_id: mesh
+    producer: U.S. National Library of Medicine
+    roles: [terminology, classification]
+    code_system: https://id.nlm.nih.gov/mesh/
+    homepage: https://www.nlm.nih.gov/mesh/meshhome.html
+    release: '2026'
+    release_date: '2026-08-12'
+    access_date: '2026-09-20'
+    importer: latros.knowledge.mesh.parse_mesh_descriptors
+    license:
+      name: NLM Terms and Conditions for MeSH
+      url: https://www.nlm.nih.gov/databases/download/terms_and_conditions_mesh.html
+      attribution: U.S. National Library of Medicine; MeSH 2026 descriptors
+      redistribution: allowed_with_attribution
+      implementation_rights_confirmed: true
+      transformation_rights: allowed
+      restrictions: [State the MeSH version; do not imply NLM endorsement; MTMS translations excluded]
+    artifacts:
+      - filename: desc2026.gz
+        product: MeSH 2026 descriptor XML
+        format: mesh-descriptors-xml-gzip
+        language: en
+        source_url: https://nlmpubs.nlm.nih.gov/projects/mesh/MESH_FILES/xmlmesh/desc2026.gz
+        sha256: ccd4d0d33bebfd4c836a59e7dd0c635b1d4e20c4f5a6abc55e2eb0ba4c8716dd
+        access_mode: public_https
+        size_bytes: 16812612
+
+  - source_id: medlineplus
+    producer: U.S. National Library of Medicine
+    roles: [clinical_assertion_source]
+    code_system: https://medlineplus.gov/
+    homepage: https://medlineplus.gov/xml.html
+    release: '2026-09-19'
+    release_date: '2026-09-19'
+    access_date: '2026-09-20'
+    importer: latros.knowledge.medlineplus.parse_medlineplus_topics
+    release_identity_method: dated_capture
+    capture_identity: medlineplus-health-topics-2026-09-19-sha256-4b52e1a2
+    license:
+      name: United States public domain for MedlinePlus Health Topic summaries
+      url: https://medlineplus.gov/about/using/usingcontent/
+      attribution: Source MedlinePlus, National Library of Medicine
+      redistribution: restricted
+      implementation_rights_confirmed: true
+      transformation_rights: allowed
+      restrictions:
+        - Only MedlinePlus Health Topic summaries are treated as public-domain clinical text
+        - Linked third-party content, images, A.D.A.M. and ASHP content are not ingested
+        - Do not imply NLM endorsement
+    dependencies:
+      - upstream_reference: heterogeneous editorial sources retained in each topic record
+        dependency_type: unknown
+        evidence: MedlinePlus aggregates NIH and external links; independence is not assumed
+    artifacts:
+      - filename: mplus_topics_compressed_2026-09-19.zip
+        product: Complete MedlinePlus Health Topics XML
+        format: medlineplus-health-topics-xml-zip
+        source_url: https://medlineplus.gov/xml/mplus_topics_compressed_2026-09-19.zip
+        sha256: 4b52e1a2c4c499d363dfbff1776875b53a695b315e7761e1c283b223b675ed74
+        access_mode: public_https
+        size_bytes: 4769861
+
+  - source_id: monarch
+    producer: Monarch Initiative
+    roles: [aggregated_knowledge]
+    code_system: https://w3id.org/biolink/
+    homepage: https://monarchinitiative.org/
+    release: '2026-09-02'
+    release_date: '2026-09-02'
+    access_date: '2026-09-20'
+    importer: latros.knowledge.monarch.iter_monarch_disease_phenotypes
+    license:
+      name: Upstream-dependent Monarch KG data licensing
+      url: https://monarch-app.monarchinitiative.org/Licensing/
+      attribution: Monarch Initiative and the primary knowledge source retained on every association; release 2026-09-02
+      redistribution: restricted
+      implementation_rights_confirmed: true
+      transformation_rights: allowed
+      restrictions:
+        - Each upstream primary source license and attribution remains applicable
+        - This DEV snapshot is not redistributable as a substitute for upstream datasets
+    dependencies:
+      - upstream_reference: primary_knowledge_source and aggregator_knowledge_source columns in each KGX edge
+        dependency_type: derived_from
+        evidence: Monarch KG release retains per-edge primary and aggregator provenance
+    artifacts:
+      - filename: monarch-kg.tar.gz
+        product: Complete Monarch KG KGX nodes and edges archive
+        format: monarch-kg-tar-gzip
+        source_url: https://github.com/monarch-initiative/monarch-ingest/releases/download/2026-09-02/monarch-kg.tar.gz
+        sha256: 9acae0cc6b8bf41753c2b34e2b3ac7ee5761263c28e8619b1fe73f6515c2aac6
+        access_mode: public_https
+        size_bytes: 335027647
