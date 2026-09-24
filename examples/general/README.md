@@ -13,4 +13,3 @@ reste `examples/case.orl-unreviewed.json`.
 | `empty.json` | aucune observation, donc abstention attendue |
 | `contradictory.json` | signes présents et absents pour exercer les contradictions |
 | `rare-multisystem.json` | cas multi-système hors du pilote ORL |
-
