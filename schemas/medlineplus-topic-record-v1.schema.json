@@ -1,0 +1,197 @@
+{
+  "$defs": {
+    "MedlinePlusMeshHeading": {
+      "additionalProperties": false,
+      "properties": {
+        "descriptor_id": {
+          "minLength": 1,
+          "title": "Descriptor Id",
+          "type": "string"
+        },
+        "label": {
+          "minLength": 1,
+          "title": "Label",
+          "type": "string"
+        }
+      },
+      "required": [
+        "descriptor_id",
+        "label"
+      ],
+      "title": "MedlinePlusMeshHeading",
+      "type": "object"
+    },
+    "MedlinePlusRelatedTopic": {
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "topic_id": {
+          "minLength": 1,
+          "title": "Topic Id",
+          "type": "string"
+        },
+        "url": {
+          "minLength": 1,
+          "title": "Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "topic_id",
+        "title",
+        "url"
+      ],
+      "title": "MedlinePlusRelatedTopic",
+      "type": "object"
+    },
+    "MedlinePlusSiteRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "categories": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Categories",
+          "type": "array"
+        },
+        "descriptions": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Descriptions",
+          "type": "array"
+        },
+        "organizations": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Organizations",
+          "type": "array"
+        },
+        "title": {
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "url": {
+          "minLength": 1,
+          "title": "Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "title",
+        "url"
+      ],
+      "title": "MedlinePlusSiteRecord",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "date_created": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Date Created"
+    },
+    "groups": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Groups",
+      "type": "array"
+    },
+    "language": {
+      "minLength": 1,
+      "title": "Language",
+      "type": "string"
+    },
+    "links": {
+      "items": {
+        "$ref": "#/$defs/MedlinePlusSiteRecord"
+      },
+      "title": "Links",
+      "type": "array"
+    },
+    "mesh_headings": {
+      "items": {
+        "$ref": "#/$defs/MedlinePlusMeshHeading"
+      },
+      "title": "Mesh Headings",
+      "type": "array"
+    },
+    "meta_description": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Meta Description"
+    },
+    "related_topics": {
+      "items": {
+        "$ref": "#/$defs/MedlinePlusRelatedTopic"
+      },
+      "title": "Related Topics",
+      "type": "array"
+    },
+    "source_locator": {
+      "minLength": 1,
+      "title": "Source Locator",
+      "type": "string"
+    },
+    "summaries": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Summaries",
+      "type": "array"
+    },
+    "synonyms": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Synonyms",
+      "type": "array"
+    },
+    "title": {
+      "minLength": 1,
+      "title": "Title",
+      "type": "string"
+    },
+    "topic_id": {
+      "minLength": 1,
+      "title": "Topic Id",
+      "type": "string"
+    },
+    "url": {
+      "minLength": 1,
+      "title": "Url",
+      "type": "string"
+    }
+  },
+  "required": [
+    "topic_id",
+    "title",
+    "language",
+    "url",
+    "source_locator"
+  ],
+  "title": "MedlinePlusTopicRecord",
+  "type": "object"
+}

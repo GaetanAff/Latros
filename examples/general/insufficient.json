@@ -1,0 +1,14 @@
+{
+  "case_id": "synthetic-general-insufficient",
+  "observation_proposals": [],
+  "observations": [
+    {
+      "acquisition_method": "reported", "certainty": "asserted", "clinical_status": "present",
+      "concept": {"coding": {"code": "HP:0002315", "display": "Headache", "system": "http://purl.obolibrary.org/obo/hp.owl"}, "concept_id": "concept:ae61a734e2272e88968512a677fbed23b4ee7846018fbd84a33dca19dc4a8b96", "status": "active"},
+      "evaluation_status": "assessed", "experiencer": "patient", "kind": "symptom", "observation_id": "synthetic-insufficient-headache",
+      "provenance": {"origin_type": "patient_report", "provenance_id": "synthetic-insufficient-p1"}
+    }
+  ],
+  "question_history": [], "schema_version": 2, "source_statements": [],
+  "subject_context": {"age": {"code": "a", "comparator": "eq", "kind": "quantity", "system": "http://unitsofmeasure.org", "unit": "year", "value": 30}, "sex": "unknown"}
+}

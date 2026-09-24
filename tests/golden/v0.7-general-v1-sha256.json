@@ -1,0 +1,40 @@
+{
+  "snapshot": "v0.7.0-general-dev-unreviewed",
+  "cases": {
+    "respiratory-common": {
+      "candidate_count": 696,
+      "diagnosis_sha256": "c88de036e2f6858acd7cd01660f0987e4e5084c9acdc8c6619e0cc5e49210d69",
+      "question_sha256": "c73e60ebb3afc5a940d7b273a8f2b66df9c78b4d9eeb59afe6e08c3602897018"
+    },
+    "ambiguous-febrile": {
+      "candidate_count": 696,
+      "diagnosis_sha256": "65e54e6caeecaab8bdcb16bc6b0dbc310900d388e124d218378fca18a5d2d841",
+      "question_sha256": "99a318d78ffcd63533ed74f2d1c547e52d1b8f037c54f49ece42a7c92434d272"
+    },
+    "contradictory": {
+      "candidate_count": 696,
+      "diagnosis_sha256": "5633e1847dcbf40ae7b63407ca952cb0f7e6cb5cf1e9c1d081dad31437cf8011",
+      "question_sha256": "1034bd22840de4e11e2e875aba88681dd4a69eddfc122b1e93c72af02fc0c6e9"
+    },
+    "insufficient": {
+      "candidate_count": 0,
+      "diagnosis_sha256": "cb621a790739a1cab58bc06042edbced90e84232e94b50cc08545a7ebe110990",
+      "question_sha256": "9378b08c193e7fa2468d9d6b312582a15a1a6b18df96f4d161ccd495e48f9f52"
+    },
+    "empty": {
+      "candidate_count": 0,
+      "diagnosis_sha256": "57d84a6999d78a708fff92c79c7d5dc3383bd4260a15da9fd5f9d1c62b4b94c7",
+      "question_sha256": "8734ad77ddcaba8f7cc44129a4ee5f71eab87b5005fe856d87d966c3ff8dfcb5"
+    },
+    "outside-corpus": {
+      "candidate_count": 0,
+      "diagnosis_sha256": "773aa262b0013911d98d526572f4a1feff67113f9a483237ef2b48838db0b771",
+      "question_sha256": "65c7ecd483f97a52fbc24b14e3eb1c0b5cb556db495d5927c58b63b90470c290"
+    },
+    "rare-multisystem": {
+      "candidate_count": 799,
+      "diagnosis_sha256": "f67be82e29b13136fca18d12e4ab4a7643a6b9c359006f5819775f6f3963a754",
+      "question_sha256": "ae1d42ab144afa45d13778ba3a0f8d48c6ef3ab220533508da2c9b1a18c5c5bd"
+    }
+  }
+}

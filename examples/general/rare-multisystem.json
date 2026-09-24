@@ -1,0 +1,26 @@
+{
+  "case_id": "synthetic-general-rare-multisystem",
+  "observation_proposals": [],
+  "observations": [
+    {
+      "acquisition_method": "observed", "certainty": "asserted", "clinical_status": "present",
+      "concept": {"coding": {"code": "HP:0000268", "display": "Dolichocephaly", "system": "http://purl.obolibrary.org/obo/hp.owl"}, "concept_id": "concept:90f8bb0f908e3d261c759c8700a2e61ceb5d8b7359c7ac22fa1570cd17e8a262", "status": "active"},
+      "evaluation_status": "assessed", "experiencer": "patient", "kind": "sign", "observation_id": "synthetic-multisystem-dolichocephaly",
+      "provenance": {"origin_type": "clinician_observation", "provenance_id": "synthetic-multisystem-p1"}
+    },
+    {
+      "acquisition_method": "observed", "certainty": "asserted", "clinical_status": "present",
+      "concept": {"coding": {"code": "HP:0000490", "display": "Deeply set eye", "system": "http://purl.obolibrary.org/obo/hp.owl"}, "concept_id": "concept:cf266aa8c3e662d7dab750b811717dfa9dab740b500f52476a82b30c024ca3de", "status": "active"},
+      "evaluation_status": "assessed", "experiencer": "patient", "kind": "sign", "observation_id": "synthetic-multisystem-deep-eye",
+      "provenance": {"origin_type": "clinician_observation", "provenance_id": "synthetic-multisystem-p2"}
+    },
+    {
+      "acquisition_method": "observed", "certainty": "asserted", "clinical_status": "present",
+      "concept": {"coding": {"code": "HP:0003758", "display": "Reduced subcutaneous adipose tissue", "system": "http://purl.obolibrary.org/obo/hp.owl"}, "concept_id": "concept:b036e0482991a17074108196af062c071b96c4c5ed5baa8861d877c3a1c58570", "status": "active"},
+      "evaluation_status": "assessed", "experiencer": "patient", "kind": "sign", "observation_id": "synthetic-multisystem-adipose",
+      "provenance": {"origin_type": "clinician_observation", "provenance_id": "synthetic-multisystem-p3"}
+    }
+  ],
+  "question_history": [], "schema_version": 2, "source_statements": [],
+  "subject_context": {"age": {"code": "a", "comparator": "eq", "kind": "quantity", "system": "http://unitsofmeasure.org", "unit": "year", "value": 28}, "sex": "unknown"}
+}

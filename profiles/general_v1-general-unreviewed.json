@@ -1,0 +1,60 @@
+{
+  "abstention_rules": [
+    "Adult population context is required",
+    "At least two supported findings must be assessed",
+    "Confirmed-observation coverage must be at least 0.50",
+    "At least one non-unknown evidence family must contribute"
+  ],
+  "accepted_observation_types": [
+    "symptom",
+    "sign",
+    "exam",
+    "vital"
+  ],
+  "accepted_relations": [
+    "has_symptom",
+    "has_sign",
+    "has_exam_finding"
+  ],
+  "aggregation_rules": [
+    "Engineering-only profile over explicitly unreviewed assertions",
+    "Average assessed assertion contributions inside each evidence family",
+    "Monarch republications share an evidence family with a matching Orphadata assertion",
+    "MedlinePlus assertions with unknown editorial dependencies are not aggregated",
+    "Weights are unvalidated engineering parameters, never clinical probabilities"
+  ],
+  "compatible_snapshot_ids": [
+    "v0.7.0-general-dev-unreviewed"
+  ],
+  "compatible_snapshot_schema_versions": [
+    2
+  ],
+  "coverage_rules": [
+    "Only confirmed resolved observations count as supported",
+    "Unknown and unevaluable findings have no numeric contribution",
+    "Only direct identifiers or exact/equivalent resolved mappings may score"
+  ],
+  "out_of_scope_rules": [
+    "Age below 18 years is outside this engineering profile",
+    "Missing or ambiguous age prevents adult-scope reasoning",
+    "This profile is local_research_only and has no clinical validation"
+  ],
+  "parameters": {
+    "allow_unlisted_evidence_families": true,
+    "family_weights": {},
+    "minimum_age_years": 18,
+    "minimum_assessed_findings": 2,
+    "minimum_coverage_ratio": 0.5
+  },
+  "profile_id": "general_v1-general-unreviewed",
+  "profile_sha256": "ec320533ebf4900d8a19e23cec99232b078d56636d6da9cd217b4e9651e3882d",
+  "schema_version": 1,
+  "score_scale": {
+    "calibrated": false,
+    "description": "Unreviewed deterministic compatibility for local engineering research; never a clinical probability",
+    "kind": "compatibility",
+    "scale_id": "general_v1.compatibility"
+  },
+  "strategy_id": "general_v1",
+  "strategy_version": "1"
+}

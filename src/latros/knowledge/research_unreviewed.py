@@ -450,11 +450,13 @@ def _registry(root: Path, package: LoadedCurationPackage) -> RegistryV2:
     sources.append(
         SourcePackageV2(
             source_id="latros-curation",
+            producer="Latros project",
             roles=["curation_metadata"],
             code_system="urn:latros:orl",
             homepage="https://github.com/GaetanAff/Latros",
             release=package.manifest.package_id,
             access_date=max(item.access_date for item in package.sources),
+            importer="latros.knowledge.research_unreviewed:canonicalize_pending_package",
             license=LicenseV2(
                 name="Project-internal research curation metadata",
                 url="https://github.com/GaetanAff/Latros",
@@ -463,6 +465,8 @@ def _registry(root: Path, package: LoadedCurationPackage) -> RegistryV2:
                 ),
                 redistribution="restricted",
                 implementation_rights_confirmed=True,
+                transformation_rights="restricted",
+                restrictions=["Local research use only; not clinically validated."],
                 notes="Not clinically reviewed; not a redistributable clinical reference snapshot.",
             ),
             dependencies=[
@@ -540,7 +544,8 @@ def _source_package(receipts: list[SourceArtifactReceipt]) -> SourcePackageV2:
         raise LatrosError("Unreviewed research mode does not bypass legal source review")
     return SourcePackageV2(
         source_id=receipt.source_id,
-        roles=sorted({item.role for item in receipts}),
+        producer=receipt.source_id,
+        roles=sorted({_sovereign_role(item.role) for item in receipts}),
         code_system=f"urn:latros:source:{receipt.source_id}",
         homepage=receipt.source_url,
         release=receipt.release,
@@ -549,12 +554,15 @@ def _source_package(receipts: list[SourceArtifactReceipt]) -> SourcePackageV2:
             default=None,
         ),
         access_date=max(item.access_date for item in receipts),
+        importer="latros.knowledge.research_unreviewed:canonicalize_pending_package",
         license=LicenseV2(
             name=receipt.license_name,
             url=receipt.license_url,
             attribution="; ".join(sorted({item.attribution for item in receipts})),
             redistribution=redistribution,
             implementation_rights_confirmed=True,
+            transformation_rights="allowed",
+            restrictions=["Pinned local research capture; upstream terms remain controlling."],
             notes=" ".join(item.notes for item in receipts if item.notes),
         ),
         dependencies=dependencies,
@@ -580,6 +588,13 @@ def _artifact_format(receipt: SourceArtifactReceipt) -> ArtifactFormatV2:
     if receipt.local_path.endswith(".json"):
         return "obographs-json"
     return "html-capture"
+
+
+def _sovereign_role(role: str) -> str:
+    return {
+        "terminology": "terminology",
+        "clinical_assertions": "clinical_assertion_source",
+    }.get(role, role)
 
 
 def _artifact_id(source: SourcePackageV2, artifact: RegistryArtifactV2) -> str:

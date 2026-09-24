@@ -3,7 +3,8 @@
 from __future__ import annotations
 
 import webbrowser
-from collections.abc import Sequence
+from collections.abc import AsyncIterator, Sequence
+from contextlib import asynccontextmanager
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, cast
@@ -42,12 +43,21 @@ MUTATING_METHODS = {"POST", "PUT", "PATCH", "DELETE"}
 def create_app(root: Path) -> FastAPI:
     """Create an internal transport bound by the launcher to loopback only."""
     resolved_root = root.resolve()
+
+    @asynccontextmanager
+    async def lifespan(application: FastAPI) -> AsyncIterator[None]:
+        try:
+            yield
+        finally:
+            application.state.service.close()
+
     app = FastAPI(
         title="Latros R&D local interface",
         version=__version__,
         docs_url=None,
         redoc_url=None,
         openapi_url=None,
+        lifespan=lifespan,
     )
     app.state.service = ResearchApplicationService(resolved_root)
     app.state.sessions = SessionStore(resolved_root)

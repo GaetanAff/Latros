@@ -3,6 +3,7 @@
 import hashlib
 import shutil
 import tempfile
+from collections import Counter
 from pathlib import Path
 from typing import Any, Literal
 
@@ -70,6 +71,7 @@ V2_RULES = {
     "mapping": "resolved_exact_or_equivalent_only_for_reasoning",
     "deduplication": "source_rows_preserved; canonical_signature_deduplicated",
     "evidence": "aggregate_independent_families_only; unknown_dependency_excluded",
+    "manifest_evidence": "full_below_5000_rows; otherwise table_authoritative_summary",
     "runtime_integrity": "local_receipt; manifest_and_canonical_hashes_define_identity",
     "safety": "not_evaluated",
 }
@@ -78,9 +80,16 @@ V2_RULES = {
 def pipeline_hash_v2() -> str:
     root = Path(__file__).resolve().parents[1]
     relative_paths = [
+        "knowledge/adapter_v1.py",
+        "knowledge/candidates.py",
         "knowledge/manifest_v2.py",
         "knowledge/models_v2.py",
+        "knowledge/importers.py",
         "knowledge/importers_v2.py",
+        "knowledge/general_factory.py",
+        "knowledge/medlineplus.py",
+        "knowledge/mesh.py",
+        "knowledge/monarch.py",
         "knowledge/research_unreviewed.py",
         "knowledge/store_v2.py",
         "sources/registry_v2.py",
@@ -183,6 +192,7 @@ def build_snapshot_v2(
             "unreviewed_mapping_ids": expected.unreviewed_mapping_ids,
             "reviewer_count": expected.reviewer_count,
             "limitations": expected.limitations,
+            "metrics": expected.metrics,
         }
         if expected_research != (research_metadata or expected_research):
             raise LatrosError("Snapshot ID already belongs to different research safeguards")
@@ -255,6 +265,29 @@ def build_snapshot_v2(
         manifest_payload: dict[str, Any] = {
             **(research_metadata or {}),
         }
+        evidence_manifest: list[dict[str, Any]]
+        evidence_memberships = sum(
+            len(item.source_assertion_ids) for item in knowledge.evidence_families
+        )
+        if evidence_memberships <= 5000:
+            evidence_manifest = [
+                item.model_dump(mode="json") for item in knowledge.evidence_families
+            ]
+        else:
+            dependency_counts = Counter(
+                item.dependency_type for item in knowledge.evidence_families
+            )
+            evidence_manifest = [
+                {
+                    "summary": True,
+                    "table": "evidence_family",
+                    "count": len(knowledge.evidence_families),
+                    "source_assertion_membership_count": evidence_memberships,
+                    "dependency_type_counts": dict(sorted(dependency_counts.items())),
+                    "logical_sha256": table_info["evidence_family"].logical_sha256,
+                    "note": "Every family remains in the canonical evidence_family table.",
+                }
+            ]
         manifest = KnowledgeSnapshotManifestV2(
             snapshot=snapshot,
             latros_version=__version__,
@@ -265,9 +298,7 @@ def build_snapshot_v2(
             source_dependencies=[
                 item.model_dump(mode="json") for item in knowledge.source_dependencies
             ],
-            evidence_families=[
-                item.model_dump(mode="json") for item in knowledge.evidence_families
-            ],
+            evidence_families=evidence_manifest,
             rules=V2_RULES,
             tables=table_info,
             compatible_profiles=registry.compatible_profiles,

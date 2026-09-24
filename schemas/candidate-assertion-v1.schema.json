@@ -1,0 +1,532 @@
+{
+  "$defs": {
+    "ExtractionProvenance": {
+      "additionalProperties": false,
+      "properties": {
+        "extractor_id": {
+          "minLength": 1,
+          "title": "Extractor Id",
+          "type": "string"
+        },
+        "extractor_version": {
+          "minLength": 1,
+          "title": "Extractor Version",
+          "type": "string"
+        },
+        "method": {
+          "enum": [
+            "deterministic_parser",
+            "rule_based",
+            "agent",
+            "manual"
+          ],
+          "title": "Method",
+          "type": "string"
+        }
+      },
+      "required": [
+        "extractor_id",
+        "extractor_version",
+        "method"
+      ],
+      "title": "ExtractionProvenance",
+      "type": "object"
+    },
+    "Frequency": {
+      "additionalProperties": false,
+      "properties": {
+        "category": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Category"
+        },
+        "denominator": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Denominator"
+        },
+        "kind": {
+          "enum": [
+            "count",
+            "percentage",
+            "interval",
+            "category",
+            "excluded",
+            "missing"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "lower": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Lower"
+        },
+        "numerator": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Numerator"
+        },
+        "raw": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Raw"
+        },
+        "upper": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Upper"
+        }
+      },
+      "required": [
+        "kind"
+      ],
+      "title": "Frequency",
+      "type": "object"
+    },
+    "MappingProposal": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "minLength": 1,
+          "title": "Code",
+          "type": "string"
+        },
+        "concept_id": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Concept Id"
+        },
+        "provenance": {
+          "minLength": 1,
+          "title": "Provenance",
+          "type": "string"
+        },
+        "relation": {
+          "enum": [
+            "exact",
+            "equivalent",
+            "broader",
+            "narrower",
+            "related",
+            "unresolved"
+          ],
+          "title": "Relation",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "resolved",
+            "ambiguous",
+            "unresolved",
+            "not_attempted"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "system": {
+          "minLength": 1,
+          "title": "System",
+          "type": "string"
+        }
+      },
+      "required": [
+        "system",
+        "code",
+        "relation",
+        "status",
+        "provenance"
+      ],
+      "title": "MappingProposal",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "A proposed assertion that must never be mistaken for canonical knowledge.",
+  "properties": {
+    "age": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Age"
+    },
+    "artifact_sha256": {
+      "items": {
+        "pattern": "^[0-9a-f]{64}$",
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Artifact Sha256",
+      "type": "array"
+    },
+    "candidate_assertion_id": {
+      "minLength": 1,
+      "title": "Candidate Assertion Id",
+      "type": "string"
+    },
+    "context": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Context"
+    },
+    "dependency_group": {
+      "minLength": 1,
+      "title": "Dependency Group",
+      "type": "string"
+    },
+    "duration": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Duration"
+    },
+    "evidence_family": {
+      "minLength": 1,
+      "title": "Evidence Family",
+      "type": "string"
+    },
+    "extraction": {
+      "$ref": "#/$defs/ExtractionProvenance"
+    },
+    "frequency": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Frequency"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "laterality": {
+      "anyOf": [
+        {
+          "enum": [
+            "left",
+            "right",
+            "bilateral",
+            "midline",
+            "unspecified"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Laterality"
+    },
+    "location": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Location"
+    },
+    "object_mapping": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/MappingProposal"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "object_text": {
+      "minLength": 1,
+      "title": "Object Text",
+      "type": "string"
+    },
+    "object_type": {
+      "minLength": 1,
+      "title": "Object Type",
+      "type": "string"
+    },
+    "onset": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Onset"
+    },
+    "polarity": {
+      "default": "present",
+      "enum": [
+        "present",
+        "excluded",
+        "unknown"
+      ],
+      "title": "Polarity",
+      "type": "string"
+    },
+    "population": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Population",
+      "type": "array"
+    },
+    "predicate": {
+      "minLength": 1,
+      "title": "Predicate",
+      "type": "string"
+    },
+    "quantitative_value": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Quantitative Value"
+    },
+    "review_status": {
+      "default": "unreviewed",
+      "enum": [
+        "unreviewed",
+        "agent_extracted",
+        "pending_mapping",
+        "normalized_unreviewed",
+        "approved",
+        "rejected"
+      ],
+      "title": "Review Status",
+      "type": "string"
+    },
+    "reviewer_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Reviewer Ids",
+      "type": "array"
+    },
+    "severity": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Severity"
+    },
+    "sex": {
+      "anyOf": [
+        {
+          "enum": [
+            "male",
+            "female",
+            "intersex",
+            "any",
+            "unknown"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Sex"
+    },
+    "source_locator": {
+      "minLength": 1,
+      "title": "Source Locator",
+      "type": "string"
+    },
+    "source_record_id": {
+      "minLength": 1,
+      "title": "Source Record Id",
+      "type": "string"
+    },
+    "source_release_id": {
+      "minLength": 1,
+      "title": "Source Release Id",
+      "type": "string"
+    },
+    "subject_mapping": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/MappingProposal"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "subject_text": {
+      "minLength": 1,
+      "title": "Subject Text",
+      "type": "string"
+    },
+    "subject_type": {
+      "minLength": 1,
+      "title": "Subject Type",
+      "type": "string"
+    },
+    "temporality": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Temporality"
+    },
+    "transformation_chain": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Transformation Chain",
+      "type": "array"
+    },
+    "unit_code": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Unit Code"
+    },
+    "unit_system": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Unit System"
+    }
+  },
+  "required": [
+    "candidate_assertion_id",
+    "source_release_id",
+    "source_record_id",
+    "source_locator",
+    "artifact_sha256",
+    "subject_text",
+    "subject_type",
+    "predicate",
+    "object_text",
+    "object_type",
+    "evidence_family",
+    "dependency_group",
+    "extraction"
+  ],
+  "title": "CandidateAssertion",
+  "type": "object"
+}

@@ -7,6 +7,7 @@ change.
 
 - [v0.5-E — SNOMED/HAS, décision historique `NO-GO`](v0.5-orl.md)
 - [v0.5-E2/E3 — sources ouvertes DOID/Mondo, corpus ORL et état du gate](v0.5-orl-open-sources.md)
+- [v0.7 — distributions souveraines généralistes et captures effectivement utilisées](v0.7-sovereign-general.md)
 
 Le paquet E3 et les blocages humains sont détaillés dans le
 [dossier de revue](../reviews/v0.5-orl/README.md). Un état

@@ -2,7 +2,7 @@
 
 ## Document de conception — phase 0
 
-**Statut actualisé le 18 septembre 2026 :** ce document conserve la vision initiale. Une première tranche interne de recherche est désormais autorisée et implémentée : maladies rares, CLI Python 3.11, HPO/Mondo/Orphadata, moteur `semantic_v1` et questions adaptatives. Voir [README](../README.md) et [ADR 0001](decisions/0001-socle-recherche.md) pour les choix applicables. Les autres composants ci-dessous restent prospectifs.
+**Statut actualisé le 21 septembre 2026 :** ce document conserve la vision initiale. Deux chemins internes de recherche sont désormais implémentés : la référence maladies rares avec `semantic_v1`, puis le snapshot généraliste souverain non relu `v0.7.0-general-dev-unreviewed` avec `general_v1`. Voir [README](../README.md), [ADR 0001](decisions/0001-socle-recherche.md) et [ADR 0009](decisions/0009-fabrique-souveraine-generaliste.md) pour les choix applicables. Les autres composants ci-dessous restent prospectifs.
 
 **Suivi des étapes :** le [plan d'implémentation](plan.md) décrit les jalons livrés `v0.1.0` à `v0.4.0`, la tranche `v0.5` encore non validée cliniquement et l'interface R&D `v0.6`. Les checkpoints techniques A à D de v0.5 sont implémentés sur des données entièrement inventées, y compris le pipeline canonique v2 et `general_v1`. Le `NO-GO` historique de E pour SNOMED/HAS est conservé. L'audit E2 retient DOID/Mondo et des sources ouvertes ; E3 matérialise un paquet réel de 17 assertions et 10 mappings, avec provenance et gate automatiques. Il reste intégralement `pending_review`. E4 permet de le construire localement sous l'identité explicite `v0.5.0-dev-unreviewed`, avec override volontaire et marquage non validé dans chaque résultat ; aucune validation humaine n'est inventée et le snapshot officiel `v0.5.0` reste bloqué. Le [cahier des charges de `v0.4`](v0.4-clinical-knowledge-model.md) documente le modèle général ; les [ADR 0005](decisions/0005-snapshot-v2-et-pilote-orl.md), [0006](decisions/0006-sources-ouvertes-pilote-orl.md) et [0007](decisions/0007-mode-recherche-orl-non-revu.md) encadrent les deux chemins ORL. `v0.6` ajoute une console web strictement locale, le service applicatif commun CLI/UI et des sessions reprenables avec runs immuables, selon l'[ADR 0008](decisions/0008-interface-locale-rd-et-sessions.md). Elle ne change aucun raisonnement médical. L'ancienne maquette locale a été supprimée après la livraison : l'interface officielle est autonome sous `src/latros/ui/`. Les extensions de temporalité, biologie, constantes, risques et médicaments passent en `v0.7`, le safety en `v0.8`, le NLP/LLM en `v0.9` et l'API/FHIR/interopérabilité en `v0.10`. Le snapshot clinique de référence reste `v0.2.0` et le paquet Python est `0.6.0`. [history.md](history.md), le README et le plan sont actualisés à chaque livraison.
 
@@ -1458,6 +1458,17 @@ Les points les plus importants à préserver sont :
 8. prévoir la reproductibilité et la réglementation dès la conception.
 
 MedGemma 1.5 est particulièrement intéressant pour l'extraction médicale locale, les documents, les comparaisons LLM et, plus tard, la multimodalité. TxGemma peut compléter le projet dans un espace de recherche thérapeutique clairement isolé, mais ne doit pas intervenir dans le diagnostic différentiel principal ni produire de recommandations de traitement au patient.
+
+### Invariant ajouté — souveraineté locale
+
+La fabrique de connaissances de Latros repose exclusivement sur des distributions officielles
+téléchargeables, figées et vérifiées. Après acquisition initiale, reconstruire un snapshot, lancer
+les moteurs, poser les questions et utiliser l'interface ne doit provoquer aucun accès réseau. Les
+API externes ne constituent pas une architecture de données acceptable. MedlinePlus XML, MeSH XML
+et Monarch KG sont désormais importés depuis leurs distributions locales épinglées dans
+`v0.7.0-general-dev-unreviewed`, aux côtés de HPO, Mondo, DOID et Orphadata. Ce snapshot reste un
+artefact de recherche non validé et non publiable ; le pilote ORL demeure un corpus historique de
+régression et n'est pas une dépendance du nouveau build.
 
 ---
 

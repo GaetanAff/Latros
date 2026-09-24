@@ -32,6 +32,31 @@
           "title": "Redistribution",
           "type": "string"
         },
+        "restrictions": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Restrictions",
+          "type": "array"
+        },
+        "transformation_rights": {
+          "anyOf": [
+            {
+              "enum": [
+                "allowed",
+                "restricted",
+                "prohibited",
+                "unknown"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Transformation Rights"
+        },
         "url": {
           "minLength": 1,
           "title": "Url",
@@ -73,7 +98,20 @@
             "html-capture",
             "curation-jsonl",
             "curation-package-json",
-            "source-segments-json"
+            "source-segments-json",
+            "medlineplus-health-topics-xml",
+            "medlineplus-health-topics-xml-zip",
+            "mesh-descriptors-xml",
+            "mesh-descriptors-xml-gzip",
+            "mesh-qualifiers-xml",
+            "mesh-supplemental-records-xml",
+            "monarch-kg-tar-gzip",
+            "monarch-kg-duckdb",
+            "kgx-nodes-tsv-gzip",
+            "kgx-edges-tsv-gzip",
+            "jsonl-gzip",
+            "rdf-ntriples-gzip",
+            "orphadata-product4-xml"
           ],
           "title": "Format",
           "type": "string"
@@ -113,6 +151,19 @@
           "pattern": "^[0-9a-f]{64}$",
           "title": "Sha256",
           "type": "string"
+        },
+        "size_bytes": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Size Bytes"
         },
         "source_url": {
           "minLength": 1,
@@ -243,6 +294,19 @@
           "title": "Artifacts",
           "type": "array"
         },
+        "capture_identity": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Capture Identity"
+        },
         "code_system": {
           "minLength": 1,
           "title": "Code System",
@@ -260,8 +324,34 @@
           "title": "Homepage",
           "type": "string"
         },
+        "importer": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Importer"
+        },
         "license": {
           "$ref": "#/$defs/LicenseV2"
+        },
+        "producer": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Producer"
         },
         "release": {
           "title": "Release",
@@ -279,6 +369,15 @@
           ],
           "default": null,
           "title": "Release Date"
+        },
+        "release_identity_method": {
+          "default": "publisher_release",
+          "enum": [
+            "publisher_release",
+            "dated_capture"
+          ],
+          "title": "Release Identity Method",
+          "type": "string"
         },
         "roles": {
           "items": {

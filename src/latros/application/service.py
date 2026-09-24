@@ -17,11 +17,11 @@ from latros.clinical.v2 import ClinicalCaseV2
 from latros.common import LatrosError, safe_id
 from latros.knowledge.loading import load_manifest_document
 from latros.knowledge.manifest_v2 import KnowledgeSnapshotManifestV2
-from latros.knowledge.models_v2 import DesignationV2, ExternalIdentifierV2
 from latros.knowledge.store import snapshot_path
-from latros.knowledge.store_v2 import read_knowledge_v2, snapshot_path_v2
+from latros.knowledge.store_v2 import snapshot_path_v2
 from latros.reasoning.engine import Engine
-from latros.reasoning.general_v1 import GENERAL_V1_DESCRIPTOR, GeneralV1Strategy
+from latros.reasoning.general_v1 import GENERAL_V1_DESCRIPTOR
+from latros.reasoning.general_v1_lazy import LazyGeneralV1Strategy
 from latros.reasoning.profiles import ReasoningProfile, load_reasoning_profile
 from latros.reasoning.results_v2 import (
     DifferentialResultV2,
@@ -44,6 +44,12 @@ class ResearchApplicationService:
     def __init__(self, root: Path) -> None:
         self.root = root.resolve()
         self._catalog_cache: dict[tuple[str, str], list[ConceptOption]] = {}
+        self._general_cache: dict[str, LazyGeneralV1Strategy] = {}
+
+    def close(self) -> None:
+        for strategy in self._general_cache.values():
+            strategy.close()
+        self._general_cache.clear()
 
     def diagnose(
         self,
@@ -58,8 +64,7 @@ class ResearchApplicationService:
                 raise LatrosError("general_v1 accepts only ClinicalCaseV2")
             if output_contract == "v1":
                 raise LatrosError("general_v1 has no v1 output contract")
-            profile = self.profile(strategy, snapshot)
-            return GeneralV1Strategy(self.root, snapshot, profile).diagnose(case)
+            return self._general_strategy(snapshot).diagnose(case)
         adapter = self._semantic_strategy(snapshot, strategy)
         if self._v2_output(case, output_contract):
             return build_differential_v2(self.root, case, adapter, self.profile(strategy, snapshot))
@@ -78,12 +83,28 @@ class ResearchApplicationService:
                 raise LatrosError("general_v1 accepts only ClinicalCaseV2")
             if output_contract == "v1":
                 raise LatrosError("general_v1 has no v1 output contract")
-            profile = self.profile(strategy, snapshot)
-            return GeneralV1Strategy(self.root, snapshot, profile).question(case)
+            return self._general_strategy(snapshot).question(case)
         adapter = self._semantic_strategy(snapshot, strategy)
         if self._v2_output(case, output_contract):
             return build_question_v2(self.root, case, adapter, self.profile(strategy, snapshot))
         return adapter.next(case).payload
+
+    def _general_strategy(self, snapshot: str) -> LazyGeneralV1Strategy:
+        """Keep at most two lightweight, read-only repositories open."""
+        strategy = self._general_cache.get(snapshot)
+        if strategy is None:
+            strategy = LazyGeneralV1Strategy(
+                self.root,
+                snapshot,
+                self.profile("general_v1", snapshot),
+            )
+            if len(self._general_cache) >= 2:
+                oldest = next(iter(self._general_cache))
+                self._general_cache.pop(oldest).close()
+            self._general_cache[snapshot] = strategy
+        else:
+            strategy.repository.assert_unchanged()
+        return strategy
 
     def capabilities(self) -> ApplicationCapabilities:
         snapshots = self._snapshot_capabilities()
@@ -143,6 +164,18 @@ class ResearchApplicationService:
         if limit < 1 or limit > 50:
             raise LatrosError("Concept result limit must be between 1 and 50")
         normalized = query.strip().casefold()
+        if strategy == "general_v1":
+            rows = self._general_strategy(snapshot).repository.observation_options(
+                query=normalized if normalized.isascii() else "", limit=0 if normalized else limit
+            )
+            matches = [
+                self._general_concept_option(snapshot, row)
+                for row in rows
+                if not normalized
+                or normalized in row[3].casefold()
+                or normalized in row[2].casefold()
+            ]
+            return sorted(matches, key=lambda item: (item.label.casefold(), item.code))[:limit]
         catalog = self._catalog(snapshot, strategy)
         matches = [
             item
@@ -156,6 +189,14 @@ class ResearchApplicationService:
     def resolve_question_concept(
         self, snapshot: str, strategy: str, system: str, code: str
     ) -> ConceptOption:
+        if strategy == "general_v1":
+            self.require_compatible(snapshot, strategy)
+            rows = self._general_strategy(snapshot).repository.observation_options(
+                system=system, code=code, limit=0
+            )
+            if len(rows) != 1:
+                raise LatrosError("Question concept has no unambiguous supported observation type")
+            return self._general_concept_option(snapshot, rows[0])
         matches = [
             item
             for item in self._catalog(snapshot, strategy)
@@ -166,13 +207,12 @@ class ResearchApplicationService:
         return matches[0]
 
     def profile(self, strategy: str, snapshot: str | None = None) -> ReasoningProfile:
-        name = (
-            "general_v1-orl-unreviewed.json"
-            if strategy == "general_v1"
-            and snapshot is not None
-            and snapshot.endswith("-dev-unreviewed")
-            else f"{strategy}.json"
-        )
+        if strategy == "general_v1" and snapshot == "v0.5.0-dev-unreviewed":
+            name = "general_v1-orl-unreviewed.json"
+        elif strategy == "general_v1" and snapshot == "v0.7.0-general-dev-unreviewed":
+            name = "general_v1-general-unreviewed.json"
+        else:
+            name = f"{strategy}.json"
         candidates = [
             Path(__file__).resolve().parents[3] / "profiles" / name,
             Path(__file__).resolve().parents[1] / "profiles" / name,
@@ -268,58 +308,26 @@ class ResearchApplicationService:
                         observation_kind="phenotype",
                     )
                 )
-        elif strategy == "general_v1":
-            _, knowledge = read_knowledge_v2(self.root, snapshot)
-            labels: dict[str, DesignationV2] = {}
-            for designation_item in sorted(
-                knowledge.designations,
-                key=lambda item: (item.scope != "preferred", item.language != "en", item.text),
-            ):
-                labels.setdefault(designation_item.concept_id, designation_item)
-            identifiers: dict[str, ExternalIdentifierV2] = {}
-            for identifier_item in sorted(
-                knowledge.external_identifiers,
-                key=lambda item: (item.relation not in {"identity", "source_code"}, item.code),
-            ):
-                identifiers.setdefault(identifier_item.concept_id, identifier_item)
-            kinds: dict[str, set[str]] = {}
-            relation_kinds = {
-                "has_symptom": "symptom",
-                "has_sign": "sign",
-                "has_exam_finding": "exam",
-            }
-            for assertion in knowledge.canonical_assertions:
-                kind = relation_kinds.get(assertion.relation)
-                if kind is not None and assertion.object.kind == "concept":
-                    kinds.setdefault(assertion.object.concept_id, set()).add(kind)
-            catalog = []
-            for concept in knowledge.concepts:
-                inferred = kinds.get(concept.concept_id, set())
-                identifier = identifiers.get(concept.concept_id)
-                designation = labels.get(concept.concept_id)
-                if concept.status != "active" or len(inferred) != 1 or identifier is None:
-                    continue
-                kind = next(iter(inferred))
-                if kind not in {"symptom", "sign", "exam", "vital"}:
-                    continue
-                catalog.append(
-                    ConceptOption(
-                        snapshot_id=snapshot,
-                        strategy_id=strategy,
-                        concept_id=concept.concept_id,
-                        system=identifier.system,
-                        code=identifier.code,
-                        label=designation.text if designation else concept.primary_code,
-                        language=designation.language if designation else "und",
-                        observation_kind=cast(
-                            Literal["phenotype", "symptom", "sign", "exam", "vital"], kind
-                        ),
-                    )
-                )
         else:
             raise LatrosError(f"Unknown reasoning strategy: {strategy}")
         self._catalog_cache[key] = catalog
         return catalog
+
+    @staticmethod
+    def _general_concept_option(
+        snapshot: str, row: tuple[str, str, str, str, str, str]
+    ) -> ConceptOption:
+        concept_id, system, code, label, language, kind = row
+        return ConceptOption(
+            snapshot_id=snapshot,
+            strategy_id="general_v1",
+            concept_id=concept_id,
+            system=system,
+            code=code,
+            label=label,
+            language=language,
+            observation_kind=cast(Literal["phenotype", "symptom", "sign", "exam", "vital"], kind),
+        )
 
     @staticmethod
     def _strategy_capability(descriptor: Any) -> StrategyCapability:

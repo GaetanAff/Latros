@@ -1,0 +1,20 @@
+{
+  "case_id": "synthetic-general-outside-corpus",
+  "observation_proposals": [],
+  "observations": [
+    {
+      "acquisition_method": "reported", "certainty": "asserted", "clinical_status": "present",
+      "concept": {"coding": {"code": "unresolved-001", "display": "Synthetic unresolved observation", "system": "urn:latros:synthetic"}, "concept_id": "synthetic:unresolved-001", "status": "active"},
+      "evaluation_status": "assessed", "experiencer": "patient", "kind": "symptom", "observation_id": "synthetic-outside-unresolved",
+      "provenance": {"origin_type": "patient_report", "provenance_id": "synthetic-outside-p1"}
+    },
+    {
+      "acquisition_method": "reported", "certainty": "asserted", "clinical_status": "present",
+      "concept": {"coding": {"code": "unresolved-002", "display": "Second synthetic unresolved observation", "system": "urn:latros:synthetic"}, "concept_id": "synthetic:unresolved-002", "status": "active"},
+      "evaluation_status": "assessed", "experiencer": "patient", "kind": "symptom", "observation_id": "synthetic-outside-unresolved-2",
+      "provenance": {"origin_type": "patient_report", "provenance_id": "synthetic-outside-p2"}
+    }
+  ],
+  "question_history": [], "schema_version": 2, "source_statements": [],
+  "subject_context": {"age": {"code": "a", "comparator": "eq", "kind": "quantity", "system": "http://unitsofmeasure.org", "unit": "year", "value": 50}, "sex": "unknown"}
+}

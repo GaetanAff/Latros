@@ -120,7 +120,7 @@ def _write_import_fixture(root: Path) -> tuple[RegistryV2, Path]:
                 _source(
                     "invented-guidance-import",
                     "urn:latros:test-guidance",
-                    "diagnostic_assertions",
+                    "clinical_assertion_source",
                     [_artifact(assertions, "curated-assertions-jsonl")],
                 ),
             ],
@@ -137,18 +137,22 @@ def _write_import_fixture(root: Path) -> tuple[RegistryV2, Path]:
 def _source(source_id: str, system: str, role: str, artifacts: list[dict[str, str]]):
     return {
         "source_id": source_id,
+        "producer": "Latros tests",
         "roles": [role],
         "code_system": system,
         "homepage": f"https://example.test/{source_id}/test-v2",
         "release": "test-v2",
         "release_date": "2026-09-01",
         "access_date": "2026-09-17",
+        "importer": "latros.knowledge.importers_v2:import_registry_v2",
         "license": {
             "name": "Synthetic fixture",
             "url": "https://example.test/licenses/synthetic-v2",
             "attribution": "Invented by Latros tests",
             "redistribution": "allowed_with_attribution",
             "implementation_rights_confirmed": True,
+            "transformation_rights": "allowed",
+            "restrictions": [],
         },
         "dependencies": [],
         "artifacts": artifacts,

@@ -1,0 +1,26 @@
+{
+  "case_id": "synthetic-general-contradictory",
+  "observation_proposals": [],
+  "observations": [
+    {
+      "acquisition_method": "reported", "certainty": "asserted", "clinical_status": "present",
+      "concept": {"coding": {"code": "HP:0012735", "display": "Cough", "system": "http://purl.obolibrary.org/obo/hp.owl"}, "concept_id": "concept:663110b9081464bd750ba8b137ceb1b0564bd7fde1be836fbfc8324f5b9515c2", "status": "active"},
+      "evaluation_status": "assessed", "experiencer": "patient", "kind": "symptom", "observation_id": "synthetic-contradictory-cough",
+      "provenance": {"origin_type": "patient_report", "provenance_id": "synthetic-contradictory-p1"}
+    },
+    {
+      "acquisition_method": "reported", "certainty": "asserted", "clinical_status": "absent",
+      "concept": {"coding": {"code": "HP:0002094", "display": "Dyspnea", "system": "http://purl.obolibrary.org/obo/hp.owl"}, "concept_id": "concept:da470c5015e4b54de2d73a785ea8c83350aa28ef359479f6e944cdb949810657", "status": "active"},
+      "evaluation_status": "assessed", "experiencer": "patient", "kind": "symptom", "observation_id": "synthetic-contradictory-no-dyspnea",
+      "provenance": {"origin_type": "patient_report", "provenance_id": "synthetic-contradictory-p2"}
+    },
+    {
+      "acquisition_method": "observed", "certainty": "asserted", "clinical_status": "absent",
+      "concept": {"coding": {"code": "HP:0001945", "display": "Fever", "system": "http://purl.obolibrary.org/obo/hp.owl"}, "concept_id": "concept:e8024e6f99d2cd9015ad2bf202e9159638315b5ca23f55603af0d137b5a7e28a", "status": "active"},
+      "evaluation_status": "assessed", "experiencer": "patient", "kind": "sign", "observation_id": "synthetic-contradictory-no-fever",
+      "provenance": {"origin_type": "clinician_observation", "provenance_id": "synthetic-contradictory-p3"}
+    }
+  ],
+  "question_history": [], "schema_version": 2, "source_statements": [],
+  "subject_context": {"age": {"code": "a", "comparator": "eq", "kind": "quantity", "system": "http://unitsofmeasure.org", "unit": "year", "value": 45}, "sex": "unknown"}
+}

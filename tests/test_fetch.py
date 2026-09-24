@@ -84,18 +84,22 @@ def _v2_source(payload: bytes, access_mode: str) -> SourcePackageV2:
     return SourcePackageV2.model_validate(
         {
             "source_id": "invented-v2-source",
-            "roles": ["synthetic"],
+            "producer": "Latros tests",
+            "roles": ["synthetic_test_data"],
             "code_system": "urn:latros:test-v2",
             "homepage": "https://example.test/invented-v2/test-1",
             "release": "test-1",
             "release_date": "2026-09-01",
             "access_date": "2026-09-17",
+            "importer": "latros.tests.synthetic_v2",
             "license": {
                 "name": "Synthetic fixture",
                 "url": "https://example.test/licenses/synthetic-v2",
                 "attribution": "Invented by Latros tests",
                 "redistribution": "allowed_with_attribution",
                 "implementation_rights_confirmed": True,
+                "transformation_rights": "allowed",
+                "restrictions": [],
             },
             "dependencies": [],
             "artifacts": [

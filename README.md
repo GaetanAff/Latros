@@ -43,7 +43,24 @@ produit commercialisé, classe thérapeutique et assertions médicales sourcées
 distincts. Cette préparation ne constitue ni une recommandation de traitement, ni une fonction de
 prescription ; le détail est consigné dans le [cahier v0.4](docs/v0.4-clinical-knowledge-model.md).
 
-`v0.5` est en cours sur une branche dédiée. Ses checkpoints techniques A à D définissent le registre,
+La fabrique `v0.7` suit
+[fabrique généraliste souveraine](docs/decisions/0009-fabrique-souveraine-generaliste.md). Une source
+n'entre dans le pipeline que sous forme de distribution locale épinglée et vérifiée par SHA-256 ;
+seule la commande explicite `sources fetch` peut utiliser Internet. MedlinePlus Health Topics XML,
+MeSH XML et une release locale Monarch constituent maintenant, avec HPO, Mondo, DOID et Orphadata,
+le premier snapshot `v0.7.0-general-dev-unreviewed`. Il est local, reproductible et consommable par
+`general_v1`, mais reste une base de recherche **non relue, non validée et non publiable**. CDC est
+différé tant qu'aucun export généraliste officiel adapté n'est disponible. Voir l'[audit des
+distributions](docs/source-audits/v0.7-sovereign-general.md) et le [rapport de
+couverture](docs/reports/v0.7-general-coverage.md).
+
+Le durcissement technique `v0.7-F2` lit désormais le DuckDB v2 par requêtes ciblées pour
+`general_v1` et la recherche de concepts de l'interface. Il ne change ni le snapshot, ni le
+profil, ni la mathématique du score. Les sept diagnostics et questions synthétiques du vrai
+snapshot sont comparés octet pour octet aux sorties précédentes ; voir le
+[rapport de performance](docs/reports/v0.7-runtime-performance.md).
+
+`v0.5` reste historiquement incomplet sur `main`. Ses checkpoints techniques A à D définissent le registre,
 le manifeste, le constructeur, les importeurs et le premier raisonneur général. Le paquet ORL réel
 reste intégralement `pending_clinical_review`. Un chemin séparé permet désormais de l'importer et de
 le scorer localement sous l'identité non ambiguë `v0.5.0-dev-unreviewed`, uniquement après override
@@ -57,6 +74,15 @@ Le registre v2 peut décrire un sous-ensemble RF2 et un paquet JSONL d'assertion
 protégées utilisent `manual_local` : l'opérateur acquiert le fichier sous sa licence, puis Latros
 vérifie son emplacement et son hash sans stocker de secret. La CLI détecte automatiquement les
 registres et manifestes v1 ou v2. Aucun registre SNOMED/HAS réel n'est encore versionné.
+
+Le registre v2 exige maintenant, pour tout nouveau build, producteur, rôle fermé, release ou identité
+de capture, date, URL, hash, format, licence, droits de transformation/redistribution, restrictions
+et importeur. Les anciens manifestes restent lisibles. Le nouveau
+[contrat de candidate assertion](schemas/candidate-assertion-v1.schema.json) conserve extraction,
+mappings proposés, temporalité, contexte, quantité/unité, famille de preuve, groupe de dépendance,
+review status et chaîne de transformation sans modifier les tables canoniques publiées.
+Le [contrat de topic MedlinePlus](schemas/medlineplus-topic-record-v1.schema.json) conserve les
+identifiants MeSH et les locators avant toute extraction.
 
 `general_v1` classe les conditions déclarées par un snapshot v2 à partir d'assertions explicites,
 normalise d'abord les contributions au niveau des familles de preuves et publie une compatibilité
@@ -85,7 +111,8 @@ uv run --offline --no-sync latros --root . ui --port 8766 --no-open
 ```
 
 L'interface permet uniquement les couples compatibles, notamment `v0.2.0 + semantic_v1` et
-`v0.5.0-dev-unreviewed + general_v1`. Elle crée un `ClinicalCaseV2`, recherche les concepts
+`v0.5.0-dev-unreviewed + general_v1` ainsi que
+`v0.7.0-general-dev-unreviewed + general_v1`. Elle crée un `ClinicalCaseV2`, recherche les concepts
 réellement présents dans le snapshot, conserve les cinq situations d'évaluation, lance le backend
 et affiche candidats, compatibilité brute, couverture, abstention, contributions, contradictions,
 sources, familles, mappings, provenance et reçu.
@@ -186,10 +213,10 @@ uv run --no-sync latros --help
 uv run --no-sync latros sources validate
 ```
 
-Le dépôt est privé : Git doit disposer de votre authentification GitHub. La branche v0.6 est empilée
-sur le travail v0.5 non fusionné ; `main` ne doit être actualisé qu'après revue des branches
-précédentes. `uv.lock` fixe les dépendances ; ne pas le mettre à jour pour reconstruire un snapshot
-historique. Pour récupérer les évolutions : `git pull --ff-only`, puis `uv sync --locked`.
+Le dépôt est privé : Git doit disposer de votre authentification GitHub. `v0.6` est déjà fusionnée
+dans `main` ; le travail `v0.7` est développé sur une branche avant revue de sa pull request.
+`uv.lock` fixe les dépendances ; ne pas le mettre à jour pour reconstruire un snapshot historique.
+Pour récupérer les évolutions : `git pull --ff-only`, puis `uv sync --locked`.
 
 ## Télécharger les sources épinglées
 
@@ -203,6 +230,40 @@ uv run --no-sync latros sources fetch --source orphadata --release 2026-07
 ```
 
 Le registre fournit versions, URLs officielles, produits, attributions, restrictions et SHA-256 attendus. Aucun lien `latest`. Les fichiers aboutissent à `data/raw/<source>/<release>/`, avec un manifeste local. Les fichiers complets déjà vérifiés sont réutilisés. Après interruption, relancer la commande : le fichier `.part` repart de zéro, sans retélécharger les autres fichiers valides. Un hash incorrect ou un fichier existant corrompu provoque un refus, sans écrasement du fichier complet.
+
+Le registre généraliste est séparé et s'utilise explicitement :
+
+```text
+uv run --no-sync latros --registry sources/registry-general-v0.7.yaml sources validate
+uv run --no-sync latros --registry sources/registry-general-v0.7.yaml sources fetch --source medlineplus --release 2026-09-19
+uv run --no-sync latros --registry sources/registry-general-v0.7.yaml sources fetch --source mesh --release 2026
+uv run --no-sync latros --registry sources/registry-general-v0.7.yaml sources fetch --source monarch --release 2026-09-02
+```
+
+Après acquisition de ses sept sources, le build et le runtime ne nécessitent plus Internet :
+
+```text
+uv run --offline --no-sync latros --registry sources/registry-general-v0.7.yaml data build --snapshot v0.7.0-general-dev-unreviewed --allow-unreviewed-research-data
+uv run --offline --no-sync latros --registry sources/registry-general-v0.7.yaml data inspect --snapshot v0.7.0-general-dev-unreviewed
+uv run --offline --no-sync latros diagnose --snapshot v0.7.0-general-dev-unreviewed --strategy general_v1 --case examples/general/respiratory-common.json
+uv run --offline --no-sync latros question next --snapshot v0.7.0-general-dev-unreviewed --strategy general_v1 --case examples/general/respiratory-common.json
+uv run --offline --no-sync latros --root . ui --no-open
+```
+
+Les dumps restent sous `data/raw/` et les tables/runtime générés sous `data/`; ils sont ignorés par
+Git. Seuls le registre, le manifeste, les hashes, les importeurs, les schémas, les tests et la
+documentation sont versionnés. Le runtime `general_v1` conserve le DuckDB vérifié en lecture seule
+et ne matérialise que les assertions des candidats concernés. Le catalogue UI interroge lui aussi
+DuckDB sans charger l'ensemble du modèle canonique en Python. Pour vérifier les sorties du vrai
+snapshot contre les empreintes de l'ancienne implémentation et mesurer la mémoire :
+
+```text
+uv run --offline --no-sync python scripts/compare_general_v1_runtime.py --output data/staging/v0.7-f2/check.json --expected tests/golden/v0.7-general-v1-sha256.json
+uv run --offline --no-sync python scripts/profile_general_v1_runtime.py --output data/staging/v0.7-f2/profile.json
+```
+
+Le second script refuse toute connexion réseau. Les sorties de ces commandes restent locales et
+ignorées par Git ; le rapport de performance versionné résume les mesures reproductibles.
 
 | Source | Version | Utilisation |
 | --- | --- | --- |
