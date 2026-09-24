@@ -2,7 +2,7 @@
 
 Ce fichier est le journal de continuité du projet. Il décrit ce qui a été décidé et effectivement réalisé, afin de pouvoir reprendre la discussion sans déduire l'état du projet à partir du code seul.
 
-Dernière mise à jour : 21 septembre 2026.
+Dernière mise à jour : 24 septembre 2026.
 
 ## État actuel en une phrase
 
@@ -17,6 +17,33 @@ Référence médicale publiée : **`v0.2.0`**, nom du jalon « Premier snapshot 
 `v0.5.0-dev-unreviewed` reste une expérience locale non publiable ; aucun snapshot clinique v2
 validé n'est publié. `v0.7.0-general-dev-unreviewed` est le nouveau corpus généraliste DEV local,
 également non publiable. L'ancien snapshot `latros-kb-0002` est conservé.
+
+## Durcissement runtime généraliste `v0.7-F2` — 24 septembre 2026
+
+- Avant toute optimisation, le snapshot réel a été profilé : lecture complète des treize tables,
+  2 681 410 modèles canoniques Pydantic retenus, recherche initiale d'environ 57 s, premier
+  diagnostic multi-système d'environ 176 s et pic RSS mesuré à 10,97 Go. La vérification forte
+  des fichiers prenait 1,20 s. Les sept diagnostics et questions synthétiques ont été figés par
+  empreintes du JSON complet avant changement.
+- Un repository DuckDB v2 en lecture seule interroge maintenant le runtime existant. Il résout
+  les observations, présélectionne les candidats pouvant scorer, charge leurs seules assertions
+  et provenances, et calcule la question discriminante côté DuckDB. Le catalogue de l'interface
+  utilise des requêtes ciblées au lieu de rappeler `read_knowledge_v2()`.
+- La stratégie `general_v1` garde ses mathématiques et son ancien chemin complet comme référence
+  de comparaison dans les tests. Les sept diagnostics et les sept questions du snapshot réel ont
+  les mêmes empreintes avant/après, reçus et provenance compris. Les tests synthétiques bloquent
+  le réseau ; le profil réel refuse également toute connexion. L'intégrité forte initiale reste
+  inchangée et un cache borné vérifie les attributs des fichiers à chaque réutilisation.
+- Le snapshot `v0.7.0-general-dev-unreviewed`, son manifeste et son hash de contenu ne sont pas
+  modifiés. Les statuts `unreviewed`, `clinical_validation: false`, `publishable: false` et
+  `safety_status: not_evaluated` restent inchangés. `v0.7-G` n'a pas commencé.
+- Les mesures détaillées, les commandes de reproduction, les contrôles et les limites résiduelles
+  sont dans le [rapport runtime](reports/v0.7-runtime-performance.md). Le pilote ORL n'est pas
+  restauré comme fondation de ce snapshot.
+- Ruff, format, mypy, schémas, registres et 150 tests locaux passent. Le build/inspect de
+  l'identifiant v0.7 existant réussit offline et conserve son hash. La console HTTP `127.0.0.1`
+  a exécuté deux diagnostics, une question, la consultation de provenance, la reprise et le
+  changement de snapshot ; le serveur a ensuite été arrêté.
 
 ## Premier snapshot généraliste souverain — 21 septembre 2026
 

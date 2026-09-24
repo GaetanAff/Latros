@@ -43,7 +43,7 @@ produit commercialisé, classe thérapeutique et assertions médicales sourcées
 distincts. Cette préparation ne constitue ni une recommandation de traitement, ni une fonction de
 prescription ; le détail est consigné dans le [cahier v0.4](docs/v0.4-clinical-knowledge-model.md).
 
-La priorité immédiate de `v0.7` est désormais la
+La fabrique `v0.7` suit
 [fabrique généraliste souveraine](docs/decisions/0009-fabrique-souveraine-generaliste.md). Une source
 n'entre dans le pipeline que sous forme de distribution locale épinglée et vérifiée par SHA-256 ;
 seule la commande explicite `sources fetch` peut utiliser Internet. MedlinePlus Health Topics XML,
@@ -53,6 +53,12 @@ le premier snapshot `v0.7.0-general-dev-unreviewed`. Il est local, reproductible
 différé tant qu'aucun export généraliste officiel adapté n'est disponible. Voir l'[audit des
 distributions](docs/source-audits/v0.7-sovereign-general.md) et le [rapport de
 couverture](docs/reports/v0.7-general-coverage.md).
+
+Le durcissement technique `v0.7-F2` lit désormais le DuckDB v2 par requêtes ciblées pour
+`general_v1` et la recherche de concepts de l'interface. Il ne change ni le snapshot, ni le
+profil, ni la mathématique du score. Les sept diagnostics et questions synthétiques du vrai
+snapshot sont comparés octet pour octet aux sorties précédentes ; voir le
+[rapport de performance](docs/reports/v0.7-runtime-performance.md).
 
 `v0.5` reste historiquement incomplet sur `main`. Ses checkpoints techniques A à D définissent le registre,
 le manifeste, le constructeur, les importeurs et le premier raisonneur général. Le paquet ORL réel
@@ -207,10 +213,10 @@ uv run --no-sync latros --help
 uv run --no-sync latros sources validate
 ```
 
-Le dépôt est privé : Git doit disposer de votre authentification GitHub. La branche v0.6 est empilée
-sur le travail v0.5 non fusionné ; `main` ne doit être actualisé qu'après revue des branches
-précédentes. `uv.lock` fixe les dépendances ; ne pas le mettre à jour pour reconstruire un snapshot
-historique. Pour récupérer les évolutions : `git pull --ff-only`, puis `uv sync --locked`.
+Le dépôt est privé : Git doit disposer de votre authentification GitHub. `v0.6` est déjà fusionnée
+dans `main` ; le travail `v0.7` est développé sur une branche avant revue de sa pull request.
+`uv.lock` fixe les dépendances ; ne pas le mettre à jour pour reconstruire un snapshot historique.
+Pour récupérer les évolutions : `git pull --ff-only`, puis `uv sync --locked`.
 
 ## Télécharger les sources épinglées
 
@@ -246,10 +252,18 @@ uv run --offline --no-sync latros --root . ui --no-open
 
 Les dumps restent sous `data/raw/` et les tables/runtime générés sous `data/`; ils sont ignorés par
 Git. Seuls le registre, le manifeste, les hashes, les importeurs, les schémas, les tests et la
-documentation sont versionnés. Le premier chargement complet du snapshot généraliste est encore
-coûteux en mémoire ; le service applicatif le met en cache pour les appels suivants du même
-processus. Cette limite de performance n'altère pas la reproductibilité, mais doit être corrigée
-avant tout élargissement d'usage.
+documentation sont versionnés. Le runtime `general_v1` conserve le DuckDB vérifié en lecture seule
+et ne matérialise que les assertions des candidats concernés. Le catalogue UI interroge lui aussi
+DuckDB sans charger l'ensemble du modèle canonique en Python. Pour vérifier les sorties du vrai
+snapshot contre les empreintes de l'ancienne implémentation et mesurer la mémoire :
+
+```text
+uv run --offline --no-sync python scripts/compare_general_v1_runtime.py --output data/staging/v0.7-f2/check.json --expected tests/golden/v0.7-general-v1-sha256.json
+uv run --offline --no-sync python scripts/profile_general_v1_runtime.py --output data/staging/v0.7-f2/profile.json
+```
+
+Le second script refuse toute connexion réseau. Les sorties de ces commandes restent locales et
+ignorées par Git ; le rapport de performance versionné résume les mesures reproductibles.
 
 | Source | Version | Utilisation |
 | --- | --- | --- |

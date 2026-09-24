@@ -1,6 +1,6 @@
 # Plan d'implémentation et avancement
 
-Référence : plan « Premières étapes de Latros — socle de données et moteur clinique pur » demandé par l'utilisateur. État au 21 septembre 2026.
+Référence : plan « Premières étapes de Latros — socle de données et moteur clinique pur » demandé par l'utilisateur. État au 24 septembre 2026.
 
 Les trois jalons avaient été implémentés ensemble dans la première tranche. La reprise de l'étape 2 consiste à vérifier sa livraison et à établir le snapshot sous le nom du jalon, `v0.2.0`. Elle ne correspond pas à l'ajout de nouvelles sources ou de fonctions cliniques.
 
@@ -14,7 +14,7 @@ Les trois jalons avaient été implémentés ensemble dans la première tranche.
 | 4 | Clinical Knowledge Model — `v0.4.0` | Terminée : checkpoints A–H livrés et revue finale verte | La référence reste `v0.2.0` ; aucun snapshot médical v2 publié |
 | 5 | Snapshot ORL généraliste — `v0.5.0` | En cours : A–D terminés ; E historique en `NO-GO` ; E2 audité ; E3 prêt pour revue ; mode E4 local non validé disponible | Référence officielle toujours bloquée ; `v0.5.0-dev-unreviewed` est non publiable |
 | 6 | Interface interne de test R&D — `v0.6` | Terminée et fusionnée dans `main` | Console locale, sessions reprenables et inspection fidèle des moteurs ; aucun produit utilisateur ni nouvelle logique médicale |
-| 7 | Fabrique souveraine généraliste — `v0.7` | Tranche technique D–F terminée ; revue clinique G non commencée | `v0.7.0-general-dev-unreviewed` construit localement, reproductible, non validé et non publiable ; biologie et médicaments restent futures |
+| 7 | Fabrique souveraine généraliste — `v0.7` | Tranche technique D–F et durcissement runtime F2 terminés ; revue clinique G non commencée | `v0.7.0-general-dev-unreviewed` construit localement, reproductible, non validé et non publiable ; biologie et médicaments restent futures |
 | 8 | Safety / triage séparé — `v0.8` | Prévue | Composant indépendant du différentiel, avec périmètre et validation propres |
 | 9 | NLP / LLM encadré — `v0.9` | Prévue | Structuration, reformulation et explication, jamais source implicite de connaissance |
 | 10 | API, FHIR et interopérabilité — `v0.10` | Prévue | Exposition et échanges des contrats de domaine après validation des étapes précédentes |
@@ -193,6 +193,7 @@ ne sera pas restauré comme dépendance du nouveau snapshot.
 | `v0.7-D` | Terminé | Sept sources réelles épinglées ; MedlinePlus 2026-09-19, MeSH 2026 et Monarch 2026-09-02 vérifiés par hash |
 | `v0.7-E` | Terminé | Importeurs locaux MeSH/Monarch, extraction candidate MedlinePlus, mappings exacts et déduplication/dépendances |
 | `v0.7-F` | Terminé | Snapshot généraliste DEV, profil `general_v1`, rapport de couverture, cas synthétiques et reconstruction offline |
+| `v0.7-F2` | Terminé — durcissement technique | Repository DuckDB v2 paresseux en lecture seule, catalogue UI ciblé, comparaison exacte des sorties et profil mémoire du snapshot existant |
 | `v0.7-G` | À faire | Revue clinique et décision distincte sur une éventuelle publication |
 
 Le parseur MedlinePlus transforme uniquement le XML local en enregistrements sources fidèles. Le
@@ -202,6 +203,15 @@ anglais, tout en conservant les 2 033 records anglais et espagnols. Les candidat
 mappings résolus `exact/equivalent` participent au scoring. Les treize tables canoniques v2 et les
 manifestes historiques ne sont pas réécrits. Les résultats chiffrés sont consignés dans le
 [rapport v0.7](reports/v0.7-general-coverage.md).
+
+`v0.7-F2` ne change pas les treize tables, le hash du pipeline de build, le profil ou le snapshot
+figé. La CLI et l'interface utilisent un repository de lecture DuckDB en lecture seule pour
+`general_v1` : résolution et candidats sont obtenus par requêtes ciblées, les assertions et leur
+provenance ne sont matérialisées que pour les candidats scorables, et le catalogue ne charge plus
+`CanonicalKnowledgeV2`. L'ancienne implémentation reste comme référence des tests ; les résultats
+du snapshot réel sont comparés par empreintes du JSON complet. Le
+[rapport de performance](reports/v0.7-runtime-performance.md) détaille mesures, limites et commandes.
+La revue clinique `v0.7-G` n'a pas commencé.
 
 ### Sous-tranches v0.7 — médicaments, temporalité et mesures cliniques
 
