@@ -295,13 +295,14 @@ class GeneralV1Strategy:
                 run_receipt=receipt,
             )
         concept_id, assertion_ids, family_ids, source_ids, separation, candidate_coverage = selected
-        label = self._labels.get(concept_id, concept_id)
+        label = self._question_label(concept_id)
+        system, code = self._question_coding(concept_id)
         question = AdaptiveQuestionV2(
             question_id=stable_id("question", case.case_id, concept_id, "general_v1"),
             text=f"Is {label} present?",
             concept=QuestionConcept(
-                system=_concept_system(self.knowledge, concept_id),
-                code=_concept_code(self.knowledge, concept_id),
+                system=system,
+                code=code,
                 label=label,
                 label_language="en",
             ),
@@ -716,6 +717,14 @@ class GeneralV1Strategy:
             if age.low.value >= minimum:
                 return None
         return "missing_required_context"
+
+    def _question_label(self, concept_id: str) -> str:
+        return self._labels.get(concept_id, concept_id)
+
+    def _question_coding(self, concept_id: str) -> tuple[str, str]:
+        return _concept_system(self.knowledge, concept_id), _concept_code(
+            self.knowledge, concept_id
+        )
 
     def _receipt(
         self,
