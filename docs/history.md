@@ -18,6 +18,24 @@ Référence médicale publiée : **`v0.2.0`**, nom du jalon « Premier snapshot 
 validé n'est publié. `v0.7.0-general-dev-unreviewed` est le nouveau corpus généraliste DEV local,
 également non publiable. L'ancien snapshot `latros-kb-0002` est conservé.
 
+## Transport HTTP paresseux `v0.7-F4` — 25 septembre 2026
+
+- Après revue technique et CI Linux/Windows verte, les PR #9 (F3) puis #10 (outil de revue)
+  ont été fusionnées dans `main`. F4 part de ce `main` sur
+  `codex/v0.7-f4-lazy-result-payload`, sans modifier snapshot, manifeste, profil ou scoring.
+- La vue simple demande un résumé HTTP de 20 candidats au maximum, puis le détail et toute sa
+  provenance au clic. Le run complet reste immuable sur disque et accessible par `/expert`.
+  Un index auxiliaire d'offsets avec vérification SHA-256 évite de recharger ses 206 Mo pour
+  le résumé ou le détail ; les anciens runs restent compatibles.
+- Sur le grand cas fictif de 3 650 candidats, la route est passée de 22,912 à 18,538 s et la
+  réponse initiale d'environ 206 Mo à 14 072 octets. Le détail mesure 198 312 octets et
+  0,112 s. La baisse de mémoire/temps de parsing navigateur n'a pas été mesurée. Le diagnostic
+  et l'écriture du run complet restent la limite principale.
+- Tests de transport : résumé, limite top 20, détail exact, reprise, abstention, run/candidat
+  absent, intégrité, accès expert complet. Le [rapport F4](reports/v0.7-f4-result-transport.md)
+  donne le protocole et les limites. Les statuts `research_unreviewed: true`,
+  `clinical_validation: false`, `publishable: false` et `safety: not_evaluated` sont inchangés.
+
 ## Outil de revue humaine G1/G2 — 25 septembre 2026
 
 - Après fusion des PR #7 et #8 dans `main`, ce chantier est isolé sur
