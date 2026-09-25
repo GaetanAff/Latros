@@ -2,7 +2,7 @@
 
 Ce fichier est le journal de continuité du projet. Il décrit ce qui a été décidé et effectivement réalisé, afin de pouvoir reprendre la discussion sans déduire l'état du projet à partir du code seul.
 
-Dernière mise à jour : 25 septembre 2026.
+Dernière mise à jour : 26 septembre 2026.
 
 ## État actuel en une phrase
 
@@ -17,6 +17,25 @@ Référence médicale publiée : **`v0.2.0`**, nom du jalon « Premier snapshot 
 `v0.5.0-dev-unreviewed` reste une expérience locale non publiable ; aucun snapshot clinique v2
 validé n'est publié. `v0.7.0-general-dev-unreviewed` est le nouveau corpus généraliste DEV local,
 également non publiable. L'ancien snapshot `latros-kb-0002` est conservé.
+
+## Qualité d'extraction MedlinePlus `v0.7-G4` — 26 septembre 2026
+
+- La PR #13 (F6) a été relue : scoring, candidats, scores, provenance, run complet, snapshot,
+  compatibilité UI/sessions et fonctionnement offline inchangés ; goldens et CI Linux/Windows
+  verts. Elle a été fusionnée dans `main` avant la branche G4. Les optimisations runtime v0.7
+  s'arrêtent à F6 sauf régression importante.
+- Le rejeu du ZIP MedlinePlus épinglé, à partir des terminologies du DuckDB figé en lecture
+  seule, reproduit exactement 7 736 candidats et leur SHA-256 historique. L'audit lexical du
+  G2 réel identifie modificateurs, auto-références, URLs, négations et contextes non
+  symptomatiques ; cinq faux positifs fournis ont été retrouvés dans le XML.
+- Un extracteur expérimental distinct du pipeline hashé classe 1 468 candidats en rejet
+  d'extraction automatique, 4 056 en revue humaine et 2 212 retenus dans un nouveau jeu
+  **non intégré**. Quatre contrôles plausibles restent conservés. Le G2 historique reste intact ;
+  nouveau sample et journal des 7 736 décisions restent sous `data/staging/`.
+- Les vérifications et limites sont consignées dans le
+  [rapport G4](reports/v0.7-g4-medlineplus-extraction-quality.md). Ruff, format, mypy strict,
+  schémas, registre et 196 tests sont verts ; le rejeu réel avec sockets bloquées produit le
+  même hash. G1/G2 humains et G3 indépendant restent à faire ; aucun statut clinique n'a changé.
 
 ## Matérialisation compacte `v0.7-F6` — 26 septembre 2026
 
