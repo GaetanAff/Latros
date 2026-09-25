@@ -33,6 +33,7 @@ from latros.ui.models import (
     SelectionRequest,
     SessionSelection,
 )
+from latros.ui.run_transport import summary_projection
 from latros.ui.sessions import SessionStore
 
 PACKAGE_ROOT = Path(__file__).resolve().parent
@@ -186,7 +187,10 @@ def create_app(root: Path) -> FastAPI:
 
     @app.post("/internal/v1/sessions/{session_id}/analyses")
     async def run_analysis(
-        request: Request, session_id: str, payload: RunRequest
+        request: Request,
+        session_id: str,
+        payload: RunRequest,
+        view: str = Query(default="full", pattern="^(full|summary)$"),
     ) -> dict[str, Any]:
         store = _sessions(request)
         session = store.load(session_id)
@@ -212,7 +216,7 @@ def create_app(root: Path) -> FastAPI:
         )
         return {
             "session": updated.model_dump(mode="json"),
-            "run": run.model_dump(mode="json"),
+            "run": summary_projection(run) if view == "summary" else run.model_dump(mode="json"),
         }
 
     @app.post("/internal/v1/sessions/{session_id}/questions/next")
@@ -292,6 +296,16 @@ def create_app(root: Path) -> FastAPI:
     @app.get("/internal/v1/sessions/{session_id}/runs/{run_id}")
     async def get_run(request: Request, session_id: str, run_id: str) -> dict[str, Any]:
         return _sessions(request).load_run(session_id, run_id).model_dump(mode="json")
+
+    @app.get("/internal/v1/sessions/{session_id}/runs/{run_id}/summary")
+    async def get_run_summary(request: Request, session_id: str, run_id: str) -> dict[str, Any]:
+        return _sessions(request).load_run_summary(session_id, run_id)
+
+    @app.get("/internal/v1/sessions/{session_id}/runs/{run_id}/candidates/{candidate_id:path}")
+    async def get_candidate_detail(
+        request: Request, session_id: str, run_id: str, candidate_id: str
+    ) -> dict[str, Any]:
+        return _sessions(request).load_candidate_detail(session_id, run_id, candidate_id)
 
     return app
 

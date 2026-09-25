@@ -125,6 +125,28 @@ def test_ui_general_v1_workflow_persists_exact_v2_run(synthetic_v2) -> None:
     assert result["candidates"][0]["aggregate"]["kind"] == "compatibility"
     assert result["safety"]["status"] == "not_evaluated"
     assert payload["session"]["latest_diagnose"]["run_id"] == payload["run"]["run_id"]
+    run_path = f"/internal/v1/sessions/{session['session_id']}/runs/{payload['run']['run_id']}"
+    summary = client.get(f"{run_path}/summary").json()
+    assert summary["result"]["candidate_count"] == len(result["candidates"])
+    assert summary["result"]["research_unreviewed"] == result["research_unreviewed"]
+    assert summary["result"]["safety"] == result["safety"]
+    candidate_id = result["candidates"][0]["candidate_id"]
+    detail = client.get(f"{run_path}/candidates/{candidate_id}").json()
+    assert detail["candidate"] == result["candidates"][0]
+    assert detail["run_receipt"] == result["run_receipt"]
+    compact_response = client.post(
+        f"/internal/v1/sessions/{session['session_id']}/analyses?view=summary",
+        json={"revision": payload["session"]["revision"]},
+    )
+    assert compact_response.status_code == 200, compact_response.text
+    compact = compact_response.json()
+    assert compact["run"]["result"]["candidate_count"] == len(result["candidates"])
+    assert (
+        client.get(
+            f"/internal/v1/sessions/{session['session_id']}/runs/{compact['run']['run_id']}"
+        ).json()["result"]["candidates"]
+        == result["candidates"]
+    )
 
 
 def test_ui_simple_flow_uses_local_concepts_and_resumable_runs(synthetic_v2) -> None:
