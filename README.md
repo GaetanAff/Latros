@@ -68,7 +68,11 @@ MedlinePlus, les dépendances Monarch et l'échantillon de revue sont détaillé
 
 Les jeux de travail [`v0.7-G1/G2`](docs/reports/v0.7-g-targeted-review.md) préparent une revue
 humaine ciblée des mappings MedlinePlus et des dépendances de provenance. Ils ne valident aucune
-assertion ; le corpus d'évaluation indépendant G3 n'existe pas encore.
+assertion ; le corpus d'évaluation indépendant G3 n'existe pas encore. Un
+[outil séparé de revue locale](docs/v0.7-g-review-ui.md) permet de parcourir les trois exports et
+de journaliser des décisions humaines sans modifier le snapshot. Après l'export des jeux, lancer
+`uv run --offline --no-sync python scripts/run_v07_g_review.py` puis ouvrir
+`http://127.0.0.1:8765/`. Aucune décision médicale n'est fournie ou préremplie par l'outil.
 
 `v0.5` reste historiquement incomplet sur `main`. Ses checkpoints techniques A à D définissent le registre,
 le manifeste, le constructeur, les importeurs et le premier raisonneur général. Le paquet ORL réel

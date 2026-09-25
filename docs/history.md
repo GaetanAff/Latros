@@ -18,6 +18,26 @@ Référence médicale publiée : **`v0.2.0`**, nom du jalon « Premier snapshot 
 validé n'est publié. `v0.7.0-general-dev-unreviewed` est le nouveau corpus généraliste DEV local,
 également non publiable. L'ancien snapshot `latros-kb-0002` est conservé.
 
+## Outil de revue humaine G1/G2 — 25 septembre 2026
+
+- Après fusion des PR #7 et #8 dans `main`, ce chantier est isolé sur
+  `codex/v0.7-g-review-ui`, séparé du durcissement F3 et du symptom checker.
+- Une interface locale et offline présente une ligne à la fois parmi les 1 327 pistes G1,
+  120 assertions MedlinePlus G2 et 40 dépendances Monarch/Orphadata G2. Les trois CSV et le
+  résumé sont vérifiés par SHA-256 ; une modification en cours de session bloque une décision.
+- Chaque choix explicite requiert nom, identifiant et attestation du réviseur. Les événements
+  horodatés sont ajoutés à un journal local chaîné par hash, sans effacer les corrections ;
+  l'export déterministe reste hors Git. Aucun choix n'est prérempli, aucun reviewer n'est
+  inventé dans les exports réels. Les identités des tests sont purement synthétiques.
+- L'[ADR 0012](decisions/0012-outil-local-de-revue-humaine.md) et la
+  [documentation](v0.7-g-review-ui.md) explicitent la frontière : aucune écriture dans le
+  snapshot, aucun `approved` canonique ni changement de `clinical_validation` ou `publishable`.
+  L'identité est déclarative ; la qualification doit être contrôlée humainement. G1/G2 et G3
+  restent à réaliser par l'équipe clinique.
+- Le vrai jeu d'exports a été ouvert sans décision : 1 327 / 120 / 40 lignes, zéro revue. Le
+  parcours Edge à 390 et 1 280 px fonctionne sans débordement ni requête externe, sans action
+  présélectionnée ; le changement de jeu et le passage à la ligne suivante ont été vérifiés.
+
 ## Parcours simple local et mode expert — 25 septembre 2026
 
 - Après revue et fusion de la PR #6 (`v0.7-G0`) dans `main`, le chantier UI est isolé sur
