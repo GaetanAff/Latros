@@ -18,6 +18,30 @@ Référence médicale publiée : **`v0.2.0`**, nom du jalon « Premier snapshot 
 validé n'est publié. `v0.7.0-general-dev-unreviewed` est le nouveau corpus généraliste DEV local,
 également non publiable. L'ancien snapshot `latros-kb-0002` est conservé.
 
+## Matérialisation compacte `v0.7-F6` — 25 septembre 2026
+
+- La PR #12 (F5) a été revue et fusionnée dans `main` après CI Linux/Windows verte, 167 tests
+  locaux et sorties d'or identiques. F6 part du `main` synchronisé sur une branche distincte.
+- Trois stratégies ont été mesurées avant choix : join SQL complet (rapide isolément mais
+  plus lent et plus gourmand en RAM une fois intégré), index dérivé (lecture chaude rapide,
+  construction et gouvernance coûteuses), représentation interne compacte (retenue).
+- Le gros cas fictif passe de 12,54 à 9,50 s HTTP et de 3 153 à 2 856 Mo de pic RSS ; le
+  respiratoire de 4,17 à 3,89 s. Le résultat complet du gros cas conserve son SHA-256 et sa
+  taille ; les sept diagnostics/questions d'or sont inchangés. Le rapport F6 détaille les
+  mesures, la reproductibilité et la limite du run de 206 Mo.
+- Ruff, format, mypy strict, schémas, registre, tests complets et CI sont à vérifier à la
+  clôture de la PR. Aucun score, snapshot, provenance finale ou statut médical n'est changé.
+
+## Clarification des préparations `v0.7-G0/G1/G2` — 25 septembre 2026
+
+- L'audit G0, le jeu de revue des mappings G1, l'échantillonnage assertions/provenance G2 et
+  l'outil local G1/G2 sont considérés vérifiés et acceptés **techniquement/méthodologiquement**.
+  Les dépendances Monarch/Orphadata restent exposées, sans double approbation ni décision fictive.
+- Les vraies décisions G1/G2 exigent encore des réviseurs humains qualifiés. Le protocole G3 est
+  défini, mais aucun corpus indépendant n'a été évalué. Aucune allégation clinique n'en découle.
+- Vérification documentaire de README, plan, rapport G et ADR 0009/0012 ; aucune modification
+  de code, snapshot, mapping, assertion ou statut clinique dans cette clarification.
+
 ## Profilage et latence résiduelle `v0.7-F5` — 25 septembre 2026
 
 - La PR #11 (F4) a été revue puis fusionnée dans `main` après CI Linux/Windows et 166 tests

@@ -7,8 +7,11 @@ from typing import Any, Literal
 
 from latros.clinical.v2 import ClinicalCaseV2
 from latros.common import stable_id
-from latros.knowledge.models_v2 import CanonicalAssertion, ConceptObject
-from latros.knowledge.repository_v2 import CandidateRows, CanonicalKnowledgeRepositoryV2
+from latros.knowledge.repository_v2 import (
+    CandidateRows,
+    CanonicalKnowledgeRepositoryV2,
+    ScoringAssertion,
+)
 from latros.reasoning.general_v1 import (
     ComputedCandidate,
     GeneralV1Strategy,
@@ -81,7 +84,7 @@ class LazyGeneralV1Strategy(GeneralV1Strategy):
             contributions: list[ContributionV2] = []
             family_values: dict[str, list[float]] = {}
             for assertion in rows.assertions.get(candidate_id, []):
-                if not isinstance(assertion.object, ConceptObject):
+                if assertion.object_concept_id is None:
                     continue
                 source_ids = sorted(rows.derivations.get(assertion.canonical_assertion_id, []))
                 family_ids = sorted(
@@ -102,7 +105,7 @@ class LazyGeneralV1Strategy(GeneralV1Strategy):
                         assertion,
                         family_id,
                         family_source_ids,
-                        observations.get(assertion.object.concept_id),
+                        observations.get(assertion.object_concept_id),
                         rows,
                     )
                     contributions.append(contribution)
@@ -137,14 +140,14 @@ class LazyGeneralV1Strategy(GeneralV1Strategy):
     def _contribution_lazy(
         self,
         candidate_id: str,
-        assertion: CanonicalAssertion,
+        assertion: ScoringAssertion,
         family_id: str,
         source_ids: list[str],
         observation: ResolvedObservation | None,
         rows: CandidateRows,
     ) -> ContributionV2:
-        assert isinstance(assertion.object, ConceptObject)
-        finding_concept_id = assertion.object.concept_id
+        assert assertion.object_concept_id is not None
+        finding_concept_id = assertion.object_concept_id
         value: float | None = None
         direction: Literal["favorable", "unfavorable", "unknown"] = "unknown"
         reason = "finding_not_observed"
@@ -155,7 +158,7 @@ class LazyGeneralV1Strategy(GeneralV1Strategy):
         ):
             reason = "finding_unknown_or_not_assessable"
         elif observation is not None:
-            expected_present = assertion.qualifiers.polarity == "present"
+            expected_present = assertion.polarity == "present"
             observed_present = observation.clinical_status == "present"
             value = 1.0 if expected_present == observed_present else -1.0
             direction = "favorable" if value > 0 else "unfavorable"
@@ -195,7 +198,7 @@ class LazyGeneralV1Strategy(GeneralV1Strategy):
             details={
                 "canonical_assertion_id": assertion.canonical_assertion_id,
                 "relation": assertion.relation,
-                "assertion_polarity": assertion.qualifiers.polarity,
+                "assertion_polarity": assertion.polarity,
                 "aggregatable": family_id in self._aggregatable,
                 "all_source_release_ids": source_releases,
             },
