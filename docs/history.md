@@ -18,7 +18,7 @@ Référence médicale publiée : **`v0.2.0`**, nom du jalon « Premier snapshot 
 validé n'est publié. `v0.7.0-general-dev-unreviewed` est le nouveau corpus généraliste DEV local,
 également non publiable. L'ancien snapshot `latros-kb-0002` est conservé.
 
-## Matérialisation compacte `v0.7-F6` — 25 septembre 2026
+## Matérialisation compacte `v0.7-F6` — 26 septembre 2026
 
 - La PR #12 (F5) a été revue et fusionnée dans `main` après CI Linux/Windows verte, 167 tests
   locaux et sorties d'or identiques. F6 part du `main` synchronisé sur une branche distincte.
@@ -29,8 +29,8 @@ validé n'est publié. `v0.7.0-general-dev-unreviewed` est le nouveau corpus gé
   respiratoire de 4,17 à 3,89 s. Le résultat complet du gros cas conserve son SHA-256 et sa
   taille ; les sept diagnostics/questions d'or sont inchangés. Le rapport F6 détaille les
   mesures, la reproductibilité et la limite du run de 206 Mo.
-- Ruff, format, mypy strict, schémas, registre, tests complets et CI sont à vérifier à la
-  clôture de la PR. Aucun score, snapshot, provenance finale ou statut médical n'est changé.
+- Ruff, format, mypy strict, schémas, registre, 168 tests locaux et CI Linux/Windows de la PR
+  #13 sont verts. Aucun score, snapshot, provenance finale ou statut médical n'est changé.
 
 ## Clarification des préparations `v0.7-G0/G1/G2` — 25 septembre 2026
 
