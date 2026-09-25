@@ -13,6 +13,8 @@ Décisions acceptées :
 - [0007 — Mode local ORL non revu](0007-mode-recherche-orl-non-revu.md).
 - [0008 — Interface locale R&D et sessions reproductibles](0008-interface-locale-rd-et-sessions.md).
 - [0009 — Fabrique de connaissances généraliste souveraine](0009-fabrique-souveraine-generaliste.md).
+- [0010 — Runtime v2 DuckDB paresseux](0010-runtime-v2-duckdb-paresseux.md).
+- [0011 — Parcours simple local et console experte conservée](0011-parcours-simple-local.md).
 
 Utiliser un fichier par décision, par exemple :
 

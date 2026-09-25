@@ -66,8 +66,8 @@ identiques dans un shell Linux, hormis le chemin du dossier.
 ### Sur le poste où le dépôt existe déjà
 
 ```powershell
-cd C:\Users\gaeta\Desktop\Latros
-git switch feat/v0.6-rd-interface
+cd C:\Users\gaeta\Desktop\LLM\Latros
+git switch main
 git pull --ff-only
 uv sync --locked --python 3.11
 uv run --no-sync latros --help
@@ -81,7 +81,7 @@ ce verrou pour tester un snapshot historique.
 ```powershell
 git clone https://github.com/GaetanAff/Latros.git
 cd Latros
-git switch feat/v0.6-rd-interface
+git switch main
 uv sync --locked --python 3.11
 uv run --no-sync latros sources validate
 ```
@@ -91,12 +91,12 @@ petites fixtures, mais pas les bases médicales brutes, les snapshots construits
 
 ## 4. Vérifier les snapshots disponibles
 
-Sur le poste de développement actuel, les deux runtimes sont déjà construits. Les commandes
-suivantes doivent retourner leurs manifestes :
+Les runtimes présents dépendent des distributions acquises localement. Inspecter ceux qui sont
+disponibles ; une installation neuve ne contient pas automatiquement les gros snapshots :
 
 ```powershell
 uv run --offline --no-sync latros data inspect --snapshot v0.2.0
-uv run --offline --no-sync latros data inspect --snapshot v0.5.0-dev-unreviewed
+uv run --offline --no-sync latros --registry sources/registry-general-v0.7.yaml data inspect --snapshot v0.7.0-general-dev-unreviewed
 ```
 
 `--offline` garantit que l'opération n'utilise pas Internet. Si un runtime est absent, suivre la
@@ -151,8 +151,10 @@ Depuis la racine du dépôt :
 uv run --offline --no-sync latros --root . ui
 ```
 
-Le navigateur s'ouvre sur <http://127.0.0.1:8765/>. Conserver le terminal ouvert : il héberge le
-serveur. Pour utiliser un autre port ou ouvrir l'adresse manuellement :
+Le navigateur s'ouvre sur <http://127.0.0.1:8765/>, parcours simple expérimental. Les essais
+guidés ci-dessous décrivent la console historique à <http://127.0.0.1:8765/expert> ; l'ouvrir
+avant de poursuivre à la section 6. Conserver le terminal ouvert : il héberge le serveur. Pour
+utiliser un autre port ou ouvrir l'adresse manuellement :
 
 ```powershell
 uv run --offline --no-sync latros --root . ui --port 8766 --no-open
@@ -349,6 +351,7 @@ Lancer avec `--no-open`, puis ouvrir manuellement l'adresse affichée dans le te
 ## 15. Où trouver la suite
 
 - [Documentation v0.6](v0.6-rd-interface.md) ;
+- [Parcours simple local](modern-ui.md) ;
 - [plan et roadmap](plan.md) ;
 - [historique des livraisons](history.md) ;
 - [méthodologie des moteurs](methodology.md) ;
