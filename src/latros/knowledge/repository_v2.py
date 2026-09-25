@@ -243,7 +243,6 @@ class CanonicalKnowledgeRepositoryV2:
         self._family_members()
         self._derivation_refs()
         assertions: dict[str, list[CanonicalAssertion]] = defaultdict(list)
-        assertion_ids: list[str] = []
         rows = self.connection.execute(
             "SELECT payload_json FROM canonical_assertion WHERE "
             "json_extract_string(payload_json, '$.subject_concept_id') "
@@ -253,39 +252,53 @@ class CanonicalKnowledgeRepositoryV2:
         for (payload,) in rows:
             assertion = CanonicalAssertion.model_validate_json(payload)
             assertions[assertion.subject_concept_id].append(assertion)
-            assertion_ids.append(assertion.canonical_assertion_id)
         del rows
+        # Passing tens of thousands of IDs as a VARCHAR[] parameter is very slow
+        # in DuckDB's Python binding. Derive the selected IDs inside DuckDB instead.
+        self.connection.execute(
+            "CREATE OR REPLACE TEMP TABLE selected_canonical_id AS "
+            "SELECT id FROM canonical_assertion WHERE "
+            "json_extract_string(payload_json, '$.subject_concept_id') "
+            "IN (SELECT unnest(?::VARCHAR[]))",
+            [candidate_ids],
+        )
         derivations: dict[str, list[str]] = defaultdict(list)
         family_by_source: dict[str, list[str]] = defaultdict(list)
         rows = self.connection.execute(
             "SELECT d.canonical_id, d.source_id, fm.family_id "
             "FROM derivation_ref AS d LEFT JOIN family_member AS fm "
             "ON fm.source_id = d.source_id "
-            "WHERE d.canonical_id "
-            "IN (SELECT unnest(?::VARCHAR[])) ORDER BY d.id, fm.family_id",
-            [assertion_ids],
+            "JOIN selected_canonical_id AS picked ON picked.id = d.canonical_id "
+            "ORDER BY d.id, fm.family_id",
         ).fetchall()
         for canonical_id, source_id, family_id in rows:
             if source_id not in derivations[canonical_id]:
                 derivations[canonical_id].append(source_id)
             if family_id is not None:
                 family_by_source[source_id].append(family_id)
-        source_ids = sorted(family_by_source)
         provenance: dict[str, SourceProvenance] = {}
-        if source_ids:
+        if family_by_source:
+            self.connection.execute(
+                "CREATE OR REPLACE TEMP TABLE selected_source_id AS "
+                "SELECT DISTINCT fm.source_id AS id FROM derivation_ref AS d "
+                "JOIN selected_canonical_id AS c ON c.id = d.canonical_id "
+                "JOIN family_member AS fm ON fm.source_id = d.source_id",
+            )
             source_rows = self.connection.execute(
                 "SELECT id, json_extract_string(payload_json, '$.source_release_id'), "
                 "json_extract_string(payload_json, '$.source_record_id'), "
                 "json_extract(payload_json, '$.artifact_ids') "
-                "FROM source_assertion WHERE id IN (SELECT unnest(?::VARCHAR[]))",
-                [source_ids],
+                "FROM source_assertion JOIN selected_source_id USING (id)",
             ).fetchall()
-            record_ids = sorted({record_id for _, _, record_id, _ in source_rows})
+            self.connection.execute(
+                "CREATE OR REPLACE TEMP TABLE selected_record_id AS "
+                "SELECT DISTINCT json_extract_string(a.payload_json, '$.source_record_id') "
+                "AS id FROM source_assertion AS a JOIN selected_source_id AS s USING (id)",
+            )
             locators = dict(
                 self.connection.execute(
                     "SELECT id, json_extract_string(payload_json, '$.record_locator') "
-                    "FROM source_record WHERE id IN (SELECT unnest(?::VARCHAR[]))",
-                    [record_ids],
+                    "FROM source_record JOIN selected_record_id USING (id)",
                 ).fetchall()
             )
             for source_id, release_id, record_id, artifact_json in source_rows:
