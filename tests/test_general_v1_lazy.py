@@ -129,6 +129,24 @@ def test_candidate_rows_does_not_send_assertion_id_lists_to_duckdb(synthetic_v2)
         repository.close()
 
 
+def test_matched_candidate_projection_reuses_exact_ids_and_provenance(synthetic_v2) -> None:
+    root, registry, knowledge = synthetic_v2
+    build_snapshot_v2(root, registry, "test-v2", knowledge)
+    repository = CanonicalKnowledgeRepositoryV2(root, "test-v2")
+    try:
+        matched = repository.matching_candidate_ids(
+            [("test:finding-1", "has_symptom")], repository.aggregatable_family_ids()
+        )
+        assert matched == ["test:condition-1", "test:condition-2"]
+        reused = repository.candidate_rows(matched, reuse_last_match=True)
+        independent = repository.candidate_rows(matched)
+        assert reused == independent
+        with pytest.raises(LatrosError, match="no longer match"):
+            repository.candidate_rows(["test:condition-4"], reuse_last_match=True)
+    finally:
+        repository.close()
+
+
 def test_cached_repository_fails_closed_if_manifest_changes(synthetic_v2) -> None:
     root, registry, knowledge = synthetic_v2
     build_snapshot_v2(root, registry, "test-v2", knowledge)

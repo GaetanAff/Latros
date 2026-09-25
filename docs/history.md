@@ -18,6 +18,24 @@ Référence médicale publiée : **`v0.2.0`**, nom du jalon « Premier snapshot 
 validé n'est publié. `v0.7.0-general-dev-unreviewed` est le nouveau corpus généraliste DEV local,
 également non publiable. L'ancien snapshot `latros-kb-0002` est conservé.
 
+## Profilage et latence résiduelle `v0.7-F5` — 25 septembre 2026
+
+- La PR #11 (F4) a été revue puis fusionnée dans `main` après CI Linux/Windows et 166 tests
+  verts, avec 7/7 sorties d'or inchangées. F5 est isolée sur
+  `codex/v0.7-f5-run-persistence` ; le dossier local `FUTUR INTERFACE/` reste hors Git.
+- Une baseline sur trois cas fictifs mesure séparément DuckDB, scoring, Pydantic, écriture,
+  renommages atomiques, réponse HTTP, tailles et RSS. Sur le grand cas, le run complet de
+  206 Mo s'écrit en ~0,35 s ; `candidate_rows()` prend ~11,7 s. La refonte en shards ou base
+  dédiée n'aurait pas traité le goulet principal.
+- Le format F4 est donc conservé. Une sélection temporaire DuckDB réutilise les IDs et payloads
+  candidats, sans liaison répétée de milliers d'IDs Python ni double scan. Le grand cas passe
+  de 19,064 à 12,703 s HTTP, le respiratoire de 5,653 à 4,300 s ; les tailles des runs et les
+  sorties d'or restent identiques. Le pic RSS du grand cas augmente d'environ 121 Mo.
+- `v0.7-G` reste une revue humaine à faire. Aucun scoring, snapshot, reçu, statut clinique ou
+  règle safety n'est modifié. La [mesure et les limites](reports/v0.7-f5-run-persistence.md)
+  indiquent que la matérialisation d'environ 152 000 assertions/provenances par grand cas
+  maintient la latence au-dessus de 10 s.
+
 ## Transport HTTP paresseux `v0.7-F4` — 25 septembre 2026
 
 - Après revue technique et CI Linux/Windows verte, les PR #9 (F3) puis #10 (outil de revue)

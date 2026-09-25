@@ -207,6 +207,7 @@ ne sera pas restauré comme dépendance du nouveau snapshot.
 | `v0.7-F2` | Terminé — durcissement technique | Repository DuckDB v2 paresseux en lecture seule, catalogue UI ciblé, comparaison exacte des sorties et profil mémoire du snapshot existant |
 | `v0.7-F3` | Terminé — latence runtime | Filtres volumineux dérivés dans DuckDB ; diagnostic après question mesuré de 292 à 15,6 s, sorties identiques ; transport complet encore 23,6 s sur le grand cas |
 | `v0.7-F4` | Terminé — transport paresseux | Run complet conservé ; projection HTTP top 20 et détail candidat à la demande, 14 Ko initiaux et 18,5 s sur le grand cas fictif ; scoring inchangé |
+| `v0.7-F5` | Terminé — profilage et latence résiduelle | Format du run F4 conservé après mesures ; tables temporaires DuckDB réutilisées, grand cas 19,1 → 12,7 s dans le protocole F5, cas courant 5,7 → 4,3 s, sorties d'or identiques |
 | `v0.7-G0` | Terminé — préparation quantitative | Audit SQL du corpus, des dépendances et des mappings ; échantillon stratifié non revu pour préparer G |
 | `v0.7-G1` | Jeu et outil local de revue prêts — décision humaine à faire | 689 topics MedlinePlus bloqués, pistes lexicales/MeSH non promues, aucune décision préremplie |
 | `v0.7-G2` | Échantillons et outil local de revue prêts — revue humaine à faire | 120 candidates MedlinePlus et 40 assertions Monarch/Orphadata pour qualité et provenance ; décisions séparées du snapshot |
@@ -232,6 +233,9 @@ Le [rapport F3](reports/v0.7-f3-runtime-latency.md) chiffre le goulet des grands
 `VARCHAR[]` et l'amélioration sans changement du snapshot ni des résultats.
 Le [rapport F4](reports/v0.7-f4-result-transport.md) chiffre la projection HTTP et l'index
 local de détails : le résultat scientifique intégral reste immuable et accessible en mode expert.
+Le [rapport F5](reports/v0.7-f5-run-persistence.md) établit que l'écriture du run n'est pas le
+goulet, compare les options de stockage et documente l'optimisation ciblée du repository sans
+nouveau format ni modification du snapshot.
 L'[audit structurel `v0.7-G0`](reports/v0.7-general-quality-audit.md) chiffre la forte liaison
 Orphanet/génétique (14 661 des 15 611 maladies documentées), le goulet de mapping MedlinePlus
 et les dépendances Monarch. Il ne déduit pas la prévalence d'une maladie de ses seules hiérarchies

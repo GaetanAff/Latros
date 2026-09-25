@@ -49,6 +49,7 @@ class CanonicalKnowledgeRepositoryV2:
         self.connection.execute("SET threads=1")
         self._members_ready = False
         self._derivations_ready = False
+        self._last_matched_candidate_ids: tuple[str, ...] | None = None
         self._verified_file_attributes = self._file_attributes()
 
     def _file_attributes(self) -> tuple[tuple[str, int, int, int], ...]:
@@ -180,6 +181,7 @@ class CanonicalKnowledgeRepositoryV2:
         allowed_family_ids: set[str],
     ) -> list[str]:
         pairs = sorted(set(observations))
+        self._last_matched_candidate_ids = None
         if not pairs or not allowed_family_ids:
             return []
         self._family_members()
@@ -187,7 +189,8 @@ class CanonicalKnowledgeRepositoryV2:
         values = ", ".join("(?, ?)" for _ in pairs)
         parameters: list[Any] = [part for pair in pairs for part in pair]
         parameters.append(sorted(allowed_family_ids))
-        rows = self.connection.execute(
+        self.connection.execute(
+            "CREATE OR REPLACE TEMP TABLE selected_matching_candidate_id AS "
             f"WITH observed(concept_id, relation) AS (VALUES {values}), "
             "matched AS (SELECT a.id, "
             "json_extract_string(a.payload_json, '$.subject_concept_id') AS candidate_id "
@@ -201,11 +204,15 @@ class CanonicalKnowledgeRepositoryV2:
             "JOIN family_member AS fm ON fm.source_id = d.source_id "
             "WHERE json_extract_string(c.payload_json, '$.kind') = 'condition' "
             "AND json_extract_string(c.payload_json, '$.status') = 'active' "
-            "AND fm.family_id IN (SELECT unnest(?::VARCHAR[])) "
-            "ORDER BY m.candidate_id",
+            "AND fm.family_id IN (SELECT unnest(?::VARCHAR[]))",
             parameters,
+        )
+        rows = self.connection.execute(
+            "SELECT candidate_id FROM selected_matching_candidate_id ORDER BY candidate_id"
         ).fetchall()
-        return [row[0] for row in rows]
+        result = [row[0] for row in rows]
+        self._last_matched_candidate_ids = tuple(result)
+        return result
 
     def labels(self, concept_ids: list[str]) -> dict[str, str]:
         if not concept_ids:
@@ -236,32 +243,43 @@ class CanonicalKnowledgeRepositoryV2:
             raise LatrosError(f"Concept {concept_id!r} has no external identifier")
         return row[0], row[1]
 
-    def candidate_rows(self, candidate_ids: list[str]) -> CandidateRows:
+    def candidate_rows(
+        self, candidate_ids: list[str], *, reuse_last_match: bool = False
+    ) -> CandidateRows:
         """Materialize only assertions/provenance of candidates that can score."""
         if not candidate_ids:
             return CandidateRows({}, {}, {}, {}, {})
         self._family_members()
         self._derivation_refs()
+        # The selected assertions were previously scanned twice: once to
+        # materialize payloads and again to derive IDs for provenance joins.
+        # Keep both in one temporary, connection-local projection.
+        if reuse_last_match and tuple(candidate_ids) != self._last_matched_candidate_ids:
+            raise LatrosError("Candidate rows no longer match the selected observation set")
+        filter_sql = (
+            "IN (SELECT candidate_id FROM selected_matching_candidate_id)"
+            if reuse_last_match
+            else "IN (SELECT unnest(?::VARCHAR[]))"
+        )
+        parameters = [] if reuse_last_match else [candidate_ids]
+        self.connection.execute(
+            "CREATE OR REPLACE TEMP TABLE selected_canonical_id AS "
+            "SELECT id, payload_json, "
+            "json_extract_string(payload_json, '$.subject_concept_id') AS candidate_id "
+            "FROM canonical_assertion WHERE "
+            "json_extract_string(payload_json, '$.subject_concept_id') " + filter_sql,
+            parameters,
+        )
         assertions: dict[str, list[CanonicalAssertion]] = defaultdict(list)
         rows = self.connection.execute(
-            "SELECT payload_json FROM canonical_assertion WHERE "
-            "json_extract_string(payload_json, '$.subject_concept_id') "
-            "IN (SELECT unnest(?::VARCHAR[])) ORDER BY id",
-            [candidate_ids],
+            "SELECT payload_json FROM selected_canonical_id ORDER BY id",
         ).fetchall()
         for (payload,) in rows:
             assertion = CanonicalAssertion.model_validate_json(payload)
             assertions[assertion.subject_concept_id].append(assertion)
         del rows
         # Passing tens of thousands of IDs as a VARCHAR[] parameter is very slow
-        # in DuckDB's Python binding. Derive the selected IDs inside DuckDB instead.
-        self.connection.execute(
-            "CREATE OR REPLACE TEMP TABLE selected_canonical_id AS "
-            "SELECT id FROM canonical_assertion WHERE "
-            "json_extract_string(payload_json, '$.subject_concept_id') "
-            "IN (SELECT unnest(?::VARCHAR[]))",
-            [candidate_ids],
-        )
+        # in DuckDB's Python binding. Derive selected IDs inside DuckDB instead.
         derivations: dict[str, list[str]] = defaultdict(list)
         family_by_source: dict[str, list[str]] = defaultdict(list)
         rows = self.connection.execute(
@@ -310,8 +328,23 @@ class CanonicalKnowledgeRepositoryV2:
             dict(derivations),
             dict(family_by_source),
             provenance,
-            self.labels(candidate_ids),
+            self._selected_candidate_labels(),
         )
+
+    def _selected_candidate_labels(self) -> dict[str, str]:
+        """Use the same label ordering without rebinding a large ID array."""
+        rows = self.connection.execute(
+            "SELECT json_extract_string(payload_json, '$.concept_id'), "
+            "json_extract_string(payload_json, '$.text') FROM designation "
+            "WHERE json_extract_string(payload_json, '$.concept_id') "
+            "IN (SELECT DISTINCT candidate_id FROM selected_canonical_id) "
+            "AND json_extract_string(payload_json, '$.scope') "
+            "IN ('preferred', 'fully_specified_name') "
+            "ORDER BY json_extract_string(payload_json, '$.concept_id'), "
+            "json_extract_string(payload_json, '$.scope'), "
+            "json_extract_string(payload_json, '$.language'), id",
+        ).fetchall()
+        return {concept_id: label for concept_id, label in rows}
 
     def best_question_concept(self, observed_concepts: set[str]) -> tuple[str, int, int] | None:
         row = self.connection.execute(
