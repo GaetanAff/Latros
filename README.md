@@ -67,6 +67,11 @@ reçoit une projection de 20 candidats au maximum et charge le détail au clic. 
 cas fictif, la réponse initiale passe d'environ 206 Mo à 14 Ko et la route de 22,9 à 18,5 s ;
 le calcul et l'écriture du run restent le goulet principal. Voir le
 [rapport F4](docs/reports/v0.7-f4-result-transport.md).
+Le profilage `v0.7-F5` montre que l'écriture du run entier prend ~0,35 s sur le grand cas,
+contre ~11,7 s pour l'extraction des lignes candidates. Latros conserve donc le format F4 et
+réutilise des tables temporaires DuckDB de lecture : la route mesurée passe de 19,1 à 12,7 s
+sur le même protocole, et de 5,7 à 4,3 s pour le cas respiratoire. Les sorties d'or restent
+identiques ; voir le [rapport F5](docs/reports/v0.7-f5-run-persistence.md).
 
 L'audit préparatoire `v0.7-G0` mesure la composition réelle du corpus sans valider ses assertions :
 14 661 des 15 611 maladies documentées ont un lien structurel Orphanet ou génétique, tandis que
