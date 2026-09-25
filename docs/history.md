@@ -42,6 +42,34 @@ validé n'est publié. `v0.7.0-general-dev-unreviewed` est le nouveau corpus gé
 - Les libellés du catalogue sont parfois anglais. Le classement expérimental reste peu
   discriminant et sans prévalence ; aucune promotion clinique ou publication n'est autorisée.
 
+## Préparation de la revue ciblée `v0.7-G1/G2/G3` — 25 septembre 2026
+
+- Après revue du diff et nouvelle exécution des 150 tests, Ruff, format, mypy et schémas, la PR
+  #6 (`v0.7-G0`) a été fusionnée dans `main` au commit `767b522`. La CI Linux et Windows était
+  verte. Les chantiers médical et interface repartent de ce `main` sur deux branches distinctes.
+- Un exporteur offline vérifie le snapshot immuable et le hash des 7 736 candidates MedlinePlus,
+  interroge DuckDB en lecture seule, puis génère localement trois CSV et un classeur de revue.
+  G1 couvre 689 topics bloqués (5 106 candidates) par 1 327 lignes d'hypothèses ou d'absence de
+  piste : 334 topics ont au moins une piste lexicale ou xref MeSH, 355 aucune par ces méthodes.
+- G2 échantillonne 120 candidates MedlinePlus éligibles et 40 assertions Monarch/Orphadata avec
+  amonts, agrégateurs et dépendances. Les 120 candidates MedlinePlus sont toutes positives ; la
+  source ne fournit aucun négatif. Aucune prévalence fiable ne permet d'attester une strate de
+  maladies fréquentes. Les champs de décision et de réviseur sont vides.
+- Le [protocole G3](reports/v0.7-g-targeted-review.md) sépare tests logiciels, évaluation
+  expérimentale sur cas synthétiques indépendants et validation clinique humaine. Le corpus G3
+  n'est pas constitué. En l'état, la décision méthodologique est `NO-GO` pour une publication
+  clinique ; aucune décision humaine ni promotion `approved` n'a été simulée.
+- Le snapshot `v0.7.0-general-dev-unreviewed`, son manifeste, le scoring et les statuts
+  `clinical_validation: false`, `publishable: false`, `research_unreviewed: true` et
+  `safety_status: not_evaluated` ne sont pas modifiés. Les CSV/classeur générés restent sous
+  `data/staging/` et hors Git.
+- La revue technique de la PR #7 a ajouté un garde-fou : une régénération byte-for-byte identique
+  conserve les fichiers, mais un CSV/résumé modifié par un humain n'est jamais écrasé. Les sorties
+  sont limitées à `data/staging/` ; un test vérifie explicitement le refus d'écrasement.
+- Contrôles locaux : Ruff, format, mypy strict, export des schémas et 155 tests verts. Les trois
+  CSV ont des SHA-256 identiques sur deux générations ; l'export réussit aussi avec les connexions
+  socket bloquées. Le classeur a été inspecté et rendu feuille par feuille, sans erreur de formule.
+
 ## Audit structurel préparatoire `v0.7-G0` — 25 septembre 2026
 
 - La PR #5 du durcissement `v0.7-F2` a été relue, contrôlée et fusionnée dans `main` au commit

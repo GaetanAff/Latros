@@ -66,6 +66,10 @@ la prévalence et la couverture de la médecine courante demeurent inconnues. Le
 MedlinePlus, les dépendances Monarch et l'échantillon de revue sont détaillés dans le
 [rapport de qualité](docs/reports/v0.7-general-quality-audit.md). `v0.7-G` reste à faire.
 
+Les jeux de travail [`v0.7-G1/G2`](docs/reports/v0.7-g-targeted-review.md) préparent une revue
+humaine ciblée des mappings MedlinePlus et des dépendances de provenance. Ils ne valident aucune
+assertion ; le corpus d'évaluation indépendant G3 n'existe pas encore.
+
 `v0.5` reste historiquement incomplet sur `main`. Ses checkpoints techniques A à D définissent le registre,
 le manifeste, le constructeur, les importeurs et le premier raisonneur général. Le paquet ORL réel
 reste intégralement `pending_clinical_review`. Un chemin séparé permet désormais de l'importer et de
@@ -287,6 +291,17 @@ uv run --offline --no-sync python scripts/audit_v07_general_quality.py --with-di
 
 Les sorties sont écrites sous `data/staging/v0.7-g0/` et ignorées par Git ; aucune assertion
 ne devient approuvée par cette commande.
+
+Pour générer localement les jeux de revue G1/G2 à partir du même snapshot figé :
+
+```text
+uv run --offline --no-sync python scripts/prepare_v07_g_review.py
+```
+
+Les trois CSV et leur résumé sont placés sous `data/staging/v0.7-g/`, ignoré par Git. Les colonnes
+de décision et d'identité des réviseurs sont vides. Aucun mapping suggéré n'est promu dans le
+snapshot par cette commande. Une relance accepte des sorties identiques mais refuse d'écraser
+un fichier de revue modifié ; `--output-dir` reste limité à `data/staging/`.
 
 | Source | Version | Utilisation |
 | --- | --- | --- |
