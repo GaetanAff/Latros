@@ -8,6 +8,7 @@ porte d'entrée courte ; les détails sont rangés ici par rôle.
 - [Tutoriel complet](tuto.md) : installation, snapshots, interface, essais guidés, sessions,
   interprétation des résultats et dépannage.
 - [Interface R&D v0.6](v0.6-rd-interface.md) : contrat et limites de la console locale.
+- [Parcours simple local](modern-ui.md) : sélection explicite, questions, résultats et mode expert.
 - [Méthodologie](methodology.md) : calcul historique de `semantic_v1` et limites scientifiques.
 - [Couverture généraliste v0.7](reports/v0.7-general-coverage.md) : métriques réelles du snapshot
   souverain DEV, comparaison ORL et limites de performance/validation.

@@ -5,8 +5,8 @@
 </p>
 
 Prototype **interne de recherche** pour explorer des raisonnements cliniques structurés. Les moteurs
-sont locaux et explicables, sans LLM. La petite interface web v0.6 est une console R&D locale, pas
-une interface patient.
+sont locaux et explicables, sans LLM. L'interface web propose désormais un parcours simple et
+conserve la console R&D en mode expert. Elle n'est pas une interface patient validée.
 
 > **Aucun triage n'est effectué.** Toutes les analyses retournent `safety_status: not_evaluated`. Les scores sont des compatibilités sémantiques, jamais des probabilités ou des diagnostics validés. Ne pas utiliser ce prototype pour conseiller un patient.
 
@@ -29,7 +29,7 @@ trouvent ensuite la roadmap, les ADR, les audits et les contrats.
 
 Les futurs snapshots multi-sources devront publier leur périmètre, leurs dépendances, leurs règles de déduplication et leurs profils de raisonnement compatibles. Le snapshot de connaissance et le profil d'agrégation seront versionnés séparément puis liés par leurs hashes dans chaque exécution ; `v0.2.0` reste immuable.
 
-`v0.6` livre maintenant l'interface interne de test R&D : elle saisit un `ClinicalCaseV2`, exécute
+`v0.6` a livré l'interface interne de test R&D : elle saisit un `ClinicalCaseV2`, exécute
 les moteurs déjà disponibles et inspecte leurs résultats, sources, contradictions, couverture et
 statuts de validation. Elle n'est ni une interface patient, ni un produit médical validé, ni une
 nouvelle logique clinique. Son implémentation autonome et versionnée se trouve sous
@@ -113,14 +113,21 @@ Construire d'abord les snapshots locaux nécessaires, puis lancer :
 uv run --offline --no-sync latros --root . ui
 ```
 
-Latros ouvre `http://127.0.0.1:8765/`. Le port peut être changé et l'ouverture automatique
+Latros ouvre `http://127.0.0.1:8765/`. Cette page est maintenant le parcours simple de recherche
+locale ; la console R&D complète reste à `http://127.0.0.1:8765/expert`. Le port peut être changé et l'ouverture automatique
 désactivée :
 
 ```powershell
 uv run --offline --no-sync latros --root . ui --port 8766 --no-open
 ```
 
-L'interface permet uniquement les couples compatibles, notamment `v0.2.0 + semantic_v1` et
+Le parcours simple privilégie `v0.7.0-general-dev-unreviewed + general_v1` lorsqu'il est présent.
+Il guide de la sélection explicite de symptômes vers l'âge, les questions fournies par le backend,
+les résultats non probabilistes et leurs détails facultatifs. Aucun texte libre n'est interprété.
+Un snapshot absent est signalé ; les libellés du catalogue local peuvent être en anglais. Voir
+[la documentation du parcours simple](docs/modern-ui.md) et [l'ADR 0011](docs/decisions/0011-parcours-simple-local.md).
+
+La console experte permet uniquement les couples compatibles, notamment `v0.2.0 + semantic_v1` et
 `v0.5.0-dev-unreviewed + general_v1` ainsi que
 `v0.7.0-general-dev-unreviewed + general_v1`. Elle crée un `ClinicalCaseV2`, recherche les concepts
 réellement présents dans le snapshot, conserve les cinq situations d'évaluation, lance le backend
@@ -407,7 +414,7 @@ src/latros/knowledge/   fréquences, importeurs, validation et snapshots
 src/latros/clinical/    contrat ClinicalCase
 src/latros/reasoning/   stratégies, profils, semantic_v1, sorties v2 et reçus
 src/latros/application/ orchestration partagée entre CLI et interface
-src/latros/ui/          serveur loopback, sessions et actifs de la console R&D
+src/latros/ui/          serveur loopback, sessions, parcours simple et console experte
 src/latros/cli.py       commandes publiques
 docs/                   tutoriel, roadmap, historique, vision, ADR, audits et revues
 sources/               registre épinglé (versionné)

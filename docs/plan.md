@@ -13,7 +13,7 @@ Les trois jalons avaient été implémentés ensemble dans la première tranche.
 | 3 | Moteur pur et interrogatoire — `v0.3.0` | Implémentée dans le paquet `0.3.0` ; évaluation clinique non réalisée | Le moteur utilise le snapshot `v0.2.0` |
 | 4 | Clinical Knowledge Model — `v0.4.0` | Terminée : checkpoints A–H livrés et revue finale verte | La référence reste `v0.2.0` ; aucun snapshot médical v2 publié |
 | 5 | Snapshot ORL généraliste — `v0.5.0` | En cours : A–D terminés ; E historique en `NO-GO` ; E2 audité ; E3 prêt pour revue ; mode E4 local non validé disponible | Référence officielle toujours bloquée ; `v0.5.0-dev-unreviewed` est non publiable |
-| 6 | Interface interne de test R&D — `v0.6` | Terminée et fusionnée dans `main` | Console locale, sessions reprenables et inspection fidèle des moteurs ; aucun produit utilisateur ni nouvelle logique médicale |
+| 6 | Interface interne de test R&D — `v0.6` | Terminée et fusionnée dans `main` ; parcours simple expérimental ultérieur en chantier séparé | Console experte, sessions reprenables et projection simple des moteurs ; aucun produit médical validé ni nouvelle logique clinique |
 | 7 | Fabrique souveraine généraliste — `v0.7` | D–F, F2 et G0 terminés ; jeux de revue G1/G2 et protocole G3 préparés, décisions humaines et évaluation indépendante à faire | `v0.7.0-general-dev-unreviewed` inchangé, non validé et non publiable ; biologie et médicaments restent futures |
 | 8 | Safety / triage séparé — `v0.8` | Prévue | Composant indépendant du différentiel, avec périmètre et validation propres |
 | 9 | NLP / LLM encadré — `v0.9` | Prévue | Structuration, reformulation et explication, jamais source implicite de connaissance |
@@ -176,6 +176,17 @@ Les critères d’acceptation de cette tranche sont une séparation visible entr
 snapshots validés et non revus, la fidélité aux sorties et reçus des moteurs existants, l’absence de
 vocabulaire diagnostic/probabiliste et l’impossibilité de masquer l’état de sécurité ou les limites
 de couverture. Les tests UI vérifient le logiciel et les garde-fous, jamais la justesse médicale.
+
+### Parcours simple expérimental après v0.6
+
+Un chantier UI distinct de `v0.7-G` ajoute une entrée mobile-first à `/` et conserve la console
+v0.6 à `/expert`. Il réutilise les sessions, la recherche DuckDB ciblée, les questions et résultats
+du backend. La sélection d'un symptôme reste explicite ; aucun NLP, score frontend, pourcentage
+diagnostique ou triage n'est ajouté. Les alertes `research_unreviewed` et
+`safety.status = not_evaluated` demeurent visibles. L'[ADR 0011](decisions/0011-parcours-simple-local.md)
+réévalue Jinja2/JavaScript natif face à React/Vite ; la
+[documentation UI](modern-ui.md) précise le parcours et ses limites. Ce prototype d'ergonomie ne
+change ni le jalon v0.6 livré, ni le statut du snapshot v0.7, ni la revue clinique G.
 
 ## Étape v0.7 — fabrique souveraine généraliste
 

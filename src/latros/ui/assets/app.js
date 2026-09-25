@@ -55,7 +55,12 @@ async function boot() {
     state.capabilities = await api("/internal/v1/capabilities");
     const sessionPayload = await api("/internal/v1/sessions");
     state.sessions = sessionPayload.items;
-    if (!state.sessions.length) {
+    const requestedSessionId = new URLSearchParams(window.location.search).get("session");
+    const requestedSession = requestedSessionId
+      ? state.sessions.find((item) => item.session_id === requestedSessionId) : null;
+    if (requestedSession) {
+      state.session = requestedSession;
+    } else if (!state.sessions.length) {
       state.session = await api("/internal/v1/sessions", {
         method: "POST",
         body: JSON.stringify({ display_name: "Session R&D 1" }),

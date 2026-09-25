@@ -7,7 +7,7 @@ Dernière mise à jour : 25 septembre 2026.
 ## État actuel en une phrase
 
 Latros est aujourd'hui un prototype local de recherche utilisable en ligne de commande ou dans une
-console web R&D locale. Il prend des cas déjà structurés, exécute `semantic_v1` sur le snapshot rare
+interface web simple avec console experte locale. Il prend des cas structurés, exécute `semantic_v1` sur le snapshot rare
 ou `general_v1` sur les snapshots expérimentaux ORL et généraliste, expose les preuves et propose
 éventuellement une question discriminante. Il n'est ni un chatbot, ni une interface patient, ni un
 outil de triage ou de diagnostic clinique validé.
@@ -17,6 +17,30 @@ Référence médicale publiée : **`v0.2.0`**, nom du jalon « Premier snapshot 
 `v0.5.0-dev-unreviewed` reste une expérience locale non publiable ; aucun snapshot clinique v2
 validé n'est publié. `v0.7.0-general-dev-unreviewed` est le nouveau corpus généraliste DEV local,
 également non publiable. L'ancien snapshot `latros-kb-0002` est conservé.
+
+## Parcours simple local et mode expert — 25 septembre 2026
+
+- Après revue et fusion de la PR #6 (`v0.7-G0`) dans `main`, le chantier UI est isolé sur
+  `codex/latros-modern-ui` ; la revue ciblée G utilise une autre branche/PR. Aucun snapshot,
+  manifeste, profil ou moteur de raisonnement n'est modifié ici.
+- `/` présente une sélection explicite des concepts locaux, l'âge, les questions fournies par
+  `general_v1`, des résultats sans pourcentage, un détail facultatif et l'historique local.
+  `/expert` conserve la console v0.6 et toutes ses inspections. Les deux vues utilisent les
+  sessions/runs et le backend existants ; aucune extraction NLP ni règle clinique frontend.
+- L'[ADR 0011](decisions/0011-parcours-simple-local.md) réévalue React/Vite et conserve pour cette
+  tranche Jinja2/CSS/JavaScript natif, sans CDN, télémétrie, Node runtime ou nouvel asset distant.
+  Les avertissements `research_unreviewed` et `safety.status = not_evaluated` restent visibles.
+- Contrôles locaux : 151 tests Python verts, Ruff, mypy strict, schémas et registre v0.7 verts ;
+  recherche et parcours mobile vérifiés dans Edge sur `127.0.0.1`, avec les requêtes hors boucle
+  locale refusées. Diagnostic réel, détail, reprise de question, abstention sans âge et erreur de
+  snapshot absent ont abouti ; une question a été répondue et a conduit à une seconde question.
+  Après cette réponse, un autre diagnostic réel dépassait 120 s
+  lors du contrôle navigateur : le chargement reste visible, mais cette latence du grand corpus
+  est une limite technique à traiter séparément. Le test API synthétique question/réponse/analyse
+  passe. Les trois sessions fictives de vérification ont été archivées sous `data/staging/`, hors
+  Git, sans toucher aux sessions antérieures. Ces vérifications ne sont pas une validation clinique.
+- Les libellés du catalogue sont parfois anglais. Le classement expérimental reste peu
+  discriminant et sans prévalence ; aucune promotion clinique ou publication n'est autorisée.
 
 ## Préparation de la revue ciblée `v0.7-G1/G2/G3` — 25 septembre 2026
 
