@@ -72,7 +72,7 @@ class LazyGeneralV1Strategy(GeneralV1Strategy):
         ]
         matched = set(self.repository.matching_candidate_ids(assessed, allowed))
         selected = [candidate_id for candidate_id in candidate_ids if candidate_id in matched]
-        rows = self.repository.candidate_rows(selected)
+        rows = self.repository.candidate_rows(selected, reuse_last_match=True)
         mappings = sorted(
             {item.mapping_id for item in observations.values() if item.mapping_id is not None}
         )
