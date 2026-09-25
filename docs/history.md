@@ -38,6 +38,26 @@ validé n'est publié. `v0.7.0-general-dev-unreviewed` est le nouveau corpus gé
   parcours Edge à 390 et 1 280 px fonctionne sans débordement ni requête externe, sans action
   présélectionnée ; le changement de jeu et le passage à la ligne suivante ont été vérifiés.
 
+## Latence du diagnostic `v0.7-F3` — 25 septembre 2026
+
+- Les PR #7 (revue ciblée G1/G2, sans décision humaine) et #8 (parcours simple `/`, console
+  `/expert`) ont été relues, synchronisées et fusionnées dans `main` après CI Linux/Windows verte.
+  F3 est isolée sur `codex/v0.7-f3-runtime-latency` ; l'outil de revue humaine relève d'une autre
+  branche.
+- Le profil du vrai snapshot, sur une session fictive après réponse à une question, mesure
+  292,123 s pour le diagnostic, dont 288,160 s dans `candidate_rows()` ; la question prend
+  2,679 s. Des listes de ~26 000 identifiants passées comme paramètres DuckDB `VARCHAR[]`
+  coûtaient ~16 s chacune, bien davantage que leurs requêtes.
+- Les identifiants de dérivation, assertions sources et records sont désormais sélectionnés
+  par tables temporaires et jointures DuckDB locales. Le même cas prend 15,629 s pour le
+  diagnostic ; le cas respiratoire passe de 50,396 à 4,009 s. Les empreintes JSON avant/après
+  et les sept cas d'or restent strictement identiques ; le snapshot, la formule et les statuts
+  médicaux restent inchangés.
+- Une requête HTTP locale complète sur le grand cas prend encore 23,59 s et renvoie ~206 Mo
+  pour 3 650 candidats. Cette limite résiduelle est documentée, sans masquer la provenance ou
+  réduire les résultats. Le [rapport F3](reports/v0.7-f3-runtime-latency.md) donne le protocole,
+  les chiffres de mémoire et les commandes de reproduction.
+
 ## Parcours simple local et mode expert — 25 septembre 2026
 
 - Après revue et fusion de la PR #6 (`v0.7-G0`) dans `main`, le chantier UI est isolé sur
