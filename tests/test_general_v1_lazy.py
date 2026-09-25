@@ -98,6 +98,37 @@ def test_repository_rejects_changed_runtime_hash(synthetic_v2) -> None:
         CanonicalKnowledgeRepositoryV2(root, "test-v2")
 
 
+def test_candidate_rows_does_not_send_assertion_id_lists_to_duckdb(synthetic_v2) -> None:
+    root, registry, knowledge = synthetic_v2
+    build_snapshot_v2(root, registry, "test-v2", knowledge)
+    repository = CanonicalKnowledgeRepositoryV2(root, "test-v2")
+
+    class ParameterGuard:
+        def __init__(self, connection):
+            self.connection = connection
+
+        def execute(self, sql, parameters=None):
+            for parameter in parameters or []:
+                if isinstance(parameter, list):
+                    assert len(parameter) <= 1, sql
+            return (
+                self.connection.execute(sql, parameters)
+                if parameters is not None
+                else self.connection.execute(sql)
+            )
+
+        def close(self):
+            self.connection.close()
+
+    repository.connection = ParameterGuard(repository.connection)
+    try:
+        rows = repository.candidate_rows(["test:condition-1"])
+        assert len(rows.assertions["test:condition-1"]) == 2
+        assert len(rows.provenance) == 2
+    finally:
+        repository.close()
+
+
 def test_cached_repository_fails_closed_if_manifest_changes(synthetic_v2) -> None:
     root, registry, knowledge = synthetic_v2
     build_snapshot_v2(root, registry, "test-v2", knowledge)
