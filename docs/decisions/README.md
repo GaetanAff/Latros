@@ -15,6 +15,7 @@ Décisions acceptées :
 - [0009 — Fabrique de connaissances généraliste souveraine](0009-fabrique-souveraine-generaliste.md).
 - [0010 — Runtime v2 DuckDB paresseux](0010-runtime-v2-duckdb-paresseux.md).
 - [0011 — Parcours simple local et console experte conservée](0011-parcours-simple-local.md).
+- [0012 — Outil local de revue humaine G1/G2](0012-outil-local-de-revue-humaine.md).
 
 Utiliser un fichier par décision, par exemple :
 

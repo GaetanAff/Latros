@@ -207,8 +207,8 @@ ne sera pas restauré comme dépendance du nouveau snapshot.
 | `v0.7-F2` | Terminé — durcissement technique | Repository DuckDB v2 paresseux en lecture seule, catalogue UI ciblé, comparaison exacte des sorties et profil mémoire du snapshot existant |
 | `v0.7-F3` | Terminé — latence runtime | Filtres volumineux dérivés dans DuckDB ; diagnostic après question mesuré de 292 à 15,6 s, sorties identiques ; transport complet encore 23,6 s sur le grand cas |
 | `v0.7-G0` | Terminé — préparation quantitative | Audit SQL du corpus, des dépendances et des mappings ; échantillon stratifié non revu pour préparer G |
-| `v0.7-G1` | Jeu de revue prêt — décision humaine à faire | 689 topics MedlinePlus bloqués, pistes lexicales/MeSH non promues, colonnes de décision vides |
-| `v0.7-G2` | Échantillons prêts — revue humaine à faire | 120 candidates MedlinePlus et 40 assertions Monarch/Orphadata pour qualité et provenance |
+| `v0.7-G1` | Jeu et outil local de revue prêts — décision humaine à faire | 689 topics MedlinePlus bloqués, pistes lexicales/MeSH non promues, aucune décision préremplie |
+| `v0.7-G2` | Échantillons et outil local de revue prêts — revue humaine à faire | 120 candidates MedlinePlus et 40 assertions Monarch/Orphadata pour qualité et provenance ; décisions séparées du snapshot |
 | `v0.7-G3` | Protocole prêt — corpus indépendant absent | Cas non patients à rédiger/adjudique séparément du snapshot et des fixtures logiciels |
 | `v0.7-G` | À faire | Revue clinique et décision distincte sur une éventuelle publication |
 
@@ -242,6 +242,9 @@ la revue qualifiée et le corpus d'évaluation indépendant manquent ; il ne cha
 du snapshot. Les décisions humaines G1/G2 et l'évaluation G3 restent à réaliser.
 Les exports identiques peuvent être régénérés, mais un CSV ou résumé annoté est protégé contre
 l'écrasement accidentel ; le chemin de sortie reste sous `data/staging/`.
+L'[outil de revue G1/G2](v0.7-g-review-ui.md), distinct du symptom checker, affiche une ligne à
+la fois et conserve un journal local append-only. Son existence n'est ni une décision clinique,
+ni le début d'une promotion du snapshot ; G1/G2 restent à faire par des réviseurs réels.
 
 ### Sous-tranches v0.7 — médicaments, temporalité et mesures cliniques
 

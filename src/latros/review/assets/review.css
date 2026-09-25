@@ -1,0 +1,71 @@
+:root {
+  color-scheme: light;
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+  --teal: #0f6472;
+  --green: #6ea07a;
+  --sage: #b7cfaf;
+  --ink: #173039;
+  --muted: #54666b;
+  --border: #d8e4df;
+  --paper: #fbfcf9;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--ink); line-height: 1.55; }
+.topbar { display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  padding: .75rem max(1rem, calc((100vw - 1100px) / 2)); background: white;
+  border-bottom: 1px solid var(--border); }
+.brand { display: flex; align-items: center; gap: .85rem; font-weight: 700; color: var(--teal); }
+.brand img { width: 94px; height: 40px; object-fit: contain; }
+.local-badge, .status { border-radius: 99px; padding: .35rem .7rem; background: #eaf4ec;
+  color: #24583f; font-size: .86rem; font-weight: 650; }
+main { max-width: 1100px; margin: auto; padding: 2.5rem 1.2rem 5rem; }
+.intro { max-width: 720px; margin-bottom: 2rem; }
+.intro h1 { font-size: clamp(1.9rem, 4vw, 3rem); line-height: 1.15; margin: .2rem 0 1rem; }
+.eyebrow { margin: 0; color: var(--teal); font-size: .82rem; font-weight: 750;
+  letter-spacing: .08em; text-transform: uppercase; }
+.toolbar, .review-card, .decision-card, .history-card { background: white;
+  border: 1px solid var(--border); border-radius: 18px; padding: 1.4rem; margin: 1rem 0;
+  box-shadow: 0 10px 30px rgba(25, 60, 50, .04); }
+.toolbar { display: flex; align-items: end; gap: 1rem; flex-wrap: wrap; }
+.toolbar label { font-weight: 650; }
+select, input, textarea { font: inherit; border: 1px solid #a9bdb7; border-radius: 10px;
+  background: white; color: var(--ink); padding: .68rem .75rem; max-width: 100%; }
+select { min-width: min(100%, 330px); }
+.toolbar select { margin-right: auto; }
+.card-head { display: flex; align-items: start; justify-content: space-between; gap: 1rem; }
+h2 { font-size: 1.35rem; line-height: 1.25; }
+.card-head h2 { margin: .3rem 0 1rem; }
+.fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
+.field { padding: .8rem 1rem; border-radius: 12px; background: #f5f9f5; min-width: 0; }
+dt { color: var(--muted); font-size: .78rem; font-weight: 700; text-transform: uppercase; }
+dd { margin: .2rem 0 0; overflow-wrap: anywhere; white-space: pre-wrap; }
+.pager { display: flex; justify-content: space-between; gap: .8rem; margin-top: 1.3rem; }
+.button { cursor: pointer; min-height: 44px; border-radius: 10px; padding: .65rem 1.05rem;
+  font: inherit; font-weight: 700; border: 1px solid var(--teal); }
+.button.primary { background: var(--teal); color: white; }
+.button.secondary { background: white; color: var(--teal); }
+.button:disabled { opacity: .45; cursor: not-allowed; }
+:focus-visible { outline: 3px solid var(--green); outline-offset: 3px; }
+fieldset { border: 0; padding: 0; margin: 1.4rem 0; }
+legend { font-weight: 700; margin-bottom: .6rem; }
+.actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .55rem; }
+.action { display: flex; align-items: center; gap: .65rem; padding: .75rem;
+  background: #f5f9f5; border-radius: 10px; cursor: pointer; }
+.action input, .attestation input { accent-color: var(--teal); width: 20px; height: 20px; flex: none; }
+.identity-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.identity-grid > div { display: flex; flex-direction: column; gap: .35rem; }
+.decision-card textarea { display: block; width: 100%; margin: .4rem 0 1rem; }
+.attestation { display: flex; align-items: start; gap: .6rem; margin: 1rem 0; }
+.history-entry { border-left: 3px solid var(--sage); padding: .5rem .9rem; margin: .5rem 0; }
+.history-entry p { margin: .2rem 0; color: var(--muted); overflow-wrap: anywhere; }
+.message { background: #fff4d6; color: #533d09; border: 1px solid #dbc47a;
+  border-radius: 10px; padding: .8rem 1rem; margin-bottom: 1rem; }
+.fine-print { color: var(--muted); font-size: .9rem; max-width: 770px; }
+@media (max-width: 680px) {
+  main { padding-top: 1.4rem; }
+  .local-badge { font-size: .7rem; }
+  .fields, .actions, .identity-grid { grid-template-columns: 1fr; }
+  .card-head { display: block; }
+  .status { display: inline-block; margin-bottom: .8rem; }
+  .toolbar select, .toolbar .button { width: 100%; }
+}
