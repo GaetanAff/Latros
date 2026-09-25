@@ -7,7 +7,7 @@ import uuid
 from collections.abc import Callable
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Literal
+from typing import Any, Literal, cast
 
 from latros.clinical.v2 import ClinicalCaseV2
 from latros.common import LatrosError, safe_id, write_json
@@ -15,6 +15,13 @@ from latros.ui.models import (
     ResearchSession,
     SessionRunReference,
     StoredRun,
+)
+from latros.ui.run_transport import (
+    index_path,
+    read_candidate,
+    read_index,
+    summary_projection,
+    write_indexed_run,
 )
 
 
@@ -129,11 +136,15 @@ class SessionStore:
             run_path = self._run_path(session_id, run_id)
             if run_path.exists():
                 raise LatrosError("Immutable session run already exists")
-            write_json(run_path, run.model_dump(mode="json"))
             try:
+                if operation == "diagnose" and current.selection.strategy_id == "general_v1":
+                    write_indexed_run(run_path, run)
+                else:
+                    write_json(run_path, run.model_dump(mode="json"))
                 write_json(self._session_path(session_id), updated.model_dump(mode="json"))
             except Exception:
                 run_path.unlink(missing_ok=True)
+                index_path(run_path).unlink(missing_ok=True)
                 raise
             return updated, run
 
@@ -142,6 +153,41 @@ class SessionStore:
         if not path.is_file():
             raise LatrosError(f"Unknown immutable session run: {run_id}")
         return StoredRun.model_validate_json(path.read_bytes())
+
+    def load_run_summary(self, session_id: str, run_id: str) -> dict[str, Any]:
+        path = self._run_path(session_id, run_id)
+        if not path.is_file():
+            raise LatrosError(f"Unknown immutable session run: {run_id}")
+        index = read_index(path)
+        if index is not None:
+            return cast(dict[str, Any], index["summary"])
+        run = self.load_run(session_id, run_id)
+        if run.operation != "diagnose":
+            raise LatrosError("Only diagnosis runs have candidate summaries")
+        return summary_projection(run)
+
+    def load_candidate_detail(
+        self, session_id: str, run_id: str, candidate_id: str
+    ) -> dict[str, Any]:
+        path = self._run_path(session_id, run_id)
+        if not path.is_file():
+            raise LatrosError(f"Unknown immutable session run: {run_id}")
+        index = read_index(path)
+        if index is not None:
+            return read_candidate(path, index, candidate_id)
+        run = self.load_run(session_id, run_id)
+        if run.operation != "diagnose":
+            raise LatrosError("Only diagnosis runs have candidate details")
+        for candidate in run.result.get("candidates", []):
+            if candidate.get("candidate_id") == candidate_id:
+                return {
+                    "candidate": candidate,
+                    "run_receipt": run.result.get("run_receipt"),
+                    "selection": run.selection.model_dump(mode="json"),
+                    "research_unreviewed": run.result.get("research_unreviewed"),
+                    "safety": run.result.get("safety"),
+                }
+        raise LatrosError(f"Unknown diagnosis candidate: {candidate_id}")
 
     @staticmethod
     def _require_revision(session: ResearchSession, expected: int) -> None:

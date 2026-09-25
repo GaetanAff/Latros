@@ -62,6 +62,11 @@ snapshot sont comparés octet pour octet aux sorties précédentes ; voir le
 Le durcissement `v0.7-F3` réduit ensuite le diagnostic réel après question de 292 à 15,6 s
 sur le grand cas fictif mesuré, sans changer les sorties ni le snapshot. Le transport complet
 de 3 650 candidats reste à 23,6 s : voir le [rapport F3](docs/reports/v0.7-f3-runtime-latency.md).
+`v0.7-F4` conserve ensuite ce résultat complet et immuable sur disque, mais la vue simple
+reçoit une projection de 20 candidats au maximum et charge le détail au clic. Sur le grand
+cas fictif, la réponse initiale passe d'environ 206 Mo à 14 Ko et la route de 22,9 à 18,5 s ;
+le calcul et l'écriture du run restent le goulet principal. Voir le
+[rapport F4](docs/reports/v0.7-f4-result-transport.md).
 
 L'audit préparatoire `v0.7-G0` mesure la composition réelle du corpus sans valider ses assertions :
 14 661 des 15 611 maladies documentées ont un lien structurel Orphanet ou génétique, tandis que

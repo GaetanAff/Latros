@@ -291,7 +291,7 @@ async function answerQuestion(answer) {
 }
 
 async function diagnose() {
-  const payload = await api(`${sessionPath()}/analyses`, {
+  const payload = await api(`${sessionPath()}/analyses?view=summary`, {
     method: "POST", body: JSON.stringify({ revision: state.session.revision }),
   });
   state.session = payload.session;
@@ -365,10 +365,12 @@ function sourceLabel(source) {
   return `${names[id] || id || "Source locale"}${version ? ` (${version})` : ""}`;
 }
 
-function openDetail(index) {
-  const candidate = state.resultRun?.result?.candidates?.[index];
-  if (!candidate) return;
-  const result = state.resultRun.result;
+async function openDetail(index) {
+  const selected = state.resultRun?.result?.candidates?.[index];
+  if (!selected) return;
+  const detail = await api(`${sessionPath()}/runs/${encodeURIComponent(state.resultRun.run_id)}`
+    + `/candidates/${encodeURIComponent(selected.candidate_id)}`);
+  const candidate = detail.candidate;
   byId("dialog-title").textContent = `Pourquoi ${candidate.label} apparaît`;
   byId("dialog-content").innerHTML = `
     <p>Possibilité classée au rang ${escapeHtml(candidate.rank)} ; ce rang n’est pas une probabilité.</p>
@@ -384,9 +386,7 @@ function openDetail(index) {
     : "<p>Aucune source détaillée.</p>"}</section>
     <details class="technical-details"><summary>Afficher les détails techniques</summary>
       <p>Compatibilité brute non calibrée : ${escapeHtml(candidate.aggregate?.value)}. Ne pas interpréter comme un risque ou une probabilité.</p>
-      <pre>${escapeHtml(JSON.stringify({ candidate, run_receipt: result.run_receipt,
-    selection: state.session?.selection, research_unreviewed: result.research_unreviewed,
-    safety: result.safety }, null, 2))}</pre>
+      <pre>${escapeHtml(JSON.stringify(detail, null, 2))}</pre>
     </details>`;
   byId("result-dialog").showModal();
 }
@@ -477,7 +477,7 @@ async function resumeSession(sessionId) {
     && (!session.latest_question || new Date(session.latest_diagnose.created_at)
       >= new Date(session.latest_question.created_at));
   if (diagnoseIsCurrent) {
-    state.resultRun = await api(`${sessionPath()}/runs/${encodeURIComponent(session.latest_diagnose.run_id)}`);
+    state.resultRun = await api(`${sessionPath()}/runs/${encodeURIComponent(session.latest_diagnose.run_id)}/summary`);
     renderResults();
     showScreen("results");
   } else if (session.latest_question) {
@@ -554,7 +554,7 @@ document.querySelectorAll("[data-answer]").forEach((button) => {
 byId("question-to-results").addEventListener("click", () => guarded(diagnose, "Calcul des possibilités…"));
 byId("result-list").addEventListener("click", (event) => {
   const button = event.target.closest("[data-detail-index]");
-  if (button) openDetail(Number(button.dataset.detailIndex));
+  if (button) guarded(() => openDetail(Number(button.dataset.detailIndex)), "Chargement du détail local…");
 });
 byId("show-more-results").addEventListener("click", () => {
   state.visibleCount += 5;
