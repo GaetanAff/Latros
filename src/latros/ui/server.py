@@ -116,6 +116,14 @@ def create_app(root: Path) -> FastAPI:
     async def index(request: Request) -> HTMLResponse:
         return TEMPLATES.TemplateResponse(
             request=request,
+            name="checker.html",
+            context={"version": __version__},
+        )
+
+    @app.get("/expert", response_class=HTMLResponse)
+    async def expert(request: Request) -> HTMLResponse:
+        return TEMPLATES.TemplateResponse(
+            request=request,
             name="index.html",
             context={"version": __version__},
         )

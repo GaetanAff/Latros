@@ -76,16 +76,30 @@ def test_ui_shell_is_local_static_and_explicit_about_limits(tmp_path: Path) -> N
     response = client.get("/")
 
     assert response.status_code == 200
-    assert "Interface interne v0.6" in response.text
-    assert "SAFETY STATUS" in response.text
-    assert "DONNÉES NON REVUES" in response.text
+    assert "Qu’est-ce qui vous gêne ?" in response.text
+    assert "La saisie libre n’est pas encore interprétée" in response.text
+    assert "Urgences non évaluées" in response.text
+    assert "Mode expert" in response.text
     assert "script-src 'self'" in response.headers["content-security-policy"]
     assert "https://" not in response.text
     assert client.get("/docs").status_code == 404
+    assert client.get("/assets/checker.js").status_code == 200
+    assert "https://" not in client.get("/assets/checker.js").text
+    css = client.get("/assets/checker.css").text
+    assert "#0f6472" in css
+    assert "#6ea07a" in css
+    assert "#b7cfaf" in css
+
+    expert = client.get("/expert")
+    assert expert.status_code == 200
+    assert "Interface interne v0.6" in expert.text
+    assert "SAFETY STATUS" in expert.text
+    assert "DONNÉES NON REVUES" in expert.text
     script = client.get("/assets/app.js").text
     assert "research_unreviewed: true" in script
     assert "unreviewed_assertion_count" in script
     assert "unreviewed_mapping_count" in script
+    assert "requestedSessionId" in script
 
 
 def test_ui_general_v1_workflow_persists_exact_v2_run(synthetic_v2) -> None:
@@ -111,6 +125,74 @@ def test_ui_general_v1_workflow_persists_exact_v2_run(synthetic_v2) -> None:
     assert result["candidates"][0]["aggregate"]["kind"] == "compatibility"
     assert result["safety"]["status"] == "not_evaluated"
     assert payload["session"]["latest_diagnose"]["run_id"] == payload["run"]["run_id"]
+
+
+def test_ui_simple_flow_uses_local_concepts_and_resumable_runs(synthetic_v2) -> None:
+    root, registry, knowledge = synthetic_v2
+    build_snapshot_v2(root, registry, "test-v2", knowledge)
+    client = TestClient(create_app(root))
+
+    capabilities = client.get("/internal/v1/capabilities").json()
+    assert any(
+        item["snapshot_id"] == "test-v2" and item["strategy_id"] == "general_v1"
+        for item in capabilities["compatible_selections"]
+    )
+    found = client.get(
+        "/internal/v1/concepts",
+        params={"snapshot": "test-v2", "strategy": "general_v1", "q": "Invented finding 1"},
+    ).json()["items"]
+    assert found and found[0]["label"] == "Invented finding 1"
+    not_found = client.get(
+        "/internal/v1/concepts",
+        params={"snapshot": "test-v2", "strategy": "general_v1", "q": "not-in-corpus"},
+    ).json()["items"]
+    assert not_found == []
+
+    session = _select(client, _create_session(client), "test-v2", "general_v1")
+    clinical_case = _general_case(session["clinical_case"]["case_id"])
+    clinical_case["observations"] = clinical_case["observations"][:1]
+    saved = client.put(
+        f"/internal/v1/sessions/{session['session_id']}/case",
+        json={"revision": session["revision"], "clinical_case": clinical_case},
+    )
+    assert saved.status_code == 200, saved.text
+    current = saved.json()
+    question = client.post(
+        f"/internal/v1/sessions/{session['session_id']}/questions/next",
+        json={"revision": current["revision"]},
+    )
+    assert question.status_code == 200, question.text
+    current = question.json()["session"]
+    question_run = question.json()["run"]
+    assert question_run["result"]["status"] in {"question", "stopped"}
+    if question_run["result"]["status"] == "question":
+        answer = client.post(
+            f"/internal/v1/sessions/{session['session_id']}/questions/answer",
+            json={
+                "revision": current["revision"],
+                "question_run_id": question_run["run_id"],
+                "answer": "unknown",
+            },
+        )
+        assert answer.status_code == 200, answer.text
+        current = answer.json()
+        assert current["clinical_case"]["question_history"]
+
+    analysis = client.post(
+        f"/internal/v1/sessions/{session['session_id']}/analyses",
+        json={"revision": current["revision"]},
+    )
+    assert analysis.status_code == 200, analysis.text
+    run = analysis.json()["run"]
+    assert run["result"]["safety"]["status"] == "not_evaluated"
+    stored = client.get(
+        f"/internal/v1/sessions/{session['session_id']}/runs/{run['run_id']}"
+    ).json()
+    assert stored["result"] == run["result"]
+    assert any(
+        item["session_id"] == session["session_id"]
+        for item in client.get("/internal/v1/sessions").json()["items"]
+    )
 
 
 def test_ui_semantic_v1_workflow_preserves_safety_and_scale(built) -> None:
