@@ -8,6 +8,7 @@ from __future__ import annotations
 import argparse
 import csv
 import hashlib
+import io
 import json
 from collections import Counter, defaultdict
 from pathlib import Path
@@ -376,20 +377,29 @@ def _dependency_rows(connection: duckdb.DuckDBPyConnection) -> list[dict[str, An
 def _csv_value(value: Any) -> str | int | float:
     if value is None:
         return ""
-    if isinstance(value, str) and value[:1] in {"=", "+", "-", "@"}:
+    if isinstance(value, str) and value.lstrip()[:1] in {"=", "+", "-", "@"}:
         return "'" + value
     return value
+
+
+def _write_without_overwriting_review(path: Path, content: bytes) -> str:
+    if path.exists():
+        if not path.is_file() or path.read_bytes() != content:
+            raise LatrosError(f"Existing review output differs; refusing to overwrite: {path}")
+    else:
+        with path.open("xb") as stream:
+            stream.write(content)
+    return hashlib.sha256(content).hexdigest()
 
 
 def _write_csv(path: Path, rows: list[dict[str, Any]]) -> str:
     if not rows:
         raise LatrosError(f"Review set is empty: {path.name}")
-    with path.open("w", encoding="utf-8", newline="") as stream:
-        writer = csv.DictWriter(stream, fieldnames=list(rows[0]), lineterminator="\n")
-        writer.writeheader()
-        writer.writerows({key: _csv_value(value) for key, value in row.items()} for row in rows)
-    with path.open("rb") as stream:
-        return hashlib.file_digest(stream, "sha256").hexdigest()
+    stream = io.StringIO(newline="")
+    writer = csv.DictWriter(stream, fieldnames=list(rows[0]), lineterminator="\n")
+    writer.writeheader()
+    writer.writerows({key: _csv_value(value) for key, value in row.items()} for row in rows)
+    return _write_without_overwriting_review(path, stream.getvalue().encode("utf-8"))
 
 
 def main() -> None:
@@ -399,8 +409,9 @@ def main() -> None:
     args = parser.parse_args()
     root = args.root.resolve()
     output = (args.output_dir or root / "data/staging/v0.7-g").resolve()
-    if root not in output.parents:
-        raise LatrosError("Review outputs must stay in the local repository")
+    staging = (root / "data/staging").resolve()
+    if output != staging and staging not in output.parents:
+        raise LatrosError("Review outputs must stay under data/staging")
     manifest = load_manifest_v2(root, SNAPSHOT)
     if (
         manifest.content_sha256 != CONTENT_SHA256
@@ -461,8 +472,9 @@ def main() -> None:
         "human_decisions_recorded": 0,
         "files_sha256": hashes,
     }
-    (output / "summary.json").write_bytes(
-        orjson.dumps(summary, option=orjson.OPT_SORT_KEYS | orjson.OPT_INDENT_2) + b"\n"
+    _write_without_overwriting_review(
+        output / "summary.json",
+        orjson.dumps(summary, option=orjson.OPT_SORT_KEYS | orjson.OPT_INDENT_2) + b"\n",
     )
     print(json.dumps(summary, indent=2, ensure_ascii=False))
 

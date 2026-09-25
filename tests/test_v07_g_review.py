@@ -3,10 +3,13 @@
 from __future__ import annotations
 
 import importlib
+import sys
 from pathlib import Path
 from types import ModuleType
 
 import pytest
+
+from latros.common import LatrosError
 
 
 @pytest.fixture
@@ -49,8 +52,41 @@ def test_mapping_review_never_prepopulates_human_decision(review_module: ModuleT
 def test_csv_review_cells_cannot_execute_spreadsheet_formulas(review_module: ModuleType) -> None:
     assert review_module._csv_value("=HYPERLINK('bad')") == "'=HYPERLINK('bad')"
     assert review_module._csv_value("@code") == "'@code"
+    assert review_module._csv_value("  =HYPERLINK('bad')") == "'  =HYPERLINK('bad')"
     assert review_module._csv_value("ordinary label") == "ordinary label"
     assert review_module._csv_value(0) == 0
+
+
+def test_review_export_refuses_to_replace_human_edits(
+    review_module: ModuleType, tmp_path: Path
+) -> None:
+    path = tmp_path / "review.csv"
+    rows = [{"topic": "Example", "human_decision": ""}]
+    expected = review_module._write_csv(path, rows)
+    assert review_module._write_csv(path, rows) == expected
+
+    path.write_text("human decision in progress\n", encoding="utf-8")
+    with pytest.raises(LatrosError, match="refusing to overwrite"):
+        review_module._write_csv(path, rows)
+    assert path.read_text(encoding="utf-8") == "human decision in progress\n"
+
+
+def test_review_export_stays_under_ignored_staging(
+    review_module: ModuleType, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "prepare_v07_g_review.py",
+            "--root",
+            str(tmp_path),
+            "--output-dir",
+            str(tmp_path / "docs"),
+        ],
+    )
+    with pytest.raises(LatrosError, match="under data/staging"):
+        review_module.main()
 
 
 def test_label_normalization_is_technical_only(review_module: ModuleType) -> None:

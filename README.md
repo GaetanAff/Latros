@@ -293,7 +293,8 @@ uv run --offline --no-sync python scripts/prepare_v07_g_review.py
 
 Les trois CSV et leur résumé sont placés sous `data/staging/v0.7-g/`, ignoré par Git. Les colonnes
 de décision et d'identité des réviseurs sont vides. Aucun mapping suggéré n'est promu dans le
-snapshot par cette commande.
+snapshot par cette commande. Une relance accepte des sorties identiques mais refuse d'écraser
+un fichier de revue modifié ; `--output-dir` reste limité à `data/staging/`.
 
 | Source | Version | Utilisation |
 | --- | --- | --- |

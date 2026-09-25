@@ -39,7 +39,10 @@ validé n'est publié. `v0.7.0-general-dev-unreviewed` est le nouveau corpus gé
   `clinical_validation: false`, `publishable: false`, `research_unreviewed: true` et
   `safety_status: not_evaluated` ne sont pas modifiés. Les CSV/classeur générés restent sous
   `data/staging/` et hors Git.
-- Contrôles locaux : Ruff, format, mypy strict, export des schémas et 153 tests verts. Les trois
+- La revue technique de la PR #7 a ajouté un garde-fou : une régénération byte-for-byte identique
+  conserve les fichiers, mais un CSV/résumé modifié par un humain n'est jamais écrasé. Les sorties
+  sont limitées à `data/staging/` ; un test vérifie explicitement le refus d'écrasement.
+- Contrôles locaux : Ruff, format, mypy strict, export des schémas et 155 tests verts. Les trois
   CSV ont des SHA-256 identiques sur deux générations ; l'export réussit aussi avec les connexions
   socket bloquées. Le classeur a été inspecté et rendu feuille par feuille, sans erreur de formule.
 

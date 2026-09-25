@@ -218,7 +218,7 @@ du snapshot réel sont comparés par empreintes du JSON complet. Le
 L'[audit structurel `v0.7-G0`](reports/v0.7-general-quality-audit.md) chiffre la forte liaison
 Orphanet/génétique (14 661 des 15 611 maladies documentées), le goulet de mapping MedlinePlus
 et les dépendances Monarch. Il ne déduit pas la prévalence d'une maladie de ses seules hiérarchies
-et ne change ni le snapshot, ni le profil, ni les statuts de validation. La revue clinique
+et ne change ni le snapshot, ni le profil, ni les statuts de validation.
 La revue clinique humaine `v0.7-G` n'a pas commencé.
 
 Les [jeux et le protocole de revue ciblée](reports/v0.7-g-targeted-review.md) n'approuvent aucun
@@ -226,6 +226,8 @@ mapping ni assertion. Ils rendent vérifiables les 5 106 candidates MedlinePlus 
 dépendances Monarch/Orphadata. Le `NO-GO` actuel concerne toute publication clinique tant que
 la revue qualifiée et le corpus d'évaluation indépendant manquent ; il ne change pas le statut
 du snapshot. Les décisions humaines G1/G2 et l'évaluation G3 restent à réaliser.
+Les exports identiques peuvent être régénérés, mais un CSV ou résumé annoté est protégé contre
+l'écrasement accidentel ; le chemin de sortie reste sous `data/staging/`.
 
 ### Sous-tranches v0.7 — médicaments, temporalité et mesures cliniques
 
