@@ -60,6 +60,12 @@ profil, ni la mathématique du score. Les sept diagnostics et questions synthét
 snapshot sont comparés octet pour octet aux sorties précédentes ; voir le
 [rapport de performance](docs/reports/v0.7-runtime-performance.md).
 
+L'audit préparatoire `v0.7-G0` mesure la composition réelle du corpus sans valider ses assertions :
+14 661 des 15 611 maladies documentées ont un lien structurel Orphanet ou génétique, tandis que
+la prévalence et la couverture de la médecine courante demeurent inconnues. Les limites de
+MedlinePlus, les dépendances Monarch et l'échantillon de revue sont détaillés dans le
+[rapport de qualité](docs/reports/v0.7-general-quality-audit.md). `v0.7-G` reste à faire.
+
 `v0.5` reste historiquement incomplet sur `main`. Ses checkpoints techniques A à D définissent le registre,
 le manifeste, le constructeur, les importeurs et le premier raisonneur général. Le paquet ORL réel
 reste intégralement `pending_clinical_review`. Un chemin séparé permet désormais de l'importer et de
@@ -264,6 +270,16 @@ uv run --offline --no-sync python scripts/profile_general_v1_runtime.py --output
 
 Le second script refuse toute connexion réseau. Les sorties de ces commandes restent locales et
 ignorées par Git ; le rapport de performance versionné résume les mesures reproductibles.
+
+Pour reproduire l'audit quantitatif préparatoire et son échantillon local non revu, avec le
+snapshot v0.7 déjà construit :
+
+```text
+uv run --offline --no-sync python scripts/audit_v07_general_quality.py --with-diagnostic-ties
+```
+
+Les sorties sont écrites sous `data/staging/v0.7-g0/` et ignorées par Git ; aucune assertion
+ne devient approuvée par cette commande.
 
 | Source | Version | Utilisation |
 | --- | --- | --- |

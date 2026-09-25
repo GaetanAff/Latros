@@ -2,7 +2,7 @@
 
 Ce fichier est le journal de continuité du projet. Il décrit ce qui a été décidé et effectivement réalisé, afin de pouvoir reprendre la discussion sans déduire l'état du projet à partir du code seul.
 
-Dernière mise à jour : 24 septembre 2026.
+Dernière mise à jour : 25 septembre 2026.
 
 ## État actuel en une phrase
 
@@ -17,6 +17,37 @@ Référence médicale publiée : **`v0.2.0`**, nom du jalon « Premier snapshot 
 `v0.5.0-dev-unreviewed` reste une expérience locale non publiable ; aucun snapshot clinique v2
 validé n'est publié. `v0.7.0-general-dev-unreviewed` est le nouveau corpus généraliste DEV local,
 également non publiable. L'ancien snapshot `latros-kb-0002` est conservé.
+
+## Audit structurel préparatoire `v0.7-G0` — 25 septembre 2026
+
+- La PR #5 du durcissement `v0.7-F2` a été relue, contrôlée et fusionnée dans `main` au commit
+  `2a736a1`. Le travail G0 a ensuite commencé sur la branche distincte
+  `codex/v0.7-g0-quality-audit`.
+- Un script reproductible interroge le vrai DuckDB v0.7 en lecture seule, sans charger le modèle
+  canonique en Python et sans réseau. Il mesure sources, relations, polarités, densité par maladie,
+  mappings, familles de preuve, dépendances, domaines et égalités de scores ; il prépare localement
+  60 lignes stratifiées non revues, hors Git.
+- Sur 15 611 maladies avec assertions, 14 661 sont liées structurellement à Orphanet ou à une
+  hiérarchie génétique ; cette mesure n'est **pas** une estimation de prévalence. 193 ont une
+  assertion MedlinePlus sans ces marqueurs et 757 restent non classées. 13 098 maladies ont au
+  moins cinq assertions, 10 938 au moins dix et 7 286 au moins vingt.
+- Les 7 736 candidats MedlinePlus comprennent 2 630 techniquement éligibles. Les 5 106 rejets
+  proviennent du mapping maladie : 3 408 non résolus, 1 698 ambigus. MedlinePlus est la seule
+  source de 163 maladies, mais sa famille `unknown` n'est pas agrégeable par `general_v1`.
+  Monarch relaie 114 839 associations d'amont Orphanet ; 114 269 paires correspondent à
+  Orphadata après crosswalk exact et ne constituent pas une corroboration indépendante.
+- Seules 706 maladies portent un négatif. Le cas synthétique respiratoire produit 696 candidats,
+  dont 692 au score `+1` ; aucune mathématique du moteur n'a été changée. Le
+  [rapport G0](reports/v0.7-general-quality-audit.md) décrit la méthode, les limites, les
+  domaines sous-couverts et l'organisation proposée de la revue humaine.
+- Le snapshot et son hash `bfda708aba44dcc5d12896ac7523d9d6bb577dea53bdc3810e499c15f64b1fb0`
+  restent immuables. Zéro assertion approuvée ; `clinical_validation: false`,
+  `publishable: false`, `research_unreviewed: true` et `safety_status: not_evaluated` restent
+  inchangés. `v0.7-G` reste à faire.
+- Vérifications locales : Ruff, format, mypy strict, export des schémas, registre v0.7 et 150 tests
+  passent. Deux exécutions du script sur le vrai snapshot produisent le même SHA-256 de
+  l'échantillon de 60 lignes ; une troisième avec les connexions socket bloquées réussit aussi.
+  Les sorties générées restent ignorées par Git.
 
 ## Durcissement runtime généraliste `v0.7-F2` — 24 septembre 2026
 
