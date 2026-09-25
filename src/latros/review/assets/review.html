@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Latros — revue humaine G1/G2</title>
+    <link rel="icon" href="/logo.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="/assets/review.css">
+    <script src="/assets/review.js" defer></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand"><img src="/logo.svg" alt="Latros"><span>Revue G1/G2</span></div>
+      <span class="local-badge">Local · hors ligne</span>
+    </header>
+    <main>
+      <div class="intro">
+        <p class="eyebrow">Outil réservé à la revue humaine</p>
+        <h1>Une ligne à la fois, chaque décision traçable.</h1>
+        <p>Les suggestions sont techniques et <strong>non validées</strong>. Une décision dans cet outil ne
+          change ni le snapshot, ni le moteur, ni les statuts de validation clinique ou de publication.</p>
+      </div>
+      <div id="message" class="message" role="alert" hidden></div>
+      <section class="toolbar" aria-label="Choix du jeu de revue">
+        <label for="dataset">Jeu de revue</label>
+        <select id="dataset">
+          <option value="g1">G1 — mappings MedlinePlus</option>
+          <option value="g2_medline">G2 — assertions MedlinePlus</option>
+          <option value="g2_upstream">G2 — dépendances Monarch/Orphadata</option>
+        </select>
+        <button id="export" type="button" class="button secondary">Exporter les décisions</button>
+      </section>
+      <section class="review-card" aria-labelledby="item-title">
+        <div class="card-head">
+          <div><p id="progress" class="eyebrow"></p><h2 id="item-title">Chargement…</h2></div>
+          <span id="status" class="status">Non revu</span>
+        </div>
+        <dl id="fields" class="fields"></dl>
+        <div class="pager">
+          <button id="previous" type="button" class="button secondary">← Précédent</button>
+          <button id="next" type="button" class="button secondary">Suivant →</button>
+        </div>
+      </section>
+      <section class="decision-card" aria-labelledby="decision-title">
+        <h2 id="decision-title">Décision humaine</h2>
+        <p>Choisissez une décision explicitement. Aucun choix n’est présélectionné et aucune
+          approbation n’est appliquée au corpus automatiquement.</p>
+        <form id="decision-form">
+          <fieldset><legend>Votre décision sur cette ligne</legend><div id="actions" class="actions"></div></fieldset>
+          <div class="identity-grid">
+            <div><label for="reviewer-name">Nom réel du réviseur</label>
+              <input id="reviewer-name" autocomplete="name" required minlength="3"></div>
+            <div><label for="reviewer-id">Identifiant professionnel ou institutionnel</label>
+              <input id="reviewer-id" required minlength="2"></div>
+          </div>
+          <label for="comment">Commentaire / justification</label>
+          <textarea id="comment" rows="4" maxlength="2000" placeholder="Précisez les réserves, la provenance ou la justification…"></textarea>
+          <label class="attestation"><input id="attest" type="checkbox" required>
+            J’atteste utiliser ma propre identité ; cette décision sera horodatée dans un journal local.</label>
+          <button id="save" type="submit" class="button primary">Enregistrer ma décision</button>
+        </form>
+      </section>
+      <section class="history-card" aria-labelledby="history-title">
+        <h2 id="history-title">Historique de cette ligne</h2>
+        <div id="history"></div>
+      </section>
+      <p class="fine-print">La saisie n’authentifie pas vos qualifications : l’identité est déclarative.
+        Les décisions restent locales dans <code>data/staging/</code>. Une revue clinique qualifiée et
+        une évaluation indépendante restent nécessaires avant toute publication.</p>
+    </main>
+  </body>
+</html>
