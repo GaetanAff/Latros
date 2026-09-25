@@ -14,7 +14,7 @@ Les trois jalons avaient été implémentés ensemble dans la première tranche.
 | 4 | Clinical Knowledge Model — `v0.4.0` | Terminée : checkpoints A–H livrés et revue finale verte | La référence reste `v0.2.0` ; aucun snapshot médical v2 publié |
 | 5 | Snapshot ORL généraliste — `v0.5.0` | En cours : A–D terminés ; E historique en `NO-GO` ; E2 audité ; E3 prêt pour revue ; mode E4 local non validé disponible | Référence officielle toujours bloquée ; `v0.5.0-dev-unreviewed` est non publiable |
 | 6 | Interface interne de test R&D — `v0.6` | Terminée et fusionnée dans `main` ; parcours simple expérimental ultérieur en chantier séparé | Console experte, sessions reprenables et projection simple des moteurs ; aucun produit médical validé ni nouvelle logique clinique |
-| 7 | Fabrique souveraine généraliste — `v0.7` | D–F, F2 et G0 terminés ; jeux de revue G1/G2 et protocole G3 préparés, décisions humaines et évaluation indépendante à faire | `v0.7.0-general-dev-unreviewed` inchangé, non validé et non publiable ; biologie et médicaments restent futures |
+| 7 | Fabrique souveraine généraliste — `v0.7` | D–F6 et G0 terminés ; préparation G0/G1/G2 vérifiée et acceptée techniquement ; revue humaine G1/G2 et évaluation indépendante G3 à faire | `v0.7.0-general-dev-unreviewed` inchangé, non validé et non publiable ; biologie et médicaments restent futures |
 | 8 | Safety / triage séparé — `v0.8` | Prévue | Composant indépendant du différentiel, avec périmètre et validation propres |
 | 9 | NLP / LLM encadré — `v0.9` | Prévue | Structuration, reformulation et explication, jamais source implicite de connaissance |
 | 10 | API, FHIR et interopérabilité — `v0.10` | Prévue | Exposition et échanges des contrats de domaine après validation des étapes précédentes |
@@ -208,10 +208,11 @@ ne sera pas restauré comme dépendance du nouveau snapshot.
 | `v0.7-F3` | Terminé — latence runtime | Filtres volumineux dérivés dans DuckDB ; diagnostic après question mesuré de 292 à 15,6 s, sorties identiques ; transport complet encore 23,6 s sur le grand cas |
 | `v0.7-F4` | Terminé — transport paresseux | Run complet conservé ; projection HTTP top 20 et détail candidat à la demande, 14 Ko initiaux et 18,5 s sur le grand cas fictif ; scoring inchangé |
 | `v0.7-F5` | Terminé — profilage et latence résiduelle | Format du run F4 conservé après mesures ; tables temporaires DuckDB réutilisées, grand cas 19,1 → 12,7 s dans le protocole F5, cas courant 5,7 → 4,3 s, sorties d'or identiques |
-| `v0.7-G0` | Terminé — préparation quantitative | Audit SQL du corpus, des dépendances et des mappings ; échantillon stratifié non revu pour préparer G |
-| `v0.7-G1` | Jeu et outil local de revue prêts — décision humaine à faire | 689 topics MedlinePlus bloqués, pistes lexicales/MeSH non promues, aucune décision préremplie |
-| `v0.7-G2` | Échantillons et outil local de revue prêts — revue humaine à faire | 120 candidates MedlinePlus et 40 assertions Monarch/Orphadata pour qualité et provenance ; décisions séparées du snapshot |
-| `v0.7-G3` | Protocole prêt — corpus indépendant absent | Cas non patients à rédiger/adjudique séparément du snapshot et des fixtures logiciels |
+| `v0.7-F6` | Terminé — matérialisation des preuves | Trois stratégies mesurées ; projection interne compacte retenue, grand cas 12,54 → 9,50 s et RSS 3,15 → 2,86 Go, résultat complet et goldens identiques |
+| `v0.7-G0` | Audit terminé, vérifié et accepté techniquement | Audit SQL du corpus, des dépendances et des mappings ; échantillon stratifié non revu pour préparer G |
+| `v0.7-G1` | Dispositif vérifié et prêt — décision humaine à faire | 689 topics MedlinePlus bloqués, pistes lexicales/MeSH non promues, aucune décision préremplie |
+| `v0.7-G2` | Échantillonnage et provenance vérifiés, outil prêt — revue humaine à faire | 120 candidates MedlinePlus et 40 assertions Monarch/Orphadata ; décisions séparées du snapshot |
+| `v0.7-G3` | Protocole défini — évaluation indépendante non réalisée | Cas non patients à rédiger/adjudique séparément du snapshot et des fixtures logiciels |
 | `v0.7-G` | À faire | Revue clinique et décision distincte sur une éventuelle publication |
 
 Le parseur MedlinePlus transforme uniquement le XML local en enregistrements sources fidèles. Le
@@ -236,6 +237,9 @@ local de détails : le résultat scientifique intégral reste immuable et access
 Le [rapport F5](reports/v0.7-f5-run-persistence.md) établit que l'écriture du run n'est pas le
 goulet, compare les options de stockage et documente l'optimisation ciblée du repository sans
 nouveau format ni modification du snapshot.
+Le [rapport F6](reports/v0.7-f6-evidence-materialization.md) compare joins SQL, index dérivé
+et représentation compacte avant de retenir cette dernière. La provenance complète et le run
+immuable restent obligatoires ; le snapshot et la mathématique ne changent pas.
 L'[audit structurel `v0.7-G0`](reports/v0.7-general-quality-audit.md) chiffre la forte liaison
 Orphanet/génétique (14 661 des 15 611 maladies documentées), le goulet de mapping MedlinePlus
 et les dépendances Monarch. Il ne déduit pas la prévalence d'une maladie de ses seules hiérarchies

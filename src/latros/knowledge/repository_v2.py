@@ -17,7 +17,6 @@ import orjson
 
 from latros.common import LatrosError
 from latros.knowledge.manifest_v2 import KnowledgeSnapshotManifestV2
-from latros.knowledge.models_v2 import CanonicalAssertion
 from latros.knowledge.store_v2 import load_manifest_v2, snapshot_path_v2
 
 
@@ -29,9 +28,20 @@ class SourceProvenance:
     record_locator: str
 
 
+@dataclass(frozen=True, slots=True)
+class ScoringAssertion:
+    """Only the canonical fields consumed by the immutable general_v1 math."""
+
+    canonical_assertion_id: str
+    subject_concept_id: str
+    relation: str
+    object_concept_id: str | None
+    polarity: str
+
+
 @dataclass
 class CandidateRows:
-    assertions: dict[str, list[CanonicalAssertion]]
+    assertions: dict[str, list[ScoringAssertion]]
     derivations: dict[str, list[str]]
     families_by_source: dict[str, list[str]]
     provenance: dict[str, SourceProvenance]
@@ -270,12 +280,22 @@ class CanonicalKnowledgeRepositoryV2:
             "json_extract_string(payload_json, '$.subject_concept_id') " + filter_sql,
             parameters,
         )
-        assertions: dict[str, list[CanonicalAssertion]] = defaultdict(list)
+        assertions: dict[str, list[ScoringAssertion]] = defaultdict(list)
         rows = self.connection.execute(
             "SELECT payload_json FROM selected_canonical_id ORDER BY id",
         ).fetchall()
         for (payload,) in rows:
-            assertion = CanonicalAssertion.model_validate_json(payload)
+            item = orjson.loads(payload)
+            object_value = item["object"]
+            assertion = ScoringAssertion(
+                canonical_assertion_id=item["canonical_assertion_id"],
+                subject_concept_id=item["subject_concept_id"],
+                relation=item["relation"],
+                object_concept_id=(
+                    object_value["concept_id"] if object_value["kind"] == "concept" else None
+                ),
+                polarity=item.get("qualifiers", {}).get("polarity", "present"),
+            )
             assertions[assertion.subject_concept_id].append(assertion)
         del rows
         # Passing tens of thousands of IDs as a VARCHAR[] parameter is very slow

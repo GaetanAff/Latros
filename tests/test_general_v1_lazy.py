@@ -7,6 +7,7 @@ import pytest
 from latros.application.service import ResearchApplicationService
 from latros.clinical.v2 import ClinicalCaseV2, QuantityValue, SubjectContext, SymptomObservation
 from latros.common import LatrosError
+from latros.knowledge.models_v2 import ConceptObject
 from latros.knowledge.repository_v2 import CanonicalKnowledgeRepositoryV2
 from latros.knowledge.store_v2 import build_snapshot_v2, snapshot_path_v2
 from latros.reasoning.general_v1 import GeneralV1Strategy
@@ -143,6 +144,32 @@ def test_matched_candidate_projection_reuses_exact_ids_and_provenance(synthetic_
         assert reused == independent
         with pytest.raises(LatrosError, match="no longer match"):
             repository.candidate_rows(["test:condition-4"], reuse_last_match=True)
+    finally:
+        repository.close()
+
+
+def test_compact_scoring_assertions_preserve_canonical_fields(synthetic_v2) -> None:
+    root, registry, knowledge = synthetic_v2
+    build_snapshot_v2(root, registry, "test-v2", knowledge)
+    repository = CanonicalKnowledgeRepositoryV2(root, "test-v2")
+    try:
+        rows = repository.candidate_rows(repository.all_candidate_ids())
+        compact = {
+            item.canonical_assertion_id: item
+            for items in rows.assertions.values()
+            for item in items
+        }
+        assert set(compact) == {
+            item.canonical_assertion_id for item in knowledge.canonical_assertions
+        }
+        for original in knowledge.canonical_assertions:
+            projected = compact[original.canonical_assertion_id]
+            assert projected.subject_concept_id == original.subject_concept_id
+            assert projected.relation == original.relation
+            assert projected.polarity == original.qualifiers.polarity
+            assert projected.object_concept_id == (
+                original.object.concept_id if isinstance(original.object, ConceptObject) else None
+            )
     finally:
         repository.close()
 

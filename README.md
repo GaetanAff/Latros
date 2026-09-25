@@ -72,16 +72,22 @@ contre ~11,7 s pour l'extraction des lignes candidates. Latros conserve donc le 
 réutilise des tables temporaires DuckDB de lecture : la route mesurée passe de 19,1 à 12,7 s
 sur le même protocole, et de 5,7 à 4,3 s pour le cas respiratoire. Les sorties d'or restent
 identiques ; voir le [rapport F5](docs/reports/v0.7-f5-run-persistence.md).
+`v0.7-F6` réduit ensuite la matérialisation Python des assertions nécessaires au scoring,
+sans changer le run complet ni sa provenance. Sur le grand cas fictif du même protocole,
+la route passe de 12,54 à 9,50 s et le pic RSS de 3,15 à 2,86 Go ; voir le
+[rapport F6](docs/reports/v0.7-f6-evidence-materialization.md).
 
-L'audit préparatoire `v0.7-G0` mesure la composition réelle du corpus sans valider ses assertions :
+L'audit préparatoire `v0.7-G0`, vérifié et accepté sur le plan technique/méthodologique,
+mesure la composition réelle du corpus sans valider ses assertions :
 14 661 des 15 611 maladies documentées ont un lien structurel Orphanet ou génétique, tandis que
 la prévalence et la couverture de la médecine courante demeurent inconnues. Les limites de
 MedlinePlus, les dépendances Monarch et l'échantillon de revue sont détaillés dans le
 [rapport de qualité](docs/reports/v0.7-general-quality-audit.md). `v0.7-G` reste à faire.
 
-Les jeux de travail [`v0.7-G1/G2`](docs/reports/v0.7-g-targeted-review.md) préparent une revue
-humaine ciblée des mappings MedlinePlus et des dépendances de provenance. Ils ne valident aucune
-assertion ; le corpus d'évaluation indépendant G3 n'existe pas encore. Un
+Les jeux de travail [`v0.7-G1/G2`](docs/reports/v0.7-g-targeted-review.md) et leur dispositif
+de revue sont vérifiés et prêts sur le plan technique/méthodologique. Ils préparent une revue
+humaine ciblée des mappings MedlinePlus, assertions et dépendances de provenance, mais ne valident
+aucune assertion ; le protocole G3 est défini, sans évaluation indépendante réalisée. Un
 [outil séparé de revue locale](docs/v0.7-g-review-ui.md) permet de parcourir les trois exports et
 de journaliser des décisions humaines sans modifier le snapshot. Après l'export des jeux, lancer
 `uv run --offline --no-sync python scripts/run_v07_g_review.py` puis ouvrir
