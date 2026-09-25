@@ -59,6 +59,9 @@ Le durcissement technique `v0.7-F2` lit désormais le DuckDB v2 par requêtes ci
 profil, ni la mathématique du score. Les sept diagnostics et questions synthétiques du vrai
 snapshot sont comparés octet pour octet aux sorties précédentes ; voir le
 [rapport de performance](docs/reports/v0.7-runtime-performance.md).
+Le durcissement `v0.7-F3` réduit ensuite le diagnostic réel après question de 292 à 15,6 s
+sur le grand cas fictif mesuré, sans changer les sorties ni le snapshot. Le transport complet
+de 3 650 candidats reste à 23,6 s : voir le [rapport F3](docs/reports/v0.7-f3-runtime-latency.md).
 
 L'audit préparatoire `v0.7-G0` mesure la composition réelle du corpus sans valider ses assertions :
 14 661 des 15 611 maladies documentées ont un lien structurel Orphanet ou génétique, tandis que
