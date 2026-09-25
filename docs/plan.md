@@ -14,7 +14,7 @@ Les trois jalons avaient été implémentés ensemble dans la première tranche.
 | 4 | Clinical Knowledge Model — `v0.4.0` | Terminée : checkpoints A–H livrés et revue finale verte | La référence reste `v0.2.0` ; aucun snapshot médical v2 publié |
 | 5 | Snapshot ORL généraliste — `v0.5.0` | En cours : A–D terminés ; E historique en `NO-GO` ; E2 audité ; E3 prêt pour revue ; mode E4 local non validé disponible | Référence officielle toujours bloquée ; `v0.5.0-dev-unreviewed` est non publiable |
 | 6 | Interface interne de test R&D — `v0.6` | Terminée et fusionnée dans `main` | Console locale, sessions reprenables et inspection fidèle des moteurs ; aucun produit utilisateur ni nouvelle logique médicale |
-| 7 | Fabrique souveraine généraliste — `v0.7` | Tranche technique D–F, durcissement F2 et audit préparatoire G0 terminés ; revue clinique G non commencée | `v0.7.0-general-dev-unreviewed` construit localement, reproductible, non validé et non publiable ; biologie et médicaments restent futures |
+| 7 | Fabrique souveraine généraliste — `v0.7` | D–F, F2 et G0 terminés ; jeux de revue G1/G2 et protocole G3 préparés, décisions humaines et évaluation indépendante à faire | `v0.7.0-general-dev-unreviewed` inchangé, non validé et non publiable ; biologie et médicaments restent futures |
 | 8 | Safety / triage séparé — `v0.8` | Prévue | Composant indépendant du différentiel, avec périmètre et validation propres |
 | 9 | NLP / LLM encadré — `v0.9` | Prévue | Structuration, reformulation et explication, jamais source implicite de connaissance |
 | 10 | API, FHIR et interopérabilité — `v0.10` | Prévue | Exposition et échanges des contrats de domaine après validation des étapes précédentes |
@@ -195,6 +195,9 @@ ne sera pas restauré comme dépendance du nouveau snapshot.
 | `v0.7-F` | Terminé | Snapshot généraliste DEV, profil `general_v1`, rapport de couverture, cas synthétiques et reconstruction offline |
 | `v0.7-F2` | Terminé — durcissement technique | Repository DuckDB v2 paresseux en lecture seule, catalogue UI ciblé, comparaison exacte des sorties et profil mémoire du snapshot existant |
 | `v0.7-G0` | Terminé — préparation quantitative | Audit SQL du corpus, des dépendances et des mappings ; échantillon stratifié non revu pour préparer G |
+| `v0.7-G1` | Jeu de revue prêt — décision humaine à faire | 689 topics MedlinePlus bloqués, pistes lexicales/MeSH non promues, colonnes de décision vides |
+| `v0.7-G2` | Échantillons prêts — revue humaine à faire | 120 candidates MedlinePlus et 40 assertions Monarch/Orphadata pour qualité et provenance |
+| `v0.7-G3` | Protocole prêt — corpus indépendant absent | Cas non patients à rédiger/adjudique séparément du snapshot et des fixtures logiciels |
 | `v0.7-G` | À faire | Revue clinique et décision distincte sur une éventuelle publication |
 
 Le parseur MedlinePlus transforme uniquement le XML local en enregistrements sources fidèles. Le
@@ -216,7 +219,13 @@ L'[audit structurel `v0.7-G0`](reports/v0.7-general-quality-audit.md) chiffre la
 Orphanet/génétique (14 661 des 15 611 maladies documentées), le goulet de mapping MedlinePlus
 et les dépendances Monarch. Il ne déduit pas la prévalence d'une maladie de ses seules hiérarchies
 et ne change ni le snapshot, ni le profil, ni les statuts de validation. La revue clinique
-`v0.7-G` n'a pas commencé.
+La revue clinique humaine `v0.7-G` n'a pas commencé.
+
+Les [jeux et le protocole de revue ciblée](reports/v0.7-g-targeted-review.md) n'approuvent aucun
+mapping ni assertion. Ils rendent vérifiables les 5 106 candidates MedlinePlus bloquées et les
+dépendances Monarch/Orphadata. Le `NO-GO` actuel concerne toute publication clinique tant que
+la revue qualifiée et le corpus d'évaluation indépendant manquent ; il ne change pas le statut
+du snapshot. Les décisions humaines G1/G2 et l'évaluation G3 restent à réaliser.
 
 ### Sous-tranches v0.7 — médicaments, temporalité et mesures cliniques
 
