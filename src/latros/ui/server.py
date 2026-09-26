@@ -7,7 +7,7 @@ from collections.abc import AsyncIterator, Sequence
 from contextlib import asynccontextmanager
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, cast
+from typing import Annotated, Any, Literal, cast
 from urllib.parse import urlparse
 from uuid import uuid4
 
@@ -143,6 +143,42 @@ def create_app(root: Path) -> FastAPI:
     ) -> dict[str, Any]:
         items = _service(request).search_concepts(snapshot, strategy, q, limit=limit)
         return {"items": [item.model_dump(mode="json") for item in items]}
+
+    @app.get("/internal/v1/presentation/concepts")
+    async def display_concepts(
+        request: Request,
+        snapshot: str,
+        strategy: str,
+        q: str = Query(default="", max_length=120),
+        language: Literal["fr", "de", "en"] = "en",
+        limit: int = Query(default=20, ge=1, le=50),
+    ) -> dict[str, Any]:
+        return {
+            "items": _service(request).search_display_concepts(
+                snapshot, strategy, q, language, limit=limit
+            )
+        }
+
+    @app.get("/internal/v1/presentation/labels")
+    async def display_labels(
+        request: Request,
+        snapshot: str,
+        strategy: str,
+        ids: Annotated[list[str] | None, Query()] = None,
+        language: Literal["fr", "de", "en"] = "en",
+    ) -> dict[str, Any]:
+        return {"items": _service(request).display_labels(snapshot, strategy, ids or [], language)}
+
+    @app.get("/internal/v1/presentation/question")
+    async def display_question(
+        request: Request,
+        snapshot: str,
+        strategy: str,
+        system: str,
+        code: str,
+        language: Literal["fr", "de", "en"] = "en",
+    ) -> dict[str, Any]:
+        return _service(request).display_question(snapshot, strategy, system, code, language)
 
     @app.post("/internal/v1/sessions", status_code=201)
     async def create_session(request: Request, payload: CreateSessionRequest) -> dict[str, Any]:

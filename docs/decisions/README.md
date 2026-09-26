@@ -18,6 +18,7 @@ Décisions acceptées :
 - [0012 — Outil local de revue humaine G1/G2](0012-outil-local-de-revue-humaine.md).
 - [0013 — Projections HTTP paresseuses des résultats immuables](0013-transport-paresseux-des-resultats.md).
 - [0014 — Adjudication humaine versionnée et isolée](0014-adjudication-humaine-versionnee.md).
+- [0015 — Affichage multilingue et alias séparés de la connaissance](0015-affichage-multilingue-local.md).
 
 Utiliser un fichier par décision, par exemple :
 

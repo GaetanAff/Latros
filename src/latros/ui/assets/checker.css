@@ -54,6 +54,15 @@ button:focus-visible, input:focus-visible, a:focus-visible, summary:focus-visibl
 .brand { display: inline-flex; align-items: center; }
 .brand img { width: 150px; height: auto; display: block; }
 .site-header nav { display: flex; align-items: center; gap: 6px; }
+.language-switch { display: flex; gap: 2px; margin-left: auto; }
+.language-switch button { min-height: 44px; min-width: 44px; border: 0; border-radius: 8px;
+  background: transparent; color: var(--ink-soft); font: inherit; font-weight: 650; }
+.language-switch button[aria-pressed="true"] { background: var(--latros-sage-pale); color: var(--latros-teal-deep); }
+@media (max-width: 640px) {
+  .site-header { flex-wrap: wrap; padding: 12px 16px; }
+  .site-header nav { flex-basis: 100%; justify-content: flex-end; }
+  .brand img { width: 120px; }
+}
 .nav-link {
   border: 0;
   background: transparent;

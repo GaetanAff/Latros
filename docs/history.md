@@ -18,6 +18,26 @@ Référence médicale publiée : **`v0.2.0`**, nom du jalon « Premier snapshot 
 validé n'est publié. `v0.7.0-general-dev-unreviewed` est le nouveau corpus généraliste DEV local,
 également non publiable. L'ancien snapshot `latros-kb-0002` est conservé.
 
+## Multilingue et recherche locale — 26 septembre 2026
+
+- Chantier UI séparé de la PR G5 #15, depuis le même `main` après fusion de #14. Aucun filtre
+  G4 supplémentaire, donnée clinique, source ou décision de revue n'est ajouté.
+- I18n FR/DE/EN locale pour le parcours simple, choix persistant, questions affichées sans
+  modifier leur ID, libellés source accessibles. Neuf concepts HPO ont un petit lexique
+  d'affichage/alias versionné ; les désignations traduites déjà présentes sont prioritaires.
+  Tout manque de traduction est indiqué EN, sans traduction médicale massive ou LLM.
+- Recherche SQL sur les observations réellement supportées et toutes leurs désignations,
+  normalisation accents/casse/traits d'union/pluriel simple, préfixes/tokens et fuzzy prudent
+  limité aux alias explicites non ambigus. Pas de catalogue global dans le navigateur/Pydantic.
+- Mesures offline du vrai snapshot : première ouverture 6,687 s avec vérification forte ;
+  médianes chaudes 0,158–0,218 s pour douze formulations FR/DE/EN. Les sept diagnostics/questions
+  d'or restent identiques. 206 tests Python et quatre tests frontend passent ; Ruff, format,
+  mypy strict, schémas et registre verts. CI Windows/Linux inclut les tests frontend Node.
+- Vérification navigateur du parcours fictif, changement de langue et viewport mobile ; aucune
+  validation clinique. `/expert` et les JSON scientifiques originaux restent conservés. La
+  couverture de traduction des termes médicaux reste volontairement limitée ; G1/G2 et G3
+  indépendants restent nécessaires, tous les statuts du snapshot inchangés.
+
 ## Workflow d'adjudication humaine `v0.7-G5` — 26 septembre 2026
 
 - PR #14 relue puis fusionnée après CI Linux/Windows verte, 197 tests locaux et rejeu G4

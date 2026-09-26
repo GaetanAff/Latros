@@ -17,6 +17,7 @@ from latros.clinical.v2 import ClinicalCaseV2
 from latros.common import LatrosError, safe_id
 from latros.knowledge.loading import load_manifest_document
 from latros.knowledge.manifest_v2 import KnowledgeSnapshotManifestV2
+from latros.knowledge.presentation_repository import Language, ObservationPresentationRepository
 from latros.knowledge.store import snapshot_path
 from latros.knowledge.store_v2 import snapshot_path_v2
 from latros.reasoning.engine import Engine
@@ -205,6 +206,38 @@ class ResearchApplicationService:
         if len(matches) != 1:
             raise LatrosError("Question concept has no unambiguous supported observation type")
         return matches[0]
+
+    def search_display_concepts(
+        self, snapshot: str, strategy: str, query: str, language: Language, *, limit: int = 20
+    ) -> list[dict[str, Any]]:
+        repository = self._presentation_repository(snapshot, strategy)
+        return [
+            {"snapshot_id": snapshot, "strategy_id": strategy, **item}
+            for item in repository.search(query, language, limit)
+        ]
+
+    def display_labels(
+        self, snapshot: str, strategy: str, ids: list[str], language: Language
+    ) -> dict[str, dict[str, Any]]:
+        return self._presentation_repository(snapshot, strategy).display_labels(ids, language)
+
+    def _presentation_repository(
+        self, snapshot: str, strategy: str
+    ) -> ObservationPresentationRepository:
+        if strategy != "general_v1":
+            raise LatrosError("The simple display projection supports general_v1 only")
+        # A cached repository has already passed the exact compatibility/integrity checks;
+        # _general_strategy asserts all verified file attributes again on every access.
+        if snapshot not in self._general_cache:
+            self.require_compatible(snapshot, strategy)
+        return ObservationPresentationRepository(self._general_strategy(snapshot).repository)
+
+    def display_question(
+        self, snapshot: str, strategy: str, system: str, code: str, language: Language
+    ) -> dict[str, Any]:
+        return self._presentation_repository(snapshot, strategy).question_display(
+            system, code, language
+        )
 
     def profile(self, strategy: str, snapshot: str | None = None) -> ReasoningProfile:
         if strategy == "general_v1" and snapshot == "v0.5.0-dev-unreviewed":
