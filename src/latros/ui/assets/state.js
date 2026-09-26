@@ -28,6 +28,7 @@ const state = {
   screen: 'home',
   bootErrorKey: 'service_unavailable',
   caseDirty: true,
+  ageDirty: true,
   pendingAction: 'diagnose',
   anatomy: { config: null, region: 'body', items: [], picked: null, sequence: 0 },
 };

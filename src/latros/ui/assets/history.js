@@ -75,6 +75,7 @@ async function resumeSession(sessionId) {
   if (!available) throw new Error(t("session_snapshot_missing"));
   state.session = session;
   state.caseDirty = false;
+  state.ageDirty = false;
   state.selection = available;
   state.selected = selectedFromSession(session);
   state.visibleCount = 5;

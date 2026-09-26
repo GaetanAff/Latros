@@ -36,7 +36,9 @@ validé n'est publié. `v0.7.0-general-dev-unreviewed` est le nouveau corpus gé
 - Première recherche 6,830 → 6,776 s dans le protocole courant : pas de gain froid significatif.
   Résolution groupée du lexique ; pas de warm-up bloquant ou réduction d'intégrité.
   Médianes chaudes ~0,18–0,25 s. Les sept diagnostics/questions d'or réels restent identiques.
-- 221 tests Python et 12 tests frontend Node, Ruff/format, mypy strict, schémas et registre
+- Dernier garde-fou de reprise : l'édition d'un symptôme conserve le contexte sujet et
+  l'unité d'âge d'origine ; seul un changement explicite de l'âge les actualise.
+- 221 tests Python et 13 tests frontend Node, Ruff/format, mypy strict, schémas et registre
   verts localement ; contrôles
   navigateur local sur cas fictif, mobile/desktop, langues, détail, question et reprise.
   Rapport et limites : [UI anatomique](reports/ui-anatomy-vnext.md), décision ADR 0016.

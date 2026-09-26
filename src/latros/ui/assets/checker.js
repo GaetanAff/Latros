@@ -67,6 +67,7 @@ function newAnalysis() {
   state.visibleCount = 5;
   state.questionCount = 0;
   state.caseDirty = true;
+  state.ageDirty = true;
   state.selection = preferredSelection(state.capabilities);
   byId("patient-age").value = "";
   byId("symptom-search").value = "";
@@ -120,13 +121,14 @@ function beginAnalysis(action) {
 }
 byId("home-continue").addEventListener("click", () => beginAnalysis('diagnose'));
 byId("home-question").addEventListener("click", () => beginAnalysis('question'));
-byId('patient-age').addEventListener('change',()=>{state.caseDirty=true;});
+byId('patient-age').addEventListener('change',()=>{state.caseDirty=true;state.ageDirty=true;});
 byId("age-continue").addEventListener("click", () => guarded(async () => {
   await ensureSession();
   await (state.pendingAction==='question'?askNextQuestion():diagnose());
 }, t("prepare_questions")));
 byId("age-skip").addEventListener("click", () => guarded(async () => {
   byId("patient-age").value = "";
+  state.ageDirty = true;
   await ensureSession();
   await (state.pendingAction==='question'?askNextQuestion():diagnose());
 }, t("prepare_questions")));

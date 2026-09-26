@@ -207,3 +207,17 @@ test("display cache is bounded and isolated when the active snapshot changes",as
   await env.run("anatomyNavigate('body')");
   assert.equal(env.run("regionForObservation({concept_id:'finding'})"),undefined);
 });
+
+test("editing a resumed symptom never reinterprets the original subject age or other context",async()=>{
+  const env=environment(); await ready(env);
+  env.context.originalContext={age:{kind:'quantity',value:480,unit:'month'},custom_context:'unchanged'};
+  env.node('patient-age').value='480';
+  env.run('state.ageDirty=false;state.caseDirty=true;');
+  assert.equal(env.run('JSON.stringify(subjectContextForSave(originalContext))'),JSON.stringify(env.context.originalContext));
+  env.run('state.ageDirty=true;'); env.node('patient-age').value='40';
+  assert.equal(env.run('subjectContextForSave(originalContext).age.unit'),'year');
+  assert.equal(env.run('subjectContextForSave(originalContext).custom_context'),'unchanged');
+  env.node('patient-age').value='';
+  assert.equal(env.run('subjectContextForSave(originalContext).age'),undefined);
+  assert.equal(env.context.originalContext.age.unit,'month');
+});

@@ -81,7 +81,7 @@ async function ensureSession() {
     });
   }
   const clinicalCase = structuredClone(state.session.clinical_case);
-  clinicalCase.subject_context = ageContext();
+  clinicalCase.subject_context = subjectContextForSave(clinicalCase.subject_context);
   clinicalCase.observations = state.selected.map(makeObservation);
   clinicalCase.question_history = [];
   state.session = await api(`${sessionPath()}/case`, {
@@ -92,5 +92,15 @@ async function ensureSession() {
   state.questionRun = null;
   state.questionCount = 0;
   state.caseDirty = false;
+  state.ageDirty = false;
   byId("nav-expert").href = `/expert?session=${encodeURIComponent(state.session.session_id)}`;
+}
+
+function subjectContextForSave(previous) {
+  const context = structuredClone(previous || {});
+  if (state.ageDirty) {
+    delete context.age;
+    Object.assign(context, ageContext());
+  }
+  return context;
 }

@@ -116,10 +116,11 @@ Hash canonique conservé : `bfda708aba44dcc5d12896ac7523d9d6bb577dea53bdc3810e49
 `clinical_validation: false`, `publishable: false`, `research_unreviewed: true` et
 `safety_status: not_evaluated` sont inchangés ; aucune décision clinique humaine inventée.
 
-221 tests Python et 12 tests frontend Node verts localement, Ruff/format, mypy strict,
+221 tests Python et 13 tests frontend Node verts localement, Ruff/format, mypy strict,
 schémas et registre verts. Tests : navigation/breadcrumb/retour, mêmes IDs FR/DE/EN, corpus incomplet et
 ambiguïté refusés, absence de duplication, états présent/absent/inconnu, langues persistantes,
 questions/runs inchangés, reprise sans réécriture, édition d'un cas après résultat,
+préservation du contexte sujet et de l'unité d'âge d'une session reprise tant que non édités,
 thème local persistant, snapshots read-only et réseau externe bloqué. Les schémas et le registre
 restent inchangés. Le contrôle navigateur utilise exclusivement des informations fictives :
 aucun patient réel et aucune validation clinique. La CI Windows/Linux couvre Python et Node.
