@@ -65,28 +65,15 @@ class ObservationPresentationRepository:
             "(concept_id VARCHAR, code VARCHAR, language VARCHAR, text VARCHAR, "
             "scope VARCHAR, question VARCHAR)"
         )
+        identities = self.resolve_supported_codes(
+            self.lexicon["system"], [entry["code"] for entry in self.lexicon["entries"]]
+        )
+        rows = []
         for entry in self.lexicon["entries"]:
-            ids = self.connection.execute(
-                "SELECT DISTINCT json_extract_string(payload_json, '$.concept_id') "
-                "FROM external_identifier WHERE json_extract_string(payload_json, '$.system')=? "
-                "AND json_extract_string(payload_json, '$.code')=? "
-                "AND json_extract_string(payload_json, '$.relation') "
-                "IN ('primary','identity','source_code')",
-                [self.lexicon["system"], entry["code"]],
-            ).fetchall()
-            if len(ids) != 1:
-                continue  # Missing/ambiguous identifiers never create a concept.
-            concept_id = ids[0][0]
-            labels = self.connection.execute(
-                "SELECT json_extract_string(payload_json, '$.text') FROM designation "
-                "WHERE json_extract_string(payload_json, '$.concept_id')=? "
-                "AND json_extract_string(payload_json, '$.language')='en' "
-                "AND json_extract_string(payload_json, '$.scope')='preferred'",
-                [concept_id],
-            ).fetchall()
-            if entry["source_label"] not in {row[0] for row in labels}:
-                continue  # Fail closed on a different identity/meaning in another snapshot.
-            rows = []
+            option = identities.get(entry["code"])
+            if not option or option["label"] != entry["source_label"]:
+                continue  # Fail closed, without rescanning identifiers/designations per alias.
+            concept_id = option["concept_id"]
             for language in ("fr", "de", "en"):
                 rows.append(
                     (
@@ -102,6 +89,7 @@ class ObservationPresentationRepository:
                     (concept_id, entry["code"], language, text, "ui_alias", "")
                     for text in entry["aliases"][language]
                 )
+        if rows:
             self.connection.executemany("INSERT INTO ui_aliases VALUES (?,?,?,?,?,?)", rows)
         # Normalization matches normalize_search; no source payload is rewritten.
         self.connection.execute(
@@ -119,6 +107,49 @@ class ObservationPresentationRepository:
             "'[^a-z0-9]+',' ','g')), '\\b([a-z]{3,}[^s])s\\b','\\1','g') AS normalized FROM terms"
         )
         self.repository._presentation_ready = True
+
+    def resolve_supported_codes(self, system: str, codes: list[str]) -> dict[str, dict[str, Any]]:
+        """Resolve navigation references, never create or broaden a clinical mapping."""
+        if len(codes) > 100:
+            raise LatrosError("At most 100 navigation identifiers per request")
+        if not codes:
+            return {}
+        rows = self.connection.execute(
+            "WITH identifiers AS (SELECT "
+            "json_extract_string(payload_json,'$.concept_id') AS concept_id, "
+            "json_extract_string(payload_json,'$.code') AS code FROM external_identifier "
+            "WHERE json_extract_string(payload_json,'$.system')=? "
+            "AND json_extract_string(payload_json,'$.code') IN (SELECT unnest(?::VARCHAR[])) "
+            "AND json_extract_string(payload_json,'$.relation') "
+            "IN ('primary','identity','source_code')), "
+            "unique_ids AS (SELECT code,min(concept_id) AS concept_id FROM identifiers "
+            "GROUP BY code HAVING count(DISTINCT concept_id)=1) "
+            "SELECT u.code,o.concept_id,o.system,o.code,o.label,o.language,o.kind "
+            "FROM unique_ids u JOIN ui_observations o USING(concept_id) ORDER BY u.code",
+            [system, codes],
+        ).fetchall()
+        return {
+            row[0]: dict(
+                zip(
+                    ("concept_id", "system", "code", "label", "language", "observation_kind"),
+                    row[1:],
+                    strict=True,
+                )
+            )
+            for row in rows
+        }
+
+    def navigation_options(
+        self, system: str, codes: list[str], language: Language
+    ) -> list[dict[str, Any]]:
+        self._prepare()
+        resolved = self.resolve_supported_codes(system, codes)
+        displays = self.display_labels([row["concept_id"] for row in resolved.values()], language)
+        return [
+            {**resolved[code], **displays.get(resolved[code]["concept_id"], {})}
+            for code in dict.fromkeys(codes)
+            if code in resolved
+        ]
 
     def search(self, query: str, language: Language, limit: int) -> list[dict[str, Any]]:
         if not 1 <= limit <= 50:

@@ -1,0 +1,86 @@
+/* Local, schematic anatomy. Regions classify navigation, never medical knowledge. */
+:root { --page: #f2f7fa; --surface: #fff; --ink: #18333f; --ink-soft: #516972; }
+:root[data-theme="dark"] {
+  color-scheme: dark; --page: #0f2029; --surface: #182e38; --ink: #e7f0ef;
+  --ink-soft: #bdcecf; --line: #36505a; --latros-sage-pale: #253f3e;
+  --latros-teal-deep: #a2d8d9; --warning-bg: #3b3221; --warning: #f0d6a0;
+  --error-bg: #402a32; --error: #ffc6c8; --shadow: 0 12px 36px #0003;
+}
+.site-header { max-width: 1320px; min-height: 76px; padding: 12px 24px; }
+.local-indicator { color: var(--ink-soft); font-size: .8rem; display: inline-flex; gap: 8px; align-items:center; }
+.local-indicator > span:first-child { color: var(--latros-green); }
+.research-banner { width:min(1240px,calc(100% - 32px)); padding:10px 16px; border:0; font-size:.78rem; }
+.exploration-layout { display:grid; grid-template-columns:minmax(0,1fr) 360px; gap:28px; max-width:1240px; margin:28px auto; padding:0 16px; }
+.app-shell { margin:0; width:100%; min-width:0; padding:24px; border:0; box-shadow:none; background:transparent; }
+.progress-track { margin-bottom:24px; gap:14px; }
+.screen { max-width:760px; }
+.screen-home { text-align:left; }
+.screen-home h1 { font-size:clamp(1.55rem,3vw,2.2rem); margin:12px 0; }
+.anatomy-help { font-size:.88rem; color:var(--ink-soft); max-width:560px; }
+.breadcrumb { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+.breadcrumb button { border:0; background:transparent; color:var(--latros-teal-deep); padding:8px; min-height:44px; font-weight:650; }
+.breadcrumb button[aria-current="page"] { color:var(--ink); }
+.anatomy-canvas { display:grid; place-items:center; border-radius:28px; background:radial-gradient(ellipse at center,#b7cfaf22,transparent 70%); min-height:420px; }
+.anatomy-canvas svg { height:min(55vh,570px); min-height:380px; width:100%; max-width:500px; overflow:visible; animation:anatomy-enter .2s ease-out; }
+@keyframes anatomy-enter { from { opacity:.2; transform:scale(.97); } to {opacity:1;transform:scale(1);} }
+.anatomy-canvas [data-region] { cursor:pointer; transition:filter .18s,fill-opacity .18s; outline:none; }
+.anatomy-canvas [data-region]:hover { filter:brightness(.93) saturate(1.5); }
+.anatomy-canvas [data-region]:focus-visible > path, .anatomy-canvas [data-region]:focus-visible > ellipse { stroke:#0f6472; stroke-width:5; }
+.anatomy-canvas [data-region].selected > path, .anatomy-canvas [data-region].selected > ellipse { stroke:#0f6472; stroke-width:3; }
+.anatomy-canvas [data-region].active { fill-opacity:.85; }
+:root[data-theme="dark"] .anatomy-canvas text { fill:#a2d8d9; }
+.region-links { display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin:16px 0; }
+.region-link { min-height:44px; padding:8px 18px; background:var(--surface); color:var(--latros-teal-deep); border:1px solid var(--line); border-radius:24px; font-weight:650; }
+.region-link:hover { background:var(--latros-sage-pale); }
+.explorer-sidebar { min-width:0; align-self:start; position:sticky; top:16px; display:grid; gap:18px; }
+.permanent-search, .case-panel, .region-panel { border:0; background:var(--surface); border-radius:18px; padding:20px; box-shadow:var(--shadow); }
+.search-box { margin:0; text-align:left; }
+.permanent-search label { font-size:.88rem; font-weight:650; }
+.permanent-search input { padding:12px; min-height:48px; width:100%; }
+.suggestions { position:absolute; z-index:25; width:calc(100% - 40px); background:var(--surface); max-height:320px; overflow:auto; box-shadow:var(--shadow); }
+.suggestion { background:var(--surface); color:var(--ink); min-height:48px; }
+.field-hint { font-size:.78rem; line-height:1.5; color:var(--ink-soft); }
+.case-panel h2, .region-panel h2 { font-size:1.08rem; margin:0 0 12px; }
+.selected-symptoms { display:grid; margin:12px 0; gap:10px; }
+.selected-observation { display:grid; grid-template-columns:minmax(0,1fr) auto 44px; gap:6px; text-align:left; align-items:center; color:var(--ink); font-size:.86rem; }
+.selected-observation select { min-height:44px; max-width:116px; border:1px solid var(--line); border-radius:8px; background:var(--latros-sage-pale); color:var(--ink); font:inherit; }
+.selected-observation span { overflow-wrap:anywhere; }
+.observation-region { display:block; border:0; background:transparent; color:var(--latros-teal-deep); font-size:.75rem; min-height:44px; padding:4px 0; }
+.region-finding { display:block; width:100%; min-height:48px; text-align:left; border:0; border-radius:10px; background:transparent; color:var(--ink); padding:10px; margin:4px 0; }
+.region-finding:hover,.region-finding[aria-pressed="true"] { background:var(--latros-sage-pale); color:var(--latros-teal-deep); }
+.state-options { display:flex; flex-wrap:wrap; gap:8px; }
+.state-options label { display:flex; align-items:center; padding:8px; min-height:44px; border-radius:8px; background:var(--latros-sage-pale); font-size:.8rem; }
+.state-options input { width:auto; }
+fieldset { border:0; margin:0 0 12px; padding:0; }
+legend { font-size:.82rem; color:var(--ink-soft); }
+select:focus-visible,[role="button"]:focus-visible { outline:3px solid var(--latros-green); outline-offset:3px; }
+.icon-button { min-height:44px; min-width:44px; color:var(--ink); background:transparent; }
+.case-panel .button { width:100%; min-height:48px; }
+.safety-footer { max-width:1240px; font-size:.8rem; }
+.result-card,.history-card,.result-dialog { background:var(--surface); color:var(--ink); }
+.result-dialog::backdrop { background:#0a232980; }
+.technical-details pre { background:var(--latros-sage-pale); color:var(--ink); }
+input { color:var(--ink); background:var(--surface); }
+.mobile-search-toggle { display:none; }
+@media(max-width:800px) {
+  .site-header { padding:10px 16px; flex-wrap:wrap; gap:6px; }
+  .local-indicator { font-size:.7rem; }
+  .site-header nav { flex-basis:auto; margin-left:auto; }
+  .language-switch { margin-left:auto; }
+  .nav-link { padding:8px; min-height:44px; }
+  .exploration-layout { display:flex; flex-direction:column; gap:14px; margin-top:16px; padding:0 12px; }
+  .explorer-sidebar { display:contents; }
+  .permanent-search { order:-1; position:sticky; top:0; z-index:30; padding:12px; }
+  .permanent-search .field-hint { display:none; }
+  .app-shell { padding:12px; min-height:0; }
+  .screen-home { scroll-margin-top:100px; }
+  .progress-track { margin-bottom:12px; }
+  .anatomy-canvas { min-height:340px; }
+  .anatomy-canvas svg { height:47vh; min-height:340px; }
+  .region-panel { border-radius:24px 24px 12px 12px; box-shadow:0 -4px 28px #17303812; scroll-margin-top:100px; }
+  .case-panel { margin-bottom:60px; }
+  .mobile-search-toggle { display:block; position:fixed; bottom:14px; right:14px; z-index:35; box-shadow:var(--shadow); background:var(--surface); }
+  .research-banner { font-size:.72rem; }
+  .safety-footer { padding:12px 16px 80px; }
+}
+@media(prefers-reduced-motion:reduce) { *,*::before,*::after { animation:none !important; transition:none !important; scroll-behavior:auto !important; } }

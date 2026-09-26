@@ -239,6 +239,13 @@ class ResearchApplicationService:
             system, code, language
         )
 
+    def navigation_concepts(
+        self, snapshot: str, strategy: str, system: str, codes: list[str], language: Language
+    ) -> list[dict[str, Any]]:
+        return self._presentation_repository(snapshot, strategy).navigation_options(
+            system, codes, language
+        )
+
     def profile(self, strategy: str, snapshot: str | None = None) -> ReasoningProfile:
         if strategy == "general_v1" and snapshot == "v0.5.0-dev-unreviewed":
             name = "general_v1-orl-unreviewed.json"

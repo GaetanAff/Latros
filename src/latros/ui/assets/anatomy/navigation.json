@@ -1,0 +1,252 @@
+{
+  "version": "ui-anatomy-1",
+  "role": "navigation_only_not_clinical_knowledge",
+  "system": "http://purl.obolibrary.org/obo/hp.owl",
+  "nodes": {
+    "body": {
+      "id": "body",
+      "labels": {
+        "fr": "Corps",
+        "de": "Körper",
+        "en": "Body"
+      },
+      "parent": null,
+      "asset": "body-front.svg",
+      "children": [
+        "head",
+        "neck",
+        "thorax",
+        "abdomen",
+        "pelvis",
+        "arms",
+        "hands",
+        "legs",
+        "feet"
+      ],
+      "codes": [],
+      "implemented": true
+    },
+    "head": {
+      "id": "head",
+      "labels": {
+        "fr": "Tête",
+        "de": "Kopf",
+        "en": "Head"
+      },
+      "parent": "body",
+      "asset": "head-front.svg",
+      "children": [
+        "sinuses",
+        "eyes",
+        "ears",
+        "nose",
+        "mouth",
+        "throat",
+        "jaw"
+      ],
+      "codes": [],
+      "implemented": true
+    },
+    "sinuses": {
+      "id": "sinuses",
+      "labels": {
+        "fr": "Sinus",
+        "de": "Nasennebenhöhlen",
+        "en": "Sinuses"
+      },
+      "parent": "head",
+      "asset": "sinuses-front.svg",
+      "children": [],
+      "codes": [
+        "HP:0001742",
+        "HP:0031417",
+        "HP:0004409",
+        "HP:0000458",
+        "HP:0002315"
+      ],
+      "implemented": true
+    },
+    "neck": {
+      "id": "neck",
+      "labels": {
+        "fr": "Cou",
+        "de": "Hals",
+        "en": "Neck"
+      },
+      "parent": "body",
+      "asset": "body-front.svg",
+      "children": [],
+      "codes": [],
+      "implemented": false
+    },
+    "thorax": {
+      "id": "thorax",
+      "labels": {
+        "fr": "Thorax",
+        "de": "Brustkorb",
+        "en": "Chest"
+      },
+      "parent": "body",
+      "asset": "body-front.svg",
+      "children": [],
+      "codes": [],
+      "implemented": false
+    },
+    "abdomen": {
+      "id": "abdomen",
+      "labels": {
+        "fr": "Abdomen",
+        "de": "Bauch",
+        "en": "Abdomen"
+      },
+      "parent": "body",
+      "asset": "body-front.svg",
+      "children": [],
+      "codes": [],
+      "implemented": false
+    },
+    "pelvis": {
+      "id": "pelvis",
+      "labels": {
+        "fr": "Bassin",
+        "de": "Becken",
+        "en": "Pelvis"
+      },
+      "parent": "body",
+      "asset": "body-front.svg",
+      "children": [],
+      "codes": [],
+      "implemented": false
+    },
+    "arms": {
+      "id": "arms",
+      "labels": {
+        "fr": "Bras",
+        "de": "Arme",
+        "en": "Arms"
+      },
+      "parent": "body",
+      "asset": "body-front.svg",
+      "children": [],
+      "codes": [],
+      "implemented": false
+    },
+    "hands": {
+      "id": "hands",
+      "labels": {
+        "fr": "Mains",
+        "de": "Hände",
+        "en": "Hands"
+      },
+      "parent": "body",
+      "asset": "body-front.svg",
+      "children": [],
+      "codes": [],
+      "implemented": false
+    },
+    "legs": {
+      "id": "legs",
+      "labels": {
+        "fr": "Jambes",
+        "de": "Beine",
+        "en": "Legs"
+      },
+      "parent": "body",
+      "asset": "body-front.svg",
+      "children": [],
+      "codes": [],
+      "implemented": false
+    },
+    "feet": {
+      "id": "feet",
+      "labels": {
+        "fr": "Pieds",
+        "de": "Füße",
+        "en": "Feet"
+      },
+      "parent": "body",
+      "asset": "body-front.svg",
+      "children": [],
+      "codes": [],
+      "implemented": false
+    },
+    "eyes": {
+      "id": "eyes",
+      "labels": {
+        "fr": "Yeux",
+        "de": "Augen",
+        "en": "Eyes"
+      },
+      "parent": "head",
+      "asset": "head-front.svg",
+      "children": [],
+      "codes": [],
+      "implemented": false
+    },
+    "ears": {
+      "id": "ears",
+      "labels": {
+        "fr": "Oreilles",
+        "de": "Ohren",
+        "en": "Ears"
+      },
+      "parent": "head",
+      "asset": "head-front.svg",
+      "children": [],
+      "codes": [],
+      "implemented": false
+    },
+    "nose": {
+      "id": "nose",
+      "labels": {
+        "fr": "Nez",
+        "de": "Nase",
+        "en": "Nose"
+      },
+      "parent": "head",
+      "asset": "head-front.svg",
+      "children": [],
+      "codes": [],
+      "implemented": false
+    },
+    "mouth": {
+      "id": "mouth",
+      "labels": {
+        "fr": "Bouche",
+        "de": "Mund",
+        "en": "Mouth"
+      },
+      "parent": "head",
+      "asset": "head-front.svg",
+      "children": [],
+      "codes": [],
+      "implemented": false
+    },
+    "throat": {
+      "id": "throat",
+      "labels": {
+        "fr": "Gorge",
+        "de": "Rachen",
+        "en": "Throat"
+      },
+      "parent": "head",
+      "asset": "head-front.svg",
+      "children": [],
+      "codes": [],
+      "implemented": false
+    },
+    "jaw": {
+      "id": "jaw",
+      "labels": {
+        "fr": "Mâchoire",
+        "de": "Kiefer",
+        "en": "Jaw"
+      },
+      "parent": "head",
+      "asset": "head-front.svg",
+      "children": [],
+      "codes": [],
+      "implemented": false
+    }
+  }
+}

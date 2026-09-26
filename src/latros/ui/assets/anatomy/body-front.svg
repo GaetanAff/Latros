@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 720" aria-labelledby="body-title" role="img">
+  <title id="body-title">Front view — anatomical navigation, schematic illustration</title>
+  <defs><linearGradient id="body-skin" x1="0" x2="1"><stop stop-color="#dae8e6"/><stop offset=".5" stop-color="#f3f6f1"/><stop offset="1" stop-color="#c5dcda"/></linearGradient></defs>
+  <ellipse cx="200" cy="693" rx="104" ry="12" fill="#0f6472" opacity=".08"/>
+  <g fill="url(#body-skin)" stroke="#80aaa8" stroke-width="1.5">
+    <g id="body-head" data-region="head" role="button" tabindex="0" aria-label="Head"><path d="M162 59Q164 20 200 19Q237 20 239 59L234 99Q226 130 200 138Q174 130 166 99Z"/><path d="M169 60Q200 42 231 60M174 84L185 83M215 83L226 84M200 85L195 105L203 107M186 119Q200 126 214 119" fill="none"/></g>
+    <g id="body-neck" data-region="neck" role="button" tabindex="0" aria-label="Neck"><path d="M178 130L178 154L156 170Q200 193 244 170L222 154L222 130Q200 146 178 130Z"/></g>
+    <g id="body-thorax" data-region="thorax" role="button" tabindex="0" aria-label="Chest"><path d="M157 163Q131 160 115 183L131 260L151 287Q200 303 249 287L269 260L285 183Q269 160 243 163Q200 182 157 163Z"/></g>
+    <g id="body-abdomen" data-region="abdomen" role="button" tabindex="0" aria-label="Abdomen"><path d="M151 284Q200 302 249 284L255 361Q200 389 145 361Z"/></g>
+    <g id="body-pelvis" data-region="pelvis" role="button" tabindex="0" aria-label="Pelvis"><path d="M145 359Q200 384 255 359L259 399L219 439L200 433L181 439L141 399Z"/></g>
+    <g id="body-arms" data-region="arms" role="button" tabindex="0" aria-label="Arms"><path d="M118 177Q99 184 93 220L76 294L61 356L85 365L107 303L125 253L137 191ZM282 177Q301 184 307 220L324 294L339 356L315 365L293 303L275 253L263 191Z"/></g>
+    <g id="body-hands" data-region="hands" role="button" tabindex="0" aria-label="Hands"><path d="M62 350L86 360L84 390L72 425L58 436L48 424L49 386ZM338 350L314 360L316 390L328 425L342 436L352 424L351 386Z"/></g>
+    <g id="body-legs" data-region="legs" role="button" tabindex="0" aria-label="Legs"><path d="M142 397L183 429L190 516L180 594L178 657L145 657L137 585L131 512ZM258 397L217 429L210 516L220 594L222 657L255 657L263 585L269 512Z"/></g>
+    <g id="body-feet" data-region="feet" role="button" tabindex="0" aria-label="Feet"><path d="M145 647L178 647L178 679L163 692L119 692Q112 681 129 673ZM255 647L222 647L222 679L237 692L281 692Q288 681 271 673Z"/></g>
+  </g>
+  <g aria-hidden="true" pointer-events="none" fill="#6ea07a" opacity=".25">
+    <path d="M190 195Q160 191 152 223Q149 253 180 262L189 252ZM210 195Q240 191 248 223Q251 253 220 262L211 252Z"/>
+    <path d="M191 237Q202 226 214 237Q224 247 203 269Q185 252 191 237Z" fill="#0f6472"/>
+    <path d="M170 313Q227 300 231 316Q225 329 173 329Q166 340 225 340Q231 352 180 355" fill="none" stroke="#6ea07a" stroke-width="10" stroke-linecap="round"/>
+    <path d="M154 434Q158 480 160 503M246 434Q242 480 240 503M155 535L161 620M245 535L239 620" fill="none" stroke="#80aaa8" stroke-width="12" stroke-linecap="round"/>
+  </g>
+  <g aria-hidden="true" pointer-events="none" fill="#0f6472" stroke="none" font-size="15" font-family="sans-serif">
+    <g stroke="#6ea07a" fill="none"><path d="M74 74H155M72 151H173M82 221H147M91 330H146M82 396H140M294 243H348M347 387H378M267 535H341M280 677H342"/></g>
+    <text x="18" y="79" data-region-label="head">Head</text><text x="18" y="156" data-region-label="neck">Neck</text>
+    <text x="18" y="226" data-region-label="thorax">Chest</text><text x="8" y="335" data-region-label="abdomen">Abdomen</text>
+    <text x="18" y="401" data-region-label="pelvis">Pelvis</text><text x="346" y="237" data-region-label="arms" text-anchor="end">Arms</text>
+    <text x="392" y="381" data-region-label="hands" text-anchor="end">Hands</text><text x="386" y="540" data-region-label="legs" text-anchor="end">Legs</text>
+    <text x="386" y="682" data-region-label="feet" text-anchor="end">Feet</text>
+  </g>
+</svg>

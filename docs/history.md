@@ -18,6 +18,32 @@ Référence médicale publiée : **`v0.2.0`**, nom du jalon « Premier snapshot 
 validé n'est publié. `v0.7.0-general-dev-unreviewed` est le nouveau corpus généraliste DEV local,
 également non publiable. L'ancien snapshot `latros-kb-0002` est conservé.
 
+## Navigation anatomique UI vNext — 26 septembre 2026
+
+- PR #15 relue et fusionnée ; #16 mise à jour sur le nouveau main, contrôles et CI
+  Linux/Windows relancés puis fusionnée. Nouvelle branche UI depuis `main`, sans travail
+  sur le dossier local `FUTUR INTERFACE/`.
+- Corps → Tête → Sinus implémenté avec SVG locaux, breadcrumb, navigation clavier,
+  arbre UI versionné et résolution des seules observations supportées. Les autres régions
+  restent explicitement incomplètes ; la carte n'est pas une connaissance médicale.
+- Recherche permanente, ajout/modification présent/absent/inconnu, unicité par concept,
+  liens vers les régions résolues, thème local et disposition mobile. Modules JS séparés,
+  `/expert`, détail lazy, sessions et runs scientifiques conservés. Une édition quitte
+  l'écran d'un résultat/question devenu obsolète ; une reprise inchangée ne réécrit pas le cas.
+- Audit réel : 11 671 observations recherchables ; 65 concepts FR/DE actifs, 72 alias FR et
+  69 DE. Cinq références ambiguës restent désactivées, 11 606 findings sans traduction.
+  Deux différences historiques de code primaire sont exposées sans correction du snapshot.
+- Première recherche 6,830 → 6,776 s dans le protocole courant : pas de gain froid significatif.
+  Résolution groupée du lexique ; pas de warm-up bloquant ou réduction d'intégrité.
+  Médianes chaudes ~0,18–0,25 s. Les sept diagnostics/questions d'or réels restent identiques.
+- 221 tests Python et 12 tests frontend Node, Ruff/format, mypy strict, schémas et registre
+  verts localement ; contrôles
+  navigateur local sur cas fictif, mobile/desktop, langues, détail, question et reprise.
+  Rapport et limites : [UI anatomique](reports/ui-anatomy-vnext.md), décision ADR 0016.
+- Aucun changement du snapshot, scoring, provenance ou statuts médicaux ; aucune décision
+  clinique inventée. FR/DE restent partiels, la carte est schématique et limitée à trois
+  niveaux implémentés ; G1/G2 humains et G3 indépendant restent requis.
+
 ## Multilingue et recherche locale — 26 septembre 2026
 
 - Chantier UI séparé de la PR G5 #15, depuis le même `main` après fusion de #14. Aucun filtre

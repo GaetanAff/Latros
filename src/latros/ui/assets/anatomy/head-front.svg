@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 550" role="img" aria-labelledby="head-title">
+  <title id="head-title">Front view of head — schematic anatomical navigation</title>
+  <defs><radialGradient id="head-skin"><stop stop-color="#f5f6ee"/><stop offset="1" stop-color="#c8dfdc"/></radialGradient></defs>
+  <path d="M156 380L154 449Q119 470 62 501L62 549L358 549L358 501Q301 470 266 449L264 380" fill="#dbe9e5" stroke="#80aaa8" stroke-width="2"/>
+  <path d="M87 166Q78 40 210 35Q342 40 333 166L316 285Q295 362 210 408Q125 362 104 285Z" fill="url(#head-skin)" stroke="#80aaa8" stroke-width="2"/>
+  <path d="M114 138Q122 77 168 62M306 138Q298 77 252 62M136 296Q157 346 210 371Q263 346 284 296" fill="none" stroke="#adc9c3" stroke-width="9" stroke-linecap="round"/>
+  <g fill="#b7cfaf" fill-opacity=".42" stroke="#0f6472" stroke-width="2">
+    <g id="head-sinuses" data-region="sinuses" role="button" tabindex="0" aria-label="Sinuses"><path d="M148 105Q170 88 202 116L204 161Q174 160 149 137ZM272 105Q250 88 218 116L216 161Q246 160 271 137ZM129 242Q154 222 176 247L177 287Q153 301 131 277ZM291 242Q266 222 244 247L243 287Q267 301 289 277Z"/></g>
+    <g id="head-ears" data-region="ears" role="button" tabindex="0" aria-label="Ears"><path d="M97 189Q63 180 74 237Q78 275 103 271L110 225Z"/><path d="M323 189Q357 180 346 237Q342 275 317 271L310 225Z"/></g>
+    <g id="head-eyes" data-region="eyes" role="button" tabindex="0" aria-label="Eyes"><ellipse cx="152" cy="204" rx="39" ry="23"/><ellipse cx="268" cy="204" rx="39" ry="23"/><circle cx="152" cy="204" r="9" fill="#0f6472"/><circle cx="268" cy="204" r="9" fill="#0f6472"/></g>
+    <g id="head-nose" data-region="nose" role="button" tabindex="0" aria-label="Nose"><path d="M194 209L226 209L237 270Q211 294 183 270Z"/></g>
+    <g id="head-mouth" data-region="mouth" role="button" tabindex="0" aria-label="Mouth"><path d="M166 310Q188 294 210 305Q232 294 254 310Q234 339 210 336Q186 339 166 310Z"/></g>
+    <g id="head-jaw" data-region="jaw" role="button" tabindex="0" aria-label="Jaw"><path d="M118 315Q140 375 210 399Q280 375 302 315L285 364Q253 403 210 418Q167 403 135 364Z"/></g>
+    <g id="head-throat" data-region="throat" role="button" tabindex="0" aria-label="Throat"><path d="M176 427L244 427L244 481Q210 501 176 481Z"/></g>
+  </g>
+  <g aria-hidden="true" pointer-events="none" fill="#0f6472" font-size="16" font-family="sans-serif">
+    <g stroke="#6ea07a" fill="none"><path d="M258 107L319 86H372M307 207H354M81 226H35M229 261H366M250 318H352M279 363L347 383M244 463H343"/></g>
+    <text x="410" y="78" data-region-label="sinuses" text-anchor="end">Sinuses</text><text x="410" y="212" data-region-label="eyes" text-anchor="end">Eyes</text>
+    <text x="4" y="218" data-region-label="ears">Ears</text><text x="410" y="257" data-region-label="nose" text-anchor="end">Nose</text>
+    <text x="410" y="312" data-region-label="mouth" text-anchor="end">Mouth</text><text x="410" y="401" data-region-label="jaw" text-anchor="end">Jaw</text>
+    <text x="410" y="458" data-region-label="throat" text-anchor="end">Throat</text>
+  </g>
+</svg>

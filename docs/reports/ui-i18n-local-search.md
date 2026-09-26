@@ -2,6 +2,8 @@
 
 26 septembre 2026. Chantier UI indépendant de G5, après fusion de #14 dans `main`.
 Il améliore la découvrabilité, **pas la connaissance médicale ni la qualité clinique**.
+Ce rapport conserve la baseline de #16 ; l'extension ultérieure et ses 65 concepts FR/DE
+actifs sont mesurées dans le [rapport UI anatomique](ui-anatomy-vnext.md).
 Snapshot, `general_v1`, `semantic_v1`, reçus et sorties scientifiques sont inchangés ;
 `clinical_validation: false`, `publishable: false`, `research_unreviewed: true` et
 `safety_status: not_evaluated` demeurent protégés. Aucun reviewer ou avis clinique n'est inventé.

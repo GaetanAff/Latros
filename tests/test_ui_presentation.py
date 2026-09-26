@@ -202,7 +202,7 @@ def test_offline_http_same_scientific_question_run_and_snapshot(display_snapshot
 def test_alias_lexicon_unambiguous_and_presentation_only():
     lexicon = load_display_lexicon()
     assert lexicon["role"] == "display_and_explicit_selection_only"
-    assert len(lexicon["entries"]) == 9
+    assert len(lexicon["entries"]) == 70
     assert normalize_search("TÊTE-qui-tourne") == "tete qui tourne"
     assert normalize_search("Übelkeit") == "ubelkeit"
     assert normalize_search("groß") == "gross"

@@ -24,6 +24,7 @@ from latros import __version__
 from latros.application.service import ResearchApplicationService
 from latros.clinical.v2 import ClinicalCaseV2, QuestionResponseV2
 from latros.common import LatrosError
+from latros.ui.anatomy import load_navigation
 from latros.ui.models import (
     CaseRequest,
     CreateSessionRequest,
@@ -179,6 +180,28 @@ def create_app(root: Path) -> FastAPI:
         language: Literal["fr", "de", "en"] = "en",
     ) -> dict[str, Any]:
         return _service(request).display_question(snapshot, strategy, system, code, language)
+
+    @app.get("/internal/v1/presentation/anatomy")
+    async def anatomical_navigation(
+        request: Request,
+        snapshot: str,
+        strategy: str,
+        region: str = "body",
+        language: Literal["fr", "de", "en"] = "en",
+    ) -> dict[str, Any]:
+        config = load_navigation()
+        node = config["nodes"].get(region)
+        if node is None:
+            raise LatrosError("Unknown anatomical navigation region")
+        # Empty navigation nodes never initialize the medical repository at startup.
+        items = (
+            _service(request).navigation_concepts(
+                snapshot, strategy, config["system"], node.get("codes", []), language
+            )
+            if node.get("codes")
+            else []
+        )
+        return {"config": config, "region": region, "items": items}
 
     @app.post("/internal/v1/sessions", status_code=201)
     async def create_session(request: Request, payload: CreateSessionRequest) -> dict[str, Any]:
