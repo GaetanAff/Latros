@@ -1,0 +1,17 @@
+{
+  "version": "ui-display-1",
+  "role": "display_and_explicit_selection_only",
+  "basis": "Editorial UI translations checked against local HPO preferred labels and identifiers. Not clinical review, evidence, or a canonical mapping. User must select a suggestion explicitly.",
+  "system": "http://purl.obolibrary.org/obo/hp.owl",
+  "entries": [
+    {"code":"HP:0031417","source_label":"Rhinorrhea","labels":{"fr":"Nez qui coule","de":"Laufende Nase","en":"Runny nose"},"aliases":{"fr":["rhinorrhée","nez qui coule"],"de":["Schnupfen","Nase läuft"],"en":["rhinorrhea","runny nose"]},"questions":{"fr":"Avez-vous le nez qui coule ?","de":"Läuft Ihre Nase?","en":"Do you have a runny nose?"}},
+    {"code":"HP:0033050","source_label":"Pharyngalgia","labels":{"fr":"Mal de gorge","de":"Halsschmerzen","en":"Sore throat"},"aliases":{"fr":["mal à la gorge","douleur à la gorge"],"de":["Hals tut weh","Schmerzen im Hals"],"en":["throat pain","sore throat"]},"questions":{"fr":"Avez-vous mal à la gorge ?","de":"Haben Sie Halsschmerzen?","en":"Do you have a sore throat?"}},
+    {"code":"HP:0002027","source_label":"Abdominal pain","labels":{"fr":"Mal au ventre","de":"Bauchschmerzen","en":"Abdominal pain"},"aliases":{"fr":["douleur abdominale","mal au ventre"],"de":["Bauch tut weh","Schmerzen im Bauch"],"en":["stomach pain","tummy ache","belly pain"]},"questions":{"fr":"Avez-vous mal au ventre ?","de":"Haben Sie Bauchschmerzen?","en":"Do you have abdominal pain?"}},
+    {"code":"HP:0002321","source_label":"Vertigo","labels":{"fr":"Vertiges — sensation de rotation","de":"Drehschwindel","en":"Vertigo — spinning sensation"},"aliases":{"fr":["vertige","tête qui tourne"],"de":["Schwindel","mir ist schwindelig"],"en":["vertigo","dizzy","dizziness"]},"questions":{"fr":"Avez-vous des vertiges, une sensation de rotation ?","de":"Haben Sie Drehschwindel, als würde sich alles drehen?","en":"Do you have vertigo, a spinning sensation?"}},
+    {"code":"HP:0001945","source_label":"Fever","labels":{"fr":"Fièvre","de":"Fieber","en":"Fever"},"aliases":{"fr":["fièvre","température élevée"],"de":["erhöhte Temperatur"],"en":["high temperature"]},"questions":{"fr":"Avez-vous de la fièvre ?","de":"Haben Sie Fieber?","en":"Do you have a fever?"}},
+    {"code":"HP:0012735","source_label":"Cough","labels":{"fr":"Toux","de":"Husten","en":"Cough"},"aliases":{"fr":["je tousse"],"de":["ich huste"],"en":["coughing"]},"questions":{"fr":"Avez-vous de la toux ?","de":"Haben Sie Husten?","en":"Do you have a cough?"}},
+    {"code":"HP:0002315","source_label":"Headache","labels":{"fr":"Mal de tête","de":"Kopfschmerzen","en":"Headache"},"aliases":{"fr":["mal à la tête","céphalée"],"de":["Kopf tut weh"],"en":["head pain","head ache"]},"questions":{"fr":"Avez-vous mal à la tête ?","de":"Haben Sie Kopfschmerzen?","en":"Do you have a headache?"}},
+    {"code":"HP:0001742","source_label":"Nasal congestion","labels":{"fr":"Nez bouché","de":"Verstopfte Nase","en":"Blocked nose"},"aliases":{"fr":["congestion nasale"],"de":["Nase verstopft"],"en":["stuffy nose","nasal congestion"]},"questions":{"fr":"Avez-vous le nez bouché ?","de":"Ist Ihre Nase verstopft?","en":"Do you have a blocked nose?"}},
+    {"code":"HP:0002018","source_label":"Nausea","labels":{"fr":"Nausées","de":"Übelkeit","en":"Nausea"},"aliases":{"fr":["nausée","envie de vomir"],"de":["mir ist übel"],"en":["feeling nauseous"]},"questions":{"fr":"Avez-vous des nausées ?","de":"Ist Ihnen übel?","en":"Do you feel nauseous?"}}
+  ]
+}

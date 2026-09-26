@@ -8,6 +8,13 @@ Prototype **interne de recherche** pour explorer des raisonnements cliniques str
 sont locaux et explicables, sans LLM. L'interface web propose désormais un parcours simple et
 conserve la console R&D en mode expert. Elle n'est pas une interface patient validée.
 
+Le parcours simple propose désormais **FR / DE / EN**, mémorisés localement. La recherche
+accepte synonymes, accents, préfixes et un petit lexique grand public versionné (neuf concepts
+HPO vérifiés techniquement dans le snapshot local). Les traductions/désignations sont uniquement
+de l'affichage ; les termes non traduits restent signalés **EN** et les IDs/reçus sont inchangés.
+Voir le [rapport multilingue](docs/reports/ui-i18n-local-search.md). Aucun service de traduction,
+NLP ou nouvelle connaissance médicale n'est introduit.
+
 > **Aucun triage n'est effectué.** Toutes les analyses retournent `safety_status: not_evaluated`. Les scores sont des compatibilités sémantiques, jamais des probabilités ou des diagnostics validés. Ne pas utiliser ce prototype pour conseiller un patient.
 
 La version `0.6.0` ajoute une interface locale et des sessions reprenables au Clinical Knowledge

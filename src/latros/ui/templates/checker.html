@@ -4,19 +4,25 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light">
-    <title>Latros — Explorer ses symptômes</title>
+    <title data-i18n="title">Latros — Explorer ses symptômes</title>
     <link rel="icon" href="/assets/latros-logo.svg" type="image/svg+xml">
     <link rel="stylesheet" href="/assets/checker.css">
+    <script src="/assets/i18n.js" defer></script>
     <script src="/assets/checker.js" defer></script>
   </head>
   <body>
     <header class="site-header">
-      <a class="brand" href="/" aria-label="Latros, accueil">
+      <a class="brand" href="/" aria-label="Latros, accueil" data-i18n-aria="home_aria">
         <img src="/assets/latros-logo.svg" alt="Latros">
       </a>
-      <nav aria-label="Navigation principale">
-        <button id="nav-history" class="nav-link" type="button">Historique</button>
-        <a id="nav-expert" class="nav-link" href="/expert">Mode expert</a>
+      <div class="language-switch" role="group" aria-label="Langue" data-i18n-aria="language">
+        <button type="button" data-language="fr" aria-pressed="true">FR</button>
+        <button type="button" data-language="de" aria-pressed="false">DE</button>
+        <button type="button" data-language="en" aria-pressed="false">EN</button>
+      </div>
+      <nav aria-label="Navigation principale" data-i18n-aria="navigation">
+        <button id="nav-history" class="nav-link" type="button" data-i18n="history">Historique</button>
+        <a id="nav-expert" class="nav-link" href="/expert" data-i18n="expert">Mode expert</a>
       </nav>
     </header>
 
@@ -26,115 +32,115 @@
     </div>
 
     <main class="app-shell" id="app-shell">
-      <div class="progress-track" aria-label="Étapes du parcours">
-        <span data-progress="home">Symptômes</span>
-        <span data-progress="age">Informations</span>
-        <span data-progress="question">Questions</span>
-        <span data-progress="results">Résultats</span>
+      <div class="progress-track" aria-label="Étapes du parcours" data-i18n-aria="steps">
+        <span data-progress="home" data-i18n="symptoms">Symptômes</span>
+        <span data-progress="age" data-i18n="information">Informations</span>
+        <span data-progress="question" data-i18n="questions">Questions</span>
+        <span data-progress="results" data-i18n="results">Résultats</span>
       </div>
 
       <div id="app-message" class="app-message" role="alert" hidden></div>
 
       <section id="screen-home" class="screen screen-home" aria-labelledby="home-title">
-        <p class="eyebrow">Une recherche locale, à votre rythme</p>
-        <h1 id="home-title">Qu’est-ce qui vous gêne ?</h1>
-        <p class="lead">Choisissez les symptômes qui correspondent à ce que vous ressentez.</p>
+        <p class="eyebrow" data-i18n="home_eyebrow">Une recherche locale, à votre rythme</p>
+        <h1 id="home-title" data-i18n="home">Qu’est-ce qui vous gêne ?</h1>
+        <p class="lead" data-i18n="home_lead">Choisissez les symptômes qui correspondent à ce que vous ressentez.</p>
 
         <div class="search-box">
-          <label for="symptom-search">Rechercher un symptôme</label>
+          <label for="symptom-search" data-i18n="search_label">Rechercher un symptôme</label>
           <input id="symptom-search" type="search" autocomplete="off"
-                 placeholder="Rechercher un symptôme…" aria-controls="symptom-suggestions"
+                 placeholder="Rechercher un symptôme…" data-i18n-placeholder="search_placeholder" aria-controls="symptom-suggestions"
                  aria-expanded="false">
           <div id="symptom-suggestions" class="suggestions" role="listbox"
-               aria-label="Suggestions de symptômes" hidden></div>
-          <p id="search-hint" class="field-hint">Sélectionnez une suggestion. La saisie libre n’est pas encore interprétée.</p>
+               aria-label="Suggestions de symptômes" data-i18n-aria="suggestions" hidden></div>
+          <p id="search-hint" class="field-hint" data-i18n="search_hint">Sélectionnez une suggestion. La saisie libre n’est pas encore interprétée.</p>
         </div>
 
         <div id="selected-symptoms" class="selected-symptoms" aria-live="polite"></div>
-        <button id="home-continue" class="button button-primary" type="button" disabled>Continuer</button>
-        <p class="fine-print">Les termes proposés viennent de la base locale ; certaines formulations
-          françaises peuvent encore manquer.</p>
+        <button id="home-continue" class="button button-primary" type="button" disabled data-i18n="continue">Continuer</button>
+        <p class="fine-print" data-i18n="terms_updated">Les traductions sont locales. Les termes non traduits sont signalés EN ; confirmez toujours la suggestion.</p>
       </section>
 
       <section id="screen-age" class="screen" aria-labelledby="age-title" hidden>
-        <button class="back-link" data-back="home" type="button">← Retour aux symptômes</button>
-        <p class="eyebrow">Une information à la fois</p>
-        <h1 id="age-title">Quel âge avez-vous ?</h1>
-        <p class="lead">Le moteur général actuel est limité aux adultes : sans âge exploitable,
+        <button class="back-link" data-back="home" type="button" data-i18n="back_symptoms">← Retour aux symptômes</button>
+        <p class="eyebrow" data-i18n="one_at_a_time">Une information à la fois</p>
+        <h1 id="age-title" data-i18n="age_title">Quel âge avez-vous ?</h1>
+        <p class="lead" data-i18n="adult_scope">Le moteur général actuel est limité aux adultes : sans âge exploitable,
           il peut s’abstenir.</p>
-        <label for="patient-age">Âge en années</label>
+        <label for="patient-age" data-i18n="age_label">Âge en années</label>
         <input id="patient-age" class="age-input" type="number" min="0" max="130" step="1"
-               inputmode="numeric" placeholder="Votre âge">
+               inputmode="numeric" placeholder="Votre âge" data-i18n-placeholder="age_placeholder">
         <div class="button-stack">
-          <button id="age-continue" class="button button-primary" type="button">Continuer</button>
-          <button id="age-skip" class="button button-quiet" type="button">Je préfère ne pas répondre</button>
+          <button id="age-continue" class="button button-primary" type="button" data-i18n="continue">Continuer</button>
+          <button id="age-skip" class="button button-quiet" type="button" data-i18n="skip_age">Je préfère ne pas répondre</button>
         </div>
       </section>
 
       <section id="screen-question" class="screen" aria-labelledby="question-title" hidden>
-        <button class="back-link" data-back="age" type="button">← Retour</button>
-        <p id="question-count" class="eyebrow">Question du moteur</p>
-        <h1 id="question-title">Une question pour préciser</h1>
+        <button class="back-link" data-back="age" type="button" data-i18n="back">← Retour</button>
+        <p id="question-count" class="eyebrow" data-i18n="engine_question">Question du moteur</p>
+        <h1 id="question-title" data-i18n="question_title">Une question pour préciser</h1>
         <div id="question-summary" class="quiet-summary"></div>
         <div id="question-text" class="question-text"></div>
-        <div class="answer-grid" aria-label="Répondre à la question">
-          <button data-answer="present" class="answer-button" type="button">Oui</button>
-          <button data-answer="absent" class="answer-button" type="button">Non</button>
-          <button data-answer="unknown" class="answer-button" type="button">Je ne sais pas</button>
-          <button data-answer="not_assessed" class="answer-button answer-muted" type="button">Passer</button>
-          <button data-answer="unable_to_assess" class="answer-button answer-muted" type="button">Impossible à évaluer</button>
+        <p id="question-fallback" class="field-hint" hidden></p>
+        <details class="technical-details"><summary data-i18n="source_question">Question et concept source, IDs inchangés</summary><p id="question-source"></p></details>
+        <div class="answer-grid" aria-label="Répondre à la question" data-i18n-aria="answer_question">
+          <button data-answer="present" class="answer-button" type="button" data-i18n="yes">Oui</button>
+          <button data-answer="absent" class="answer-button" type="button" data-i18n="no">Non</button>
+          <button data-answer="unknown" class="answer-button" type="button" data-i18n="unknown">Je ne sais pas</button>
+          <button data-answer="not_assessed" class="answer-button answer-muted" type="button" data-i18n="skip">Passer</button>
+          <button data-answer="unable_to_assess" class="answer-button answer-muted" type="button" data-i18n="unable">Impossible à évaluer</button>
         </div>
-        <button id="question-to-results" class="text-link" type="button">Voir les résultats maintenant</button>
+        <button id="question-to-results" class="text-link" type="button" data-i18n="results_now">Voir les résultats maintenant</button>
       </section>
 
       <section id="screen-results" class="screen screen-results" aria-labelledby="results-title" hidden>
-        <p class="eyebrow">Analyse terminée</p>
-        <h1 id="results-title">Résultats</h1>
+        <p class="eyebrow" data-i18n="complete">Analyse terminée</p>
+        <h1 id="results-title" data-i18n="results">Résultats</h1>
         <p id="result-intro" class="lead"></p>
         <div id="result-alert" class="result-alert" hidden></div>
         <div id="result-list" class="result-list"></div>
-        <button id="show-more-results" class="button button-secondary" type="button" hidden>Voir plus de possibilités</button>
+        <button id="show-more-results" class="button button-secondary" type="button" hidden data-i18n="more">Voir plus de possibilités</button>
         <div class="result-actions">
-          <button id="results-new" class="button button-primary" type="button">Nouvelle analyse</button>
-          <button id="results-edit" class="button button-secondary" type="button">Modifier mes informations</button>
-          <button id="results-history" class="button button-quiet" type="button">Voir l’historique</button>
+          <button id="results-new" class="button button-primary" type="button" data-i18n="new_analysis">Nouvelle analyse</button>
+          <button id="results-edit" class="button button-secondary" type="button" data-i18n="edit">Modifier mes informations</button>
+          <button id="results-history" class="button button-quiet" type="button" data-i18n="view_history">Voir l’historique</button>
         </div>
       </section>
 
       <section id="screen-history" class="screen" aria-labelledby="history-title" hidden>
-        <button class="back-link" data-back="home" type="button">← Retour à l’accueil</button>
-        <p class="eyebrow">Conservé sur cet ordinateur</p>
-        <h1 id="history-title">Historique</h1>
-        <p class="lead">Reprenez une analyse enregistrée ou commencez-en une nouvelle.</p>
+        <button class="back-link" data-back="home" type="button" data-i18n="back_home">← Retour à l’accueil</button>
+        <p class="eyebrow" data-i18n="local_saved">Conservé sur cet ordinateur</p>
+        <h1 id="history-title" data-i18n="history">Historique</h1>
+        <p class="lead" data-i18n="history_lead">Reprenez une analyse enregistrée ou commencez-en une nouvelle.</p>
         <div id="history-list" class="history-list"></div>
-        <button id="history-new" class="button button-primary" type="button">Nouvelle analyse</button>
+        <button id="history-new" class="button button-primary" type="button" data-i18n="new_analysis">Nouvelle analyse</button>
       </section>
 
       <section id="screen-error" class="screen" aria-labelledby="error-title" hidden>
-        <p class="eyebrow">Service local indisponible</p>
-        <h1 id="error-title">Latros ne peut pas continuer</h1>
+        <p class="eyebrow" data-i18n="service_unavailable">Service local indisponible</p>
+        <h1 id="error-title" data-i18n="cannot_continue">Latros ne peut pas continuer</h1>
         <p id="error-text" class="lead"></p>
-        <button id="retry-boot" class="button button-primary" type="button">Réessayer</button>
-        <p><a href="/expert">Ouvrir le mode expert</a></p>
+        <button id="retry-boot" class="button button-primary" type="button" data-i18n="retry">Réessayer</button>
+        <p><a href="/expert" data-i18n="open_expert">Ouvrir le mode expert</a></p>
       </section>
     </main>
 
     <footer class="safety-footer" role="note">
-      <strong>Urgences non évaluées.</strong> Cette version n’évalue pas encore les situations
-      urgentes et ne remplace pas un avis médical.
+      <strong data-i18n="emergency_title">Urgences non évaluées.</strong> <span data-i18n="safety">Cette version n’évalue pas encore les situations urgentes et ne remplace pas un avis médical.</span> <code>safety_status: not_evaluated</code>
     </footer>
 
     <dialog id="result-dialog" class="result-dialog" aria-labelledby="dialog-title">
       <div class="dialog-header">
-        <h2 id="dialog-title">Pourquoi cette possibilité apparaît</h2>
-        <button id="close-dialog" class="icon-button" type="button" aria-label="Fermer">×</button>
+        <h2 id="dialog-title" data-i18n="why">Pourquoi cette possibilité apparaît</h2>
+        <button id="close-dialog" class="icon-button" type="button" aria-label="Fermer" data-i18n-aria="close">×</button>
       </div>
       <div id="dialog-content"></div>
     </dialog>
 
     <div id="loading-layer" class="loading-layer" role="status" aria-live="polite" hidden>
       <span class="loading-spinner" aria-hidden="true"></span>
-      <span id="loading-text">Chargement local…</span>
+      <span id="loading-text" data-i18n="loading">Chargement local…</span>
     </div>
   </body>
 </html>

@@ -188,6 +188,12 @@ réévalue Jinja2/JavaScript natif face à React/Vite ; la
 [documentation UI](modern-ui.md) précise le parcours et ses limites. Ce prototype d'ergonomie ne
 change ni le jalon v0.6 livré, ni le statut du snapshot v0.7, ni la revue clinique G.
 
+L'extension [multilingue et recherche locale](reports/ui-i18n-local-search.md) est livrée dans
+une branche/PR UI séparée de G5 : FR/DE/EN pour le parcours simple, désignations locales et
+lexique d'affichage limité, suggestions tolérantes et fallback anglais visible. Les concepts,
+observations soumises, question IDs et résultats scientifiques restent inchangés ; v0.9 NLP
+reste future. Node 22 sert uniquement aux tests frontend, jamais au runtime de Latros.
+
 ## Étape v0.7 — fabrique souveraine généraliste
 
 L'[ADR 0009](decisions/0009-fabrique-souveraine-generaliste.md) fixe l'invariant offline-first et

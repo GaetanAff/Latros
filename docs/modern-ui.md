@@ -29,8 +29,9 @@ techniques » et dans `/expert`. Aucun calcul clinique n'a été déplacé dans 
   publiable. Un rang n'est ni un diagnostic, ni une probabilité, ni une estimation de prévalence.
 - `safety.status = not_evaluated` : les urgences ne sont pas évaluées. Aucun conseil de triage ne
   peut être déduit de l'interface.
-- Les labels de la base peuvent être en anglais ; aucune traduction ou extraction NLP n'est
-  simulée. L'absence d'un terme dans l'autocomplétion n'est pas une conclusion médicale.
+- FR/DE/EN traduit le parcours simple localement ; les désignations sources et un petit lexique
+  explicite d'affichage couvrent une partie des labels/questions. Les termes manquants sont
+  indiqués EN, sans service externe ni NLP. L'absence d'un terme n'est pas une conclusion médicale.
 - Les sessions sont locales mais non chiffrées. Ne pas utiliser de données personnelles réelles.
 - La CSP ne permet que les assets et appels de même origine. Pas de CDN, télémétrie ou API externe.
 
@@ -41,3 +42,7 @@ contrats backend. Un contrôle navigateur doit couvrir le parcours sur mobile et
 recherche, sélection, âge, question, résultat, détail, historique, reprise et mode expert, avec
 toutes les requêtes hors boucle locale refusées. Les diagnostics de ce contrôle testent le
 logiciel, jamais la validité clinique des résultats.
+
+Le [rapport multilingue](reports/ui-i18n-local-search.md) et l'ADR 0015 précisent la séparation
+affichage/connaissance, les alias, les fallbacks et les tests. La console experte conserve les
+labels/contrats sources et ses fonctions historiques ; elle n'est pas une traduction de la base.

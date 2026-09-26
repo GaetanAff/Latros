@@ -60,6 +60,7 @@ class CanonicalKnowledgeRepositoryV2:
         self._members_ready = False
         self._derivations_ready = False
         self._last_matched_candidate_ids: tuple[str, ...] | None = None
+        self._presentation_ready = False
         self._verified_file_attributes = self._file_attributes()
 
     def _file_attributes(self) -> tuple[tuple[str, int, int, int], ...]:
@@ -444,9 +445,31 @@ class CanonicalKnowledgeRepositoryV2:
         """Return supported observation concepts, never a global Python catalog."""
         if (system is None) != (code is None):
             raise ValueError("system and code must be specified together")
+        sql = self.observation_options_sql() + (
+            "SELECT concept_id, system, code, label, language, kind FROM options WHERE "
+        )
+        if system is not None:
+            sql += "system = ? AND code = ? ORDER BY lower(label), code"
+            parameters: list[Any] = [system, code]
+        else:
+            sql += "(lower(label) LIKE ? OR lower(code) LIKE ?) ORDER BY lower(label), code"
+            normalized = (query or "").strip().casefold()
+            pattern = (
+                "%" + normalized.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_") + "%"
+            )
+            parameters = [pattern, pattern]
+            sql = sql.replace("LIKE ?", "LIKE ? ESCAPE '\\'")
+        if limit > 0:
+            sql += " LIMIT ?"
+            parameters.append(limit)
+        return [tuple(row) for row in self.connection.execute(sql, parameters).fetchall()]
+
+    @staticmethod
+    def observation_options_sql() -> str:
+        """Shared read-only projection; the historic option ordering is unchanged."""
         # The choice of designation/identifier exactly follows the v0.6 catalog
         # ordering, including its stable ID tie-break inherited from table order.
-        sql = (
+        return (
             "WITH kinds AS (SELECT "
             "json_extract_string(payload_json, '$.object.concept_id') AS concept_id, "
             "max(CASE WHEN json_extract_string(payload_json, '$.relation') = 'has_sign' "
@@ -484,20 +507,4 @@ class CanonicalKnowledgeRepositoryV2:
             "JOIN identifiers AS i ON i.concept_id = c.id AND i.ordinal = 1 "
             "LEFT JOIN labels AS l ON l.concept_id = c.id AND l.ordinal = 1 "
             "WHERE json_extract_string(c.payload_json, '$.status') = 'active') "
-            "SELECT concept_id, system, code, label, language, kind FROM options WHERE "
         )
-        if system is not None:
-            sql += "system = ? AND code = ? ORDER BY lower(label), code"
-            parameters: list[Any] = [system, code]
-        else:
-            sql += "(lower(label) LIKE ? OR lower(code) LIKE ?) ORDER BY lower(label), code"
-            normalized = (query or "").strip().casefold()
-            pattern = (
-                "%" + normalized.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_") + "%"
-            )
-            parameters = [pattern, pattern]
-            sql = sql.replace("LIKE ?", "LIKE ? ESCAPE '\\'")
-        if limit > 0:
-            sql += " LIMIT ?"
-            parameters.append(limit)
-        return [tuple(row) for row in self.connection.execute(sql, parameters).fetchall()]
