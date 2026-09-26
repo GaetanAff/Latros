@@ -105,6 +105,20 @@ de journaliser des décisions humaines sans modifier le snapshot. Après l'expor
 `uv run --offline --no-sync python scripts/run_v07_g_review.py` puis ouvrir
 `http://127.0.0.1:8765/`. Aucune décision médicale n'est fournie ou préremplie par l'outil.
 
+Le workflow [`v0.7-G5`](docs/reports/v0.7-g5-human-adjudication.md) ajoute les 7 736 candidates
+G4, leur contexte source et l'avant/après technique. Il sépare catégorie, décision humaine,
+double revue et adjudication ; 180 rejets et 180 retenues sont préparés pour contrôle humain.
+Après génération des exports G1/G2 et G4 :
+
+```text
+uv run --offline --no-sync python scripts/prepare_v07_g5_adjudication.py
+uv run --offline --no-sync python scripts/run_v07_g_review.py --adjudication
+```
+
+Les six exports de revue et le journal hashé restent locaux sous `data/staging/v0.7-g5/`.
+`retained`, accord ou adjudication ne promeuvent rien dans le snapshot. Il faut encore organiser
+de vraies revues qualifiées G1/G2 et une évaluation indépendante G3.
+
 `v0.5` reste historiquement incomplet sur `main`. Ses checkpoints techniques A à D définissent le registre,
 le manifeste, le constructeur, les importeurs et le premier raisonneur général. Le paquet ORL réel
 reste intégralement `pending_clinical_review`. Un chemin séparé permet désormais de l'importer et de
