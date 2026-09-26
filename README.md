@@ -76,6 +76,11 @@ identiques ; voir le [rapport F5](docs/reports/v0.7-f5-run-persistence.md).
 sans changer le run complet ni sa provenance. Sur le grand cas fictif du même protocole,
 la route passe de 12,54 à 9,50 s et le pic RSS de 3,15 à 2,86 Go ; voir le
 [rapport F6](docs/reports/v0.7-f6-evidence-materialization.md).
+Le durcissement runtime v0.7 s'arrête ici, sauf régression importante. La passe technique
+[`v0.7-G4`](docs/reports/v0.7-g4-medlineplus-extraction-quality.md) rejoue l'extraction
+MedlinePlus depuis le ZIP local épinglé et produit un **jeu candidat expérimental** filtré par
+contexte lexical, avec journal d'exclusions et nouveau G2. Elle ne modifie pas le snapshot,
+`general_v1` ni les statuts médicaux ; aucune assertion n'est approuvée automatiquement.
 
 L'audit préparatoire `v0.7-G0`, vérifié et accepté sur le plan technique/méthodologique,
 mesure la composition réelle du corpus sans valider ses assertions :

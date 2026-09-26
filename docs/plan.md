@@ -1,6 +1,6 @@
 # Plan d'implémentation et avancement
 
-Référence : plan « Premières étapes de Latros — socle de données et moteur clinique pur » demandé par l'utilisateur. État au 25 septembre 2026.
+Référence : plan « Premières étapes de Latros — socle de données et moteur clinique pur » demandé par l'utilisateur. État au 26 septembre 2026.
 
 Les trois jalons avaient été implémentés ensemble dans la première tranche. La reprise de l'étape 2 consiste à vérifier sa livraison et à établir le snapshot sous le nom du jalon, `v0.2.0`. Elle ne correspond pas à l'ajout de nouvelles sources ou de fonctions cliniques.
 
@@ -14,7 +14,7 @@ Les trois jalons avaient été implémentés ensemble dans la première tranche.
 | 4 | Clinical Knowledge Model — `v0.4.0` | Terminée : checkpoints A–H livrés et revue finale verte | La référence reste `v0.2.0` ; aucun snapshot médical v2 publié |
 | 5 | Snapshot ORL généraliste — `v0.5.0` | En cours : A–D terminés ; E historique en `NO-GO` ; E2 audité ; E3 prêt pour revue ; mode E4 local non validé disponible | Référence officielle toujours bloquée ; `v0.5.0-dev-unreviewed` est non publiable |
 | 6 | Interface interne de test R&D — `v0.6` | Terminée et fusionnée dans `main` ; parcours simple expérimental ultérieur en chantier séparé | Console experte, sessions reprenables et projection simple des moteurs ; aucun produit médical validé ni nouvelle logique clinique |
-| 7 | Fabrique souveraine généraliste — `v0.7` | D–F6 et G0 terminés ; préparation G0/G1/G2 vérifiée et acceptée techniquement ; revue humaine G1/G2 et évaluation indépendante G3 à faire | `v0.7.0-general-dev-unreviewed` inchangé, non validé et non publiable ; biologie et médicaments restent futures |
+| 7 | Fabrique souveraine généraliste — `v0.7` | D–F6, G0 et G4 technique terminés ; préparation G0/G1/G2 acceptée techniquement ; revue humaine G1/G2 et évaluation indépendante G3 à faire | `v0.7.0-general-dev-unreviewed` inchangé, non validé et non publiable ; biologie et médicaments restent futures |
 | 8 | Safety / triage séparé — `v0.8` | Prévue | Composant indépendant du différentiel, avec périmètre et validation propres |
 | 9 | NLP / LLM encadré — `v0.9` | Prévue | Structuration, reformulation et explication, jamais source implicite de connaissance |
 | 10 | API, FHIR et interopérabilité — `v0.10` | Prévue | Exposition et échanges des contrats de domaine après validation des étapes précédentes |
@@ -213,6 +213,7 @@ ne sera pas restauré comme dépendance du nouveau snapshot.
 | `v0.7-G1` | Dispositif vérifié et prêt — décision humaine à faire | 689 topics MedlinePlus bloqués, pistes lexicales/MeSH non promues, aucune décision préremplie |
 | `v0.7-G2` | Échantillonnage et provenance vérifiés, outil prêt — revue humaine à faire | 120 candidates MedlinePlus et 40 assertions Monarch/Orphadata ; décisions séparées du snapshot |
 | `v0.7-G3` | Protocole défini — évaluation indépendante non réalisée | Cas non patients à rédiger/adjudique séparément du snapshot et des fixtures logiciels |
+| `v0.7-G4` | Passe technique expérimentale terminée — revue humaine à faire | Rejeu exact du XML MedlinePlus local, filtre de rôle/contextes et nouveau G2 ; aucun candidat approuvé ni snapshot modifié |
 | `v0.7-G` | À faire | Revue clinique et décision distincte sur une éventuelle publication |
 
 Le parseur MedlinePlus transforme uniquement le XML local en enregistrements sources fidèles. Le
@@ -240,6 +241,12 @@ nouveau format ni modification du snapshot.
 Le [rapport F6](reports/v0.7-f6-evidence-materialization.md) compare joins SQL, index dérivé
 et représentation compacte avant de retenir cette dernière. La provenance complète et le run
 immuable restent obligatoires ; le snapshot et la mathématique ne changent pas.
+Le durcissement runtime v0.7 s'arrête à F6 sauf régression importante. La passe G4
+([rapport](reports/v0.7-g4-medlineplus-extraction-quality.md)) rejoue MedlinePlus depuis le ZIP
+local vérifié, rejette 1 468 candidats à rôle lexical inadapté et met 4 056 candidats incertains
+en revue humaine ; 2 212 candidats restent dans un **jeu expérimental**. Elle ne remplace ni le
+snapshot existant ni les jeux G1/G2 historiques. La baisse de couverture technique est un risque
+de faux négatifs à évaluer humainement, pas une validation médicale.
 L'[audit structurel `v0.7-G0`](reports/v0.7-general-quality-audit.md) chiffre la forte liaison
 Orphanet/génétique (14 661 des 15 611 maladies documentées), le goulet de mapping MedlinePlus
 et les dépendances Monarch. Il ne déduit pas la prévalence d'une maladie de ses seules hiérarchies
