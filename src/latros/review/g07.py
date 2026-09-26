@@ -260,9 +260,11 @@ def create_review_app(
     exports_dir: Path,
     *,
     expected_exports: dict[str, tuple[str, str]] | None = None,
+    review_store: ReviewStore | None = None,
+    home_asset: str = "review.html",
 ) -> FastAPI:
     """Create a separate local review app; no Latros runtime or snapshot write path."""
-    store = ReviewStore(root, exports_dir, expected_exports=expected_exports)
+    store = review_store or ReviewStore(root, exports_dir, expected_exports=expected_exports)
     token = secrets.token_urlsafe(32)
     app = FastAPI(
         title="Latros G1/G2 local human review", docs_url=None, redoc_url=None, openapi_url=None
@@ -303,7 +305,7 @@ def create_review_app(
 
     @app.get("/", response_class=HTMLResponse)
     async def home() -> HTMLResponse:
-        return HTMLResponse((ASSET_ROOT / "review.html").read_text(encoding="utf-8"))
+        return HTMLResponse((ASSET_ROOT / home_asset).read_text(encoding="utf-8"))
 
     @app.get("/logo.svg")
     async def logo() -> FileResponse:

@@ -18,6 +18,24 @@ Référence médicale publiée : **`v0.2.0`**, nom du jalon « Premier snapshot 
 validé n'est publié. `v0.7.0-general-dev-unreviewed` est le nouveau corpus généraliste DEV local,
 également non publiable. L'ancien snapshot `latros-kb-0002` est conservé.
 
+## Workflow d'adjudication humaine `v0.7-G5` — 26 septembre 2026
+
+- PR #14 relue puis fusionnée après CI Linux/Windows verte, 197 tests locaux et rejeu G4
+  hors réseau identique. Nouvelle branche depuis `main`, sans changement du snapshot ou moteur.
+- Préparation reproductible de 7 736 items G4 : contexte XML, occurrences, propositions de
+  mappings, état historique, règles et provenance. G1/G2 historiques copiés à l'identique ;
+  données dérivées ignorées sous `data/staging/v0.7-g5/`.
+- Catégorie sémantique distincte de la décision finale, identité et qualification déclaratives,
+  double revue indépendante et adjudicateur distinct. Journal v2 append-only sur la chaîne de
+  hashes existante ; six exports déterministes, aucune application au snapshot.
+- Contrôles préparés : 180 rejets (45 par règle principale) et 180 retenues, stratifiés par
+  données structurelles disponibles. File prioritaire des 4 056 items incertains, filtres,
+  progression, texte surligné, navigation clavier et reprise de position locale.
+- Ruff, format, mypy strict, schémas, registre et 208 tests locaux verts ; vérification du
+  navigateur local sans soumettre de décision réelle. Limites : identité non authentifiée,
+  indépendance organisée humainement, une seule instance, aucune qualification certifiée.
+  G1/G2 humains et G3 restent à réaliser. Tous les statuts médicaux sont inchangés.
+
 ## Qualité d'extraction MedlinePlus `v0.7-G4` — 26 septembre 2026
 
 - La PR #13 (F6) a été relue : scoring, candidats, scores, provenance, run complet, snapshot,
