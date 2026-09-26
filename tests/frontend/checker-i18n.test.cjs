@@ -14,6 +14,7 @@ function environment(saved = new Map()) {
       value:"", textContent:"", innerHTML:"", hidden:false, disabled:false, dataset:{},
       classList:{toggle(){}}, setAttribute(name,value){this[name]=value;},
       addEventListener(){}, querySelector(){return null;}, focus(){}, close(){}, showModal(){},
+      replaceChildren(){}, scrollIntoView(){},
     });
     return elements.get(id);
   };
@@ -23,7 +24,8 @@ function environment(saved = new Map()) {
   const context = vm.createContext({console, URLSearchParams, structuredClone,
     localStorage:{getItem:key=>saved.get(key)||null,setItem:(key,value)=>saved.set(key,value)},
     crypto:{randomUUID:()=>"test-uuid"},
-    document:{documentElement:{lang:""},getElementById:node,
+    DOMParser:class { parseFromString(){return {documentElement:{querySelectorAll:()=>[],setAttribute(){}}};} },
+    document:{documentElement:{lang:"",dataset:{}},getElementById:node,importNode:node=>node,
       querySelectorAll:selector=>selector==="[data-i18n]"?[staticNode]:[],querySelector:()=>null},
     window:{clearTimeout(){},setTimeout(){return 1;},scrollTo(){}},
     fetch:async (url,options) => {
@@ -36,10 +38,11 @@ function environment(saved = new Map()) {
       if(parsed.pathname.endsWith("presentation/labels")) body={items:{finding:display}};
       if(parsed.pathname.endsWith("presentation/concepts")) body={items:[{concept_id:"finding",system:"HPO",code:"HP:0031417",label:"Rhinorrhea",language:"en",observation_kind:"symptom",...display}]};
       if(parsed.pathname.endsWith("presentation/question")) body={...display,question_text:{fr:"Avez-vous le nez qui coule ?",de:"Läuft Ihre Nase?",en:"Do you have a runny nose?"}[lang]};
-      return {ok:true,status:200,json:async()=>body};
+      if(parsed.pathname.endsWith('presentation/anatomy')) body={config:JSON.parse(source('anatomy/navigation.json')),items:parsed.searchParams.get('region')==='sinuses'?[{concept_id:'finding',system:'HPO',code:'HP:0031417',label:'Rhinorrhea',observation_kind:'symptom',...display}]:[]};
+      return {ok:true,status:200,json:async()=>body,text:async()=>'<svg />'};
     }});
   vm.runInContext(source("i18n.js"),context);
-  vm.runInContext(source("checker.js"),context);
+  for(const name of ['state','api','search','observations','questions','results','history','anatomy','checker']) vm.runInContext(source(name+'.js'),context);
   return {context,node,calls,saved,question,run:code=>vm.runInContext(code,context)};
 }
 async function ready(env) { for(let i=0;i<20 && env.run("state.busy");i++) await new Promise(resolve=>setImmediate(resolve)); }
@@ -48,7 +51,8 @@ test("complete local UI catalog and persistent language with explicit fallback",
   const env=environment(); await ready(env);
   const html=fs.readFileSync(path.join(root,"src/latros/ui/templates/checker.html"),"utf8");
   const keys=[...html.matchAll(/data-i18n(?:-aria|-placeholder)?="([^"]+)"/g)].map(m=>m[1]);
-  const jsKeys=[...source("checker.js").matchAll(/\bt\("([^"]+)"/g)].map(m=>m[1]);
+  const allJs=['checker','api','search','observations','questions','results','history','anatomy'].map(name=>source(name+'.js')).join('\n');
+  const jsKeys=[...allJs.matchAll(/\bt\(['"]([^'"]+)['"]/g)].map(m=>m[1]);
   for(const lang of ["fr","de","en"]) {
     env.run(`window.LatrosI18n.setLanguage('${lang}')`);
     for(const key of [...keys,...jsKeys]) assert.ok(env.run(`t('${key}')`).length>0,key);
@@ -99,4 +103,121 @@ test("untranslated labels, abstention, research and safety stay explicit without
   assert.match(env.node("research-banner").textContent,/keine klinische Validierung/);
   assert.ok(!env.node("result-list").innerHTML.includes("%"));
   assert.match(env.run("t('safety')"),/Notfallsituationen/);
+});
+
+test("body/head/sinuses breadcrumb, back navigation and supported findings",async()=>{
+  const env=environment(); await ready(env);
+  await env.run("anatomyNavigate('head')");
+  assert.equal(env.run("anatomyTrail(state.anatomy.config,'head').map(n=>n.id).join('/')"),'body/head');
+  await env.run("anatomyNavigate('sinuses')");
+  assert.equal(env.run("anatomyTrail(state.anatomy.config,'sinuses').map(n=>n.id).join('/')"),'body/head/sinuses');
+  assert.match(env.node('anatomy-breadcrumb').innerHTML,/aria-current="page"/);
+  assert.equal(env.run('state.anatomy.items.length'),1);
+  assert.equal(env.node('region-panel').hidden,false);
+  await env.run("anatomyNavigate('body')");
+  assert.equal(env.node('region-panel').hidden,true);
+  assert.equal(env.run('state.anatomy.items.length'),0);
+});
+
+test("anatomy and text search upsert one canonical observation with three explicit states",async()=>{
+  const env=environment(); await ready(env);
+  await env.run("anatomyNavigate('sinuses')");
+  env.run("pickRegionFinding(0)");
+  assert.equal(env.run('state.selected.length'),0); // Picking is not a patient answer.
+  env.run("addObservation(state.anatomy.picked,'absent')");
+  env.node('symptom-search').value='nez qui coule';
+  await env.run('searchConcepts()'); env.run('selectSuggestion(0)');
+  assert.equal(env.run('state.selected.length'),1);
+  assert.equal(env.run('state.selected[0].status'),'absent'); // Search does not overwrite an existing answer.
+  const coding=env.run('JSON.stringify(makeObservation(state.selected[0]).concept)');
+  for(const status of ['present','absent','unknown']) {
+    env.run(`addObservation(state.anatomy.items[0],'${status}')`);
+    assert.equal(env.run('state.selected.length'),1);
+    assert.equal(env.run('JSON.stringify(makeObservation(state.selected[0]).concept)'),coding);
+    assert.equal(env.run('makeObservation(state.selected[0]).clinical_status'),status);
+    assert.equal(env.run('makeObservation(state.selected[0]).uncertainty_reason'),status==='unknown'?'unknown_to_subject':undefined);
+  }
+  assert.throws(()=>env.run("addObservation(state.anatomy.items[0],'invented')"));
+});
+
+test("theme is local, persistent and accessible",async()=>{
+  const env=environment(); await ready(env);
+  env.run('toggleTheme()');
+  assert.equal(env.context.document.documentElement.dataset.theme,'dark');
+  assert.equal(env.node('theme-toggle')['aria-pressed'],'true');
+  const resumed=environment(env.saved); await ready(resumed);
+  assert.equal(resumed.context.document.documentElement.dataset.theme,'dark');
+  resumed.run('toggleTheme()');
+  assert.equal(resumed.saved.get('latros-theme'),'light');
+});
+
+test("resumed present/absent/unknown and answered questions retain original observation identity",async()=>{
+  const env=environment(); await ready(env);
+  for(const status of ['present','absent','unknown']) {
+    env.context.example={clinical_case:{observations:[{kind:'symptom',observation_id:'unchanged',
+      concept:{concept_id:'finding',coding:{system:'HPO',code:'HP:0031417',display:'Rhinorrhea'}},
+      clinical_status:status,evaluation_status:'assessed',acquisition_method:'reported'}],
+      question_history:[{observation_id:'unchanged'}]}};
+    env.run('state.selected=selectedFromSession(example)');
+    assert.equal(env.run('state.selected.length'),1);
+    assert.equal(env.run('makeObservation(state.selected[0]).observation_id'),'unchanged');
+    assert.equal(env.run('makeObservation(state.selected[0]).clinical_status'),status);
+  }
+});
+
+test("unchanged resumed session is not rewritten before a next question or analysis",async()=>{
+  const env=environment(); await ready(env);
+  env.run("state.session={session_id:'existing'};state.caseDirty=false;");
+  const before=env.calls.length;
+  await env.run('ensureSession()');
+  assert.equal(env.calls.length,before);
+});
+
+test("new analysis routes to age with the chosen backend action, without frontend questions",async()=>{
+  const env=environment(); await ready(env);
+  env.run("state.selected=[{concept_id:'finding'}];beginAnalysis('question')");
+  assert.equal(env.run('state.screen'),'age');
+  assert.equal(env.run('state.pendingAction'),'question');
+  env.run("beginAnalysis('diagnose')");
+  assert.equal(env.run('state.pendingAction'),'diagnose');
+});
+
+test("editing observations leaves old scientific run intact but hides stale results/questions",async()=>{
+  const env=environment(); await ready(env);
+  await env.run("anatomyNavigate('sinuses')");
+  env.run("state.resultRun={run_id:'immutable-run'};state.screen='results';state.caseDirty=false;");
+  env.run("addObservation(state.anatomy.items[0],'present')");
+  assert.equal(env.run('state.screen'),'home');
+  assert.equal(env.run('state.caseDirty'),true);
+  assert.equal(env.run('state.resultRun.run_id'),'immutable-run');
+  assert.equal(env.run("regionForObservation(state.selected[0])"),'sinuses');
+  assert.match(env.node('selected-symptoms').innerHTML,/data-observation-region="sinuses"/);
+  env.run("state.screen='question';observationsChanged()");
+  assert.equal(env.run('state.screen'),'home');
+});
+
+test("display cache is bounded and isolated when the active snapshot changes",async()=>{
+  const env=environment(); await ready(env);
+  env.run("for(let i=0;i<150;i++) rememberDisplay({concept_id:'id-'+i,display_label:'label'});");
+  assert.equal(env.run('Object.keys(state.displayLabels).length'),100);
+  assert.equal(env.run("state.displayLabels['id-0']"),undefined);
+  await env.run("anatomyNavigate('sinuses')");
+  assert.equal(env.run("regionForObservation({concept_id:'finding'})"),'sinuses');
+  env.run("state.selection.snapshot_id='another';");
+  await env.run("anatomyNavigate('body')");
+  assert.equal(env.run("regionForObservation({concept_id:'finding'})"),undefined);
+});
+
+test("editing a resumed symptom never reinterprets the original subject age or other context",async()=>{
+  const env=environment(); await ready(env);
+  env.context.originalContext={age:{kind:'quantity',value:480,unit:'month'},custom_context:'unchanged'};
+  env.node('patient-age').value='480';
+  env.run('state.ageDirty=false;state.caseDirty=true;');
+  assert.equal(env.run('JSON.stringify(subjectContextForSave(originalContext))'),JSON.stringify(env.context.originalContext));
+  env.run('state.ageDirty=true;'); env.node('patient-age').value='40';
+  assert.equal(env.run('subjectContextForSave(originalContext).age.unit'),'year');
+  assert.equal(env.run('subjectContextForSave(originalContext).custom_context'),'unchanged');
+  env.node('patient-age').value='';
+  assert.equal(env.run('subjectContextForSave(originalContext).age'),undefined);
+  assert.equal(env.context.originalContext.age.unit,'month');
 });

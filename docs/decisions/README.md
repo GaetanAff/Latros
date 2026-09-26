@@ -19,6 +19,7 @@ Décisions acceptées :
 - [0013 — Projections HTTP paresseuses des résultats immuables](0013-transport-paresseux-des-resultats.md).
 - [0014 — Adjudication humaine versionnée et isolée](0014-adjudication-humaine-versionnee.md).
 - [0015 — Affichage multilingue et alias séparés de la connaissance](0015-affichage-multilingue-local.md).
+- [0016 — Navigation anatomique séparée de la connaissance](0016-navigation-anatomique-de-presentation.md).
 
 Utiliser un fichier par décision, par exemple :
 

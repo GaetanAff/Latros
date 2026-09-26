@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 550" role="img" aria-labelledby="sinus-title">
+  <title id="sinus-title">Schematic front view of frontal, ethmoid and maxillary sinus regions</title>
+  <defs><radialGradient id="sinus-face"><stop stop-color="#f4f6ef"/><stop offset="1" stop-color="#cbdedb"/></radialGradient></defs>
+  <path d="M158 391L154 469L70 535L350 535L266 469L262 391" fill="#dbe8e4"/>
+  <path d="M88 157Q82 39 210 31Q338 39 332 157L315 285Q294 367 210 411Q126 367 105 285Z" fill="url(#sinus-face)" stroke="#93b8b1" stroke-width="2"/>
+  <g fill="none" stroke="#afc8c1" stroke-width="2"><ellipse cx="153" cy="209" rx="37" ry="20"/><ellipse cx="267" cy="209" rx="37" ry="20"/><path d="M196 213L185 276Q209 291 235 276L223 213M168 322Q210 343 252 322M132 315Q154 371 210 392Q266 371 288 315"/></g>
+  <g id="sinus-regions" data-region="sinuses" role="button" tabindex="0" aria-label="Sinuses" fill="#b7cfaf" stroke="#0f6472" stroke-width="2.5">
+    <path d="M137 108Q162 76 196 115L201 163Q171 170 148 147Z"/>
+    <path d="M283 108Q258 76 224 115L219 163Q249 170 272 147Z"/>
+    <path d="M187 177Q198 167 202 184L201 227L187 223ZM233 177Q222 167 218 184L219 227L233 223Z" fill="#6ea07a"/>
+    <path d="M130 247Q153 221 178 248L181 293Q146 319 122 282Z"/>
+    <path d="M290 247Q267 221 242 248L239 293Q274 319 298 282Z"/>
+  </g>
+  <g fill="none" stroke="#0f6472" stroke-width="2" opacity=".5" aria-hidden="true" pointer-events="none"><path d="M171 141L195 186L203 276M249 141L225 186L217 276M155 275L199 263M265 275L221 263"/></g>
+</svg>

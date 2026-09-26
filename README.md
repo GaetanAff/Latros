@@ -9,11 +9,19 @@ sont locaux et explicables, sans LLM. L'interface web propose désormais un parc
 conserve la console R&D en mode expert. Elle n'est pas une interface patient validée.
 
 Le parcours simple propose désormais **FR / DE / EN**, mémorisés localement. La recherche
-accepte synonymes, accents, préfixes et un petit lexique grand public versionné (neuf concepts
-HPO vérifiés techniquement dans le snapshot local). Les traductions/désignations sont uniquement
+accepte synonymes, accents, préfixes et un lexique grand public versionné (65 concepts avec
+affichage FR/DE activé sur les 11 671 observations recherchables du snapshot local). Les traductions/désignations sont uniquement
 de l'affichage ; les termes non traduits restent signalés **EN** et les IDs/reçus sont inchangés.
 Voir le [rapport multilingue](docs/reports/ui-i18n-local-search.md). Aucun service de traduction,
 NLP ou nouvelle connaissance médicale n'est introduit.
+
+Le mode simple offre une navigation **Corps → Tête → Sinus**, des SVG locaux interactifs,
+une recherche permanente et un thème clair/sombre. Les observations d'une région sont résolues
+contre le snapshot actif avant affichage ; les autres vues détaillées restent explicitement à
+faire. Carte et recherche ajoutent la même observation, une seule fois, avec état présent,
+absent ou inconnu. `/expert` reste la console R&D complète. Voir le
+[rapport anatomique et audit de couverture](docs/reports/ui-anatomy-vnext.md) et
+la [documentation UI](docs/modern-ui.md).
 
 > **Aucun triage n'est effectué.** Toutes les analyses retournent `safety_status: not_evaluated`. Les scores sont des compatibilités sémantiques, jamais des probabilités ou des diagnostics validés. Ne pas utiliser ce prototype pour conseiller un patient.
 

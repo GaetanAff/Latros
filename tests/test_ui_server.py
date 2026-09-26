@@ -76,7 +76,8 @@ def test_ui_shell_is_local_static_and_explicit_about_limits(tmp_path: Path) -> N
     response = client.get("/")
 
     assert response.status_code == 200
-    assert "Qu’est-ce qui vous gêne ?" in response.text
+    assert "Explorez une région du corps" in response.text
+    assert 'id="anatomy-canvas"' in response.text
     assert "La saisie libre n’est pas encore interprétée" in response.text
     assert "Urgences non évaluées" in response.text
     assert "Mode expert" in response.text

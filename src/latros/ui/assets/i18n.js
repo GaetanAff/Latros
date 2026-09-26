@@ -2,6 +2,33 @@
 // Versioned, local presentation strings. No medical inference or translation service.
 (() => {
   const catalog = {
+"local": ["Local","Lokal","Local"],
+"anatomy_navigation": ["Navigation anatomique","Anatomische Navigation","Anatomical navigation"],
+"search_and_observations": ["Recherche et observations","Suche und Beobachtungen","Search and observations"],
+"theme": ["Changer le thème clair/sombre","Hell/dunkel umschalten","Toggle light/dark theme"],
+"body": ["Corps","Körper","Body"],
+"explore": ["Explorez une région du corps","Erkunden Sie eine Körperregion","Explore a body region"],
+"anatomy_hint": ["Cliquez sur une région ou utilisez la recherche. La carte aide à naviguer, pas à diagnostiquer.","Wählen Sie eine Region oder nutzen Sie die Suche. Die Karte dient der Navigation, nicht der Diagnose.","Select a region or use search. The map is navigation, not a diagnosis."],
+"region_pending": ["Cette vue détaillée n’est pas encore disponible. La recherche reste accessible.","Diese Detailansicht ist noch nicht verfügbar. Die Suche bleibt zugänglich.","This detailed view is not available yet. Search is still available."],
+"findings_prompt": ["Que constatez-vous ?","Was bemerken Sie?","What do you notice?"],
+"region_empty": ["Aucune observation supportée n’est disponible pour cette région dans le snapshot actif.","Für diese Region sind im aktiven Snapshot keine unterstützten Beobachtungen verfügbar.","No supported observations are available for this region in the active snapshot."],
+"present": ["Présent","Vorhanden","Present"],
+"absent": ["Absent","Nicht vorhanden","Absent"],
+"add_case": ["Ajouter au cas","Zum Fall hinzufügen","Add to case"],
+"selected_title": ["Symptômes sélectionnés","Ausgewählte Symptome","Selected symptoms"],
+"selected_empty": ["Ajoutez un symptôme depuis la carte ou la recherche.","Fügen Sie ein Symptom über die Karte oder Suche hinzu.","Add a symptom using the map or search."],
+"case_changed": ["Observations modifiées. Relancez l’analyse ou demandez une nouvelle question.","Beobachtungen geändert. Analyse neu starten oder eine neue Frage anfordern.","Observations changed. Run the analysis again or request a new question."],
+"analyze": ["Analyser avec Latros","Mit Latros analysieren","Analyse with Latros"],
+"next_question": ["Question suivante","Nächste Frage","Next question"],
+"added_case": ["Observation ajoutée. Vous pouvez continuer à explorer.","Beobachtung hinzugefügt. Sie können weiter erkunden.","Observation added. You can continue exploring."],
+"region_loading": ["Chargement des observations locales…","Lokale Beobachtungen werden geladen…","Loading local observations…"],
+"region_error": ["Observations indisponibles. Réessayez ou utilisez la recherche.","Beobachtungen nicht verfügbar. Erneut versuchen oder Suche nutzen.","Observations unavailable. Retry or use search."],
+"navigate_region": ["Voir la région","Region anzeigen","View region"],
+"anatomy_back": ["Revenir à la région précédente","Zur vorherigen Region","Back to previous region"],
+"select_state": ["État de l’observation","Beobachtungsstatus","Observation status"],
+"navigate_body": ["Explorer le corps","Körper erkunden","Explore the body"],
+"search_open": ["Rechercher / symptômes","Suche / Symptome","Search / symptoms"],
+"source_labels": ["Labels source conservés ; carte de navigation uniquement.","Originalbezeichnungen bleiben erhalten; Karte nur zur Navigation.","Source labels preserved; map is navigation only."],
   "title": [
     "Latros — Explorer ses symptômes",
     "Latros — Symptome erkunden",
@@ -560,6 +587,6 @@
   };
   window.LatrosI18n = { t, apply, get language() { return language; },
     setLanguage(value) { if (!["fr","de","en"].includes(value)) throw new Error("Unsupported UI language"); language=value; try { localStorage.setItem("latros-language",value); } catch {} apply(); },
-    catalogVersion: "ui-i18n-1"
+    catalogVersion: "ui-i18n-2"
   };
 })();

@@ -188,11 +188,20 @@ réévalue Jinja2/JavaScript natif face à React/Vite ; la
 [documentation UI](modern-ui.md) précise le parcours et ses limites. Ce prototype d'ergonomie ne
 change ni le jalon v0.6 livré, ni le statut du snapshot v0.7, ni la revue clinique G.
 
-L'extension [multilingue et recherche locale](reports/ui-i18n-local-search.md) est livrée dans
-une branche/PR UI séparée de G5 : FR/DE/EN pour le parcours simple, désignations locales et
+L'extension [multilingue et recherche locale](reports/ui-i18n-local-search.md), fusionnée via
+#16 après G5 #15, apporte FR/DE/EN pour le parcours simple, désignations locales et
 lexique d'affichage limité, suggestions tolérantes et fallback anglais visible. Les concepts,
 observations soumises, question IDs et résultats scientifiques restent inchangés ; v0.9 NLP
 reste future. Node 22 sert uniquement aux tests frontend, jamais au runtime de Latros.
+
+La tranche UI anatomique vNext implémente Corps → Tête → Sinus, SVG locaux et arbre de
+navigation extensible, recherche permanente, états explicites sans doublon, thèmes et responsive.
+Les autres régions détaillées restent à faire. Les références sont résolues contre les
+observations supportées du snapshot, jamais ajoutées comme assertions ou localisation clinique.
+65 concepts ont un affichage FR/DE actif ; la majorité reste avec fallback EN.
+L'[ADR 0016](decisions/0016-navigation-anatomique-de-presentation.md) et le
+[rapport mesuré](reports/ui-anatomy-vnext.md) précisent architecture, coverage et limites.
+Ce chantier ne commence ni G clinique, ni safety, ni v0.9 ; scoring et snapshot restent identiques.
 
 ## Étape v0.7 — fabrique souveraine généraliste
 
