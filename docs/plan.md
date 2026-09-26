@@ -214,6 +214,7 @@ ne sera pas restauré comme dépendance du nouveau snapshot.
 | `v0.7-G2` | Échantillonnage et provenance vérifiés, outil prêt — revue humaine à faire | 120 candidates MedlinePlus et 40 assertions Monarch/Orphadata ; décisions séparées du snapshot |
 | `v0.7-G3` | Protocole défini — évaluation indépendante non réalisée | Cas non patients à rédiger/adjudique séparément du snapshot et des fixtures logiciels |
 | `v0.7-G4` | Passe technique expérimentale terminée — revue humaine à faire | Rejeu exact du XML MedlinePlus local, filtre de rôle/contextes et nouveau G2 ; aucun candidat approuvé ni snapshot modifié |
+| `v0.7-G5` | Workflow d'adjudication préparé — décisions humaines à faire | 7 736 items G4 contextualisés, double revue, adjudication distincte, contrôles déterministes 180 retenues / 180 rejets et exports séparés |
 | `v0.7-G` | À faire | Revue clinique et décision distincte sur une éventuelle publication |
 
 Le parseur MedlinePlus transforme uniquement le XML local en enregistrements sources fidèles. Le
@@ -263,6 +264,9 @@ l'écrasement accidentel ; le chemin de sortie reste sous `data/staging/`.
 L'[outil de revue G1/G2](v0.7-g-review-ui.md), distinct du symptom checker, affiche une ligne à
 la fois et conserve un journal local append-only. Son existence n'est ni une décision clinique,
 ni le début d'une promotion du snapshot ; G1/G2 restent à faire par des réviseurs réels.
+G5 étend cet outil par un [workflow d'adjudication](reports/v0.7-g5-human-adjudication.md),
+sans nouveau filtre ni promotion. Les 4 056 items `needs_human_review` ouvrent la file ;
+les contrôles des retenues/rejets ne mesurent pas une sensibilité clinique. G3 reste requis.
 
 ### Sous-tranches v0.7 — médicaments, temporalité et mesures cliniques
 

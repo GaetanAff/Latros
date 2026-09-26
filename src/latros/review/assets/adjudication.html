@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Latros — adjudication humaine G5</title><link rel="stylesheet" href="/assets/review.css">
+<script src="/assets/adjudication.js" defer></script></head><body>
+<header class="topbar"><div class="brand"><img src="/logo.svg" alt="Latros"><span>Revue humaine G5</span></div><span class="local-badge">Local · hors ligne</span></header>
+<main><h1>Revoir les assertions, pas les approuver automatiquement.</h1>
+<p>G4 est un filtre technique, pas une vérité clinique. Les décisions restent dans un journal local.
+Le snapshot est non validé, non publiable et <code>safety_status: not_evaluated</code>.</p>
+<div id="message" class="message" role="alert" hidden></div>
+<section class="toolbar"><label>Jeu <select id="dataset"><option value="g4">G4 — 7 736 candidates</option><option value="g1">G1 — mappings</option><option value="g2_medline">G2 — MedlinePlus historique</option><option value="g2_upstream">G2 — Monarch/Orphadata</option></select></label>
+<label>Étape <select id="stage"><option value="review">Revue indépendante</option><option value="adjudication">Adjudication distincte</option></select></label></section>
+<details class="review-card"><summary>Filtrer la file de revue</summary><form id="filters" class="filter-grid">
+<label>Décision G4<select name="auto_filter_decision"><option value="">Toutes</option><option value="needs_human_review">À revoir en priorité</option><option value="auto_keep">Retenues (non approuvées)</option><option value="reject_from_auto_extraction">Rejets automatiques à contrôler</option></select></label>
+<label>Sample<select name="sample"><option value="">Tous les items</option><option value="rejected_control">Contrôle rejets</option><option value="retained_control">Contrôle retenues</option></select></label>
+<label>Domaine<input name="domains"></label><label>Règle G4<input name="auto_filter_rule"></label>
+<label>Maladie<input name="disease_label"></label><label>Finding<input name="finding_label"></label>
+<label>Mapping maladie<select name="subject_mapping_status"><option value="">Tous</option><option>resolved</option><option>ambiguous</option><option>unresolved</option></select></label>
+<label>MedlinePlus-only<select name="medlineplus_only"><option value="">Tous</option><option value="true">Oui</option><option value="false">Non</option></select></label>
+<label>Occurrences<select name="multiple_occurrences"><option value="">Toutes</option><option value="true">Plusieurs occurrences</option></select></label>
+<label>Contexte source<input name="source_context"></label><button class="button secondary">Appliquer</button></form></details>
+<p id="progress" aria-live="polite"></p>
+<section class="review-card"><h2 id="item-title">Chargement…</h2><p id="finding"></p>
+<div id="comparison" class="comparison"></div><h3>Texte source pertinent</h3><p id="source-context" class="source-text"></p>
+<details><summary>Toutes les occurrences et texte source local</summary><div id="occurrences"></div><p id="source-text" class="source-text"></p></details>
+<details><summary>Détails techniques : mappings, provenance, hashes, dépendances</summary><dl id="technical" class="fields"></dl></details>
+<div class="pager"><button id="previous" class="button secondary">← Précédent</button><button id="next" class="button secondary">Suivant →</button></div></section>
+<section class="decision-card"><h2>Décision humaine explicite</h2><p>Aucun choix n’est présélectionné. En revue indépendante, les décisions des autres réviseurs ne sont pas montrées. L’identité est déclarative.</p>
+<form id="decision-form"><div class="identity-grid"><label>Nom réel<input id="reviewer-name" required minlength="3" autocomplete="name"></label><label>Identifiant réel/self-attested<input id="reviewer-id" required minlength="2"></label></div>
+<label>Qualification déclarée (facultative, non vérifiée)<input id="qualification" maxlength="500"></label>
+<label>Catégorie<select id="category" required><option value="" selected disabled>Choisir une catégorie</option></select></label>
+<label id="mapping-wrap" hidden>Relation du mapping humain (G1 seulement)<select id="mapping-relation"><option value="">Choisir explicitement</option><option value="exact">exact</option><option value="equivalent">equivalent</option></select></label>
+<fieldset><legend>Décision finale, séparée de la catégorie</legend><div id="decisions" class="actions"></div></fieldset>
+<label>Justification/commentaire<textarea id="comment" rows="4" maxlength="2000"></textarea></label>
+<label class="attestation"><input id="attest" type="checkbox" required>J’atteste utiliser ma propre identité. Les décisions sont horodatées ; elles ne modifient pas le snapshot.</label>
+<button id="save" class="button primary">Enregistrer localement (Ctrl+Entrée)</button></form></section>
+<section class="history-card"><h2>Historique accessible dans cette étape</h2><div id="history"></div></section>
+<section class="toolbar"><label>Export déterministe<select id="export-kind"><option value="individual_decisions">Décisions individuelles</option><option value="disagreements">Désaccords</option><option value="adjudications">Adjudications</option><option value="rejected_control">Contrôle des rejets</option><option value="retained_control">Contrôle des retenues</option><option value="summary">Résumé statistique</option></select></label><button id="export" class="button secondary">Exporter</button></section>
+<p class="fine-print">Navigation : Alt+← / Alt+→. La reprise conserve la position locale, pas une décision préremplie. Deux réviseurs qualifiés et un adjudicateur distinct doivent être organisés par l’équipe humaine. Ni accord ni adjudication ne constitue une promotion du snapshot. G3 indépendant reste requis.</p>
+</main></body></html>
