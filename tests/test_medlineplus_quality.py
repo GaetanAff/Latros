@@ -263,3 +263,15 @@ def test_repeated_occurrences_and_markup_are_not_duplicate_matches() -> None:
     )
     assert len(visible_occurrences(topic, 0, candidate.object_text)) == 2
     assert classify_candidate(candidate, topic).status == "auto_keep"
+
+
+def test_review_context_points_to_the_rule_trigger_not_first_occurrence() -> None:
+    candidate, topic = _case(
+        "Cold",
+        "fever",
+        "<p>Fever is mentioned.</p><h2>Screening</h2><p>Test for fever.</p>",
+    )
+    decision = classify_candidate(candidate, topic)
+    assert decision.rule_id == "procedure_section"
+    assert decision.section == "Screening"
+    assert decision.context == "Test for fever."

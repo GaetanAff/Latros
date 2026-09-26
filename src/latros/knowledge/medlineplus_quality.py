@@ -302,11 +302,23 @@ def classify_candidate(
                 )
     for rule in ("condition_example_or_subtype", "other_disease_mention", *blocked_context):
         if rule in flags:
+            trigger = next(
+                (
+                    occurrence
+                    for occurrence in occurrences
+                    if rule in _context_signals(occurrence)
+                    or (
+                        rule == "condition_example_or_subtype"
+                        and _EXAMPLE_OR_SUBTYPE.search(_normalize(occurrence.text))
+                    )
+                ),
+                first,
+            )
             return QualityDecision(
                 "needs_human_review",
                 rule,
-                first.section,
-                first.text,
+                trigger.section,
+                trigger.text,
                 tuple(sorted(flags)),
             )
     return QualityDecision(

@@ -34,7 +34,7 @@ validé n'est publié. `v0.7.0-general-dev-unreviewed` est le nouveau corpus gé
   nouveau sample et journal des 7 736 décisions restent sous `data/staging/`.
 - Les vérifications et limites sont consignées dans le
   [rapport G4](reports/v0.7-g4-medlineplus-extraction-quality.md). Ruff, format, mypy strict,
-  schémas, registre et 196 tests sont verts ; le rejeu réel avec sockets bloquées produit le
+  schémas, registre et 197 tests sont verts ; le rejeu réel avec sockets bloquées produit le
   même hash. La PR #14 est ouverte avec CI Linux/Windows verte. G1/G2 humains et G3
   indépendant restent à faire ; aucun statut clinique n'a changé.
 
