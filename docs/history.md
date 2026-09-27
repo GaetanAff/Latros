@@ -1044,5 +1044,7 @@ localement sous Windows avant push.
   anatomie, langues, oreille interne mobile/dark, pas de scroll horizontal.
 - Goldens réels historiques identiques ; reasoning, snapshot, profils médicaux, schémas et
   statuts inchangés. Aucune décision clinique inventée. Rapport [atlas v3](reports/ui-atlas-v3.md).
+  Copie d'intégration des PR #19/#20 : 233 tests Python et 16 frontend verts. Import d'un
+  script de test rendu indépendant du lanceur pytest après un échec CI, sans retirer de test.
   G1/G2 humains et G3 restent requis ; relecture anatomique/linguistique encore nécessaire.
   `FUTUR INTERFACE/` entièrement ignoré et non modifié.

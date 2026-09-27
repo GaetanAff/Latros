@@ -115,7 +115,10 @@ Contrôle navigateur sur cas fictif : Corps → Tête → Sinus au clavier, ajou
 anatomie puis recherche sans doublon, langue changée en session, recherche allemande Wheezing,
 Oreille interne, mobile 390 × 844, dark mode, absence de scroll horizontal. Stockage de test
 isolé pour ne pas demander à cette branche basée sur main de lire les sessions du futur
-contrat General/Rare de #19. Après fusion des deux PR, leur intégration doit aussi être testée.
+contrat General/Rare de #19. Une copie temporaire du merge-tree propre des deux PR passe
+**233 tests Python et 16 frontend** sans mélanger les branches. La CI a détecté un import de
+script dépendant de `python -m pytest` ; le test charge désormais le fichier explicitement,
+et la commande exacte `pytest` est relancée. Aucun test n'est supprimé pour contourner l'échec.
 
 Hash canonique inchangé :
 `bfda708aba44dcc5d12896ac7523d9d6bb577dea53bdc3810e499c15f64b1fb0`.

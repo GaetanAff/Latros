@@ -2,7 +2,9 @@
 
 import copy
 import hashlib
+import runpy
 import socket
+from pathlib import Path
 
 import pytest
 from fastapi.testclient import TestClient
@@ -209,7 +211,9 @@ def test_alias_lexicon_unambiguous_and_presentation_only():
 
 
 def test_translation_review_export_is_deterministic_and_has_no_decisions(display_snapshot):
-    from scripts.export_ui_translation_review import review_rows
+    review_rows = runpy.run_path(
+        str(Path(__file__).resolve().parents[1] / "scripts/export_ui_translation_review.py")
+    )["review_rows"]
 
     root, _ = display_snapshot
     with CanonicalKnowledgeRepositoryV2(root, "test-v2") as base:
