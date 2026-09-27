@@ -18,31 +18,6 @@ Référence médicale publiée : **`v0.2.0`**, nom du jalon « Premier snapshot 
 validé n'est publié. `v0.7.0-general-dev-unreviewed` est le nouveau corpus généraliste DEV local,
 également non publiable. L'ancien snapshot `latros-kb-0002` est conservé.
 
-## Illustrations anatomiques locales v3 — 27 septembre 2026
-
-- PR #17 relue, contrôles/goldens/CI Linux/Windows verts, puis fusionnée. Deux branches
-  distinctes depuis le même main `31ae932` : General/Rare (#19) et cette tranche visuelle.
-- Série locale de sept images générées, sans texte intégré, registre SHA-256/version/statut,
-  overlays SVG indépendants, labels HTML, clavier et viewports sans déformation. 35 vues :
-  oreille externe/moyenne/interne, thorax/poumons/cœur, abdomen/organes, bassin urinaire et membres.
-  Les organes hors tête sont des zooms du corps, pas des planches dédiées. Images non validées
-  anatomiquement ; alternative Servier CC BY 4.0 étudiée, aucun asset tiers copié. ADR 0018.
-- Lexique UI version 3 : 150 propositions, 139 concepts FR/DE effectivement activés contre
-  65 auparavant ; 146 alias FR et 143 DE, onze références ambiguës désactivées. 80 ajouts
-  avec provenance et statut éditorial à revoir humainement. 11 532 findings restent sans FR/DE.
-  Export offline déterministe de 11 671 lignes pour revue linguistique, décisions/reviewer nuls.
-- Mesures : première recherche 8,276 → 7,810 s après insertion d'alias groupée et résolution
-  unique ; la référence historique #17 était 6,776 s, aucun gain froid global revendiqué.
-  Médianes chaudes 0,162–0,215 s. Le démarrage ne précharge ni DuckDB ni les sept images.
-- Tests ajoutés : hashes/altération d'images, chemins externes refusés, overlays indépendants,
-  navigation étendue, export linguistique déterministe sans décisions et limites bornées.
-  Contrôle navigateur sur cas fictif : Sinus au clavier, absent explicite, unicité recherche/
-  anatomie, langues, oreille interne mobile/dark, pas de scroll horizontal.
-- Goldens réels historiques identiques ; reasoning, snapshot, profils médicaux, schémas et
-  statuts inchangés. Aucune décision clinique inventée. Rapport [atlas v3](reports/ui-atlas-v3.md).
-  G1/G2 humains et G3 restent requis ; relecture anatomique/linguistique encore nécessaire.
-  `FUTUR INTERFACE/` entièrement ignoré et non modifié.
-
 ## Navigation anatomique UI vNext — 26 septembre 2026
 
 - PR #15 relue et fusionnée ; #16 mise à jour sur le nouveau main, contrôles et CI
@@ -1045,3 +1020,29 @@ d'exemple synthétique sont versionnés ; les captures, Parquet, DuckDB et reçu
 locaux et hors Git. E4 ne démarre ni F ni G : la publication clinique `v0.5.0` reste bloquée par les
 revues humaines réelles. Ruff, formatage, mypy strict, schémas et les 125 tests réussissent
 localement sous Windows avant push.
+
+
+## Illustrations anatomiques locales v3 — 27 septembre 2026
+
+- PR #17 relue, contrôles/goldens/CI Linux/Windows verts, puis fusionnée. Deux branches
+  distinctes depuis le même main `31ae932` : General/Rare (#19) et cette tranche visuelle.
+- Série locale de sept images générées, sans texte intégré, registre SHA-256/version/statut,
+  overlays SVG indépendants, labels HTML, clavier et viewports sans déformation. 35 vues :
+  oreille externe/moyenne/interne, thorax/poumons/cœur, abdomen/organes, bassin urinaire et membres.
+  Les organes hors tête sont des zooms du corps, pas des planches dédiées. Images non validées
+  anatomiquement ; alternative Servier CC BY 4.0 étudiée, aucun asset tiers copié. ADR 0018.
+- Lexique UI version 3 : 150 propositions, 139 concepts FR/DE effectivement activés contre
+  65 auparavant ; 146 alias FR et 143 DE, onze références ambiguës désactivées. 80 ajouts
+  avec provenance et statut éditorial à revoir humainement. 11 532 findings restent sans FR/DE.
+  Export offline déterministe de 11 671 lignes pour revue linguistique, décisions/reviewer nuls.
+- Mesures : première recherche 8,276 → 7,810 s après insertion d'alias groupée et résolution
+  unique ; la référence historique #17 était 6,776 s, aucun gain froid global revendiqué.
+  Médianes chaudes 0,162–0,215 s. Le démarrage ne précharge ni DuckDB ni les sept images.
+- Tests ajoutés : hashes/altération d'images, chemins externes refusés, overlays indépendants,
+  navigation étendue, export linguistique déterministe sans décisions et limites bornées.
+  Contrôle navigateur sur cas fictif : Sinus au clavier, absent explicite, unicité recherche/
+  anatomie, langues, oreille interne mobile/dark, pas de scroll horizontal.
+- Goldens réels historiques identiques ; reasoning, snapshot, profils médicaux, schémas et
+  statuts inchangés. Aucune décision clinique inventée. Rapport [atlas v3](reports/ui-atlas-v3.md).
+  G1/G2 humains et G3 restent requis ; relecture anatomique/linguistique encore nécessaire.
+  `FUTUR INTERFACE/` entièrement ignoré et non modifié.
