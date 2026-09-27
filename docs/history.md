@@ -18,6 +18,22 @@ Référence médicale publiée : **`v0.2.0`**, nom du jalon « Premier snapshot 
 validé n'est publié. `v0.7.0-general-dev-unreviewed` est le nouveau corpus généraliste DEV local,
 également non publiable. L'ancien snapshot `latros-kb-0002` est conservé.
 
+## Intégration locale General/Rare + atlas — 27 septembre 2026
+
+- À la demande de l'utilisateur, PR #19 fusionnée dans `main` (`2cb49d4`), puis #20
+  synchronisée avec ce nouveau main sans conflit. Les deux chantiers gardent leurs PR distinctes.
+- Cause du blocage réel de l'accueil : une session de test General/Rare porte le champ
+  `consultation`, interdit par l'ancien contrat de la branche atlas seule. La liste de sessions
+  entière retournait HTTP 422. Les essais visuels isolés n'avaient pas validé ce lancement normal.
+- L'intégration charge désormais les 11 sessions locales avec HTTP 200 ; les hashes des
+  fichiers de sessions sont inchangés. Aucun effacement, aucune migration silencieuse ni
+  assouplissement de validation pour masquer le problème. `/` et `/expert` répondent aussi.
+- 233 tests Python et 16 frontend verts, Ruff/format/mypy strict/schémas/registre verts ;
+  sept diagnostics/questions réels historiques comparés offline aux goldens, hashes identiques.
+  Le lancement utilise le stockage habituel, pas un répertoire de sessions isolé.
+- Snapshot, scoring historique, statuts cliniques et safety inchangés. Limites scientifiques,
+  anatomiques et linguistiques documentées conservées ; `FUTUR INTERFACE/` laissé intact.
+
 ## General-first / Rare-second expérimental — 27 septembre 2026
 
 - PR #17 relue, tests/CI et sept goldens vérifiés, fusionnée ; base propre `31ae932`.

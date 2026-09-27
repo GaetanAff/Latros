@@ -34,8 +34,11 @@ Pour préparer une vraie revue linguistique locale (11 671 lignes, décisions vi
 uv run --offline --no-sync python scripts/export_ui_translation_review.py --output-dir data/staging/ui-atlas-translation-review
 ```
 
-Le nouveau questionnaire General-first / Rare-second est livré dans une
-[PR séparée #19](https://github.com/GaetanAff/Latros/pull/19), pas dans ce diff visuel.
+Le questionnaire General-first / Rare-second et les illustrations ont été développés dans
+deux PR distinctes ([#19](https://github.com/GaetanAff/Latros/pull/19) et
+[#20](https://github.com/GaetanAff/Latros/pull/20)), puis intégrés ensemble. Lancer depuis
+`main` synchronisé permet de conserver et relire les sessions du nouveau parcours ; une
+ancienne branche UI seule ne reconnaît pas leur champ `consultation`.
 
 > **Aucun triage n'est effectué.** Toutes les analyses retournent `safety_status: not_evaluated`. Les scores sont des compatibilités sémantiques, jamais des probabilités ou des diagnostics validés. Ne pas utiliser ce prototype pour conseiller un patient.
 

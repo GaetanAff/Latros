@@ -1,6 +1,6 @@
 # Plan d'implémentation et avancement
 
-Référence : plan « Premières étapes de Latros — socle de données et moteur clinique pur » demandé par l'utilisateur. État au 26 septembre 2026.
+Référence : plan « Premières étapes de Latros — socle de données et moteur clinique pur » demandé par l'utilisateur. État au 27 septembre 2026.
 
 Les trois jalons avaient été implémentés ensemble dans la première tranche. La reprise de l'étape 2 consiste à vérifier sa livraison et à établir le snapshot sous le nom du jalon, `v0.2.0`. Elle ne correspond pas à l'ajout de nouvelles sources ou de fonctions cliniques.
 
@@ -13,7 +13,9 @@ G4 (142 maladies, 684 assertions, une famille `unknown`) puis `rare_question_v1`
 explicite. Budgets 6 / 12, anti-doublons, cas partagé, résultats séparés.
 [Rapport](reports/general-first-rare-second.md), [ADR 0017](decisions/0017-consultations-generale-et-rare-versionnees.md).
 Aucune revue clinique G1/G2 réalisée, G3 indépendant à faire, snapshot inchangé. Optimisation
-runtime arrêtée après F6 sauf régression. Illustrations/navigation/traductions : chantier distinct.
+runtime arrêtée après F6 sauf régression. Illustrations/navigation/traductions : chantier distinct,
+intégré avec ces politiques après fusion de #19. L'intégration relit les sessions existantes
+sans les supprimer ni ignorer le contrat `consultation` ; tests combinés : 233 Python et 16 frontend.
 
 | Étape | Nom du plan | État logiciel | Référence des données |
 | --- | --- | --- | --- |

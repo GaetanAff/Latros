@@ -18,6 +18,11 @@ runs immuables.
 
 ## Utilisation
 
+Utiliser `main` synchronisé avec les deux livraisons #19 (General/Rare) et #20 (atlas).
+Le champ optionnel `consultation` est conservé dans les sessions existantes ; l'ancienne
+branche visuelle seule ne sait pas les lire et peut bloquer l'accueil avec HTTP 422.
+Ne pas supprimer les sessions pour contourner cette incompatibilité de versions.
+
 ```powershell
 uv run --offline --no-sync latros --root . ui --no-open
 ```
