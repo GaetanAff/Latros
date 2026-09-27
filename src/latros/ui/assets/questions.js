@@ -14,7 +14,15 @@ async function askNextQuestion() {
 }
 
 async function renderQuestion(question) {
+  updateConsultationView();
   byId("question-count").textContent = t("question_count", {count: state.questionCount});
+  const budget = question.expected_contribution || {};
+  if (Number.isInteger(budget.remaining_budget)) {
+    byId('question-count').textContent = t('bounded_question', {
+      count: budget.answered_in_phase+1, budget:budget.maximum_questions,
+      remaining:budget.remaining_budget,
+    });
+  }
   const params = new URLSearchParams({snapshot: state.selection.snapshot_id, strategy: state.selection.strategy_id,
     system: question.concept.system, code: question.concept.code, language: locale()});
   let display;

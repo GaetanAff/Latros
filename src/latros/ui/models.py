@@ -23,6 +23,14 @@ class SessionRunReference(Contract):
     receipt_id: str = Field(min_length=1)
 
 
+class ConsultationWorkflow(Contract):
+    workflow_version: Literal[1] = 1
+    phase: Literal["general", "rare"] = "general"
+    rare_opted_in_at: datetime | None = None
+    general_run: SessionRunReference | None = None
+    rare_run: SessionRunReference | None = None
+
+
 class ResearchSession(Contract):
     schema_version: Literal[1] = 1
     session_id: str = Field(min_length=1)
@@ -35,6 +43,7 @@ class ResearchSession(Contract):
     latest_diagnose: SessionRunReference | None = None
     latest_question: SessionRunReference | None = None
     run_counter: int = Field(default=0, ge=0)
+    consultation: ConsultationWorkflow | None = None
 
 
 class StoredRun(Contract):

@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "accepted_observation_types": [
+    "symptom",
+    "sign",
+    "exam",
+    "vital"
+  ],
+  "accepted_relations": [
+    "has_symptom",
+    "has_sign",
+    "has_exam_finding"
+  ],
+  "compatible_snapshot_ids": [
+    "v0.7.0-general-dev-unreviewed"
+  ],
+  "compatible_snapshot_schema_versions": [
+    2
+  ],
+  "coverage_rules": [
+    "Direct or resolved exact/equivalent observations only",
+    "Unknown never contributes numerically"
+  ],
+  "out_of_scope_rules": [
+    "Adult engineering scope; no prevalence claims",
+    "No clinical validation or publication"
+  ],
+  "abstention_rules": [
+    "Unambiguous adult age",
+    "At least two assessed findings",
+    "At least one source-scoped scored candidate"
+  ],
+  "profile_sha256": "5f08cb0d561d4ba2bba08e556b4c75251b1edf12734c50059d9739b40c1ac9b5",
+  "profile_id": "general_question_v2-experimental",
+  "strategy_id": "general_question_v2",
+  "strategy_version": "2",
+  "score_scale": {
+    "scale_id": "general_question_v2.compatibility",
+    "kind": "compatibility",
+    "calibrated": false,
+    "description": "Experimental single-editorial-source compatibility, not independent evidence or probability"
+  },
+  "parameters": {
+    "parent_profile_id": "general_v1-general-unreviewed",
+    "parent_profile_sha256": "ec320533ebf4900d8a19e23cec99232b078d56636d6da9cd217b4e9651e3882d",
+    "snapshot_content_sha256": "bfda708aba44dcc5d12896ac7523d9d6bb577dea53bdc3810e499c15f64b1fb0",
+    "maximum_questions": 6,
+    "minimum_age_years": 18,
+    "minimum_assessed_findings": 2,
+    "minimum_coverage_ratio": 0.5,
+    "allow_unlisted_evidence_families": true,
+    "family_weights": {},
+    "policy_version": "medlineplus-g4-single-source-1",
+    "g4_retained_sha256": "78cdfd2d47f3b1fd7aa87f7f564442d7d5b606ed655fb593b8bc366e007cf9a7",
+    "source_dependency_interpretation": "single_source_unknown_not_independent"
+  },
+  "aggregation_rules": [
+    "One MedlinePlus editorial family; average existing polarity contributions, never independent proofs",
+    "Original general_v1 is unchanged"
+  ]
+}

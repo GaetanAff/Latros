@@ -20,6 +20,7 @@ from latros.knowledge.manifest_v2 import KnowledgeSnapshotManifestV2
 from latros.knowledge.presentation_repository import Language, ObservationPresentationRepository
 from latros.knowledge.store import snapshot_path
 from latros.knowledge.store_v2 import snapshot_path_v2
+from latros.reasoning.consultation import CONSULTATION_IDS, DESCRIPTORS, ConsultationStrategy
 from latros.reasoning.engine import Engine
 from latros.reasoning.general_v1 import GENERAL_V1_DESCRIPTOR
 from latros.reasoning.general_v1_lazy import LazyGeneralV1Strategy
@@ -60,12 +61,12 @@ class ResearchApplicationService:
         output_contract: OutputContractName = "auto",
     ) -> dict[str, Any] | DifferentialResultV2:
         safe_id(snapshot)
-        if strategy == "general_v1":
+        if strategy in ("general_v1", *CONSULTATION_IDS):
             if not isinstance(case, ClinicalCaseV2):
                 raise LatrosError("general_v1 accepts only ClinicalCaseV2")
             if output_contract == "v1":
                 raise LatrosError("general_v1 has no v1 output contract")
-            return self._general_strategy(snapshot).diagnose(case)
+            return self._general_strategy(snapshot, strategy).diagnose(case)
         adapter = self._semantic_strategy(snapshot, strategy)
         if self._v2_output(case, output_contract):
             return build_differential_v2(self.root, case, adapter, self.profile(strategy, snapshot))
@@ -79,30 +80,31 @@ class ResearchApplicationService:
         output_contract: OutputContractName = "auto",
     ) -> dict[str, Any] | QuestionResultV2:
         safe_id(snapshot)
-        if strategy == "general_v1":
+        if strategy in ("general_v1", *CONSULTATION_IDS):
             if not isinstance(case, ClinicalCaseV2):
                 raise LatrosError("general_v1 accepts only ClinicalCaseV2")
             if output_contract == "v1":
                 raise LatrosError("general_v1 has no v1 output contract")
-            return self._general_strategy(snapshot).question(case)
+            return self._general_strategy(snapshot, strategy).question(case)
         adapter = self._semantic_strategy(snapshot, strategy)
         if self._v2_output(case, output_contract):
             return build_question_v2(self.root, case, adapter, self.profile(strategy, snapshot))
         return adapter.next(case).payload
 
-    def _general_strategy(self, snapshot: str) -> LazyGeneralV1Strategy:
+    def _general_strategy(
+        self, snapshot: str, strategy_id: str = "general_v1"
+    ) -> LazyGeneralV1Strategy:
         """Keep at most two lightweight, read-only repositories open."""
-        strategy = self._general_cache.get(snapshot)
+        key = snapshot if strategy_id == "general_v1" else snapshot + "/" + strategy_id
+        strategy = self._general_cache.get(key)
         if strategy is None:
-            strategy = LazyGeneralV1Strategy(
-                self.root,
-                snapshot,
-                self.profile("general_v1", snapshot),
-            )
+            strategy = (
+                LazyGeneralV1Strategy if strategy_id == "general_v1" else ConsultationStrategy
+            )(self.root, snapshot, self.profile(strategy_id, snapshot))
             if len(self._general_cache) >= 2:
                 oldest = next(iter(self._general_cache))
                 self._general_cache.pop(oldest).close()
-            self._general_cache[snapshot] = strategy
+            self._general_cache[key] = strategy
         else:
             strategy.repository.assert_unchanged()
         return strategy
@@ -112,12 +114,13 @@ class ResearchApplicationService:
         strategies = [
             self._strategy_capability(SEMANTIC_V1_DESCRIPTOR),
             self._strategy_capability(GENERAL_V1_DESCRIPTOR),
+            *(self._strategy_capability(item) for item in DESCRIPTORS.values()),
         ]
         selections: list[CompatibleSelection] = []
         for snapshot in snapshots:
             if snapshot.schema_version is None:
                 continue
-            for strategy in ("semantic_v1", "general_v1"):
+            for strategy in ("semantic_v1", "general_v1", *CONSULTATION_IDS):
                 try:
                     profile = self.profile(strategy, snapshot.snapshot_id)
                     compatible = profile.accepts_snapshot(
@@ -165,8 +168,8 @@ class ResearchApplicationService:
         if limit < 1 or limit > 50:
             raise LatrosError("Concept result limit must be between 1 and 50")
         normalized = query.strip().casefold()
-        if strategy == "general_v1":
-            rows = self._general_strategy(snapshot).repository.observation_options(
+        if strategy in ("general_v1", *CONSULTATION_IDS):
+            rows = self._general_strategy(snapshot, strategy).repository.observation_options(
                 query=normalized if normalized.isascii() else "", limit=0 if normalized else limit
             )
             matches = [
@@ -190,7 +193,7 @@ class ResearchApplicationService:
     def resolve_question_concept(
         self, snapshot: str, strategy: str, system: str, code: str
     ) -> ConceptOption:
-        if strategy == "general_v1":
+        if strategy in ("general_v1", *CONSULTATION_IDS):
             self.require_compatible(snapshot, strategy)
             rows = self._general_strategy(snapshot).repository.observation_options(
                 system=system, code=code, limit=0
@@ -224,7 +227,7 @@ class ResearchApplicationService:
     def _presentation_repository(
         self, snapshot: str, strategy: str
     ) -> ObservationPresentationRepository:
-        if strategy != "general_v1":
+        if strategy not in ("general_v1", *CONSULTATION_IDS):
             raise LatrosError("The simple display projection supports general_v1 only")
         # A cached repository has already passed the exact compatibility/integrity checks;
         # _general_strategy asserts all verified file attributes again on every access.

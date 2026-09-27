@@ -4,6 +4,7 @@ async function diagnose() {
   });
   state.session = payload.session;
   state.resultRun = payload.run;
+  if (consultationPhase() === 'general') state.generalRun = payload.run;
   await refreshDisplayLabels();
   renderResults();
   showScreen("results");
@@ -23,6 +24,7 @@ function contributionLabels(items, max = 2) {
 function renderResults() {
   const result = state.resultRun?.result;
   if (!result) return;
+  updateConsultationView();
   const candidates = result.candidates || [];
   const alert = byId("result-alert");
   const unreviewed = Boolean(result.research_unreviewed);
@@ -38,7 +40,11 @@ function renderResults() {
     byId("result-intro").textContent = t("result_intro");
   }
   const visible = candidates.slice(0, state.visibleCount);
-  byId("result-list").innerHTML = visible.map((candidate, index) => {
+  byId("result-list").innerHTML = resultCards(visible, consultationPhase());
+  byId("show-more-results").hidden = candidates.length <= state.visibleCount;
+}
+function resultCards(candidates, phase) {
+  return candidates.map((candidate, index) => {
     const favorable = contributionLabels(candidate.favorable);
     const unfavorable = contributionLabels(candidate.unfavorable);
     return `<article class="result-card"><div class="result-heading">
@@ -49,7 +55,6 @@ function renderResults() {
       <button type="button" class="text-link" data-detail-index="${index}">${escapeHtml(t("see_why"))}</button>
     </article>`;
   }).join("");
-  byId("show-more-results").hidden = candidates.length <= state.visibleCount;
 }
 
 function detailList(items, empty) {
@@ -74,10 +79,11 @@ function sourceLabel(source) {
   return `${names[id] || id || t("local_source")}${version ? ` (${version})` : ""}`;
 }
 
-async function openDetail(index) {
-  const selected = state.resultRun?.result?.candidates?.[index];
+async function openDetail(index, phase) {
+  const run = phase === 'general' && consultationPhase() === 'rare' ? state.generalRun : state.resultRun;
+  const selected = run?.result?.candidates?.[index];
   if (!selected) return;
-  const detail = await api(`${sessionPath()}/runs/${encodeURIComponent(state.resultRun.run_id)}`
+  const detail = await api(`${sessionPath()}/runs/${encodeURIComponent(run.run_id)}`
     + `/candidates/${encodeURIComponent(selected.candidate_id)}`);
   const candidate = detail.candidate;
   byId("dialog-title").textContent = t("why_candidate", {label: displayLabel(candidate.candidate_id, candidate.label)});

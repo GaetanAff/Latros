@@ -17,6 +17,7 @@
     <script src="/assets/results.js" defer></script>
     <script src="/assets/history.js" defer></script>
     <script src="/assets/anatomy.js" defer></script>
+    <script src="/assets/consultation.js" defer></script>
     <script src="/assets/checker.js" defer></script>
   </head>
   <body>
@@ -97,12 +98,21 @@
       </section>
 
       <section id="screen-results" class="screen screen-results" aria-labelledby="results-title" hidden>
+        <section id="general-result-section" hidden>
+          <h2 data-i18n="general_results">Analyse générale</h2>
+          <p id="general-result-status"></p><div id="general-result-list" class="result-list"></div>
+        </section>
         <p class="eyebrow" data-i18n="complete">Analyse terminée</p>
         <h1 id="results-title" data-i18n="results">Résultats</h1>
         <p id="result-intro" class="lead"></p>
         <div id="result-alert" class="result-alert" hidden></div>
         <div id="result-list" class="result-list"></div>
         <button id="show-more-results" class="button button-secondary" type="button" hidden data-i18n="more">Voir plus de possibilités</button>
+        <section id="rare-opt-in" class="result-alert" hidden>
+          <h2 data-i18n="rare_cta">Explorer aussi les maladies rares</h2>
+          <p data-i18n="rare_explanation">Exploration facultative, avec des questions parfois très spécifiques.</p>
+          <button id="rare-start" type="button" class="button button-secondary" data-i18n="rare_start">Explorer les maladies rares</button>
+        </section>
         <div class="result-actions">
           <button id="results-new" class="button button-primary" type="button" data-i18n="new_analysis">Nouvelle analyse</button>
           <button id="results-edit" class="button button-secondary" type="button" data-i18n="edit">Modifier mes informations</button>

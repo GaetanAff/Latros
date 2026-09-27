@@ -2,6 +2,15 @@
 // Versioned, local presentation strings. No medical inference or translation service.
 (() => {
   const catalog = {
+"general_title": ["Questions de l’analyse générale","Fragen der allgemeinen Analyse","General analysis questions"],
+"rare_title": ["Exploration des maladies rares","Erkundung seltener Erkrankungen","Rare disease exploration"],
+"general_results": ["Résultats de l’analyse générale expérimentale","Ergebnisse der experimentellen allgemeinen Analyse","Experimental general analysis results"],
+"rare_results": ["Résultats de l’exploration rare","Ergebnisse der Erkundung seltener Erkrankungen","Rare exploration results"],
+"rare_cta": ["Explorer aussi les maladies rares","Auch seltene Erkrankungen erkunden","Also explore rare diseases"],
+"rare_start": ["Explorer les maladies rares","Seltene Erkrankungen erkunden","Explore rare diseases"],
+"rare_explanation": ["Cette exploration facultative pose des questions supplémentaires, parfois très spécifiques. Les résultats restent séparés et non validés.","Diese freiwillige Erkundung stellt zusätzliche, teils sehr spezifische Fragen. Ergebnisse bleiben getrennt und unvalidiert.","This optional exploration asks additional, sometimes very specific questions. Results remain separate and unvalidated."],
+"rare_now": ["Afficher les résultats rares maintenant","Ergebnisse zu seltenen Erkrankungen jetzt anzeigen","Show rare results now"],
+"bounded_question": ["Question {count} · limite {budget} · au plus {remaining} autres (budget, pas prévision médicale)","Frage {count} · Grenze {budget} · höchstens {remaining} weitere (Budget, keine medizinische Prognose)","Question {count} · limit {budget} · at most {remaining} more (budget, not medical prediction)"],
 "local": ["Local","Lokal","Local"],
 "anatomy_navigation": ["Navigation anatomique","Anatomische Navigation","Anatomical navigation"],
 "search_and_observations": ["Recherche et observations","Suche und Beobachtungen","Search and observations"],

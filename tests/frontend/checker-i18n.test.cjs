@@ -44,16 +44,49 @@ function environment(saved = new Map()) {
       return {ok:true,status:200,json:async()=>body,text:async()=>'<svg />'};
     }});
   vm.runInContext(source("i18n.js"),context);
-  for(const name of ['state','api','search','observations','questions','results','history','anatomy','checker']) vm.runInContext(source(name+'.js'),context);
+  for(const name of ['state','api','search','observations','questions','results','history','anatomy','consultation','checker']) vm.runInContext(source(name+'.js'),context);
   return {context,node,calls,saved,question,run:code=>vm.runInContext(code,context)};
 }
 async function ready(env) { for(let i=0;i<20 && env.run("state.busy");i++) await new Promise(resolve=>setImmediate(resolve)); }
+
+test('versioned general policy preferred, rare never selected implicitly',async()=>{
+  const env=environment(); await ready(env);
+  const selected=env.run(`preferredSelection({compatible_selections:[
+    {available:true,strategy_id:'rare_question_v1',snapshot_id:'new'},
+    {available:true,strategy_id:'general_v1',snapshot_id:'old'},
+    {available:true,strategy_id:'general_question_v2',snapshot_id:'new'}]}).strategy_id`);
+  assert.equal(selected,'general_question_v2');
+  assert.ok(!env.calls.some(c=>c.url.includes('/consultation/rare')));
+});
+
+test('general and rare cards/counters separate; language never rewrites the shared case',async()=>{
+  const env=environment(); await ready(env);
+  env.context.testQuestion=env.question;
+  env.run(`state.session={session_id:'shared',consultation:{phase:'rare',general_run:{run_id:'g'}},
+    clinical_case:{observations:[],question_history:[]}};
+    state.generalRun={result:{candidates:[{candidate_id:'general',label:'General condition',favorable:[],unfavorable:[],unknown:[]}]}};
+    state.resultRun={result:{candidates:[{candidate_id:'rare',label:'Rare condition',favorable:[],unfavorable:[],unknown:[]}]}};
+    state.questionRun={result:{question:{...testQuestion,expected_contribution:{answered_in_phase:0,maximum_questions:12,remaining_budget:11}}}};
+    state.screen='question'; updateConsultationView();`);
+  assert.equal(env.node('rare-opt-in').hidden,true);
+  assert.equal(env.node('general-result-section').hidden,false);
+  assert.match(env.node('general-result-list').innerHTML,/General condition/);
+  assert.ok(!env.node('general-result-list').innerHTML.includes('Rare condition'));
+  const original=env.run('JSON.stringify(state.session.clinical_case)');
+  await env.run("changeLanguage('de')");
+  assert.match(env.node('question-title').textContent,/selten/i);
+  assert.match(env.node('question-count').textContent,/12/);
+  assert.equal(env.run('JSON.stringify(state.session.clinical_case)'),original);
+  env.run("state.session.consultation.phase='general';updateConsultationView()");
+  assert.equal(env.node('rare-opt-in').hidden,false);
+  assert.equal(env.node('general-result-section').hidden,true);
+});
 
 test("complete local UI catalog and persistent language with explicit fallback",async()=>{
   const env=environment(); await ready(env);
   const html=fs.readFileSync(path.join(root,"src/latros/ui/templates/checker.html"),"utf8");
   const keys=[...html.matchAll(/data-i18n(?:-aria|-placeholder)?="([^"]+)"/g)].map(m=>m[1]);
-  const allJs=['checker','api','search','observations','questions','results','history','anatomy'].map(name=>source(name+'.js')).join('\n');
+  const allJs=['checker','api','search','observations','questions','results','history','anatomy','consultation'].map(name=>source(name+'.js')).join('\n');
   const jsKeys=[...allJs.matchAll(/\bt\(['"]([^'"]+)['"]/g)].map(m=>m[1]);
   for(const lang of ["fr","de","en"]) {
     env.run(`window.LatrosI18n.setLanguage('${lang}')`);

@@ -248,6 +248,63 @@
       "title": "ConceptReference",
       "type": "object"
     },
+    "ConsultationWorkflow": {
+      "additionalProperties": false,
+      "properties": {
+        "general_run": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SessionRunReference"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "phase": {
+          "default": "general",
+          "enum": [
+            "general",
+            "rare"
+          ],
+          "title": "Phase",
+          "type": "string"
+        },
+        "rare_opted_in_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rare Opted In At"
+        },
+        "rare_run": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SessionRunReference"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "workflow_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Workflow Version",
+          "type": "integer"
+        }
+      },
+      "title": "ConsultationWorkflow",
+      "type": "object"
+    },
     "DatePoint": {
       "additionalProperties": false,
       "properties": {
@@ -3371,6 +3428,17 @@
   "properties": {
     "clinical_case": {
       "$ref": "#/$defs/ClinicalCaseV2"
+    },
+    "consultation": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ConsultationWorkflow"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
     },
     "created_at": {
       "format": "date-time",
