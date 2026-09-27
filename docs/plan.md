@@ -196,12 +196,17 @@ reste future. Node 22 sert uniquement aux tests frontend, jamais au runtime de L
 
 La tranche UI anatomique vNext implémente Corps → Tête → Sinus, SVG locaux et arbre de
 navigation extensible, recherche permanente, états explicites sans doublon, thèmes et responsive.
-Les autres régions détaillées restent à faire. Les références sont résolues contre les
+L'extension atlas v3 ajoute sept images générées locales, 35 vues avec overlays indépendants
+et zooms (oreilles, thorax, abdomen, urinaire, membres). Les organes hors tête n'ont pas encore
+de planches dédiées. Les références sont résolues contre les
 observations supportées du snapshot, jamais ajoutées comme assertions ou localisation clinique.
-65 concepts ont un affichage FR/DE actif ; la majorité reste avec fallback EN.
+139 concepts ont un affichage FR/DE actif ; la majorité reste avec fallback EN.
 L'[ADR 0016](decisions/0016-navigation-anatomique-de-presentation.md) et le
 [rapport mesuré](reports/ui-anatomy-vnext.md) précisent architecture, coverage et limites.
 Ce chantier ne commence ni G clinique, ni safety, ni v0.9 ; scoring et snapshot restent identiques.
+Le [rapport atlas v3](reports/ui-atlas-v3.md) et l'[ADR 0018](decisions/0018-illustrations-locales-et-overlays.md)
+documentent les images non validées anatomiquement, les traductions éditoriales à revoir et
+l'export linguistique déterministe. Le questionnaire General/Rare est une tranche séparée (#19).
 
 ## Étape v0.7 — fabrique souveraine généraliste
 
