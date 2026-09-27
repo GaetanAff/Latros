@@ -23,7 +23,7 @@ from starlette.middleware.trustedhost import TrustedHostMiddleware
 from latros import __version__
 from latros.application.service import ResearchApplicationService
 from latros.clinical.v2 import ClinicalCaseV2, QuestionResponseV2
-from latros.common import LatrosError
+from latros.common import LatrosError, sha256
 from latros.ui.anatomy import load_navigation
 from latros.ui.models import (
     CaseRequest,
@@ -42,6 +42,15 @@ from latros.ui.sessions import SessionStore
 PACKAGE_ROOT = Path(__file__).resolve().parent
 TEMPLATES = Jinja2Templates(directory=str(PACKAGE_ROOT / "templates"))
 MUTATING_METHODS = {"POST", "PUT", "PATCH", "DELETE"}
+
+
+def _asset_urls() -> dict[str, str]:
+    """Bind local UI resources to their content, not a stale browser cache entry."""
+    return {
+        path.name: f"/assets/{path.name}?v={sha256(path)}"
+        for path in (PACKAGE_ROOT / "assets").iterdir()
+        if path.is_file() and path.suffix in {".js", ".css", ".svg"}
+    }
 
 
 def create_app(root: Path) -> FastAPI:
@@ -87,7 +96,7 @@ def create_app(root: Path) -> FastAPI:
         response.headers["Referrer-Policy"] = "no-referrer"
         response.headers["X-Content-Type-Options"] = "nosniff"
         response.headers["X-Frame-Options"] = "DENY"
-        if request.url.path.startswith("/internal/"):
+        if request.url.path.startswith("/internal/") or request.url.path in {"/", "/expert"}:
             response.headers["Cache-Control"] = "no-store"
         return response
 
@@ -121,7 +130,7 @@ def create_app(root: Path) -> FastAPI:
         return TEMPLATES.TemplateResponse(
             request=request,
             name="checker.html",
-            context={"version": __version__},
+            context={"version": __version__, "assets": _asset_urls()},
         )
 
     @app.get("/expert", response_class=HTMLResponse)
@@ -129,7 +138,7 @@ def create_app(root: Path) -> FastAPI:
         return TEMPLATES.TemplateResponse(
             request=request,
             name="index.html",
-            context={"version": __version__},
+            context={"version": __version__, "assets": _asset_urls()},
         )
 
     @app.get("/internal/v1/capabilities")

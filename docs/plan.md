@@ -15,7 +15,8 @@ explicite. Budgets 6 / 12, anti-doublons, cas partagé, résultats séparés.
 Aucune revue clinique G1/G2 réalisée, G3 indépendant à faire, snapshot inchangé. Optimisation
 runtime arrêtée après F6 sauf régression. Illustrations/navigation/traductions : chantier distinct,
 intégré avec ces politiques après fusion de #19. L'intégration relit les sessions existantes
-sans les supprimer ni ignorer le contrat `consultation` ; tests combinés : 233 Python et 16 frontend.
+sans les supprimer ni ignorer le contrat `consultation` ; tests combinés : 235 Python et 16 frontend.
+Les JS/CSS locaux sont liés à leurs hashes pour éviter une UI obsolète dans le cache navigateur.
 
 | Étape | Nom du plan | État logiciel | Référence des données |
 | --- | --- | --- | --- |

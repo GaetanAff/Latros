@@ -22,6 +22,9 @@ Utiliser `main` synchronisé avec les deux livraisons #19 (General/Rare) et #20 
 Le champ optionnel `consultation` est conservé dans les sessions existantes ; l'ancienne
 branche visuelle seule ne sait pas les lire et peut bloquer l'accueil avec HTTP 422.
 Ne pas supprimer les sessions pour contourner cette incompatibilité de versions.
+Les fichiers JS/CSS des deux modes portent un SHA-256 dans leur URL ; les pages HTML ne
+sont pas cachées. Un rechargement charge ainsi la version locale courante sans purger
+l'historique, les préférences de langue/thème ou les sessions.
 
 ```powershell
 uv run --offline --no-sync latros --root . ui --no-open

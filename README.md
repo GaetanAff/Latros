@@ -39,6 +39,8 @@ deux PR distinctes ([#19](https://github.com/GaetanAff/Latros/pull/19) et
 [#20](https://github.com/GaetanAff/Latros/pull/20)), puis intégrés ensemble. Lancer depuis
 `main` synchronisé permet de conserver et relire les sessions du nouveau parcours ; une
 ancienne branche UI seule ne reconnaît pas leur champ `consultation`.
+Les liens JS/CSS sont versionnés par leur contenu pour éviter de réutiliser une ancienne UI
+en cache après la mise à jour ; recharger la page ne supprime pas les sessions locales.
 
 > **Aucun triage n'est effectué.** Toutes les analyses retournent `safety_status: not_evaluated`. Les scores sont des compatibilités sémantiques, jamais des probabilités ou des diagnostics validés. Ne pas utiliser ce prototype pour conseiller un patient.
 

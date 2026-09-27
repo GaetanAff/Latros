@@ -129,3 +129,19 @@ Principales limites : 11 532 concepts sans FR/DE ; illustrations anatomiquement 
 organes hors tête seulement zoomés du corps ; recherche froide encore ~8 s ; G1/G2 humains
 et G3 indépendant nécessaires. La navigation n'est pas un atlas ni une validation de ranking.
 `FUTUR INTERFACE/` reste entièrement ignoré, non inspecté et non modifié.
+
+## Intégration et lancement normal — 27 septembre 2026
+
+Après fusion de #19, #20 est remise à jour sur main. Les 11 sessions habituelles sont
+lisibles sans changement de leurs hashes : l'ancienne branche atlas seule refusait le champ
+`consultation` d'une session General/Rare et faisait échouer la liste entière avec HTTP 422.
+Les sessions isolées des premiers essais visuels n'avaient pas couvert ce cas d'intégration.
+
+Le navigateur Brave conservait aussi d'anciens JS/CSS : l'API fournissait la nouvelle navigation,
+mais l'overlay vide restait sans illustration. Les deux pages HTML sont désormais non cachées
+et tous leurs JS/CSS portent le SHA-256 de leur contenu dans l'URL. Aucune purge de données
+navigateur ni modification de session. Le rechargement normal affiche l'image locale.
+
+235 tests Python et 16 frontend verts, tous les contrôles qualité verts et les sept goldens
+réels historiques identiques. Diagnostic/question généralistes réels testés sans réseau,
+`research_unreviewed: true` et safety `not_evaluated`. Le snapshot reste immuable et non validé.

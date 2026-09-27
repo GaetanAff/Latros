@@ -28,9 +28,14 @@ validé n'est publié. `v0.7.0-general-dev-unreviewed` est le nouveau corpus gé
 - L'intégration charge désormais les 11 sessions locales avec HTTP 200 ; les hashes des
   fichiers de sessions sont inchangés. Aucun effacement, aucune migration silencieuse ni
   assouplissement de validation pour masquer le problème. `/` et `/expert` répondent aussi.
-- 233 tests Python et 16 frontend verts, Ruff/format/mypy strict/schémas/registre verts ;
+- Second problème confirmé dans le navigateur habituel : anciens JS/CSS conservés en cache,
+  avec overlay SVG vide au lieu de l'image atlas. Les deux pages exposent désormais des URLs
+  JS/CSS liées au SHA-256 du contenu et un HTML non caché. Aucune purge des données navigateur.
+  Deux tests vérifient les liens des deux modes et leur changement lorsque le contenu change.
+- Contrôles combinés : 235 tests Python et 16 frontend verts ; Ruff/format/mypy strict/schémas/registre verts ;
   sept diagnostics/questions réels historiques comparés offline aux goldens, hashes identiques.
   Le lancement utilise le stockage habituel, pas un répertoire de sessions isolé.
+  Rechargement vérifié dans Brave : illustration présente et nouveaux JS/CSS hashés chargés.
 - Snapshot, scoring historique, statuts cliniques et safety inchangés. Limites scientifiques,
   anatomiques et linguistiques documentées conservées ; `FUTUR INTERFACE/` laissé intact.
 

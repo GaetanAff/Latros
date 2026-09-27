@@ -167,7 +167,7 @@ def test_simple_template_modular_permanent_search_and_theme():
         "results",
         "history",
     ):
-        assert f"/assets/{module}.js" in html
+        assert f"assets['{module}.js']" in html
         assert (assets / f"{module}.js").exists()
     assert "https://" not in html
     css = (assets / "anatomy.css").read_text(encoding="utf-8")
