@@ -16,6 +16,7 @@
 "search_and_observations": ["Recherche et observations","Suche und Beobachtungen","Search and observations"],
 "theme": ["Changer le thème clair/sombre","Hell/dunkel umschalten","Toggle light/dark theme"],
 "body": ["Corps","Körper","Body"],
+"illustration_status": ["Illustrations générées, non validées anatomiquement. Navigation uniquement.","Generierte Illustrationen, anatomisch nicht validiert. Nur zur Navigation.","Generated illustrations, not anatomically validated. Navigation only."],
 "explore": ["Explorez une région du corps","Erkunden Sie eine Körperregion","Explore a body region"],
 "anatomy_hint": ["Cliquez sur une région ou utilisez la recherche. La carte aide à naviguer, pas à diagnostiquer.","Wählen Sie eine Region oder nutzen Sie die Suche. Die Karte dient der Navigation, nicht der Diagnose.","Select a region or use search. The map is navigation, not a diagnosis."],
 "region_pending": ["Cette vue détaillée n’est pas encore disponible. La recherche reste accessible.","Diese Detailansicht ist noch nicht verfügbar. Die Suche bleibt zugänglich.","This detailed view is not available yet. Search is still available."],

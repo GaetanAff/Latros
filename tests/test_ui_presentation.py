@@ -2,7 +2,9 @@
 
 import copy
 import hashlib
+import runpy
 import socket
+from pathlib import Path
 
 import pytest
 from fastapi.testclient import TestClient
@@ -202,7 +204,37 @@ def test_offline_http_same_scientific_question_run_and_snapshot(display_snapshot
 def test_alias_lexicon_unambiguous_and_presentation_only():
     lexicon = load_display_lexicon()
     assert lexicon["role"] == "display_and_explicit_selection_only"
-    assert len(lexicon["entries"]) == 70
+    assert len(lexicon["entries"]) == 150
     assert normalize_search("TÊTE-qui-tourne") == "tete qui tourne"
     assert normalize_search("Übelkeit") == "ubelkeit"
     assert normalize_search("groß") == "gross"
+
+
+def test_translation_review_export_is_deterministic_and_has_no_decisions(display_snapshot):
+    review_rows = runpy.run_path(
+        str(Path(__file__).resolve().parents[1] / "scripts/export_ui_translation_review.py")
+    )["review_rows"]
+
+    root, _ = display_snapshot
+    with CanonicalKnowledgeRepositoryV2(root, "test-v2") as base:
+        repository = ObservationPresentationRepository(base)
+        first = review_rows(repository)
+        assert first == review_rows(repository)
+        assert len({row["concept_id"] for row in first}) == len(first)
+        for row in first:
+            assert row["language_reviewer"] is None
+            assert row["decision_fr"] is None
+            assert row["decision_de"] is None
+        with pytest.raises(LatrosError, match="100"):
+            repository.resolve_supported_codes(repository.lexicon["system"], ["HP:0031417"] * 101)
+
+
+def test_new_translation_drafts_have_provenance_not_human_approval():
+    lexicon = load_display_lexicon()
+    drafts = [row for row in lexicon["entries"] if "translation_provenance" in row]
+    assert len(drafts) == 80
+    for row in drafts:
+        provenance = row["translation_provenance"]
+        assert provenance["status"] == "editorial_draft_requires_human_language_review"
+        assert provenance["reviewer"] is None
+        assert provenance["clinical_knowledge"] is False

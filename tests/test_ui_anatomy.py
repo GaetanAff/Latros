@@ -4,9 +4,12 @@ import hashlib
 import socket
 from xml.etree import ElementTree
 
+import orjson
+import pytest
 from fastapi.testclient import TestClient
 from test_ui_presentation import display_snapshot  # noqa: F401
 
+from latros.common import LatrosError
 from latros.knowledge.presentation_repository import ObservationPresentationRepository
 from latros.knowledge.repository_v2 import CanonicalKnowledgeRepositoryV2
 from latros.knowledge.store_v2 import build_snapshot_v2, snapshot_path_v2
@@ -19,7 +22,7 @@ def test_tree_and_local_svg_keyboard_regions():
     assert config["role"] == "navigation_only_not_clinical_knowledge"
     assert config["nodes"]["head"]["parent"] == "body"
     assert config["nodes"]["sinuses"]["parent"] == "head"
-    assert sum(node["implemented"] for node in config["nodes"].values()) == 3
+    assert sum(node["implemented"] for node in config["nodes"].values()) == 35
     for asset in ("body-front.svg", "head-front.svg", "sinuses-front.svg"):
         svg = ElementTree.parse(CONFIG_PATH.parent / asset)
         zones = [element for element in svg.iter() if "data-region" in element.attrib]
@@ -89,10 +92,63 @@ def test_anatomy_and_search_same_supported_coding_offline(display_snapshot, monk
             "head-front.svg",
             "sinuses-front.svg",
             "navigation.json",
+            "atlas-overlay.svg",
+            "illustrations.json",
+            "body-atlas-v1.png",
         ):
             assert client.get("/assets/anatomy/" + filename).status_code == 200
         assert client.get("/expert").status_code == 200
     assert hashlib.sha256(runtime.read_bytes()).hexdigest() == digest
+
+
+def test_independent_generated_images_and_bounded_overlays():
+    config = load_navigation()
+    manifest = orjson.loads((CONFIG_PATH.parent / "illustrations.json").read_bytes())
+    assert manifest["anatomical_validation"] is False
+    assert len(manifest["images"]) == 7
+    for image in manifest["images"]:
+        assert image["human_reviewer"] is None
+        assert image["review_status"] == "not_anatomically_validated"
+        assert (
+            hashlib.sha256((CONFIG_PATH.parent / image["filename"]).read_bytes()).hexdigest()
+            == image["sha256"]
+        )
+    for key in (
+        "ear-external",
+        "ear-middle",
+        "ear-inner",
+        "lungs",
+        "heart",
+        "intestines",
+        "urinary",
+        "knee",
+        "hands",
+    ):
+        assert config["nodes"][key]["implemented"]
+    assert config["nodes"]["lungs"]["image"] == config["nodes"]["body"]["image"]
+    assert "body_site" not in orjson.dumps(config).decode()
+
+
+def test_modified_image_hash_and_external_navigation_rejected(tmp_path, monkeypatch):
+    import shutil
+
+    import latros.ui.anatomy as module
+
+    for file in CONFIG_PATH.parent.iterdir():
+        if file.is_file():
+            shutil.copyfile(file, tmp_path / file.name)
+    monkeypatch.setattr(module, "CONFIG_PATH", tmp_path / "navigation.json")
+    path = tmp_path / "body-atlas-v1.png"
+    payload = path.read_bytes()
+    path.write_bytes(b"x" + payload[1:])
+    with pytest.raises(LatrosError, match="integrity"):
+        module.load_navigation()
+    path.write_bytes(payload)
+    config = orjson.loads((tmp_path / "navigation.json").read_bytes())
+    config["nodes"]["body"]["image"] = "https://external/atlas.png"
+    (tmp_path / "navigation.json").write_bytes(orjson.dumps(config))
+    with pytest.raises(LatrosError, match="local"):
+        module.load_navigation()
 
 
 def test_simple_template_modular_permanent_search_and_theme():
@@ -111,7 +167,7 @@ def test_simple_template_modular_permanent_search_and_theme():
         "results",
         "history",
     ):
-        assert f"/assets/{module}.js" in html
+        assert f"assets['{module}.js']" in html
         assert (assets / f"{module}.js").exists()
     assert "https://" not in html
     css = (assets / "anatomy.css").read_text(encoding="utf-8")

@@ -1,4 +1,4 @@
-/* Local, schematic anatomy. Regions classify navigation, never medical knowledge. */
+/* Local generated illustrations with independent navigation-only overlays. */
 :root { --page: #f2f7fa; --surface: #fff; --ink: #18333f; --ink-soft: #516972; }
 :root[data-theme="dark"] {
   color-scheme: dark; --page: #0f2029; --surface: #182e38; --ink: #e7f0ef;
@@ -7,6 +7,7 @@
   --error-bg: #402a32; --error: #ffc6c8; --shadow: 0 12px 36px #0003;
 }
 .site-header { max-width: 1320px; min-height: 76px; padding: 12px 24px; }
+:root[data-theme="dark"] .brand { background:#f2f7fa; padding:8px 12px; border-radius:12px; }
 .local-indicator { color: var(--ink-soft); font-size: .8rem; display: inline-flex; gap: 8px; align-items:center; }
 .local-indicator > span:first-child { color: var(--latros-green); }
 .research-banner { width:min(1240px,calc(100% - 32px)); padding:10px 16px; border:0; font-size:.78rem; }
@@ -21,7 +22,11 @@
 .breadcrumb button { border:0; background:transparent; color:var(--latros-teal-deep); padding:8px; min-height:44px; font-weight:650; }
 .breadcrumb button[aria-current="page"] { color:var(--ink); }
 .anatomy-canvas { display:grid; place-items:center; border-radius:28px; background:radial-gradient(ellipse at center,#b7cfaf22,transparent 70%); min-height:420px; }
-.anatomy-canvas svg { height:min(55vh,570px); min-height:380px; width:100%; max-width:500px; overflow:visible; animation:anatomy-enter .2s ease-out; }
+.anatomy-canvas svg { height:min(65vh,650px); min-height:380px; width:100%; max-width:560px; overflow:hidden; animation:anatomy-enter .2s ease-out; }
+.anatomy-hitbox { fill:#0F6472; fill-opacity:0; stroke:#0F6472; stroke-opacity:0; stroke-width:3; vector-effect:non-scaling-stroke; transition:fill-opacity .18s,stroke-opacity .18s; }
+.anatomy-canvas [data-region]:hover .anatomy-hitbox { fill-opacity:.13; stroke-opacity:.8; }
+.anatomy-canvas [data-region]:focus-visible .anatomy-hitbox { fill-opacity:.14; stroke-opacity:1; stroke-width:4; }
+.anatomy-canvas [data-region].selected .anatomy-hitbox { fill:#6EA07A; fill-opacity:.12; stroke-opacity:.85; }
 @keyframes anatomy-enter { from { opacity:.2; transform:scale(.97); } to {opacity:1;transform:scale(1);} }
 .anatomy-canvas [data-region] { cursor:pointer; transition:filter .18s,fill-opacity .18s; outline:none; }
 .anatomy-canvas [data-region]:hover { filter:brightness(.93) saturate(1.5); }

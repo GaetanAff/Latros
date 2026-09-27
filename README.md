@@ -9,19 +9,38 @@ sont locaux et explicables, sans LLM. L'interface web propose désormais un parc
 conserve la console R&D en mode expert. Elle n'est pas une interface patient validée.
 
 Le parcours simple propose désormais **FR / DE / EN**, mémorisés localement. La recherche
-accepte synonymes, accents, préfixes et un lexique grand public versionné (65 concepts avec
+accepte synonymes, accents, préfixes et un lexique grand public versionné (139 concepts avec
 affichage FR/DE activé sur les 11 671 observations recherchables du snapshot local). Les traductions/désignations sont uniquement
 de l'affichage ; les termes non traduits restent signalés **EN** et les IDs/reçus sont inchangés.
 Voir le [rapport multilingue](docs/reports/ui-i18n-local-search.md). Aucun service de traduction,
 NLP ou nouvelle connaissance médicale n'est introduit.
 
-Le mode simple offre une navigation **Corps → Tête → Sinus**, des SVG locaux interactifs,
+Le mode simple offre une navigation **Corps → Tête → Sinus**, sept illustrations locales générées
+avec overlays SVG indépendants et 35 vues (oreille, thorax, abdomen, urinaire et membres inclus),
 une recherche permanente et un thème clair/sombre. Les observations d'une région sont résolues
-contre le snapshot actif avant affichage ; les autres vues détaillées restent explicitement à
-faire. Carte et recherche ajoutent la même observation, une seule fois, avec état présent,
+contre le snapshot actif avant affichage. Hors tête, les vues utilisent des zooms du corps, pas
+des planches détaillées dédiées. Les images ne sont pas anatomiquement validées. Carte et
+recherche ajoutent la même observation, une seule fois, avec état présent,
 absent ou inconnu. `/expert` reste la console R&D complète. Voir le
 [rapport anatomique et audit de couverture](docs/reports/ui-anatomy-vnext.md) et
 la [documentation UI](docs/modern-ui.md).
+
+Voir le [rapport atlas v3](docs/reports/ui-atlas-v3.md) et l'[ADR 0018](docs/decisions/0018-illustrations-locales-et-overlays.md)
+pour les hashes/provenance des images, les mesures et le lexique `ui-display-3`.
+Les 80 nouvelles traductions sont des propositions UX éditoriales, non relues humainement.
+Pour préparer une vraie revue linguistique locale (11 671 lignes, décisions vides) :
+
+```text
+uv run --offline --no-sync python scripts/export_ui_translation_review.py --output-dir data/staging/ui-atlas-translation-review
+```
+
+Le questionnaire General-first / Rare-second et les illustrations ont été développés dans
+deux PR distinctes ([#19](https://github.com/GaetanAff/Latros/pull/19) et
+[#20](https://github.com/GaetanAff/Latros/pull/20)), puis intégrés ensemble. Lancer depuis
+`main` synchronisé permet de conserver et relire les sessions du nouveau parcours ; une
+ancienne branche UI seule ne reconnaît pas leur champ `consultation`.
+Les liens JS/CSS sont versionnés par leur contenu pour éviter de réutiliser une ancienne UI
+en cache après la mise à jour ; recharger la page ne supprime pas les sessions locales.
 
 > **Aucun triage n'est effectué.** Toutes les analyses retournent `safety_status: not_evaluated`. Les scores sont des compatibilités sémantiques, jamais des probabilités ou des diagnostics validés. Ne pas utiliser ce prototype pour conseiller un patient.
 

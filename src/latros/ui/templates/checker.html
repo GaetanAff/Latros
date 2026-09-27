@@ -6,19 +6,19 @@
     <meta name="color-scheme" content="light dark">
     <title data-i18n="title">Latros — Explorer ses symptômes</title>
     <link rel="icon" href="/assets/latros-logo.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="/assets/checker.css">
-    <link rel="stylesheet" href="/assets/anatomy.css">
-    <script src="/assets/i18n.js" defer></script>
-    <script src="/assets/state.js" defer></script>
-    <script src="/assets/api.js" defer></script>
-    <script src="/assets/search.js" defer></script>
-    <script src="/assets/observations.js" defer></script>
-    <script src="/assets/questions.js" defer></script>
-    <script src="/assets/results.js" defer></script>
-    <script src="/assets/history.js" defer></script>
-    <script src="/assets/anatomy.js" defer></script>
-    <script src="/assets/consultation.js" defer></script>
-    <script src="/assets/checker.js" defer></script>
+    <link rel="stylesheet" href="{{ assets['checker.css'] }}">
+    <link rel="stylesheet" href="{{ assets['anatomy.css'] }}">
+    <script src="{{ assets['i18n.js'] }}" defer></script>
+    <script src="{{ assets['state.js'] }}" defer></script>
+    <script src="{{ assets['api.js'] }}" defer></script>
+    <script src="{{ assets['search.js'] }}" defer></script>
+    <script src="{{ assets['observations.js'] }}" defer></script>
+    <script src="{{ assets['questions.js'] }}" defer></script>
+    <script src="{{ assets['results.js'] }}" defer></script>
+    <script src="{{ assets['history.js'] }}" defer></script>
+    <script src="{{ assets['anatomy.js'] }}" defer></script>
+    <script src="{{ assets['consultation.js'] }}" defer></script>
+    <script src="{{ assets['checker.js'] }}" defer></script>
   </head>
   <body>
     <header class="site-header">
@@ -60,6 +60,7 @@
         <p class="anatomy-help" data-i18n="anatomy_hint">Cliquez sur une région ou utilisez la recherche.</p>
         <div id="anatomy-canvas" class="anatomy-canvas"></div>
         <div id="anatomy-region-links" class="region-links"></div>
+        <p class="field-hint" data-i18n="illustration_status">Illustrations générées, non validées anatomiquement. Navigation uniquement.</p>
         <p id="region-pending" class="field-hint" hidden data-i18n="region_pending"></p>
       </section>
 

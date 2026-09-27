@@ -12,6 +12,36 @@ function scrollMotion() {
   return window.matchMedia?.('(prefers-reduced-motion:reduce)')?.matches ? 'auto' : 'smooth';
 }
 
+// A local illustration is independent from keyboard-accessible navigation hitboxes.
+function composeAtlas(svg, node, config) {
+  const ns = 'http://www.w3.org/2000/svg';
+  svg.setAttribute('viewBox',(node.focus_box || [0,0,...node.canvas]).join(' '));
+  const illustration = document.createElementNS(ns,'image');
+  illustration.setAttribute('href','/assets/anatomy/' + node.image);
+  illustration.setAttribute('width',String(node.canvas[0]));
+  illustration.setAttribute('height',String(node.canvas[1]));
+  illustration.setAttribute('preserveAspectRatio','xMidYMid meet');
+  illustration.setAttribute('aria-hidden','true');
+  svg.appendChild(illustration);
+  for (const id of node.children) {
+    const target = config.nodes[id];
+    const zone = document.createElementNS(ns,'g');
+    zone.setAttribute('id','region-' + id);
+    zone.setAttribute('data-region',id);
+    zone.setAttribute('role','button');
+    zone.setAttribute('tabindex','0');
+    zone.setAttribute('aria-label',target.labels[locale()]);
+    for (const box of target.hitboxes) {
+      const rect = document.createElementNS(ns,'rect');
+      ['x','y','width','height'].forEach((name,index)=>rect.setAttribute(name,String(box[index])));
+      rect.setAttribute('rx','12'); rect.setAttribute('class','anatomy-hitbox');
+      zone.appendChild(rect);
+    }
+    svg.appendChild(zone);
+  }
+  return svg;
+}
+
 async function anatomyNavigate(region = 'body') {
   if (!state.selection) return;
   const changingRegion = region !== state.anatomy.region;
@@ -44,6 +74,7 @@ async function anatomyNavigate(region = 'body') {
     const documentSvg = new DOMParser().parseFromString(await response.text(),'image/svg+xml');
     if (sequence !== state.anatomy.sequence) return;
     const svg = documentSvg.documentElement;
+    composeAtlas(svg,node,payload.config);
     svg.setAttribute('role','group'); svg.setAttribute('aria-label',node.labels[locale()]);
     svg.querySelectorAll('title').forEach(title=>{title.textContent=node.labels[locale()];});
     svg.querySelectorAll('[data-region-label]').forEach(label=>{

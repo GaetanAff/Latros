@@ -28,6 +28,8 @@ def normalize_search(value: str) -> str:
 
 def load_display_lexicon() -> dict[str, Any]:
     lexicon: dict[str, Any] = orjson.loads(LEXICON_PATH.read_bytes())
+    if len(lexicon["entries"]) > 2048:
+        raise LatrosError("Oversized display lexicon")
     seen: dict[tuple[str, str], str] = {}
     codes = set()
     for entry in lexicon["entries"]:
@@ -65,9 +67,8 @@ class ObservationPresentationRepository:
             "(concept_id VARCHAR, code VARCHAR, language VARCHAR, text VARCHAR, "
             "scope VARCHAR, question VARCHAR)"
         )
-        identities = self.resolve_supported_codes(
-            self.lexicon["system"], [entry["code"] for entry in self.lexicon["entries"]]
-        )
+        codes = [entry["code"] for entry in self.lexicon["entries"]]
+        identities = self._resolve_supported_codes(self.lexicon["system"], codes)
         rows = []
         for entry in self.lexicon["entries"]:
             option = identities.get(entry["code"])
@@ -90,7 +91,12 @@ class ObservationPresentationRepository:
                     for text in entry["aliases"][language]
                 )
         if rows:
-            self.connection.executemany("INSERT INTO ui_aliases VALUES (?,?,?,?,?,?)", rows)
+            # One bounded insert instead of hundreds of Python/SQL round trips.
+            self.connection.execute(
+                "INSERT INTO ui_aliases SELECT "
+                + ",".join("unnest(?::VARCHAR[])" for _ in range(6)),
+                [list(column) for column in zip(*rows, strict=True)],
+            )
         # Normalization matches normalize_search; no source payload is rewritten.
         self.connection.execute(
             "CREATE OR REPLACE TEMP TABLE ui_search_terms AS WITH terms AS ("
@@ -112,6 +118,10 @@ class ObservationPresentationRepository:
         """Resolve navigation references, never create or broaden a clinical mapping."""
         if len(codes) > 100:
             raise LatrosError("At most 100 navigation identifiers per request")
+        return self._resolve_supported_codes(system, codes)
+
+    def _resolve_supported_codes(self, system: str, codes: list[str]) -> dict[str, dict[str, Any]]:
+        # Internal lexicon is bounded separately; public navigation remains limited to 100.
         if not codes:
             return {}
         rows = self.connection.execute(

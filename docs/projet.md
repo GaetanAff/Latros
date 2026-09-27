@@ -20,6 +20,13 @@ preuve, ni conclusion médicale supplémentaire.
 
 ## 1. Vision générale
 
+**Actualisation UI du 27 septembre 2026 :** le prototype simple dispose maintenant d'une
+navigation anatomique de présentation : sept illustrations locales générées, 35 vues et
+overlays indépendants, avec lexique FR/DE/EN partiel et pipeline de revue linguistique locale.
+Ce n'est ni un atlas anatomiquement validé, ni une connaissance clinique. Les organes hors tête
+restent des zooms du corps. Voir l'[ADR 0018](decisions/0018-illustrations-locales-et-overlays.md)
+et le [rapport atlas v3](reports/ui-atlas-v3.md). Le Knowledge Graph ci-dessus reste prospectif.
+
 Latros est une application médicale locale, *offline first*, inspirée du fonctionnement d'un symptom checker interactif comme Ada Health.
 
 L'utilisateur doit pouvoir :

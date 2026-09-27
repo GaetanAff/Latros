@@ -1,17 +1,23 @@
 {
-  "version": "ui-anatomy-1",
+  "version": "ui-anatomy-2",
   "role": "navigation_only_not_clinical_knowledge",
   "system": "http://purl.obolibrary.org/obo/hp.owl",
+  "illustration_status": "generated_not_anatomically_validated",
   "nodes": {
     "body": {
       "id": "body",
+      "parent": null,
       "labels": {
         "fr": "Corps",
         "de": "Körper",
         "en": "Body"
       },
-      "parent": null,
-      "asset": "body-front.svg",
+      "asset": "atlas-overlay.svg",
+      "image": "body-atlas-v1.png",
+      "canvas": [
+        1024,
+        1536
+      ],
       "children": [
         "head",
         "neck",
@@ -28,13 +34,18 @@
     },
     "head": {
       "id": "head",
+      "parent": "body",
       "labels": {
         "fr": "Tête",
         "de": "Kopf",
         "en": "Head"
       },
-      "parent": "body",
-      "asset": "head-front.svg",
+      "asset": "atlas-overlay.svg",
+      "image": "head-atlas-v1.png",
+      "canvas": [
+        1024,
+        1536
+      ],
       "children": [
         "sinuses",
         "eyes",
@@ -45,17 +56,30 @@
         "jaw"
       ],
       "codes": [],
-      "implemented": true
+      "implemented": true,
+      "hitboxes": [
+        [
+          432,
+          30,
+          160,
+          183
+        ]
+      ]
     },
     "sinuses": {
       "id": "sinuses",
+      "parent": "head",
       "labels": {
         "fr": "Sinus",
         "de": "Nasennebenhöhlen",
         "en": "Sinuses"
       },
-      "parent": "head",
-      "asset": "sinuses-front.svg",
+      "asset": "atlas-overlay.svg",
+      "image": "sinuses-atlas-v1.png",
+      "canvas": [
+        1024,
+        1536
+      ],
       "children": [],
       "codes": [
         "HP:0001742",
@@ -64,189 +88,1237 @@
         "HP:0000458",
         "HP:0002315"
       ],
-      "implemented": true
-    },
-    "neck": {
-      "id": "neck",
-      "labels": {
-        "fr": "Cou",
-        "de": "Hals",
-        "en": "Neck"
-      },
-      "parent": "body",
-      "asset": "body-front.svg",
-      "children": [],
-      "codes": [],
-      "implemented": false
-    },
-    "thorax": {
-      "id": "thorax",
-      "labels": {
-        "fr": "Thorax",
-        "de": "Brustkorb",
-        "en": "Chest"
-      },
-      "parent": "body",
-      "asset": "body-front.svg",
-      "children": [],
-      "codes": [],
-      "implemented": false
-    },
-    "abdomen": {
-      "id": "abdomen",
-      "labels": {
-        "fr": "Abdomen",
-        "de": "Bauch",
-        "en": "Abdomen"
-      },
-      "parent": "body",
-      "asset": "body-front.svg",
-      "children": [],
-      "codes": [],
-      "implemented": false
-    },
-    "pelvis": {
-      "id": "pelvis",
-      "labels": {
-        "fr": "Bassin",
-        "de": "Becken",
-        "en": "Pelvis"
-      },
-      "parent": "body",
-      "asset": "body-front.svg",
-      "children": [],
-      "codes": [],
-      "implemented": false
-    },
-    "arms": {
-      "id": "arms",
-      "labels": {
-        "fr": "Bras",
-        "de": "Arme",
-        "en": "Arms"
-      },
-      "parent": "body",
-      "asset": "body-front.svg",
-      "children": [],
-      "codes": [],
-      "implemented": false
-    },
-    "hands": {
-      "id": "hands",
-      "labels": {
-        "fr": "Mains",
-        "de": "Hände",
-        "en": "Hands"
-      },
-      "parent": "body",
-      "asset": "body-front.svg",
-      "children": [],
-      "codes": [],
-      "implemented": false
-    },
-    "legs": {
-      "id": "legs",
-      "labels": {
-        "fr": "Jambes",
-        "de": "Beine",
-        "en": "Legs"
-      },
-      "parent": "body",
-      "asset": "body-front.svg",
-      "children": [],
-      "codes": [],
-      "implemented": false
-    },
-    "feet": {
-      "id": "feet",
-      "labels": {
-        "fr": "Pieds",
-        "de": "Füße",
-        "en": "Feet"
-      },
-      "parent": "body",
-      "asset": "body-front.svg",
-      "children": [],
-      "codes": [],
-      "implemented": false
+      "implemented": true,
+      "hitboxes": [
+        [
+          310,
+          250,
+          400,
+          160
+        ]
+      ]
     },
     "eyes": {
       "id": "eyes",
+      "parent": "head",
       "labels": {
         "fr": "Yeux",
         "de": "Augen",
         "en": "Eyes"
       },
-      "parent": "head",
-      "asset": "head-front.svg",
+      "asset": "atlas-overlay.svg",
+      "image": "eye-atlas-v1.png",
+      "canvas": [
+        1280,
+        1280
+      ],
       "children": [],
-      "codes": [],
-      "implemented": false
+      "codes": [
+        "HP:0000622",
+        "HP:0000651",
+        "HP:0200026",
+        "HP:0000509",
+        "HP:0000613"
+      ],
+      "implemented": true,
+      "hitboxes": [
+        [
+          260,
+          430,
+          500,
+          145
+        ]
+      ]
     },
     "ears": {
       "id": "ears",
+      "parent": "head",
       "labels": {
         "fr": "Oreilles",
         "de": "Ohren",
         "en": "Ears"
       },
-      "parent": "head",
-      "asset": "head-front.svg",
+      "asset": "atlas-overlay.svg",
+      "image": "ear-atlas-v1.png",
+      "canvas": [
+        1280,
+        1280
+      ],
+      "children": [
+        "ear-external",
+        "ear-middle",
+        "ear-inner"
+      ],
+      "codes": [
+        "HP:0030766",
+        "HP:0000360",
+        "HP:0000365"
+      ],
+      "implemented": true,
+      "hitboxes": [
+        [
+          120,
+          520,
+          125,
+          240
+        ],
+        [
+          780,
+          520,
+          125,
+          240
+        ]
+      ]
+    },
+    "ear-external": {
+      "id": "ear-external",
+      "parent": "ears",
+      "labels": {
+        "fr": "Oreille externe",
+        "de": "Äußeres Ohr",
+        "en": "Outer ear"
+      },
+      "asset": "atlas-overlay.svg",
+      "image": "ear-atlas-v1.png",
+      "canvas": [
+        1280,
+        1280
+      ],
       "children": [],
-      "codes": [],
-      "implemented": false
+      "codes": [
+        "HP:0030766"
+      ],
+      "implemented": true,
+      "hitboxes": [
+        [
+          80,
+          120,
+          360,
+          900
+        ]
+      ],
+      "focus_box": [
+        20,
+        60,
+        600,
+        1100
+      ]
+    },
+    "ear-middle": {
+      "id": "ear-middle",
+      "parent": "ears",
+      "labels": {
+        "fr": "Oreille moyenne",
+        "de": "Mittelohr",
+        "en": "Middle ear"
+      },
+      "asset": "atlas-overlay.svg",
+      "image": "ear-atlas-v1.png",
+      "canvas": [
+        1280,
+        1280
+      ],
+      "children": [],
+      "codes": [
+        "HP:0030766",
+        "HP:0000365"
+      ],
+      "implemented": true,
+      "hitboxes": [
+        [
+          500,
+          450,
+          280,
+          320
+        ]
+      ],
+      "focus_box": [
+        390,
+        300,
+        520,
+        700
+      ]
+    },
+    "ear-inner": {
+      "id": "ear-inner",
+      "parent": "ears",
+      "labels": {
+        "fr": "Oreille interne",
+        "de": "Innenohr",
+        "en": "Inner ear"
+      },
+      "asset": "atlas-overlay.svg",
+      "image": "ear-atlas-v1.png",
+      "canvas": [
+        1280,
+        1280
+      ],
+      "children": [],
+      "codes": [
+        "HP:0000360",
+        "HP:0000365",
+        "HP:0002321"
+      ],
+      "implemented": true,
+      "hitboxes": [
+        [
+          790,
+          260,
+          390,
+          590
+        ]
+      ],
+      "focus_box": [
+        730,
+        170,
+        550,
+        850
+      ]
     },
     "nose": {
       "id": "nose",
+      "parent": "head",
       "labels": {
         "fr": "Nez",
         "de": "Nase",
         "en": "Nose"
       },
-      "parent": "head",
-      "asset": "head-front.svg",
+      "asset": "atlas-overlay.svg",
+      "image": "nose-atlas-v1.png",
+      "canvas": [
+        1024,
+        1536
+      ],
       "children": [],
-      "codes": [],
-      "implemented": false
+      "codes": [
+        "HP:0001742",
+        "HP:0031417",
+        "HP:0000421",
+        "HP:0025095",
+        "HP:0000458"
+      ],
+      "implemented": true,
+      "hitboxes": [
+        [
+          420,
+          550,
+          190,
+          185
+        ]
+      ]
     },
     "mouth": {
       "id": "mouth",
+      "parent": "head",
       "labels": {
         "fr": "Bouche",
         "de": "Mund",
         "en": "Mouth"
       },
-      "parent": "head",
-      "asset": "head-front.svg",
+      "asset": "atlas-overlay.svg",
+      "image": "mouth-throat-atlas-v1.png",
+      "canvas": [
+        1024,
+        1536
+      ],
       "children": [],
-      "codes": [],
-      "implemented": false
+      "codes": [
+        "HP:0000217",
+        "HP:0000224",
+        "HP:0010280"
+      ],
+      "implemented": true,
+      "hitboxes": [
+        [
+          370,
+          760,
+          290,
+          110
+        ]
+      ],
+      "focus_box": [
+        140,
+        150,
+        760,
+        880
+      ]
     },
     "throat": {
       "id": "throat",
+      "parent": "head",
       "labels": {
         "fr": "Gorge",
         "de": "Rachen",
         "en": "Throat"
       },
-      "parent": "head",
-      "asset": "head-front.svg",
+      "asset": "atlas-overlay.svg",
+      "image": "mouth-throat-atlas-v1.png",
+      "canvas": [
+        1024,
+        1536
+      ],
       "children": [],
-      "codes": [],
-      "implemented": false
+      "codes": [
+        "HP:0033050",
+        "HP:0002015",
+        "HP:0001609"
+      ],
+      "implemented": true,
+      "hitboxes": [
+        [
+          420,
+          1000,
+          190,
+          180
+        ]
+      ]
     },
     "jaw": {
       "id": "jaw",
+      "parent": "head",
       "labels": {
         "fr": "Mâchoire",
         "de": "Kiefer",
         "en": "Jaw"
       },
-      "parent": "head",
-      "asset": "head-front.svg",
+      "asset": "atlas-overlay.svg",
+      "image": "head-atlas-v1.png",
+      "canvas": [
+        1024,
+        1536
+      ],
       "children": [],
+      "codes": [
+        "HP:0012531"
+      ],
+      "implemented": true,
+      "hitboxes": [
+        [
+          240,
+          850,
+          130,
+          150
+        ],
+        [
+          660,
+          850,
+          130,
+          150
+        ]
+      ],
+      "focus_box": [
+        180,
+        650,
+        680,
+        550
+      ]
+    },
+    "neck": {
+      "id": "neck",
+      "parent": "body",
+      "labels": {
+        "fr": "Cou",
+        "de": "Hals",
+        "en": "Neck"
+      },
+      "asset": "atlas-overlay.svg",
+      "image": "head-atlas-v1.png",
+      "canvas": [
+        1024,
+        1536
+      ],
+      "children": [],
+      "codes": [
+        "HP:0030833",
+        "HP:0002015"
+      ],
+      "implemented": true,
+      "hitboxes": [
+        [
+          450,
+          210,
+          130,
+          85
+        ]
+      ],
+      "focus_box": [
+        220,
+        1000,
+        600,
+        536
+      ]
+    },
+    "thorax": {
+      "id": "thorax",
+      "parent": "body",
+      "labels": {
+        "fr": "Thorax",
+        "de": "Brustkorb",
+        "en": "Chest"
+      },
+      "asset": "atlas-overlay.svg",
+      "image": "body-atlas-v1.png",
+      "canvas": [
+        1024,
+        1536
+      ],
+      "children": [
+        "lungs",
+        "heart",
+        "chest-wall"
+      ],
+      "codes": [
+        "HP:0002094",
+        "HP:0012735",
+        "HP:0100749"
+      ],
+      "implemented": true,
+      "hitboxes": [
+        [
+          350,
+          280,
+          320,
+          170
+        ]
+      ],
+      "focus_box": [
+        295,
+        260,
+        440,
+        250
+      ]
+    },
+    "lungs": {
+      "id": "lungs",
+      "parent": "thorax",
+      "labels": {
+        "fr": "Poumons",
+        "de": "Lunge",
+        "en": "Lungs"
+      },
+      "asset": "atlas-overlay.svg",
+      "image": "body-atlas-v1.png",
+      "canvas": [
+        1024,
+        1536
+      ],
+      "children": [],
+      "codes": [
+        "HP:0002094",
+        "HP:0012735",
+        "HP:0030828",
+        "HP:0002105"
+      ],
+      "implemented": true,
+      "hitboxes": [
+        [
+          380,
+          300,
+          115,
+          150
+        ],
+        [
+          550,
+          300,
+          100,
+          150
+        ]
+      ],
+      "focus_box": [
+        330,
+        270,
+        365,
+        240
+      ]
+    },
+    "heart": {
+      "id": "heart",
+      "parent": "thorax",
+      "labels": {
+        "fr": "Cœur",
+        "de": "Herz",
+        "en": "Heart"
+      },
+      "asset": "atlas-overlay.svg",
+      "image": "body-atlas-v1.png",
+      "canvas": [
+        1024,
+        1536
+      ],
+      "children": [],
+      "codes": [
+        "HP:0100749",
+        "HP:0001649",
+        "HP:0000822"
+      ],
+      "implemented": true,
+      "hitboxes": [
+        [
+          493,
+          344,
+          80,
+          95
+        ]
+      ],
+      "focus_box": [
+        420,
+        300,
+        225,
+        195
+      ]
+    },
+    "chest-wall": {
+      "id": "chest-wall",
+      "parent": "thorax",
+      "labels": {
+        "fr": "Paroi thoracique",
+        "de": "Brustwand",
+        "en": "Chest wall"
+      },
+      "asset": "atlas-overlay.svg",
+      "image": "body-atlas-v1.png",
+      "canvas": [
+        1024,
+        1536
+      ],
+      "children": [],
+      "codes": [
+        "HP:0100749"
+      ],
+      "implemented": true,
+      "hitboxes": [
+        [
+          355,
+          440,
+          300,
+          30
+        ]
+      ],
+      "focus_box": [
+        295,
+        260,
+        440,
+        250
+      ]
+    },
+    "abdomen": {
+      "id": "abdomen",
+      "parent": "body",
+      "labels": {
+        "fr": "Abdomen",
+        "de": "Bauch",
+        "en": "Abdomen"
+      },
+      "asset": "atlas-overlay.svg",
+      "image": "body-atlas-v1.png",
+      "canvas": [
+        1024,
+        1536
+      ],
+      "children": [
+        "epigastrium",
+        "intestines",
+        "liver"
+      ],
+      "codes": [
+        "HP:0002027",
+        "HP:0002013",
+        "HP:0002014",
+        "HP:0002019",
+        "HP:0002018"
+      ],
+      "implemented": true,
+      "hitboxes": [
+        [
+          380,
+          460,
+          260,
+          190
+        ]
+      ],
+      "focus_box": [
+        325,
+        425,
+        380,
+        275
+      ]
+    },
+    "epigastrium": {
+      "id": "epigastrium",
+      "parent": "abdomen",
+      "labels": {
+        "fr": "Estomac / épigastre",
+        "de": "Magen / Oberbauch",
+        "en": "Stomach / upper abdomen"
+      },
+      "asset": "atlas-overlay.svg",
+      "image": "body-atlas-v1.png",
+      "canvas": [
+        1024,
+        1536
+      ],
+      "children": [],
+      "codes": [
+        "HP:0002027",
+        "HP:0002018",
+        "HP:0002013"
+      ],
+      "implemented": true,
+      "hitboxes": [
+        [
+          450,
+          475,
+          130,
+          55
+        ]
+      ],
+      "focus_box": [
+        330,
+        435,
+        320,
+        170
+      ]
+    },
+    "intestines": {
+      "id": "intestines",
+      "parent": "abdomen",
+      "labels": {
+        "fr": "Intestins",
+        "de": "Darm",
+        "en": "Intestines"
+      },
+      "asset": "atlas-overlay.svg",
+      "image": "body-atlas-v1.png",
+      "canvas": [
+        1024,
+        1536
+      ],
+      "children": [],
+      "codes": [
+        "HP:0002027",
+        "HP:0002014",
+        "HP:0002019"
+      ],
+      "implemented": true,
+      "hitboxes": [
+        [
+          407,
+          540,
+          200,
+          110
+        ]
+      ],
+      "focus_box": [
+        360,
+        510,
+        310,
+        185
+      ]
+    },
+    "liver": {
+      "id": "liver",
+      "parent": "abdomen",
+      "labels": {
+        "fr": "Foie (navigation)",
+        "de": "Leber (Navigation)",
+        "en": "Liver (navigation)"
+      },
+      "asset": "atlas-overlay.svg",
+      "image": "body-atlas-v1.png",
+      "canvas": [
+        1024,
+        1536
+      ],
+      "children": [],
+      "codes": [
+        "HP:0000952"
+      ],
+      "implemented": true,
+      "hitboxes": [
+        [
+          410,
+          450,
+          90,
+          65
+        ]
+      ],
+      "focus_box": [
+        355,
+        415,
+        235,
+        145
+      ]
+    },
+    "pelvis": {
+      "id": "pelvis",
+      "parent": "body",
+      "labels": {
+        "fr": "Bassin",
+        "de": "Becken",
+        "en": "Pelvis"
+      },
+      "asset": "atlas-overlay.svg",
+      "image": "body-atlas-v1.png",
+      "canvas": [
+        1024,
+        1536
+      ],
+      "children": [
+        "urinary"
+      ],
       "codes": [],
-      "implemented": false
+      "implemented": true,
+      "hitboxes": [
+        [
+          400,
+          660,
+          230,
+          120
+        ]
+      ],
+      "focus_box": [
+        355,
+        640,
+        330,
+        170
+      ]
+    },
+    "urinary": {
+      "id": "urinary",
+      "parent": "pelvis",
+      "labels": {
+        "fr": "Urinaire",
+        "de": "Harnwege",
+        "en": "Urinary"
+      },
+      "asset": "atlas-overlay.svg",
+      "image": "body-atlas-v1.png",
+      "canvas": [
+        1024,
+        1536
+      ],
+      "children": [],
+      "codes": [
+        "HP:0100518",
+        "HP:0000790",
+        "HP:0000016",
+        "HP:0000020",
+        "HP:0000103",
+        "HP:0000012"
+      ],
+      "implemented": true,
+      "hitboxes": [
+        [
+          480,
+          668,
+          72,
+          58
+        ]
+      ],
+      "focus_box": [
+        380,
+        635,
+        270,
+        180
+      ]
+    },
+    "arms": {
+      "id": "arms",
+      "parent": "body",
+      "labels": {
+        "fr": "Bras",
+        "de": "Arme",
+        "en": "Arms"
+      },
+      "asset": "atlas-overlay.svg",
+      "image": "body-atlas-v1.png",
+      "canvas": [
+        1024,
+        1536
+      ],
+      "children": [
+        "shoulder",
+        "elbow",
+        "wrist"
+      ],
+      "codes": [
+        "HP:0012513",
+        "HP:0003326",
+        "HP:0002829"
+      ],
+      "implemented": true,
+      "hitboxes": [
+        [
+          250,
+          305,
+          100,
+          250
+        ],
+        [
+          675,
+          305,
+          100,
+          250
+        ]
+      ],
+      "focus_box": [
+        170,
+        265,
+        680,
+        470
+      ]
+    },
+    "shoulder": {
+      "id": "shoulder",
+      "parent": "arms",
+      "labels": {
+        "fr": "Épaule",
+        "de": "Schulter",
+        "en": "Shoulder"
+      },
+      "asset": "atlas-overlay.svg",
+      "image": "body-atlas-v1.png",
+      "canvas": [
+        1024,
+        1536
+      ],
+      "children": [],
+      "codes": [
+        "HP:0030834",
+        "HP:0002829"
+      ],
+      "implemented": true,
+      "hitboxes": [
+        [
+          305,
+          270,
+          85,
+          80
+        ],
+        [
+          638,
+          270,
+          85,
+          80
+        ]
+      ],
+      "focus_box": [
+        270,
+        235,
+        460,
+        160
+      ]
+    },
+    "elbow": {
+      "id": "elbow",
+      "parent": "arms",
+      "labels": {
+        "fr": "Coude",
+        "de": "Ellenbogen",
+        "en": "Elbow"
+      },
+      "asset": "atlas-overlay.svg",
+      "image": "body-atlas-v1.png",
+      "canvas": [
+        1024,
+        1536
+      ],
+      "children": [],
+      "codes": [
+        "HP:0030835"
+      ],
+      "implemented": true,
+      "hitboxes": [
+        [
+          270,
+          485,
+          70,
+          80
+        ],
+        [
+          685,
+          485,
+          70,
+          80
+        ]
+      ],
+      "focus_box": [
+        230,
+        435,
+        560,
+        210
+      ]
+    },
+    "wrist": {
+      "id": "wrist",
+      "parent": "arms",
+      "labels": {
+        "fr": "Poignet",
+        "de": "Handgelenk",
+        "en": "Wrist"
+      },
+      "asset": "atlas-overlay.svg",
+      "image": "body-atlas-v1.png",
+      "canvas": [
+        1024,
+        1536
+      ],
+      "children": [],
+      "codes": [
+        "HP:0030836"
+      ],
+      "implemented": true,
+      "hitboxes": [
+        [
+          190,
+          665,
+          75,
+          70
+        ],
+        [
+          760,
+          665,
+          75,
+          70
+        ]
+      ],
+      "focus_box": [
+        155,
+        600,
+        725,
+        190
+      ]
+    },
+    "hands": {
+      "id": "hands",
+      "parent": "body",
+      "labels": {
+        "fr": "Mains",
+        "de": "Hände",
+        "en": "Hands"
+      },
+      "asset": "atlas-overlay.svg",
+      "image": "body-atlas-v1.png",
+      "canvas": [
+        1024,
+        1536
+      ],
+      "children": [],
+      "codes": [
+        "HP:0046505",
+        "HP:0002829"
+      ],
+      "implemented": true,
+      "hitboxes": [
+        [
+          125,
+          735,
+          105,
+          140
+        ],
+        [
+          793,
+          735,
+          105,
+          140
+        ]
+      ],
+      "focus_box": [
+        95,
+        685,
+        850,
+        240
+      ]
+    },
+    "legs": {
+      "id": "legs",
+      "parent": "body",
+      "labels": {
+        "fr": "Jambes",
+        "de": "Beine",
+        "en": "Legs"
+      },
+      "asset": "atlas-overlay.svg",
+      "image": "body-atlas-v1.png",
+      "canvas": [
+        1024,
+        1536
+      ],
+      "children": [
+        "hip",
+        "thigh",
+        "knee",
+        "lower-leg",
+        "ankle"
+      ],
+      "codes": [
+        "HP:0012514",
+        "HP:0003326",
+        "HP:0002829"
+      ],
+      "implemented": true,
+      "hitboxes": [
+        [
+          385,
+          790,
+          100,
+          560
+        ],
+        [
+          545,
+          790,
+          100,
+          560
+        ]
+      ],
+      "focus_box": [
+        320,
+        705,
+        400,
+        715
+      ]
+    },
+    "hip": {
+      "id": "hip",
+      "parent": "legs",
+      "labels": {
+        "fr": "Hanche",
+        "de": "Hüfte",
+        "en": "Hip"
+      },
+      "asset": "atlas-overlay.svg",
+      "image": "body-atlas-v1.png",
+      "canvas": [
+        1024,
+        1536
+      ],
+      "children": [],
+      "codes": [
+        "HP:0030838"
+      ],
+      "implemented": true,
+      "hitboxes": [
+        [
+          365,
+          700,
+          105,
+          90
+        ],
+        [
+          555,
+          700,
+          105,
+          90
+        ]
+      ],
+      "focus_box": [
+        320,
+        645,
+        390,
+        205
+      ]
+    },
+    "thigh": {
+      "id": "thigh",
+      "parent": "legs",
+      "labels": {
+        "fr": "Cuisse",
+        "de": "Oberschenkel",
+        "en": "Thigh"
+      },
+      "asset": "atlas-overlay.svg",
+      "image": "body-atlas-v1.png",
+      "canvas": [
+        1024,
+        1536
+      ],
+      "children": [],
+      "codes": [
+        "HP:0003326"
+      ],
+      "implemented": true,
+      "hitboxes": [
+        [
+          387,
+          790,
+          100,
+          205
+        ],
+        [
+          545,
+          790,
+          100,
+          205
+        ]
+      ],
+      "focus_box": [
+        330,
+        755,
+        355,
+        300
+      ]
+    },
+    "knee": {
+      "id": "knee",
+      "parent": "legs",
+      "labels": {
+        "fr": "Genou",
+        "de": "Knie",
+        "en": "Knee"
+      },
+      "asset": "atlas-overlay.svg",
+      "image": "body-atlas-v1.png",
+      "canvas": [
+        1024,
+        1536
+      ],
+      "children": [],
+      "codes": [
+        "HP:0030839"
+      ],
+      "implemented": true,
+      "hitboxes": [
+        [
+          387,
+          995,
+          100,
+          100
+        ],
+        [
+          545,
+          995,
+          100,
+          100
+        ]
+      ],
+      "focus_box": [
+        330,
+        940,
+        355,
+        200
+      ]
+    },
+    "lower-leg": {
+      "id": "lower-leg",
+      "parent": "legs",
+      "labels": {
+        "fr": "Jambe inférieure",
+        "de": "Unterschenkel",
+        "en": "Lower leg"
+      },
+      "asset": "atlas-overlay.svg",
+      "image": "body-atlas-v1.png",
+      "canvas": [
+        1024,
+        1536
+      ],
+      "children": [],
+      "codes": [
+        "HP:0012514",
+        "HP:0003326"
+      ],
+      "implemented": true,
+      "hitboxes": [
+        [
+          392,
+          1100,
+          85,
+          190
+        ],
+        [
+          555,
+          1100,
+          85,
+          190
+        ]
+      ],
+      "focus_box": [
+        340,
+        1060,
+        335,
+        310
+      ]
+    },
+    "ankle": {
+      "id": "ankle",
+      "parent": "legs",
+      "labels": {
+        "fr": "Cheville",
+        "de": "Sprunggelenk",
+        "en": "Ankle"
+      },
+      "asset": "atlas-overlay.svg",
+      "image": "body-atlas-v1.png",
+      "canvas": [
+        1024,
+        1536
+      ],
+      "children": [],
+      "codes": [
+        "HP:0030840"
+      ],
+      "implemented": true,
+      "hitboxes": [
+        [
+          390,
+          1290,
+          90,
+          80
+        ],
+        [
+          552,
+          1290,
+          90,
+          80
+        ]
+      ],
+      "focus_box": [
+        340,
+        1250,
+        340,
+        170
+      ]
+    },
+    "feet": {
+      "id": "feet",
+      "parent": "body",
+      "labels": {
+        "fr": "Pieds",
+        "de": "Füße",
+        "en": "Feet"
+      },
+      "asset": "atlas-overlay.svg",
+      "image": "body-atlas-v1.png",
+      "canvas": [
+        1024,
+        1536
+      ],
+      "children": [],
+      "codes": [
+        "HP:0025238",
+        "HP:0002829"
+      ],
+      "implemented": true,
+      "hitboxes": [
+        [
+          365,
+          1375,
+          120,
+          135
+        ],
+        [
+          547,
+          1375,
+          120,
+          135
+        ]
+      ],
+      "focus_box": [
+        315,
+        1310,
+        405,
+        225
+      ]
     }
   }
 }

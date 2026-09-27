@@ -18,6 +18,14 @@ runs immuables.
 
 ## Utilisation
 
+Utiliser `main` synchronisé avec les deux livraisons #19 (General/Rare) et #20 (atlas).
+Le champ optionnel `consultation` est conservé dans les sessions existantes ; l'ancienne
+branche visuelle seule ne sait pas les lire et peut bloquer l'accueil avec HTTP 422.
+Ne pas supprimer les sessions pour contourner cette incompatibilité de versions.
+Les fichiers JS/CSS des deux modes portent un SHA-256 dans leur URL ; les pages HTML ne
+sont pas cachées. Un rechargement charge ainsi la version locale courante sans purger
+l'historique, les préférences de langue/thème ou les sessions.
+
 ```powershell
 uv run --offline --no-sync latros --root . ui --no-open
 ```
@@ -67,14 +75,22 @@ L'[ADR 0016](decisions/0016-navigation-anatomique-de-presentation.md) conserve J
 avec modules locaux API/état/i18n/recherche/observations/anatomie/questions/résultats/historique.
 `assets/anatomy/navigation.json` est un arbre UI extensible ; ses codes potentiels sont résolus
 par `/internal/v1/presentation/anatomy`, pas par des connaissances codées dans le frontend.
-Les SVG sont schématiques, avec régions, focus/clavier et callouts localisés. Les vues autres
-que Corps/Tête/Sinus sont explicitement non livrées. La carte n'ajoute pas de `body_site` au cas.
+La version 2 de l'arbre contient 35 vues. Sept illustrations originales générées sont séparées
+des overlays SVG focusables et des labels HTML FR/DE/EN. Les zooms ne déforment pas les images.
+Oreille/œil sont des coupes ; les organes hors tête utilisent un zoom du corps entier, pas une
+planche dédiée. La carte n'ajoute pas de `body_site` au cas. Ces images ne sont pas anatomiquement
+validées ; l'avertissement reste visible. Voir l'ADR 0018 et le [rapport atlas v3](reports/ui-atlas-v3.md).
 
 Sur mobile la recherche reste sticky et les observations apparaissent sous la carte ; un
 raccourci ramène au champ. Changer d'observation depuis un résultat/question ramène à l'exploration
 avant une nouvelle requête backend. Reprendre sans changement conserve l'historique des réponses
 et leurs observations. Les éditions et traductions ne réécrivent jamais un run immuable.
 
-Le [rapport UI vNext](reports/ui-anatomy-vnext.md) mesure 65 concepts FR/DE actifs, explique les
+Le [rapport UI vNext](reports/ui-anatomy-vnext.md) mesurait 65 concepts FR/DE actifs, explique les
 ambiguïtés refusées, les références indisponibles et la latence froide restante (~7 s).
 Les exemples ne constituent pas de nouveaux critères diagnostiques ou une validation clinique.
+
+Le lexique UI version 3 active désormais 139 concepts FR/DE sur 11 671 ; les 80 nouvelles
+propositions ont une provenance explicite et un statut de brouillon éditorial non revu humainement.
+Le script `export_ui_translation_review.py` produit un jeu local de revue avec décisions vides.
+Les ambiguïtés ne sont jamais forcées. Aucun service de traduction, LLM ou nouvelle assertion.

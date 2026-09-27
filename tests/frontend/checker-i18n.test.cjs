@@ -12,7 +12,8 @@ function environment(saved = new Map()) {
   const node = id => {
     if (!elements.has(id)) elements.set(id, {
       value:"", textContent:"", innerHTML:"", hidden:false, disabled:false, dataset:{},
-      classList:{toggle(){}}, setAttribute(name,value){this[name]=value;},
+      children:[], classList:{toggle(){}}, setAttribute(name,value){this[name]=value; if(name==='data-region')this.dataset.region=value;},
+      appendChild(child){this.children.push(child);}, querySelectorAll(){return [];},
       addEventListener(){}, querySelector(){return null;}, focus(){}, close(){}, showModal(){},
       replaceChildren(){}, scrollIntoView(){},
     });
@@ -24,8 +25,9 @@ function environment(saved = new Map()) {
   const context = vm.createContext({console, URLSearchParams, structuredClone,
     localStorage:{getItem:key=>saved.get(key)||null,setItem:(key,value)=>saved.set(key,value)},
     crypto:{randomUUID:()=>"test-uuid"},
-    DOMParser:class { parseFromString(){return {documentElement:{querySelectorAll:()=>[],setAttribute(){}}};} },
+    DOMParser:class { parseFromString(){return {documentElement:node('svg-'+calls.length)};} },
     document:{documentElement:{lang:"",dataset:{}},getElementById:node,importNode:node=>node,
+      createElementNS:(_ns,tag)=>({tag,children:[],dataset:{},setAttribute(name,value){this[name]=value;if(name==='data-region')this.dataset.region=value;},appendChild(child){this.children.push(child);}}),
       querySelectorAll:selector=>selector==="[data-i18n]"?[staticNode]:[],querySelector:()=>null},
     window:{clearTimeout(){},setTimeout(){return 1;},scrollTo(){}},
     fetch:async (url,options) => {
@@ -150,6 +152,23 @@ test("body/head/sinuses breadcrumb, back navigation and supported findings",asyn
   await env.run("anatomyNavigate('body')");
   assert.equal(env.node('region-panel').hidden,true);
   assert.equal(env.run('state.anatomy.items.length'),0);
+});
+
+test("atlas image and accessible overlays remain independent across extended views",async()=>{
+  const env=environment(); await ready(env);
+  env.context.canvas=env.node('manual-canvas');
+  env.run("composeAtlas(canvas,state.anatomy.config.nodes.body,state.anatomy.config)");
+  assert.equal(env.context.canvas.children[0].href,'/assets/anatomy/body-atlas-v1.png');
+  assert.equal(env.context.canvas.children[0]['aria-hidden'],'true');
+  const head=env.context.canvas.children.find(child=>child.dataset.region==='head');
+  assert.equal(head.role,'button'); assert.equal(head.tabindex,'0');
+  assert.equal(head.children[0].tag,'rect'); assert.equal(head['aria-label'],'Tête');
+  for(const region of ['ear-inner','lungs','intestines','urinary','knee']) {
+    await env.run(`anatomyNavigate('${region}')`);
+    assert.equal(env.run('state.anatomy.region'),region);
+    assert.equal(env.run('state.selected.length'),0); // A navigation click is never a patient answer.
+  }
+  assert.ok(env.calls.every(call=>call.url.startsWith('/')));
 });
 
 test("anatomy and text search upsert one canonical observation with three explicit states",async()=>{

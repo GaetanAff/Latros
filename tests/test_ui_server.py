@@ -1,3 +1,5 @@
+import hashlib
+import re
 from pathlib import Path
 
 from fastapi.testclient import TestClient
@@ -5,6 +7,7 @@ from typer.testing import CliRunner
 
 from latros.cli import app
 from latros.knowledge.store_v2 import build_snapshot_v2
+from latros.ui import server
 from latros.ui.server import create_app
 
 
@@ -12,6 +15,36 @@ def _create_session(client: TestClient) -> dict:
     response = client.post("/internal/v1/sessions", json={"display_name": "Test interface locale"})
     assert response.status_code == 201
     return response.json()
+
+
+def test_ui_resources_use_content_hashes_in_both_modes(tmp_path: Path) -> None:
+    with TestClient(create_app(tmp_path)) as client:
+        for route, expected in (("/", "anatomy.js"), ("/expert", "app.js")):
+            page = client.get(route)
+            assert page.status_code == 200
+            assert page.headers["cache-control"] == "no-store"
+            urls = re.findall(
+                r'(?:src|href)="(/assets/[^"?]+\.(?:js|css)\?v=[a-f0-9]{64})"', page.text
+            )
+            assert urls and any(expected in url for url in urls)
+            assert not re.search(r'(?:src|href)="/assets/[^"?]+\.(?:js|css)"', page.text)
+            for url in urls:
+                response = client.get(url)
+                assert response.status_code == 200
+                assert url.split("?v=", 1)[1] == hashlib.sha256(response.content).hexdigest()
+
+
+def test_ui_asset_version_changes_with_content(tmp_path: Path, monkeypatch) -> None:
+    assets = tmp_path / "assets"
+    assets.mkdir()
+    script = assets / "checker.js"
+    script.write_text("// before", encoding="utf-8")
+    monkeypatch.setattr(server, "PACKAGE_ROOT", tmp_path)
+    before = server._asset_urls()["checker.js"]
+    script.write_text("// after", encoding="utf-8")
+    after = server._asset_urls()["checker.js"]
+    assert before != after
+    assert after.endswith(hashlib.sha256(script.read_bytes()).hexdigest())
 
 
 def _select(client: TestClient, session: dict, snapshot: str, strategy: str) -> dict:

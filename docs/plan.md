@@ -1,6 +1,6 @@
 # Plan d'implémentation et avancement
 
-Référence : plan « Premières étapes de Latros — socle de données et moteur clinique pur » demandé par l'utilisateur. État au 26 septembre 2026.
+Référence : plan « Premières étapes de Latros — socle de données et moteur clinique pur » demandé par l'utilisateur. État au 27 septembre 2026.
 
 Les trois jalons avaient été implémentés ensemble dans la première tranche. La reprise de l'étape 2 consiste à vérifier sa livraison et à établir le snapshot sous le nom du jalon, `v0.2.0`. Elle ne correspond pas à l'ajout de nouvelles sources ou de fonctions cliniques.
 
@@ -13,7 +13,10 @@ G4 (142 maladies, 684 assertions, une famille `unknown`) puis `rare_question_v1`
 explicite. Budgets 6 / 12, anti-doublons, cas partagé, résultats séparés.
 [Rapport](reports/general-first-rare-second.md), [ADR 0017](decisions/0017-consultations-generale-et-rare-versionnees.md).
 Aucune revue clinique G1/G2 réalisée, G3 indépendant à faire, snapshot inchangé. Optimisation
-runtime arrêtée après F6 sauf régression. Illustrations/navigation/traductions : chantier distinct.
+runtime arrêtée après F6 sauf régression. Illustrations/navigation/traductions : chantier distinct,
+intégré avec ces politiques après fusion de #19. L'intégration relit les sessions existantes
+sans les supprimer ni ignorer le contrat `consultation` ; tests combinés : 235 Python et 16 frontend.
+Les JS/CSS locaux sont liés à leurs hashes pour éviter une UI obsolète dans le cache navigateur.
 
 | Étape | Nom du plan | État logiciel | Référence des données |
 | --- | --- | --- | --- |
@@ -205,12 +208,17 @@ reste future. Node 22 sert uniquement aux tests frontend, jamais au runtime de L
 
 La tranche UI anatomique vNext implémente Corps → Tête → Sinus, SVG locaux et arbre de
 navigation extensible, recherche permanente, états explicites sans doublon, thèmes et responsive.
-Les autres régions détaillées restent à faire. Les références sont résolues contre les
+L'extension atlas v3 ajoute sept images générées locales, 35 vues avec overlays indépendants
+et zooms (oreilles, thorax, abdomen, urinaire, membres). Les organes hors tête n'ont pas encore
+de planches dédiées. Les références sont résolues contre les
 observations supportées du snapshot, jamais ajoutées comme assertions ou localisation clinique.
-65 concepts ont un affichage FR/DE actif ; la majorité reste avec fallback EN.
+139 concepts ont un affichage FR/DE actif ; la majorité reste avec fallback EN.
 L'[ADR 0016](decisions/0016-navigation-anatomique-de-presentation.md) et le
 [rapport mesuré](reports/ui-anatomy-vnext.md) précisent architecture, coverage et limites.
 Ce chantier ne commence ni G clinique, ni safety, ni v0.9 ; scoring et snapshot restent identiques.
+Le [rapport atlas v3](reports/ui-atlas-v3.md) et l'[ADR 0018](decisions/0018-illustrations-locales-et-overlays.md)
+documentent les images non validées anatomiquement, les traductions éditoriales à revoir et
+l'export linguistique déterministe. Le questionnaire General/Rare est une tranche séparée (#19).
 
 ## Étape v0.7 — fabrique souveraine généraliste
 
