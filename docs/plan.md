@@ -6,6 +6,15 @@ Les trois jalons avaient été implémentés ensemble dans la première tranche.
 
 ## Jalons du plan
 
+### Parcours General-first / Rare-second — expérimentation du 27 septembre 2026
+
+Implémenté séparément de `general_v1` : `general_question_v2` mono-source MedlinePlus retained
+G4 (142 maladies, 684 assertions, une famille `unknown`) puis `rare_question_v1` sur demande
+explicite. Budgets 6 / 12, anti-doublons, cas partagé, résultats séparés.
+[Rapport](reports/general-first-rare-second.md), [ADR 0017](decisions/0017-consultations-generale-et-rare-versionnees.md).
+Aucune revue clinique G1/G2 réalisée, G3 indépendant à faire, snapshot inchangé. Optimisation
+runtime arrêtée après F6 sauf régression. Illustrations/navigation/traductions : chantier distinct.
+
 | Étape | Nom du plan | État logiciel | Référence des données |
 | --- | --- | --- | --- |
 | 1 | Fondation technique — `v0.1.0` | Implémentée : paquet, CLI sources, registre, téléchargements vérifiés, verrou et CI | Aucun snapshot médical nécessaire à ce jalon |

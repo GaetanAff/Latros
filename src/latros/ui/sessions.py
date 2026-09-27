@@ -12,6 +12,7 @@ from typing import Any, Literal, cast
 from latros.clinical.v2 import ClinicalCaseV2
 from latros.common import LatrosError, safe_id, write_json
 from latros.ui.models import (
+    ConsultationWorkflow,
     ResearchSession,
     SessionRunReference,
     StoredRun,
@@ -132,12 +133,22 @@ class SessionStore:
                 "updated_at": created,
             }
             updates["latest_diagnose" if operation == "diagnose" else "latest_question"] = reference
+            if current.selection.strategy_id in {"general_question_v2", "rare_question_v1"}:
+                workflow = current.consultation or ConsultationWorkflow()
+                if operation == "diagnose":
+                    field = "general_run" if workflow.phase == "general" else "rare_run"
+                    workflow = workflow.model_copy(update={field: reference})
+                updates["consultation"] = workflow
             updated = current.model_copy(update=updates)
             run_path = self._run_path(session_id, run_id)
             if run_path.exists():
                 raise LatrosError("Immutable session run already exists")
             try:
-                if operation == "diagnose" and current.selection.strategy_id == "general_v1":
+                if operation == "diagnose" and current.selection.strategy_id in {
+                    "general_v1",
+                    "general_question_v2",
+                    "rare_question_v1",
+                }:
                     write_indexed_run(run_path, run)
                 else:
                     write_json(run_path, run.model_dump(mode="json"))

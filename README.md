@@ -178,7 +178,12 @@ désactivée :
 uv run --offline --no-sync latros --root . ui --port 8766 --no-open
 ```
 
-Le parcours simple privilégie `v0.7.0-general-dev-unreviewed + general_v1` lorsqu'il est présent.
+Le parcours simple privilégie désormais `v0.7.0-general-dev-unreviewed + general_question_v2` :
+profil **expérimental mono-source MedlinePlus G4**, non validé/non publiable, distinct de
+`general_v1` dont l'exclusion `unknown` reste inchangée. Après les résultats généraux, un clic
+explicite permet `rare_question_v1`, même cas, résultats et compteurs séparés. Budgets logiciels
+6 / 12, sans valeur médicale validée. Rejouer le JSONL G4 épinglé offline avant usage ; voir le
+[rapport General/Rare](docs/reports/general-first-rare-second.md) et l'[ADR 0017](docs/decisions/0017-consultations-generale-et-rare-versionnees.md).
 Il guide de la sélection explicite de symptômes vers l'âge, les questions fournies par le backend,
 les résultats non probabilistes et leurs détails facultatifs. Aucun texte libre n'est interprété.
 Un snapshot absent est signalé ; les libellés du catalogue local peuvent être en anglais. Voir

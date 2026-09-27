@@ -27,9 +27,11 @@ from latros.common import LatrosError
 from latros.ui.anatomy import load_navigation
 from latros.ui.models import (
     CaseRequest,
+    ConsultationWorkflow,
     CreateSessionRequest,
     ErrorDocument,
     QuestionAnswerRequest,
+    ResearchSession,
     RunRequest,
     SelectionRequest,
     SessionSelection,
@@ -221,6 +223,8 @@ def create_app(root: Path) -> FastAPI:
         request: Request, session_id: str, payload: SelectionRequest
     ) -> dict[str, Any]:
         service = _service(request)
+        if payload.strategy_id == "rare_question_v1":
+            raise LatrosError("Rare consultation requires explicit opt-in after general results")
         compatible = service.require_compatible(payload.snapshot_id, payload.strategy_id)
         selection = SessionSelection(
             snapshot_id=payload.snapshot_id,
@@ -231,9 +235,61 @@ def create_app(root: Path) -> FastAPI:
         session = _sessions(request).update(
             session_id,
             payload.revision,
-            lambda current: current.model_copy(update={"selection": selection}),
+            lambda current: current.model_copy(
+                update={
+                    "selection": selection,
+                    "consultation": ConsultationWorkflow()
+                    if payload.strategy_id == "general_question_v2"
+                    else None,
+                }
+            ),
         )
         return session.model_dump(mode="json")
+
+    @app.post("/internal/v1/sessions/{session_id}/consultation/rare")
+    async def rare_opt_in(request: Request, session_id: str, payload: RunRequest) -> dict[str, Any]:
+        store = _sessions(request)
+        session = store.load(session_id)
+        _require_request_revision(session.revision, payload.revision)
+        workflow = session.consultation
+        if (
+            session.selection is None
+            or workflow is None
+            or workflow.general_run is None
+            or workflow.phase != "general"
+            or session.selection.strategy_id != "general_question_v2"
+        ):
+            raise LatrosError("Complete the general analysis before optional rare exploration")
+        general_run = store.load_run(session_id, workflow.general_run.run_id)
+        if general_run.clinical_case != session.clinical_case:
+            raise LatrosError("General results are stale; analyse the changed case first")
+        compatible = _service(request).require_compatible(
+            session.selection.snapshot_id, "rare_question_v1"
+        )
+        selection = SessionSelection(
+            snapshot_id=compatible.snapshot_id,
+            strategy_id=compatible.strategy_id,
+            profile_id=compatible.profile_id,
+            profile_sha256=compatible.profile_sha256,
+        )
+        updated = store.update(
+            session_id,
+            payload.revision,
+            lambda current: current.model_copy(
+                update={
+                    "selection": selection,
+                    "consultation": workflow.model_copy(
+                        update={
+                            "phase": "rare",
+                            "rare_opted_in_at": datetime.now(UTC),
+                        }
+                    ),
+                    "latest_question": None,
+                    "latest_diagnose": None,
+                }
+            ),
+        )
+        return updated.model_dump(mode="json")
 
     @app.put("/internal/v1/sessions/{session_id}/case")
     async def save_case(request: Request, session_id: str, payload: CaseRequest) -> dict[str, Any]:
@@ -257,6 +313,7 @@ def create_app(root: Path) -> FastAPI:
         if session.selection is None:
             raise LatrosError("Select a compatible snapshot and strategy before running")
         selection = session.selection
+        _require_consultation_phase(session)
         service = _service(request)
         _require_current_selection(service, selection)
         result = service.diagnose(
@@ -288,6 +345,7 @@ def create_app(root: Path) -> FastAPI:
         if session.selection is None:
             raise LatrosError("Select a compatible snapshot and strategy before running")
         selection = session.selection
+        _require_consultation_phase(session)
         service = _service(request)
         _require_current_selection(service, selection)
         result = service.next_question(
@@ -324,6 +382,8 @@ def create_app(root: Path) -> FastAPI:
         ):
             raise LatrosError("Question run is stale or is not the latest session question")
         run = store.load_run(session_id, payload.question_run_id)
+        if run.selection != current.selection or run.clinical_case != current.clinical_case:
+            raise LatrosError("Question run belongs to an outdated case or consultation phase")
         question = run.result.get("question")
         if run.result.get("status") != "question" or not isinstance(question, dict):
             raise LatrosError("The selected run contains no answerable question")
@@ -473,6 +533,18 @@ def _require_current_selection(
         or current.profile_sha256 != selection.profile_sha256
     ):
         raise LatrosError("Reasoning profile changed; reapply the session selection before running")
+
+
+def _require_consultation_phase(session: ResearchSession) -> None:
+    if session.selection is not None and session.selection.strategy_id == "rare_question_v1":
+        workflow = session.consultation
+        if (
+            workflow is None
+            or workflow.phase != "rare"
+            or workflow.rare_opted_in_at is None
+            or workflow.general_run is None
+        ):
+            raise LatrosError("Rare consultation requires explicit opt-in after general results")
 
 
 def _service(request: Request) -> ResearchApplicationService:

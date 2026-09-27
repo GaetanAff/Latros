@@ -11,7 +11,7 @@ function isSimpleCompatible(session) {
   const clinicalCase = session.clinical_case || {};
   const answerIds = new Set((clinicalCase.question_history || [])
     .map((item) => item.resulting_observation_id));
-  return session.selection?.strategy_id === "general_v1"
+  return ['general_v1','general_question_v2','rare_question_v1'].includes(session.selection?.strategy_id)
     && !clinicalCase.subject_context?.sex
     && !(clinicalCase.source_statements || []).length
     && !(clinicalCase.observation_proposals || []).length
@@ -74,6 +74,7 @@ async function resumeSession(sessionId) {
     && item.strategy_id === session.selection.strategy_id);
   if (!available) throw new Error(t("session_snapshot_missing"));
   state.session = session;
+  await restoreConsultationRuns(session);
   state.caseDirty = false;
   state.ageDirty = false;
   state.selection = available;

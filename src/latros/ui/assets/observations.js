@@ -72,6 +72,10 @@ async function ensureSession() {
     });
   }
   if (!state.caseDirty) return;
+  if (state.session.consultation?.phase === 'rare') {
+    state.selection = preferredSelection(state.capabilities);
+    state.generalRun = null;
+  }
   if (state.session.selection?.snapshot_id !== state.selection.snapshot_id
       || state.session.selection?.strategy_id !== state.selection.strategy_id) {
     state.session = await api(`${sessionPath()}/selection`, {
@@ -83,7 +87,9 @@ async function ensureSession() {
   const clinicalCase = structuredClone(state.session.clinical_case);
   clinicalCase.subject_context = subjectContextForSave(clinicalCase.subject_context);
   clinicalCase.observations = state.selected.map(makeObservation);
-  clinicalCase.question_history = [];
+  const savedIds = new Set(clinicalCase.observations.map(item=>item.observation_id));
+  clinicalCase.question_history = (clinicalCase.question_history || [])
+    .filter(item=>savedIds.has(item.resulting_observation_id));
   state.session = await api(`${sessionPath()}/case`, {
     method: "PUT",
     body: JSON.stringify({ revision: state.session.revision, clinical_case: clinicalCase }),

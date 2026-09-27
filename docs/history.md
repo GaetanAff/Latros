@@ -2,7 +2,7 @@
 
 Ce fichier est le journal de continuité du projet. Il décrit ce qui a été décidé et effectivement réalisé, afin de pouvoir reprendre la discussion sans déduire l'état du projet à partir du code seul.
 
-Dernière mise à jour : 26 septembre 2026.
+Dernière mise à jour : 27 septembre 2026.
 
 ## État actuel en une phrase
 
@@ -17,6 +17,23 @@ Référence médicale publiée : **`v0.2.0`**, nom du jalon « Premier snapshot 
 `v0.5.0-dev-unreviewed` reste une expérience locale non publiable ; aucun snapshot clinique v2
 validé n'est publié. `v0.7.0-general-dev-unreviewed` est le nouveau corpus généraliste DEV local,
 également non publiable. L'ancien snapshot `latros-kb-0002` est conservé.
+
+## General-first / Rare-second expérimental — 27 septembre 2026
+
+- PR #17 relue, tests/CI et sept goldens vérifiés, fusionnée ; base propre `31ae932`.
+- Clarification utilisateur : profil NOUVEAU mono-source MedlinePlus autorisé, `general_v1`
+  et son exclusion `unknown` intacts. `general_question_v2` retained G4 : 142 maladies,
+  684 assertions canoniques, 706 sources, 210 findings, 106 maladies mono-source dans le corpus
+  original. Une seule famille éditoriale, aucune preuve indépendante ajoutée ni `approved`.
+- `rare_question_v1` Orphadata/Monarch OMIM-Orphanet séparé ; questions conditionnées au cas,
+  budgets 6 / 12 d'ingénierie, anti-doublons concept/history, arrêt et résultats immédiats.
+- Opt-in rare après résultats généraux, cas partagé, sections/compteurs/runs séparés ; reprise
+  backward-compatible, `/expert` conservé ; questions obsolètes refusées après édition/phase.
+- 229 Python + 15 frontend, Ruff/format/mypy/schémas/registre verts ; sept goldens identiques.
+  Scénarios offline + navigateur : plus d'intellectual disability immédiatement sur rhinorrhée
+  en général, aucune répétition. ADR 0017 et rapport : ex aequo, questions génériques et rangs
+  non validés exposés honnêtement. G1/G2 humains et G3 restent requis, tous les statuts inchangés.
+- Images dans un chantier distinct, `FUTUR INTERFACE/` ignoré, aucune mutation du snapshot.
 
 ## Navigation anatomique UI vNext — 26 septembre 2026
 
