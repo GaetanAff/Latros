@@ -16,6 +16,9 @@ function showScreen(name) {
 }
 
 function preferredSelection(capabilities) {
+  const general = (capabilities.compatible_selections || []).find(item =>
+    item.available && item.strategy_id === 'general_question_v2');
+  if (general) return general;
   const available = (capabilities.compatible_selections || [])
     .filter((item) => item.available && item.strategy_id === "general_v1");
   return available.find((item) => item.snapshot_id === "v0.7.0-general-dev-unreviewed")
@@ -60,6 +63,7 @@ async function boot() {
 function newAnalysis() {
   state.session = null;
   state.resultRun = null;
+  state.generalRun = null;
   state.questionRun = null;
   state.selected = [];
   state.suggestions = [];

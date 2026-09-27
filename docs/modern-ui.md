@@ -1,5 +1,14 @@
 # Parcours simple Latros — prototype local de recherche
 
+Depuis la politique [ADR 0017](decisions/0017-consultations-generale-et-rare-versionnees.md),
+le parcours général expérimental `general_question_v2` s'arrête au plus après six questions,
+ou plus tôt faute de question admissible / à la demande de résultats. Le compteur affiche la
+borne logicielle restante, pas une prévision médicale. Résultats généraux = une fin ; CTA rare
+facultatif ensuite. `rare_question_v1` a son compteur (budget 12) et sa propre liste, avec le
+même cas déjà renseigné. Les questions proviennent exclusivement du backend ; les concepts
+répondus, même inconnus, ne sont pas reposés. Éditer en rare recommence général ; runs conservés.
+Voir le [rapport et les limites mono-source](reports/general-first-rare-second.md).
+
 Le serveur `latros ui` reste limité à `127.0.0.1`. La page `/` guide la personne par étapes :
 symptômes explicites, âge, question du moteur, résultats, explication et historique. La console
 R&D historique est conservée à `/expert`. Le mode simple propose maintenant la carte interactive

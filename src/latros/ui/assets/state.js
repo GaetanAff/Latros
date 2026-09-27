@@ -17,6 +17,7 @@ const state = {
   selected: [],
   suggestions: [],
   resultRun: null,
+  generalRun: null,
   questionRun: null,
   questionCount: 0,
   searchSequence: 0,
