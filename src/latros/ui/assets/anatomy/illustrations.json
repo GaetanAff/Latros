@@ -1,0 +1,119 @@
+{
+  "version": "latros-atlas-1",
+  "role": "generated_navigation_illustrations_not_clinical_knowledge",
+  "created": "2026-09-27",
+  "generator": "OpenAI built-in image generation",
+  "rights_status": "original_generated_assets_no_third_party_atlas_copied",
+  "attribution": "Latros generated illustration series",
+  "clinical_validation": false,
+  "anatomical_validation": false,
+  "reproducibility": "Pinned output hashes; image generation is not byte-reproducible. Offline runtime uses these local files only.",
+  "style_brief": "Original coherent semi-realistic modern medical illustration, intermediate detail, muted natural organ colours, soft ivory/terracotta, transparent background, no embedded labels, no text, no watermark, no photorealistic gore, independently drawn teal navigation overlays. Head establishes the style reference for subsequent views.",
+  "images": [
+    {
+      "id": "body",
+      "filename": "body-atlas-v1.png",
+      "version": 1,
+      "bytes": 1882710,
+      "sha256": "433fb986394aa1795ed0e1cea1d63ce026120d595ff975e159bb7a36874b448b",
+      "canvas": [
+        1024,
+        1536
+      ],
+      "view": "frontal",
+      "review_status": "not_anatomically_validated",
+      "human_reviewer": null,
+      "brief": "Full body frontal, visible major organs and musculature, whole figure including feet."
+    },
+    {
+      "id": "ear",
+      "filename": "ear-atlas-v1.png",
+      "version": 1,
+      "bytes": 1910693,
+      "sha256": "53a3a945767df7ecc9c16372e8d04f3f6fb96f11c537547f9ed342d5289bd503",
+      "canvas": [
+        1280,
+        1280
+      ],
+      "view": "cutaway lateral/oblique for internal structures",
+      "review_status": "not_anatomically_validated",
+      "human_reviewer": null,
+      "brief": "Ear cutaway showing outer, middle and inner structures."
+    },
+    {
+      "id": "eye",
+      "filename": "eye-atlas-v1.png",
+      "version": 1,
+      "bytes": 2510316,
+      "sha256": "fcce5185618e71b706d75c6a641612b9d57f25a5bd35670ba9e40de2e1315140",
+      "canvas": [
+        1280,
+        1280
+      ],
+      "view": "cutaway lateral/oblique for internal structures",
+      "review_status": "not_anatomically_validated",
+      "human_reviewer": null,
+      "brief": "Eye cutaway revealing the globe internal layers."
+    },
+    {
+      "id": "head",
+      "filename": "head-atlas-v1.png",
+      "version": 1,
+      "bytes": 2687101,
+      "sha256": "dba62344fd9a751d4348d97858a988d8cb244ab491df510b5ef09d5858b9d547",
+      "canvas": [
+        1024,
+        1536
+      ],
+      "view": "frontal",
+      "review_status": "not_anatomically_validated",
+      "human_reviewer": null,
+      "brief": "Frontal head anatomical muscles and transparent cutaways."
+    },
+    {
+      "id": "mouth-throat",
+      "filename": "mouth-throat-atlas-v1.png",
+      "version": 1,
+      "bytes": 2887530,
+      "sha256": "46866feaade3ce8f5c53086a01609696d2195b7fe8b1fbd9267b803f73a82072",
+      "canvas": [
+        1024,
+        1536
+      ],
+      "view": "frontal",
+      "review_status": "not_anatomically_validated",
+      "human_reviewer": null,
+      "brief": "Frontal mouth and throat cutaway, tongue, palate and pharyngeal structures."
+    },
+    {
+      "id": "nose",
+      "filename": "nose-atlas-v1.png",
+      "version": 1,
+      "bytes": 2738230,
+      "sha256": "96c893bc52286c86f5ef33696f1b2aeddbb961fefb72b45d1ac03ece75829f15",
+      "canvas": [
+        1024,
+        1536
+      ],
+      "view": "frontal",
+      "review_status": "not_anatomically_validated",
+      "human_reviewer": null,
+      "brief": "Frontal nasal cavity cutaway, septum and turbinates."
+    },
+    {
+      "id": "sinuses",
+      "filename": "sinuses-atlas-v1.png",
+      "version": 1,
+      "bytes": 2534491,
+      "sha256": "876b3c92851ceee4fdc0f8aeef948e73f15892380c680710b053cbfbb2560052",
+      "canvas": [
+        1024,
+        1536
+      ],
+      "view": "frontal",
+      "review_status": "not_anatomically_validated",
+      "human_reviewer": null,
+      "brief": "Frontal face cutaway with visible paranasal sinus cavities."
+    }
+  ]
+}

@@ -22,10 +22,14 @@ def main() -> None:
         connection = repository.connection
         total = connection.execute("SELECT count(*) FROM ui_observations").fetchone()[0]
         report: dict[str, Any] = {"searchable_concepts": total, "languages": {}}
-        resolved = presentation.resolve_supported_codes(
-            presentation.lexicon["system"],
-            [entry["code"] for entry in presentation.lexicon["entries"]],
-        )
+        codes = [entry["code"] for entry in presentation.lexicon["entries"]]
+        resolved = {}
+        for start in range(0, len(codes), 100):
+            resolved.update(
+                presentation.resolve_supported_codes(
+                    presentation.lexicon["system"], codes[start : start + 100]
+                )
+            )
         report["disabled_lexicon_codes"] = [
             entry["code"]
             for entry in presentation.lexicon["entries"]
