@@ -28,6 +28,8 @@ from latros.reasoning.results_v2 import DifferentialResultV2, QuestionResultV2, 
 from latros.sources.registry import Registry
 from latros.sources.registry_v2 import RegistryV2
 from latros.ui.models import ResearchSession
+from latros.ui.patient_context import PatientContext
+from latros.ui.refinements import RefinementAnswer, SymptomRefinementDefinition
 
 
 def main() -> None:
@@ -70,6 +72,9 @@ def main() -> None:
         "question-result-v2.schema.json": QuestionResultV2.model_json_schema(),
         "run-receipt.schema.json": RunReceipt.model_json_schema(),
         "ui-session-v1.schema.json": ResearchSession.model_json_schema(),
+        "patient-context-v1.schema.json": PatientContext.model_json_schema(),
+        "symptom-refinement-v1.schema.json": SymptomRefinementDefinition.model_json_schema(),
+        "symptom-refinement-answer-v1.schema.json": RefinementAnswer.model_json_schema(),
     }
     for name, document in documents.items():
         path = root / name

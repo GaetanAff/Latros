@@ -8,6 +8,7 @@
     <link rel="icon" href="/assets/latros-logo.svg" type="image/svg+xml">
     <link rel="stylesheet" href="{{ assets['checker.css'] }}">
     <link rel="stylesheet" href="{{ assets['anatomy.css'] }}">
+    <link rel="stylesheet" href="{{ assets['product.css'] }}">
     <script src="{{ assets['i18n.js'] }}" defer></script>
     <script src="{{ assets['state.js'] }}" defer></script>
     <script src="{{ assets['api.js'] }}" defer></script>
@@ -18,6 +19,8 @@
     <script src="{{ assets['history.js'] }}" defer></script>
     <script src="{{ assets['anatomy.js'] }}" defer></script>
     <script src="{{ assets['consultation.js'] }}" defer></script>
+    <script src="{{ assets['patient.js'] }}" defer></script>
+    <script src="{{ assets['refinements.js'] }}" defer></script>
     <script src="{{ assets['checker.js'] }}" defer></script>
   </head>
   <body>
@@ -26,6 +29,7 @@
         <img src="/assets/latros-logo.svg" alt="Latros">
       </a>
       <span class="local-indicator"><span aria-hidden="true">●</span> <span data-i18n="local">Local</span></span>
+      <button id="edit-patient" class="patient-summary" type="button"><span aria-hidden="true">◉</span><span id="patient-summary" data-i18n="my_information">Mes informations</span></button>
       <div class="language-switch" role="group" aria-label="Langue" data-i18n-aria="language">
         <button type="button" data-language="fr" aria-pressed="true">FR</button>
         <button type="button" data-language="de" aria-pressed="false">DE</button>
@@ -46,46 +50,75 @@
     <div class="exploration-layout">
     <main class="app-shell" id="app-shell">
       <div class="progress-track" aria-label="Étapes du parcours" data-i18n-aria="steps">
-        <span data-progress="home" data-i18n="symptoms">Symptômes</span>
         <span data-progress="age" data-i18n="information">Informations</span>
+        <span data-progress="home" data-i18n="symptoms">Symptômes</span>
         <span data-progress="question" data-i18n="questions">Questions</span>
         <span data-progress="results" data-i18n="results">Résultats</span>
       </div>
 
       <div id="app-message" class="app-message" role="alert" hidden></div>
 
-      <section id="screen-home" class="screen screen-home" aria-labelledby="home-title">
+      <section id="screen-home" class="screen screen-home" aria-labelledby="home-title" hidden>
         <nav id="anatomy-breadcrumb" class="breadcrumb" aria-label="Navigation anatomique" data-i18n-aria="anatomy_navigation"></nav>
         <h1 id="home-title" data-i18n="explore">Explorez une région du corps</h1>
         <p class="anatomy-help" data-i18n="anatomy_hint">Cliquez sur une région ou utilisez la recherche.</p>
-        <div id="anatomy-canvas" class="anatomy-canvas"></div>
-        <div id="anatomy-region-links" class="region-links"></div>
+        <div class="anatomy-explorer">
+          <div id="anatomy-canvas" class="anatomy-canvas"></div>
+          <div id="anatomy-region-links" class="region-links"></div>
+        </div>
         <p class="field-hint" data-i18n="illustration_status">Illustrations générées, non validées anatomiquement. Navigation uniquement.</p>
         <p id="region-pending" class="field-hint" hidden data-i18n="region_pending"></p>
       </section>
 
-      <section id="screen-age" class="screen" aria-labelledby="age-title" hidden>
-        <button class="back-link" data-back="home" type="button" data-i18n="back_symptoms">← Retour aux symptômes</button>
-        <p class="eyebrow" data-i18n="one_at_a_time">Une information à la fois</p>
-        <h1 id="age-title" data-i18n="age_title">Quel âge avez-vous ?</h1>
-        <p class="lead" data-i18n="adult_scope">Le moteur général actuel est limité aux adultes : sans âge exploitable,
-          il peut s’abstenir.</p>
-        <label for="patient-age" data-i18n="age_label">Âge en années</label>
-        <input id="patient-age" class="age-input" type="number" min="0" max="130" step="1"
-               inputmode="numeric" placeholder="Votre âge" data-i18n-placeholder="age_placeholder">
-        <div class="button-stack">
-          <button id="age-continue" class="button button-primary" type="button" data-i18n="continue">Continuer</button>
-          <button id="age-skip" class="button button-quiet" type="button" data-i18n="skip_age">Je préfère ne pas répondre</button>
-        </div>
+      <section id="screen-age" class="screen information-screen" aria-labelledby="age-title">
+        <p class="eyebrow" data-i18n="local_saved">Conservé sur cet ordinateur</p>
+        <h1 id="age-title" data-i18n="welcome_title">Bienvenue sur Latros</h1>
+        <p class="lead" data-i18n="welcome_lead">Quelques informations, puis vos symptômes. À votre rythme.</p>
+        <div class="privacy-note"><span aria-hidden="true">◇</span><div><strong data-i18n="private_local">Privé et local</strong><p data-i18n="identity_note">Le nom sert uniquement à identifier cette session. Un pseudonyme convient.</p></div></div>
+        <form id="patient-form" class="patient-form">
+          <div class="form-pair">
+            <label><span data-i18n="first_name">Prénom</span><input id="patient-first-name" maxlength="80" required autocomplete="off" data-i18n-placeholder="first_name_placeholder" placeholder="Prénom ou pseudonyme"></label>
+            <label><span data-i18n="last_name">Nom</span><input id="patient-last-name" maxlength="80" required autocomplete="off" data-i18n-placeholder="last_name_placeholder" placeholder="Nom ou identifiant local"></label>
+          </div>
+          <label for="patient-age" data-i18n="age_label">Âge en années</label>
+          <input id="patient-age" class="age-input" type="number" min="0" max="130" step="1" required inputmode="numeric" placeholder="Votre âge" data-i18n-placeholder="age_placeholder">
+          <p class="field-hint" data-i18n="adult_scope">Le moteur actuel est limité aux adultes.</p>
+          <details class="background-details"><summary data-i18n="background_title">Contexte personnel facultatif</summary>
+            <p class="field-hint" data-i18n="background_note">Ces informations restent séparées des observations. Le moteur actuel ne les évalue pas.</p>
+            <label><span data-i18n="allergies_label">Allergies connues</span><textarea id="patient-allergies" rows="2" maxlength="6000" data-i18n-placeholder="one_item_per_line" placeholder="Un élément par ligne"></textarea></label>
+            <label><span data-i18n="conditions_label">Maladies connues / chroniques</span><textarea id="patient-conditions" rows="2" maxlength="6000" data-i18n-placeholder="one_item_per_line"></textarea></label>
+            <label><span data-i18n="medications_label">Traitements en cours</span><textarea id="patient-medications" rows="2" maxlength="6000" data-i18n-placeholder="one_item_per_line"></textarea></label>
+            <label><span data-i18n="history_label">Antécédents / opérations importantes</span><textarea id="patient-history" rows="2" maxlength="6000" data-i18n-placeholder="one_item_per_line"></textarea></label>
+          </details>
+          <button id="age-continue" class="button button-primary" type="submit" data-i18n="continue_symptoms">Continuer vers les symptômes →</button>
+        </form>
+      </section>
+
+      <section id="screen-refinement" class="screen" aria-labelledby="refinement-title" hidden>
+        <button class="back-link" data-back="home" type="button" data-i18n="back_symptoms">Retour aux symptômes</button>
+        <p id="refinement-count" class="eyebrow"></p><h1 id="refinement-title"></h1>
+        <p class="lead" data-i18n="refinement_lead">Précisions facultatives sur ce que vous ressentez.</p>
+        <p class="field-hint" data-i18n="refinement_limit">Informations conservées, pas encore utilisées pour le classement actuel.</p>
+        <form id="refinement-form" class="refinement-form">
+          <div data-refinement-field="duration"><label for="refinement-duration" data-i18n="duration_label">Depuis combien de temps ?</label>
+            <div class="form-pair"><input id="refinement-duration" type="number" min="1" max="10000" step="1" inputmode="numeric"><select id="refinement-unit" aria-label="Unité de durée" data-i18n-aria="duration_unit"></select></div></div>
+          <div data-refinement-field="reported_severity"><label for="refinement-severity" data-i18n="severity_label">Intensité ressentie</label><select id="refinement-severity"></select></div>
+          <div data-refinement-field="reported_laterality"><label for="refinement-laterality" data-i18n="laterality_label">Côté, si cela s’applique</label><select id="refinement-laterality"></select></div>
+          <div class="result-actions"><button class="button button-primary" type="submit" data-i18n="save_continue">Enregistrer et continuer</button><button id="refinement-skip" class="button button-quiet" type="button" data-i18n="skip">Passer</button></div>
+        </form>
+        <button id="refinement-finish" class="text-link" type="button" data-i18n="skip_refinements">Passer les précisions</button>
+        <details class="technical-details"><summary data-i18n="technical">Détails techniques</summary><pre id="refinement-technical"></pre></details>
       </section>
 
       <section id="screen-question" class="screen" aria-labelledby="question-title" hidden>
-        <button class="back-link" data-back="age" type="button" data-i18n="back">← Retour</button>
+        <button class="back-link" data-back="home" type="button" data-i18n="back_symptoms">← Retour aux symptômes</button>
         <p id="question-count" class="eyebrow" data-i18n="engine_question">Question du moteur</p>
         <h1 id="question-title" data-i18n="question_title">Une question pour préciser</h1>
         <div id="question-summary" class="quiet-summary"></div>
+        <progress id="question-progress" max="6" value="0" aria-label="Progression des questions" data-i18n-aria="questions"></progress>
         <div id="question-text" class="question-text"></div>
         <p id="question-fallback" class="field-hint" hidden></p>
+        <details class="question-reason"><summary data-i18n="why_question">Pourquoi cette question ?</summary><p id="question-reason"></p></details>
         <details class="technical-details"><summary data-i18n="source_question">Question et concept source, IDs inchangés</summary><p id="question-source"></p></details>
         <div class="answer-grid" aria-label="Répondre à la question" data-i18n-aria="answer_question">
           <button data-answer="present" class="answer-button" type="button" data-i18n="yes">Oui</button>
@@ -147,16 +180,8 @@
       <section id="region-panel" class="region-panel" hidden>
         <button id="region-back" class="back-link" type="button" data-i18n="anatomy_back">← Revenir à la région précédente</button>
         <h2 id="region-title"></h2><p data-i18n="findings_prompt">Que constatez-vous ?</p>
+        <input id="region-search" type="search" autocomplete="off" data-i18n-placeholder="region_search" data-i18n-aria="region_search" placeholder="Rechercher dans cette région…" aria-label="Rechercher dans cette région">
         <div id="region-options"></div>
-        <form id="region-selection" hidden>
-          <p id="region-finding-title"></p>
-          <fieldset><legend data-i18n="select_state">État de l’observation</legend><div class="state-options">
-            <label><input type="radio" name="region-status" value="present" required><span data-i18n="present">Présent</span></label>
-            <label><input type="radio" name="region-status" value="absent"><span data-i18n="absent">Absent</span></label>
-            <label><input type="radio" name="region-status" value="unknown"><span data-i18n="unknown">Je ne sais pas</span></label>
-          </div></fieldset>
-          <button class="button button-primary" type="submit" data-i18n="add_case">Ajouter au cas</button>
-        </form>
       </section>
       <section class="case-panel"><h2 data-i18n="selected_title">Symptômes sélectionnés</h2>
         <div id="selected-symptoms" class="selected-symptoms" aria-live="polite"></div>
@@ -170,7 +195,7 @@
     <button id="mobile-search-toggle" class="mobile-search-toggle button button-secondary" type="button" data-i18n="search_open">Rechercher / symptômes</button>
 
     <footer class="safety-footer" role="note">
-      <strong data-i18n="emergency_title">Urgences non évaluées.</strong> <span data-i18n="safety">Cette version n’évalue pas encore les situations urgentes et ne remplace pas un avis médical.</span> <code>safety_status: not_evaluated</code>
+      <strong data-i18n="emergency_title">Urgences non évaluées.</strong> <span data-i18n="safety">Cette version n’évalue pas encore les situations urgentes et ne remplace pas un avis médical.</span>
     </footer>
 
     <dialog id="result-dialog" class="result-dialog" aria-labelledby="dialog-title">

@@ -23,8 +23,9 @@ function isSimpleCompatible(session) {
         && item.acquisition_method === "reported"
         && item.certainty === "asserted"
         && item.experiencer === "patient"
-        && !item.value && !item.temporal && !item.severity
-        && !item.body_site && !item.laterality && !item.supersedes));
+        && !item.value && !item.severity
+        && !item.body_site && !item.supersedes
+        && ((!item.temporal && !item.laterality) || (session.refinement_answers || []).some(answer=>answer.observation_id===item.observation_id))));
 }
 
 function renderHistory() {
@@ -77,6 +78,7 @@ async function resumeSession(sessionId) {
   await restoreConsultationRuns(session);
   state.caseDirty = false;
   state.ageDirty = false;
+  restorePatientForm(session);
   state.selection = available;
   state.selected = selectedFromSession(session);
   state.visibleCount = 5;
