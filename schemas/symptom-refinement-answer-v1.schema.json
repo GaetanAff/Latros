@@ -1,0 +1,107 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "concept_id": {
+      "minLength": 1,
+      "title": "Concept Id",
+      "type": "string"
+    },
+    "definition_id": {
+      "const": "reported-observation-context-v1",
+      "default": "reported-observation-context-v1",
+      "title": "Definition Id",
+      "type": "string"
+    },
+    "duration_unit": {
+      "anyOf": [
+        {
+          "enum": [
+            "hour",
+            "day",
+            "week",
+            "month",
+            "year"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Duration Unit"
+    },
+    "duration_value": {
+      "anyOf": [
+        {
+          "maximum": 10000,
+          "minimum": 1,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Duration Value"
+    },
+    "evaluation_status": {
+      "const": "captured_not_evaluated",
+      "default": "captured_not_evaluated",
+      "title": "Evaluation Status",
+      "type": "string"
+    },
+    "observation_id": {
+      "minLength": 1,
+      "title": "Observation Id",
+      "type": "string"
+    },
+    "recorded_at": {
+      "format": "date-time",
+      "title": "Recorded At",
+      "type": "string"
+    },
+    "reported_laterality": {
+      "anyOf": [
+        {
+          "enum": [
+            "left",
+            "right",
+            "bilateral",
+            "midline",
+            "not_applicable"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Reported Laterality"
+    },
+    "reported_severity": {
+      "anyOf": [
+        {
+          "enum": [
+            "mild",
+            "moderate",
+            "severe"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Reported Severity"
+    }
+  },
+  "required": [
+    "observation_id",
+    "concept_id"
+  ],
+  "title": "RefinementAnswer",
+  "type": "object"
+}

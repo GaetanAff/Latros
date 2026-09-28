@@ -21,10 +21,12 @@
 .breadcrumb { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
 .breadcrumb button { border:0; background:transparent; color:var(--latros-teal-deep); padding:8px; min-height:44px; font-weight:650; }
 .breadcrumb button[aria-current="page"] { color:var(--ink); }
+.anatomy-explorer { display:grid; grid-template-columns:minmax(0,1fr) 228px; gap:14px; align-items:center; }
 .anatomy-canvas { display:grid; place-items:center; border-radius:28px; background:radial-gradient(ellipse at center,#b7cfaf22,transparent 70%); min-height:420px; }
-.anatomy-canvas svg { height:min(65vh,650px); min-height:380px; width:100%; max-width:560px; overflow:hidden; animation:anatomy-enter .2s ease-out; }
+.anatomy-canvas svg { height:min(49vh,470px); min-height:380px; width:100%; max-width:560px; overflow:hidden; animation:anatomy-enter .2s ease-out; }
 .anatomy-hitbox { fill:#0F6472; fill-opacity:0; stroke:#0F6472; stroke-opacity:0; stroke-width:3; vector-effect:non-scaling-stroke; transition:fill-opacity .18s,stroke-opacity .18s; }
-.anatomy-canvas [data-region]:hover .anatomy-hitbox { fill-opacity:.13; stroke-opacity:.8; }
+.anatomy-canvas [data-region]:hover .anatomy-hitbox,
+.anatomy-canvas [data-region].is-hovered .anatomy-hitbox { fill-opacity:.14; stroke-opacity:.8; }
 .anatomy-canvas [data-region]:focus-visible .anatomy-hitbox { fill-opacity:.14; stroke-opacity:1; stroke-width:4; }
 .anatomy-canvas [data-region].selected .anatomy-hitbox { fill:#6EA07A; fill-opacity:.12; stroke-opacity:.85; }
 @keyframes anatomy-enter { from { opacity:.2; transform:scale(.97); } to {opacity:1;transform:scale(1);} }
@@ -34,9 +36,12 @@
 .anatomy-canvas [data-region].selected > path, .anatomy-canvas [data-region].selected > ellipse { stroke:#0f6472; stroke-width:3; }
 .anatomy-canvas [data-region].active { fill-opacity:.85; }
 :root[data-theme="dark"] .anatomy-canvas text { fill:#a2d8d9; }
-.region-links { display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin:16px 0; }
-.region-link { min-height:44px; padding:8px 18px; background:var(--surface); color:var(--latros-teal-deep); border:1px solid var(--line); border-radius:24px; font-weight:650; }
-.region-link:hover { background:var(--latros-sage-pale); }
+.region-links { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin:0; }
+.region-link { min-height:44px; padding:8px 10px; background:var(--surface); color:var(--latros-teal-deep); border:1px solid var(--line); border-radius:16px; font-weight:650; font-size:.84rem; }
+.region-link:hover,.region-link.is-hovered,.region-link:focus-visible {
+  background:var(--latros-sage-pale); border-color:var(--latros-green);
+  box-shadow:0 0 0 3px #6ea07a36;
+}
 .explorer-sidebar { min-width:0; align-self:start; position:sticky; top:16px; display:grid; gap:18px; }
 .permanent-search, .case-panel, .region-panel { border:0; background:var(--surface); border-radius:18px; padding:20px; box-shadow:var(--shadow); }
 .search-box { margin:0; text-align:left; }
@@ -53,6 +58,10 @@
 .observation-region { display:block; border:0; background:transparent; color:var(--latros-teal-deep); font-size:.75rem; min-height:44px; padding:4px 0; }
 .region-finding { display:block; width:100%; min-height:48px; text-align:left; border:0; border-radius:10px; background:transparent; color:var(--ink); padding:10px; margin:4px 0; }
 .region-finding:hover,.region-finding[aria-pressed="true"] { background:var(--latros-sage-pale); color:var(--latros-teal-deep); }
+.region-search { width:100%; min-height:44px; margin:4px 0 12px; }
+.region-more { width:100%; min-height:44px; border:1px solid var(--line); border-radius:10px;
+  background:var(--surface); color:var(--latros-teal-deep); font-weight:650; }
+.region-more:hover,.region-more:focus-visible { background:var(--latros-sage-pale); }
 .state-options { display:flex; flex-wrap:wrap; gap:8px; }
 .state-options label { display:flex; align-items:center; padding:8px; min-height:44px; border-radius:8px; background:var(--latros-sage-pale); font-size:.8rem; }
 .state-options input { width:auto; }
@@ -82,6 +91,8 @@ input { color:var(--ink); background:var(--surface); }
   .progress-track { margin-bottom:12px; }
   .anatomy-canvas { min-height:340px; }
   .anatomy-canvas svg { height:47vh; min-height:340px; }
+  .anatomy-explorer { display:block; }
+  .region-links { margin:12px 0; }
   .region-panel { border-radius:24px 24px 12px 12px; box-shadow:0 -4px 28px #17303812; scroll-margin-top:100px; }
   .case-panel { margin-bottom:60px; }
   .mobile-search-toggle { display:block; position:fixed; bottom:14px; right:14px; z-index:35; box-shadow:var(--shadow); background:var(--surface); }

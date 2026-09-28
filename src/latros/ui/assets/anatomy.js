@@ -11,6 +11,13 @@ function regionForObservation(item) {
 function scrollMotion() {
   return window.matchMedia?.('(prefers-reduced-motion:reduce)')?.matches ? 'auto' : 'smooth';
 }
+function setHoveredRegion(region) {
+  state.anatomy.hoveredRegion = region;
+  for (const element of document.querySelectorAll('#anatomy-canvas [data-region], #anatomy-region-links [data-anatomy-region]')) {
+    const id = element.dataset.region || element.dataset.anatomyRegion;
+    element.classList.toggle('is-hovered',id === region);
+  }
+}
 
 // A local illustration is independent from keyboard-accessible navigation hitboxes.
 function composeAtlas(svg, node, config) {
@@ -44,11 +51,14 @@ function composeAtlas(svg, node, config) {
 
 async function anatomyNavigate(region = 'body') {
   if (!state.selection) return;
+  setHoveredRegion(null);
   const changingRegion = region !== state.anatomy.region;
   const navigationFocus = document.activeElement?.closest?.('[data-region],[data-anatomy-region],#region-back');
   const sequence = ++state.anatomy.sequence;
   state.anatomy.picked = null;
-  byId('region-selection').hidden = true;
+  state.anatomy.regionQuery = '';
+  state.anatomy.showAll = false;
+  byId('region-search').value = '';
   byId('region-panel').hidden = state.screen !== 'home' || region === 'body' || region === 'head';
   byId('region-options').textContent = t('region_loading');
   const params = new URLSearchParams({snapshot:state.selection.snapshot_id,
@@ -107,8 +117,14 @@ async function anatomyNavigate(region = 'body') {
 }
 
 function renderRegionOptions() {
-  byId('region-options').innerHTML = state.anatomy.items.length ? state.anatomy.items.map((item,index) =>
-    `<button class="region-finding" type="button" data-region-finding="${index}" aria-pressed="${state.selected.some(selected=>selected.concept_id===item.concept_id)}">${escapeHtml(displayLabel(item.concept_id,item.label))}</button>`).join('')
+  const normalize=value=>value.normalize('NFKD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase(locale());
+  const query=normalize(state.anatomy.regionQuery || '').trim();
+  const matches=state.anatomy.items.map((item,index)=>({item,index})).filter(({item})=>
+    !query || normalize(displayLabel(item.concept_id,item.label)).includes(query));
+  const visible=state.anatomy.showAll || query ? matches : matches.slice(0,8);
+  byId('region-options').innerHTML = matches.length ? visible.map(({item,index}) =>
+    `<button class="region-finding" type="button" data-region-finding="${index}" aria-pressed="${state.selected.some(selected=>selected.concept_id===item.concept_id)}">${escapeHtml(displayLabel(item.concept_id,item.label))}</button>`).join('') +
+      (visible.length<matches.length ? `<button class="region-more" type="button" data-region-more="true">${escapeHtml(t('region_more'))} · ${matches.length-visible.length}</button>` : '')
     : `<p class="field-hint">${escapeHtml(t('region_empty'))}</p>`;
 }
 
@@ -127,12 +143,9 @@ function updateAnatomySelection() {
 function pickRegionFinding(index) {
   const item = state.anatomy.items[index];
   if (!item) return;
-  state.anatomy.picked = item;
-  byId('region-finding-title').textContent = displayLabel(item.concept_id,item.label);
-  const existing = state.selected.find(selected=>selected.concept_id===item.concept_id);
-  document.querySelectorAll('input[name="region-status"]').forEach(input=>input.checked=Boolean(existing && existing.status===input.value));
-  byId('region-selection').hidden = false;
-  byId('region-selection').scrollIntoView?.({block:'nearest',behavior:scrollMotion()});
+  if (state.busy) return;
+  addObservation(item,'present');
+  notice(t('added_case'));
 }
 
 function toggleTheme() {
@@ -153,18 +166,27 @@ byId('anatomy-canvas').addEventListener('keydown',event => {
   const zone=event.target.closest('[data-region]');
   if(zone && ['Enter',' '].includes(event.key)) { event.preventDefault(); anatomyNavigate(zone.dataset.region); }
 });
+for (const id of ['anatomy-canvas','anatomy-region-links']) {
+  const container=byId(id);
+  const regionOf=element=>{
+    const target=element?.closest?.('[data-region],[data-anatomy-region]');
+    return target?.dataset.region || target?.dataset.anatomyRegion || null;
+  };
+  container.addEventListener('pointerover',event=>setHoveredRegion(regionOf(event.target)));
+  container.addEventListener('pointerout',event=>setHoveredRegion(regionOf(event.relatedTarget)));
+  container.addEventListener('focusin',event=>setHoveredRegion(regionOf(event.target)));
+  container.addEventListener('focusout',event=>setHoveredRegion(regionOf(event.relatedTarget)));
+}
 for (const id of ['anatomy-breadcrumb','anatomy-region-links']) byId(id).addEventListener('click',event=>{
   const button=event.target.closest('[data-anatomy-region]'); if(button) anatomyNavigate(button.dataset.anatomyRegion);
 });
 byId('region-options').addEventListener('click',event=>{
+  if(event.target.closest('[data-region-more]')) { state.anatomy.showAll=true; renderRegionOptions(); return; }
   const button=event.target.closest('[data-region-finding]'); if(button) pickRegionFinding(Number(button.dataset.regionFinding));
 });
-byId('region-selection').addEventListener('submit',event=>{
-  event.preventDefault(); if(state.busy) return;
-  const input=document.querySelector('input[name="region-status"]:checked');
-  if(!input || !state.anatomy.picked) return;
-  addObservation(state.anatomy.picked,input.value); notice(t('added_case'));
-  byId('region-selection').hidden=true; state.anatomy.picked=null;
+byId('region-search').addEventListener('input',event=>{
+  state.anatomy.regionQuery=event.target.value;
+  renderRegionOptions();
 });
 byId('explore-body').addEventListener('click',()=>{showScreen('home'); anatomyNavigate('body');});
 byId('region-back').addEventListener('click',()=>{

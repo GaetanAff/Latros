@@ -1,0 +1,110 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "concept_id": {
+      "title": "Concept Id",
+      "type": "string"
+    },
+    "definition_id": {
+      "const": "reported-observation-context-v1",
+      "default": "reported-observation-context-v1",
+      "title": "Definition Id",
+      "type": "string"
+    },
+    "definition_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Definition Version",
+      "type": "integer"
+    },
+    "duration_units": {
+      "items": {
+        "enum": [
+          "hour",
+          "day",
+          "week",
+          "month",
+          "year"
+        ],
+        "type": "string"
+      },
+      "title": "Duration Units",
+      "type": "array"
+    },
+    "laterality_options": {
+      "items": {
+        "enum": [
+          "left",
+          "right",
+          "bilateral",
+          "midline",
+          "not_applicable"
+        ],
+        "type": "string"
+      },
+      "title": "Laterality Options",
+      "type": "array"
+    },
+    "observation_id": {
+      "title": "Observation Id",
+      "type": "string"
+    },
+    "provenance": {
+      "const": "latros-ui-capture-contract-v1",
+      "default": "latros-ui-capture-contract-v1",
+      "title": "Provenance",
+      "type": "string"
+    },
+    "question_types": {
+      "items": {
+        "enum": [
+          "duration",
+          "reported_severity",
+          "reported_laterality"
+        ],
+        "type": "string"
+      },
+      "title": "Question Types",
+      "type": "array"
+    },
+    "reasoning_use": {
+      "const": "not_used_by_current_strategies",
+      "default": "not_used_by_current_strategies",
+      "title": "Reasoning Use",
+      "type": "string"
+    },
+    "review_status": {
+      "const": "engineering_definition_not_clinically_validated",
+      "default": "engineering_definition_not_clinically_validated",
+      "title": "Review Status",
+      "type": "string"
+    },
+    "severity_options": {
+      "items": {
+        "enum": [
+          "mild",
+          "moderate",
+          "severe"
+        ],
+        "type": "string"
+      },
+      "title": "Severity Options",
+      "type": "array"
+    },
+    "source_label": {
+      "title": "Source Label",
+      "type": "string"
+    }
+  },
+  "required": [
+    "observation_id",
+    "concept_id",
+    "source_label",
+    "question_types",
+    "duration_units",
+    "severity_options",
+    "laterality_options"
+  ],
+  "title": "SymptomRefinementDefinition",
+  "type": "object"
+}

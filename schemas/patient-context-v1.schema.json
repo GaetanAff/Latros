@@ -1,0 +1,118 @@
+{
+  "$defs": {
+    "PatientDemographics": {
+      "additionalProperties": false,
+      "properties": {
+        "age_years": {
+          "maximum": 130,
+          "minimum": 0,
+          "title": "Age Years",
+          "type": "integer"
+        },
+        "first_name": {
+          "maxLength": 80,
+          "minLength": 1,
+          "title": "First Name",
+          "type": "string"
+        },
+        "last_name": {
+          "maxLength": 80,
+          "minLength": 1,
+          "title": "Last Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "first_name",
+        "last_name",
+        "age_years"
+      ],
+      "title": "PatientDemographics",
+      "type": "object"
+    },
+    "SelfReportedContextItem": {
+      "additionalProperties": false,
+      "description": "Not a confirmed allergy, condition, coded drug or diagnostic observation.",
+      "properties": {
+        "evaluation_status": {
+          "const": "captured_not_evaluated",
+          "default": "captured_not_evaluated",
+          "title": "Evaluation Status",
+          "type": "string"
+        },
+        "label": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Label",
+          "type": "string"
+        },
+        "origin": {
+          "const": "self_reported",
+          "default": "self_reported",
+          "title": "Origin",
+          "type": "string"
+        }
+      },
+      "required": [
+        "label"
+      ],
+      "title": "SelfReportedContextItem",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "allergies": {
+      "items": {
+        "$ref": "#/$defs/SelfReportedContextItem"
+      },
+      "maxItems": 30,
+      "title": "Allergies",
+      "type": "array"
+    },
+    "clinical_evaluation": {
+      "const": "not_evaluated",
+      "default": "not_evaluated",
+      "title": "Clinical Evaluation",
+      "type": "string"
+    },
+    "context_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Context Version",
+      "type": "integer"
+    },
+    "demographics": {
+      "$ref": "#/$defs/PatientDemographics"
+    },
+    "known_conditions": {
+      "items": {
+        "$ref": "#/$defs/SelfReportedContextItem"
+      },
+      "maxItems": 30,
+      "title": "Known Conditions",
+      "type": "array"
+    },
+    "medications": {
+      "items": {
+        "$ref": "#/$defs/SelfReportedContextItem"
+      },
+      "maxItems": 30,
+      "title": "Medications",
+      "type": "array"
+    },
+    "relevant_history": {
+      "items": {
+        "$ref": "#/$defs/SelfReportedContextItem"
+      },
+      "maxItems": 30,
+      "title": "Relevant History",
+      "type": "array"
+    }
+  },
+  "required": [
+    "demographics"
+  ],
+  "title": "PatientContext",
+  "type": "object"
+}

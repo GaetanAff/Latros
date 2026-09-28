@@ -22,7 +22,10 @@ def test_tree_and_local_svg_keyboard_regions():
     assert config["role"] == "navigation_only_not_clinical_knowledge"
     assert config["nodes"]["head"]["parent"] == "body"
     assert config["nodes"]["sinuses"]["parent"] == "head"
-    assert sum(node["implemented"] for node in config["nodes"].values()) == 35
+    assert config["version"] == "ui-anatomy-3"
+    assert sum(node["implemented"] for node in config["nodes"].values()) == 47
+    assert config["nodes"]["kidneys"]["parent"] == "urinary"
+    assert config["nodes"]["cervical-back"]["parent"] == "back"
     for asset in ("body-front.svg", "head-front.svg", "sinuses-front.svg"):
         svg = ElementTree.parse(CONFIG_PATH.parent / asset)
         zones = [element for element in svg.iter() if "data-region" in element.attrib]
@@ -49,13 +52,16 @@ def test_anatomy_and_search_same_supported_coding_offline(display_snapshot, monk
     digest = hashlib.sha256(runtime.read_bytes()).hexdigest()
     params = {"snapshot": "test-v2", "strategy": "general_v1"}
     with TestClient(create_app(root)) as client:
+        assert client.app.state.service._general_cache == {}  # No slow startup warm-up.
         for region in ("body", "head"):
             response = client.get(
                 "/internal/v1/presentation/anatomy", params={**params, "region": region}
             )
             assert response.status_code == 200
-            assert response.json()["items"] == []
-        assert client.app.state.service._general_cache == {}  # No slow warm-up at startup.
+            if region == "body":
+                assert response.json()["items"] == []
+            else:
+                assert [item["code"] for item in response.json()["items"]] == ["HP:0002321"]
         for language, query in (("fr", "nez qui coule"), ("de", "Schnupfen"), ("en", "runny nose")):
             anatomy = client.get(
                 "/internal/v1/presentation/anatomy",
@@ -105,7 +111,7 @@ def test_independent_generated_images_and_bounded_overlays():
     config = load_navigation()
     manifest = orjson.loads((CONFIG_PATH.parent / "illustrations.json").read_bytes())
     assert manifest["anatomical_validation"] is False
-    assert len(manifest["images"]) == 7
+    assert len(manifest["images"]) == 37
     for image in manifest["images"]:
         assert image["human_reviewer"] is None
         assert image["review_status"] == "not_anatomically_validated"
@@ -125,7 +131,11 @@ def test_independent_generated_images_and_bounded_overlays():
         "hands",
     ):
         assert config["nodes"][key]["implemented"]
-    assert config["nodes"]["lungs"]["image"] == config["nodes"]["body"]["image"]
+    assert config["nodes"]["lungs"]["image"] != config["nodes"]["body"]["image"]
+    assert all(
+        node["image"] in {image["filename"] for image in manifest["images"]}
+        for node in config["nodes"].values()
+    )
     assert "body_site" not in orjson.dumps(config).decode()
 
 
@@ -174,6 +184,10 @@ def test_simple_template_modular_permanent_search_and_theme():
     assert 'data-theme="dark"' in css
     assert "prefers-reduced-motion" in css
     assert "@media(max-width:800px)" in css
+    assert ".region-link.is-hovered" in css
+    anatomy_js = (assets / "anatomy.js").read_text(encoding="utf-8")
+    assert "function setHoveredRegion(region)" in anatomy_js
+    assert "addObservation(item,'present')" in anatomy_js
 
 
 def test_ambiguous_navigation_identifier_fails_closed(display_snapshot, synthetic_v2):  # noqa: F811
