@@ -9,21 +9,22 @@ sont locaux et explicables, sans LLM. L'interface web propose désormais un parc
 conserve la console R&D en mode expert. Elle n'est pas une interface patient validée.
 
 Le parcours simple propose désormais **FR / DE / EN**, mémorisés localement. La recherche
-accepte synonymes, accents, préfixes et un lexique grand public versionné (139 concepts avec
+accepte synonymes, accents, préfixes et un lexique grand public versionné (160 concepts avec
 affichage FR/DE activé sur les 11 671 observations recherchables du snapshot local). Les traductions/désignations sont uniquement
 de l'affichage ; les termes non traduits restent signalés **EN** et les IDs/reçus sont inchangés.
 Voir le [rapport multilingue](docs/reports/ui-i18n-local-search.md). Aucun service de traduction,
 NLP ou nouvelle connaissance médicale n'est introduit.
 
-Le mode simple offre une navigation **Corps → Tête → Sinus**, sept illustrations locales générées
-avec overlays SVG indépendants et 35 vues (oreille, thorax, abdomen, urinaire et membres inclus),
-une recherche permanente et un thème clair/sombre. Les observations d'une région sont résolues
-contre le snapshot actif avant affichage. Hors tête, les vues utilisent des zooms du corps, pas
-des planches détaillées dédiées. Les images ne sont pas anatomiquement validées. Carte et
-recherche ajoutent la même observation, une seule fois, avec état présent,
-absent ou inconnu. `/expert` reste la console R&D complète. Voir le
-[rapport anatomique et audit de couverture](docs/reports/ui-anatomy-vnext.md) et
-la [documentation UI](docs/modern-ui.md).
+Le mode simple expérimental commence par un profil de session local (nom ou pseudonyme et âge),
+puis Symptômes → Précisions/Questions → Résultats. Le nom et les antécédents facultatifs ne sont
+pas interprétés par les moteurs ; seul l'âge est projeté dans le cas. L'ajout explicite d'un
+symptôme le marque immédiatement `present`, modifiable ensuite. Les précisions structurées
+facultatives ne modifient pas les scores. Le parcours anatomique possède 47 vues, 37 illustrations
+locales dont 30 nouvelles planches hors tête, et des zones SVG séparées dont le survol est lié aux
+boutons de région. Les références de symptômes ne sont affichées qu'après résolution sur le
+snapshot. Les images ne sont pas validées anatomiquement. `/expert` reste la console R&D.
+Voir [documentation UI](docs/modern-ui.md), [atlas v4](docs/reports/ui-atlas-v4.md),
+[recherche v2](docs/reports/ui-search-v2.md) et [audit des questions](docs/reports/ui-v4-question-quality.md).
 
 Voir le [rapport atlas v3](docs/reports/ui-atlas-v3.md) et l'[ADR 0018](docs/decisions/0018-illustrations-locales-et-overlays.md)
 pour les hashes/provenance des images, les mesures et le lexique `ui-display-3`.

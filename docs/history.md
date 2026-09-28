@@ -2,7 +2,33 @@
 
 Ce fichier est le journal de continuité du projet. Il décrit ce qui a été décidé et effectivement réalisé, afin de pouvoir reprendre la discussion sans déduire l'état du projet à partir du code seul.
 
-Dernière mise à jour : 27 septembre 2026.
+Dernière mise à jour : 28 septembre 2026.
+
+## Parcours simple v4 et audits — 28 septembre 2026
+
+- Travail séparé du snapshot et du raisonnement : profil de session local structuré,
+  Informations → Symptômes → Précisions/Questions → Résultats, symptômes ajoutés `present` en
+  un clic, résultats sans pourcentage. Seul l'âge alimente le cas clinique actuel ; les autres
+  champs déclaratifs ne sont pas interprétés. Précisions facultatives offertes uniquement pour
+  des concepts explicitement configurés, sans effet de scoring. La reprise simple conserve le
+  profil ; les sessions historiques restent lisibles.
+- Atlas local porté à 47 nœuds et 37 illustrations générées (30 nouvelles hors tête), non
+  validées anatomiquement. Images, overlays et labels séparés ; hover/focus d'une région partagé
+  entre son bouton et sa zone. Toute référence médicale non résolue est masquée.
+- Benchmark offline sur 78 requêtes FR/DE/EN : recherche historique top-1 62/63, BM25 60/63,
+  BM25 + fuzzy prudent 63/63, zéro suggestion sur 15 négatifs dans ce dernier mode. Médiane
+  chaude ~0,207 s ; pas d'embeddings adopté. Lexique UX FR/DE actif pour 160 concepts sur
+  11 671, traduction médicale largement incomplète.
+- Audit offline de 14 motifs généralistes : aucune répétition observée, mais nombreuses premières
+  questions génériques ou peu pertinentes ; deux motifs sans question. Politique clinique et
+  moteurs inchangés, amélioration du questionnement encore requise.
+- Audit documentaire de sources généralistes : pistes PMC CC BY/CC0, Bookshelf OA, AHRQ et
+  Wikidata pour curation/mappings, droits à vérifier document par document. Aucune source
+  ingérée, aucune donnée propriétaire réutilisée. G1/G2/G5 humains et G3 indépendant restent requis.
+- Voir les rapports UI v4, recherche, atlas, questions et sources. Snapshot
+  `v0.7.0-general-dev-unreviewed`, `general_v1`, `semantic_v1`, goldens, `clinical_validation:
+  false`, `publishable: false`, `research_unreviewed: true` et `safety_status: not_evaluated`
+  restent inchangés. Les vérifications finales et CI des PR v4 doivent encore être consignées.
 
 ## État actuel en une phrase
 

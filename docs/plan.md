@@ -1,6 +1,19 @@
 # Plan d'implémentation et avancement
 
-Référence : plan « Premières étapes de Latros — socle de données et moteur clinique pur » demandé par l'utilisateur. État au 27 septembre 2026.
+Référence : plan « Premières étapes de Latros — socle de données et moteur clinique pur » demandé par l'utilisateur. État au 28 septembre 2026.
+
+### Interface simple v4 — tranche distincte, expérimentale
+
+Le travail UI v4 part du `main` intégrant #19/#20 : profil de session local structuré,
+Informations → Symptômes → Précisions/Questions → Résultats, sélection `present` en un clic,
+37 illustrations locales / 47 nœuds anatomiques, survol couplé boutons-zones, recherche locale
+BM25 + fuzzy prudent. `/expert` et les moteurs restent intacts. Voir [rapport produit](reports/ui-v4-product-flow.md),
+[atlas](reports/ui-atlas-v4.md), [benchmark recherche](reports/ui-search-v2.md) et
+[audit des questions](reports/ui-v4-question-quality.md). Les questions backend restent souvent
+trop génériques ; les champs patient facultatifs ne sont pas interprétés. Ce chantier n'est pas
+une validation clinique et ne change ni le snapshot ni les statuts. Un
+[audit de sources généralistes](reports/general-medicine-source-expansion.md) est documentaire :
+aucune nouvelle source n'est acquise ou ingérée.
 
 Les trois jalons avaient été implémentés ensemble dans la première tranche. La reprise de l'étape 2 consiste à vérifier sa livraison et à établir le snapshot sous le nom du jalon, `v0.2.0`. Elle ne correspond pas à l'ajout de nouvelles sources ou de fonctions cliniques.
 

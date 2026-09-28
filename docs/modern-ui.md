@@ -10,9 +10,10 @@ répondus, même inconnus, ne sont pas reposés. Éditer en rare recommence gén
 Voir le [rapport et les limites mono-source](reports/general-first-rare-second.md).
 
 Le serveur `latros ui` reste limité à `127.0.0.1`. La page `/` guide la personne par étapes :
-symptômes explicites, âge, question du moteur, résultats, explication et historique. La console
-R&D historique est conservée à `/expert`. Le mode simple propose maintenant la carte interactive
-Corps → Tête → Sinus avec recherche toujours disponible et thème clair/sombre local.
+Informations locales → Symptômes → Précisions facultatives / Questions du moteur → Résultats,
+explication et historique. La console R&D historique est conservée à `/expert`. La carte
+interactive Corps → Tête → Sinus est étendue aux autres régions, avec recherche permanente et
+thème clair/sombre local.
 Les deux vues utilisent le même backend et les mêmes
 runs immuables.
 
@@ -30,11 +31,15 @@ l'historique, les préférences de langue/thème ou les sessions.
 uv run --offline --no-sync latros --root . ui --no-open
 ```
 
-Ouvrir `http://127.0.0.1:8765/`, rechercher un terme présent dans le catalogue local et choisir
-une suggestion, ou explorer la tête puis les sinus. La liste d'une région ne montre que les
-concepts réellement supportés ; sélectionner un état puis ajouter au cas. Un concept ajouté
+Ouvrir `http://127.0.0.1:8765/`, renseigner un nom ou pseudonyme et l'âge, puis rechercher un
+terme présent dans le catalogue local ou explorer une région. La liste d'une région ne montre que
+les concepts réellement supportés ; un clic ajoute `present`. L'état reste modifiable ensuite.
+Un concept ajouté
 par les deux voies n'est pas dupliqué. Le texte libre non sélectionné n'est pas interprété.
-L'âge est demandé parce que
+Le profil de session est local et non chiffré. Seul l'âge alimente actuellement le cas moteur ;
+les allergies, traitements et antécédents facultatifs sont déclaratifs, sans analyse médicale.
+Les précisions structurées ne sont proposées que pour une liste explicite de concepts et restent
+facultatives ; elles ne modifient pas le score actuel. L'âge est demandé parce que
 `general_v1` exige actuellement un périmètre adulte ; l'absence d'âge peut provoquer une
 abstention. Chaque question affichée vient du backend, y compris son arrêt. Les réponses et les
 analyses sont sauvegardées dans `sessions/`, hors Git. L'historique peut reprendre une session
@@ -75,11 +80,12 @@ L'[ADR 0016](decisions/0016-navigation-anatomique-de-presentation.md) conserve J
 avec modules locaux API/état/i18n/recherche/observations/anatomie/questions/résultats/historique.
 `assets/anatomy/navigation.json` est un arbre UI extensible ; ses codes potentiels sont résolus
 par `/internal/v1/presentation/anatomy`, pas par des connaissances codées dans le frontend.
-La version 2 de l'arbre contient 35 vues. Sept illustrations originales générées sont séparées
-des overlays SVG focusables et des labels HTML FR/DE/EN. Les zooms ne déforment pas les images.
-Oreille/œil sont des coupes ; les organes hors tête utilisent un zoom du corps entier, pas une
-planche dédiée. La carte n'ajoute pas de `body_site` au cas. Ces images ne sont pas anatomiquement
-validées ; l'avertissement reste visible. Voir l'ADR 0018 et le [rapport atlas v3](reports/ui-atlas-v3.md).
+La version 3 de l'arbre contient 47 vues. Trente nouvelles images originales portent la série
+à 37 illustrations locales, dont des planches dédiées au thorax, à l'abdomen, au système urinaire,
+aux membres et au dos. Elles restent séparées des overlays SVG focusables et des labels HTML
+FR/DE/EN. Bouton et zone survolée partagent le même état d'interface. La carte n'ajoute pas de
+`body_site` au cas. Ces images ne sont pas anatomiquement validées ; l'avertissement reste visible.
+Voir l'ADR 0018 et le [rapport atlas v4](reports/ui-atlas-v4.md).
 
 Sur mobile la recherche reste sticky et les observations apparaissent sous la carte ; un
 raccourci ramène au champ. Changer d'observation depuis un résultat/question ramène à l'exploration
@@ -90,7 +96,11 @@ Le [rapport UI vNext](reports/ui-anatomy-vnext.md) mesurait 65 concepts FR/DE ac
 ambiguïtés refusées, les références indisponibles et la latence froide restante (~7 s).
 Les exemples ne constituent pas de nouveaux critères diagnostiques ou une validation clinique.
 
-Le lexique UI version 3 active désormais 139 concepts FR/DE sur 11 671 ; les 80 nouvelles
+Le lexique UI active désormais 160 concepts FR/DE sur 11 671 ; les nouvelles
 propositions ont une provenance explicite et un statut de brouillon éditorial non revu humainement.
 Le script `export_ui_translation_review.py` produit un jeu local de revue avec décisions vides.
 Les ambiguïtés ne sont jamais forcées. Aucun service de traduction, LLM ou nouvelle assertion.
+La [recherche v2](reports/ui-search-v2.md) mesure BM25 lexical et fuzzy prudent, sans embeddings ;
+l'[audit des questions](reports/ui-v4-question-quality.md) confirme que l'ordre clinique des
+questions demeure expérimental et parfois trop générique. Le [rapport produit v4](reports/ui-v4-product-flow.md)
+décrit la frontière stricte entre contexte patient déclaratif et données de raisonnement.
