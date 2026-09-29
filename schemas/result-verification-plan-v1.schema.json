@@ -1,0 +1,122 @@
+{
+  "$defs": {
+    "VerificationItem": {
+      "additionalProperties": false,
+      "properties": {
+        "candidate_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 5,
+          "minItems": 1,
+          "title": "Candidate Ids",
+          "type": "array"
+        },
+        "code": {
+          "minLength": 1,
+          "title": "Code",
+          "type": "string"
+        },
+        "concept_id": {
+          "minLength": 1,
+          "title": "Concept Id",
+          "type": "string"
+        },
+        "label": {
+          "minLength": 1,
+          "title": "Label",
+          "type": "string"
+        },
+        "observation_kind": {
+          "enum": [
+            "symptom",
+            "sign",
+            "exam"
+          ],
+          "title": "Observation Kind",
+          "type": "string"
+        },
+        "question_id": {
+          "minLength": 1,
+          "title": "Question Id",
+          "type": "string"
+        },
+        "system": {
+          "minLength": 1,
+          "title": "System",
+          "type": "string"
+        }
+      },
+      "required": [
+        "question_id",
+        "concept_id",
+        "system",
+        "code",
+        "label",
+        "observation_kind",
+        "candidate_ids"
+      ],
+      "title": "VerificationItem",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "base_run_id": {
+      "minLength": 1,
+      "title": "Base Run Id",
+      "type": "string"
+    },
+    "baseline_observation_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Baseline Observation Ids",
+      "type": "array"
+    },
+    "baseline_question_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Baseline Question Ids",
+      "type": "array"
+    },
+    "case_id": {
+      "minLength": 1,
+      "title": "Case Id",
+      "type": "string"
+    },
+    "items": {
+      "items": {
+        "$ref": "#/$defs/VerificationItem"
+      },
+      "maxItems": 6,
+      "title": "Items",
+      "type": "array"
+    },
+    "policy_id": {
+      "const": "result_verification_v1",
+      "default": "result_verification_v1",
+      "title": "Policy Id",
+      "type": "string"
+    },
+    "top_candidate_ids": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 5,
+      "title": "Top Candidate Ids",
+      "type": "array"
+    }
+  },
+  "required": [
+    "base_run_id",
+    "case_id",
+    "baseline_observation_ids",
+    "baseline_question_ids",
+    "top_candidate_ids",
+    "items"
+  ],
+  "title": "VerificationPlanV1",
+  "type": "object"
+}

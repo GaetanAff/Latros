@@ -44,7 +44,7 @@ function environment(saved = new Map()) {
       return {ok:true,status:200,json:async()=>body,text:async()=>'<svg />'};
     }});
   vm.runInContext(source("i18n.js"),context);
-  for(const name of ['state','api','search','observations','questions','results','history','anatomy','consultation','patient','symptom-nlp','refinements','checker']) vm.runInContext(source(name+'.js'),context);
+  for(const name of ['state','api','search','observations','questions','results','verification','history','anatomy','consultation','patient','symptom-nlp','refinements','checker']) vm.runInContext(source(name+'.js'),context);
   return {context,node,calls,saved,question,run:code=>vm.runInContext(code,context)};
 }
 async function ready(env) { for(let i=0;i<20 && env.run("state.busy");i++) await new Promise(resolve=>setImmediate(resolve)); }
@@ -57,6 +57,27 @@ test('versioned general policy preferred, rare never selected implicitly',async(
     {available:true,strategy_id:'general_question_v2',snapshot_id:'new'}]}).strategy_id`);
   assert.equal(selected,'general_question_v2');
   assert.ok(!env.calls.some(c=>c.url.includes('/consultation/rare')));
+});
+
+test('result verification is opt-in and presents backend questions without changing the initial run',async()=>{
+  const env=environment(); await ready(env);
+  env.run(`state.selection={snapshot_id:'test',strategy_id:'general_question_v2'};
+    state.session={session_id:'local-test',revision:3,consultation:{phase:'general',general_run:{run_id:'first'}},
+      clinical_case:{observations:[],question_history:[]},verification_answered_count:0};
+    state.resultRun={run_id:'first',result:{candidates:[{candidate_id:'condition-a',label:'Invented condition',
+      rank:1,favorable:[],unfavorable:[],unknown_count:2}],research_unreviewed:true,abstention:null}};
+    renderResults();`);
+  assert.equal(env.node('verification-cta').hidden,false);
+  assert.ok(!env.calls.some(call=>call.url.includes('/verification')));
+  env.context.verificationPayload={plan:{base_run_id:'first',items:[{question_id:'result_verification_v1:one'}]},
+    question:{question_id:'result_verification_v1:one',system:'HPO',code:'HP:0031417',
+      concept_id:'finding',label:'Rhinorrhea'},answered:0,maximum:6};
+  await env.run(`api=async(path)=>path.includes('presentation/question')
+    ? {question_text:'Avez-vous le nez qui coule ?',fallback_english:false}
+    : verificationPayload; startVerification()`);
+  assert.equal(env.run('state.screen'),'verification');
+  assert.equal(env.node('verification-question-text').textContent,'Avez-vous le nez qui coule ?');
+  assert.equal(env.run('state.resultRun.run_id'),'first');
 });
 
 test('information is the first step; local patient context is structured and not a case observation',async()=>{

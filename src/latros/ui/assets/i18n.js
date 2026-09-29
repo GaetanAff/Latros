@@ -2,6 +2,17 @@
 // Versioned, local presentation strings. No medical inference or translation service.
 (() => {
   const catalog = {
+"verification_title": ["Vérifier ces possibilités","Diese Möglichkeiten prüfen","Check these possibilities"],
+"verification_intro": ["Facultatif : quelques éléments non évalués des cinq premières possibilités. Une réponse négative n'exclut pas à elle seule une maladie.","Freiwillig: einige noch nicht geprüfte Merkmale der ersten fünf Möglichkeiten. Eine negative Antwort schließt eine Erkrankung nicht allein aus.","Optional: a few unassessed findings from the first five possibilities. A negative answer alone does not rule out a condition."],
+"verification_start": ["Vérifier ces possibilités","Möglichkeiten prüfen","Check these possibilities"],
+"verification_updated": ["Résultats actualisés. Le premier résultat reste conservé localement.","Ergebnisse aktualisiert. Das erste Ergebnis bleibt lokal gespeichert.","Results updated. The first result remains stored locally."],
+"verification_back": ["← Revenir aux premiers résultats","← Zurück zu den ersten Ergebnissen","← Back to initial results"],
+"verification_neutral": ["Répondez selon ce que vous savez aujourd'hui. Vous pourrez corriger votre réponse.","Antworten Sie nach Ihrem heutigen Kenntnisstand. Sie können Ihre Antwort korrigieren.","Answer based on what you know today. You can correct your answer."],
+"verification_finish": ["Voir les résultats actualisés maintenant","Aktualisierte Ergebnisse jetzt anzeigen","Show updated results now"],
+"verification_progress": ["Vérification {count} · au plus {maximum} au total","Prüfung {count} · höchstens {maximum} insgesamt","Check {count} · at most {maximum} in total"],
+"verification_question": ["Avez-vous {label} ?","Haben Sie {label}?","Do you have {label}?"],
+"verification_loading": ["Préparation locale des questions…","Lokale Vorbereitung der Fragen…","Preparing local questions…"],
+"verification_missing_count": ["{count} élément(s) non évalué(s) ; ils ne sont pas des contradictions.","{count} nicht geprüfte Merkmale; sie sind keine Widersprüche.","{count} unassessed findings; they are not contradictions."],
 "narrative_label": ["Décrivez vos symptômes avec vos mots (facultatif)","Beschreiben Sie Ihre Beschwerden in eigenen Worten (freiwillig)","Describe your symptoms in your own words (optional)"],
 "narrative_placeholder": ["Par exemple : J’ai le nez qui coule et mal à la gorge…","Zum Beispiel: Meine Nase läuft und ich habe Halsschmerzen…","For example: I have a runny nose and a sore throat…"],
 "narrative_note": ["Un modèle local peut proposer des symptômes ; vous les confirmerez avant l’analyse.","Ein lokales Modell kann Symptome vorschlagen; Sie bestätigen sie vor der Analyse.","A local model may suggest symptoms; you confirm them before analysis."],

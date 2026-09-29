@@ -16,6 +16,7 @@
     <script src="{{ assets['observations.js'] }}" defer></script>
     <script src="{{ assets['questions.js'] }}" defer></script>
     <script src="{{ assets['results.js'] }}" defer></script>
+    <script src="{{ assets['verification.js'] }}" defer></script>
     <script src="{{ assets['history.js'] }}" defer></script>
     <script src="{{ assets['anatomy.js'] }}" defer></script>
     <script src="{{ assets['consultation.js'] }}" defer></script>
@@ -151,6 +152,12 @@
         <div id="result-alert" class="result-alert" hidden></div>
         <div id="result-list" class="result-list"></div>
         <button id="show-more-results" class="button button-secondary" type="button" hidden data-i18n="more">Voir plus de possibilités</button>
+        <section id="verification-cta" class="result-alert" hidden>
+          <h2 data-i18n="verification_title">Vérifier ces possibilités</h2>
+          <p data-i18n="verification_intro">Cette étape facultative vérifie quelques éléments non évalués des cinq premières possibilités. Une absence n'est pas une exclusion absolue.</p>
+          <button id="verification-start" type="button" class="button button-secondary" data-i18n="verification_start">Vérifier ces possibilités</button>
+          <p id="verification-updated" class="field-hint" hidden data-i18n="verification_updated">Résultats actualisés. Le premier résultat reste conservé dans l'historique local.</p>
+        </section>
         <section id="rare-opt-in" class="result-alert" hidden>
           <h2 data-i18n="rare_cta">Explorer aussi les maladies rares</h2>
           <p data-i18n="rare_explanation">Exploration facultative, avec des questions parfois très spécifiques.</p>
@@ -161,6 +168,22 @@
           <button id="results-edit" class="button button-secondary" type="button" data-i18n="edit">Modifier mes informations</button>
           <button id="results-history" class="button button-quiet" type="button" data-i18n="view_history">Voir l’historique</button>
         </div>
+      </section>
+
+      <section id="screen-verification" class="screen" aria-labelledby="verification-question-title" hidden>
+        <button id="verification-back" class="back-link" type="button" data-i18n="verification_back">← Voir les premiers résultats</button>
+        <p id="verification-progress" class="eyebrow"></p>
+        <h1 id="verification-question-title" data-i18n="verification_title">Vérifier ces possibilités</h1>
+        <p data-i18n="verification_neutral">Répondez selon ce que vous savez aujourd'hui. Vous pourrez modifier votre réponse.</p>
+        <div id="verification-question-text" class="question-text"></div>
+        <p id="verification-fallback" class="field-hint" hidden></p>
+        <div class="answer-grid" role="group" aria-label="Répondre à la vérification" data-i18n-aria="answer_question">
+          <button data-verification-answer="present" class="answer-button" type="button" data-i18n="yes">Oui</button>
+          <button data-verification-answer="absent" class="answer-button" type="button" data-i18n="no">Non</button>
+          <button data-verification-answer="unknown" class="answer-button" type="button" data-i18n="unknown">Je ne sais pas</button>
+          <button data-verification-answer="not_assessed" class="answer-button answer-muted" type="button" data-i18n="skip">Passer</button>
+        </div>
+        <button id="verification-finish" class="text-link" type="button" data-i18n="verification_finish">Voir les résultats actualisés maintenant</button>
       </section>
 
       <section id="screen-history" class="screen" aria-labelledby="history-title" hidden>

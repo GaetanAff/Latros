@@ -210,6 +210,21 @@ class ResearchApplicationService:
             raise LatrosError("Question concept has no unambiguous supported observation type")
         return matches[0]
 
+    def supported_observation_for_concept(
+        self, snapshot: str, strategy: str, concept_id: str
+    ) -> ConceptOption:
+        """Resolve a canonical finding back to one unambiguous user observation."""
+        if strategy not in ("general_v1", *CONSULTATION_IDS):
+            raise LatrosError("Canonical verification requires a v2 general strategy")
+        self.require_compatible(snapshot, strategy)
+        system, code = self._general_strategy(
+            snapshot, strategy
+        ).repository.first_external_identifier(concept_id)
+        option = self.resolve_question_concept(snapshot, strategy, system, code)
+        if option.concept_id != concept_id:
+            raise LatrosError("External identifier did not resolve to the same finding")
+        return option
+
     def search_display_concepts(
         self, snapshot: str, strategy: str, query: str, language: Language, *, limit: int = 20
     ) -> list[dict[str, Any]]:

@@ -1,12 +1,12 @@
 function showScreen(name) {
   state.screen = name;
   byId('region-panel').hidden = name !== 'home' || ['body','head'].includes(state.anatomy.region);
-  ["home", "age", "refinement", "question", "results", "history", "error"].forEach((screen) => {
+  ["home", "age", "refinement", "question", "verification", "results", "history", "error"].forEach((screen) => {
     byId(`screen-${screen}`).hidden = screen !== name;
   });
   document.documentElement.dataset.screen = name;
   const steps = ["age", "home", "question", "results"];
-  const progressName = name === 'refinement' ? 'question' : name;
+  const progressName = ['refinement', 'verification'].includes(name) ? 'question' : name;
   document.querySelectorAll("[data-progress]").forEach((element) => {
     const step = element.dataset.progress;
     element.classList.toggle("active", step === progressName);
@@ -68,6 +68,10 @@ function newAnalysis() {
   state.resultRun = null;
   state.generalRun = null;
   state.questionRun = null;
+  state.verificationPlan = null;
+  state.verificationQuestion = null;
+  state.verificationRunId = null;
+  state.verificationUpdated = false;
   state.selected = [];
   state.suggestions = [];
   state.displayLabels = {};
@@ -194,6 +198,11 @@ async function changeLanguage(language) {
     await refreshDisplayLabels();
     updateResearchNotice(); renderSelected(); renderResults(); renderHistory();
     if (state.screen === "question" && state.questionRun?.result.question) await renderQuestion(state.questionRun.result.question);
+    if (state.screen === 'verification' && state.verificationQuestion) {
+      const answered = (state.session.clinical_case.question_history || []).filter(item =>
+        state.verificationPlan?.items?.some(question => question.question_id === item.question_id)).length;
+      await renderVerification({question:state.verificationQuestion, answered, maximum:6});
+    }
     if (state.screen === 'refinement' && state.refinements[state.refinementIndex]) renderRefinement();
     if (state.selection && byId("symptom-search").value.trim()) await searchConcepts();
     await anatomyNavigate(state.anatomy.region);

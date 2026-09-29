@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import builtins
 import threading
 import uuid
 from collections.abc import Callable
@@ -17,6 +18,7 @@ from latros.ui.models import (
     SessionRunReference,
     StoredRun,
 )
+from latros.ui.result_verification import VerificationPlanV1
 from latros.ui.run_transport import (
     index_path,
     read_candidate,
@@ -200,6 +202,40 @@ class SessionStore:
                 }
         raise LatrosError(f"Unknown diagnosis candidate: {candidate_id}")
 
+    def load_candidate_details(
+        self, session_id: str, run_id: str, candidate_ids: builtins.list[str]
+    ) -> builtins.list[dict[str, Any]]:
+        """Read several bounded details with one strong integrity check."""
+        if len(candidate_ids) > 5:
+            raise LatrosError("Verification reads at most five candidate details")
+        path = self._run_path(session_id, run_id)
+        if not path.is_file():
+            raise LatrosError(f"Unknown immutable session run: {run_id}")
+        index = read_index(path)
+        if index is not None:
+            return [read_candidate(path, index, candidate_id) for candidate_id in candidate_ids]
+        run = self.load_run(session_id, run_id)
+        if run.operation != "diagnose":
+            raise LatrosError("Only diagnosis runs have candidate details")
+        by_id = {str(item["candidate_id"]): item for item in run.result.get("candidates", [])}
+        if any(candidate_id not in by_id for candidate_id in candidate_ids):
+            raise LatrosError("Unknown diagnosis candidate in verification plan")
+        return [{"candidate": by_id[candidate_id]} for candidate_id in candidate_ids]
+
+    def save_verification_plan(self, session_id: str, plan: VerificationPlanV1) -> None:
+        """Write an immutable sidecar; neither the diagnosis run nor snapshot changes."""
+        with self._lock:
+            path = self._verification_path(session_id, plan.base_run_id)
+            if path.exists():
+                raise LatrosError("Verification plan already exists")
+            write_json(path, plan.model_dump(mode="json"))
+
+    def load_verification_plan(
+        self, session_id: str, base_run_id: str
+    ) -> VerificationPlanV1 | None:
+        path = self._verification_path(session_id, base_run_id)
+        return VerificationPlanV1.model_validate_json(path.read_bytes()) if path.is_file() else None
+
     @staticmethod
     def _require_revision(session: ResearchSession, expected: int) -> None:
         if session.revision != expected:
@@ -215,3 +251,8 @@ class SessionStore:
         safe_id(session_id)
         safe_id(run_id)
         return self.sessions_root / session_id / "runs" / f"{run_id}.json"
+
+    def _verification_path(self, session_id: str, run_id: str) -> Path:
+        safe_id(session_id)
+        safe_id(run_id)
+        return self.sessions_root / session_id / "verifications" / f"{run_id}.json"

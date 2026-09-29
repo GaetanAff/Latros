@@ -30,6 +30,7 @@ from latros.sources.registry_v2 import RegistryV2
 from latros.ui.models import ResearchSession
 from latros.ui.patient_context import PatientContext
 from latros.ui.refinements import RefinementAnswer, SymptomRefinementDefinition
+from latros.ui.result_verification import VerificationAnswerRequest, VerificationPlanV1
 from latros.ui.symptom_interpretation import (
     ConfirmInterpretationRequest,
     SymptomInterpretationRequest,
@@ -85,6 +86,8 @@ def main() -> None:
         "symptom-interpretation-confirm-v1.schema.json": (
             ConfirmInterpretationRequest.model_json_schema()
         ),
+        "result-verification-plan-v1.schema.json": VerificationPlanV1.model_json_schema(),
+        "result-verification-answer-v1.schema.json": VerificationAnswerRequest.model_json_schema(),
     }
     for name, document in documents.items():
         path = root / name

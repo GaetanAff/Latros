@@ -6,6 +6,7 @@ import webbrowser
 from collections.abc import AsyncIterator, Sequence
 from contextlib import asynccontextmanager
 from datetime import UTC, datetime
+from hashlib import sha256 as hash_bytes
 from pathlib import Path
 from typing import Annotated, Any, Literal, cast
 from urllib.parse import urlparse
@@ -24,6 +25,7 @@ from latros import __version__
 from latros.application.service import ResearchApplicationService
 from latros.clinical.v2 import ClinicalCaseV2, QuestionResponseV2
 from latros.common import LatrosError, sha256
+from latros.knowledge.presentation_repository import load_display_lexicon
 from latros.ui.anatomy import load_navigation
 from latros.ui.local_llm import LocalLlamaServer
 from latros.ui.models import (
@@ -42,6 +44,16 @@ from latros.ui.refinements import (
     RefinementAnswerRequest,
     apply_refinement,
     refinement_definitions,
+)
+from latros.ui.result_verification import (
+    MAX_VERIFICATION_QUESTIONS,
+    TOP_CANDIDATES,
+    VerificationAnswerRequest,
+    VerificationItem,
+    VerificationPlanV1,
+    next_item,
+    plan_matches_case,
+    ranked_findings,
 )
 from latros.ui.run_transport import summary_projection
 from latros.ui.sessions import SessionStore
@@ -572,6 +584,154 @@ def create_app(root: Path) -> FastAPI:
         )
         return session.model_dump(mode="json")
 
+    @app.post("/internal/v1/sessions/{session_id}/runs/{run_id}/verification")
+    async def start_verification(
+        request: Request, session_id: str, run_id: str, payload: RunRequest
+    ) -> dict[str, Any]:
+        store = _sessions(request)
+        session = store.load(session_id)
+        _require_request_revision(session.revision, payload.revision)
+        if (
+            session.consultation is None
+            or session.consultation.phase != "general"
+            or session.selection is None
+            or session.selection.strategy_id != "general_question_v2"
+            or session.latest_diagnose is None
+            or session.latest_diagnose.run_id != run_id
+        ):
+            raise LatrosError("Verification requires the current general result")
+        plan = store.load_verification_plan(session_id, run_id)
+        if plan is None:
+            summary = store.load_run_summary(session_id, run_id)
+            top = summary["result"].get("candidates", [])[:TOP_CANDIDATES]
+            top_ids = [str(item["candidate_id"]) for item in top]
+            details = [
+                item["candidate"]
+                for item in store.load_candidate_details(session_id, run_id, top_ids)
+            ]
+            service = _service(request)
+            items: list[VerificationItem] = []
+            user_facing_codes = {
+                entry["code"]: entry["source_label"] for entry in load_display_lexicon()["entries"]
+            }
+            already_verified = max(
+                session.verification_answered_count,
+                sum(
+                    item.question_id.startswith("result_verification_v1:")
+                    for item in session.clinical_case.question_history
+                ),
+            )
+            remaining_budget = max(0, MAX_VERIFICATION_QUESTIONS - already_verified)
+            ranked = ranked_findings(session.clinical_case, details) if remaining_budget else []
+            for finding, candidate_ids in ranked:
+                if finding in session.verification_asked_concept_ids:
+                    continue
+                try:
+                    option = service.supported_observation_for_concept(
+                        session.selection.snapshot_id, session.selection.strategy_id, finding
+                    )
+                except LatrosError:
+                    continue
+                if option.observation_kind not in {"symptom", "sign", "exam"}:
+                    continue
+                if user_facing_codes.get(option.code) != option.label:
+                    continue
+                token = hash_bytes(f"{run_id}:{finding}".encode()).hexdigest()[:20]
+                items.append(
+                    VerificationItem(
+                        question_id=f"result_verification_v1:{token}",
+                        concept_id=finding,
+                        system=option.system,
+                        code=option.code,
+                        label=option.label,
+                        observation_kind=cast(
+                            Literal["symptom", "sign", "exam"], option.observation_kind
+                        ),
+                        candidate_ids=candidate_ids,
+                    )
+                )
+                if len(items) == remaining_budget:
+                    break
+            plan = VerificationPlanV1(
+                base_run_id=run_id,
+                case_id=session.clinical_case.case_id,
+                baseline_observation_ids=[
+                    item.observation_id for item in session.clinical_case.observations
+                ],
+                baseline_question_ids=[
+                    item.question_id for item in session.clinical_case.question_history
+                ],
+                top_candidate_ids=top_ids,
+                items=items,
+            )
+            store.save_verification_plan(session_id, plan)
+        else:
+            summary = store.load_run_summary(session_id, run_id)
+            if plan.top_candidate_ids != [
+                str(item["candidate_id"])
+                for item in summary["result"].get("candidates", [])[:TOP_CANDIDATES]
+            ]:
+                raise LatrosError("Verification plan no longer matches the immutable run")
+        if not plan_matches_case(plan, session.clinical_case):
+            raise LatrosError("Verification plan is stale after case changes")
+        return _verification_view(plan, session)
+
+    @app.post("/internal/v1/sessions/{session_id}/runs/{run_id}/verification/answer")
+    async def answer_verification(
+        request: Request,
+        session_id: str,
+        run_id: str,
+        payload: VerificationAnswerRequest,
+    ) -> dict[str, Any]:
+        store = _sessions(request)
+        session = store.load(session_id)
+        _require_request_revision(session.revision, payload.revision)
+        plan = store.load_verification_plan(session_id, run_id)
+        if plan is None or not plan_matches_case(plan, session.clinical_case):
+            raise LatrosError("Missing or stale verification plan")
+        if (
+            session.consultation is None
+            or session.consultation.phase != "general"
+            or session.selection is None
+            or session.latest_diagnose is None
+            or session.latest_diagnose.run_id != run_id
+        ):
+            raise LatrosError("Verification belongs to an outdated general result")
+        item = next_item(plan, session.clinical_case)
+        if session.verification_answered_count >= MAX_VERIFICATION_QUESTIONS:
+            raise LatrosError("Verification question budget has been reached")
+        if item is None or item.question_id != payload.question_id:
+            raise LatrosError("Verification question is already answered or out of order")
+        option = _service(request).resolve_question_concept(
+            session.selection.snapshot_id,
+            session.selection.strategy_id,
+            item.system,
+            item.code,
+        )
+        if option.concept_id != item.concept_id:
+            raise LatrosError("Verification concept no longer resolves exactly")
+        updated_case = _case_with_question_answer(
+            session.clinical_case,
+            item.question_id,
+            option.model_dump(mode="json"),
+            payload.answer,
+        )
+        updated = store.update(
+            session_id,
+            payload.revision,
+            lambda value: value.model_copy(
+                update={
+                    "clinical_case": updated_case,
+                    "verification_answered_count": value.verification_answered_count + 1,
+                    "verification_asked_concept_ids": [
+                        *value.verification_asked_concept_ids,
+                        item.concept_id,
+                    ],
+                }
+            ),
+        )
+        return _verification_view(plan, updated)
+
     @app.get("/internal/v1/sessions/{session_id}/runs/{run_id}")
     async def get_run(request: Request, session_id: str, run_id: str) -> dict[str, Any]:
         return _sessions(request).load_run(session_id, run_id).model_dump(mode="json")
@@ -587,6 +747,18 @@ def create_app(root: Path) -> FastAPI:
         return _sessions(request).load_candidate_detail(session_id, run_id, candidate_id)
 
     return app
+
+
+def _verification_view(plan: VerificationPlanV1, session: ResearchSession) -> dict[str, Any]:
+    question = next_item(plan, session.clinical_case)
+    answered_ids = {item.question_id for item in session.clinical_case.question_history}
+    return {
+        "plan": plan.model_dump(mode="json"),
+        "session": session.model_dump(mode="json"),
+        "question": question.model_dump(mode="json") if question else None,
+        "answered": sum(item.question_id in answered_ids for item in plan.items),
+        "maximum": MAX_VERIFICATION_QUESTIONS,
+    }
 
 
 def run_ui(root: Path, port: int = 8765, *, open_browser: bool = True) -> None:

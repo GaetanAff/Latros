@@ -4,6 +4,19 @@ Ce fichier est le journal de continuité du projet. Il décrit ce qui a été d�
 
 Dernière mise à jour : 29 septembre 2026.
 
+## Vérification facultative des possibilités — 29 septembre 2026
+
+- Sur `codex/v0.7-result-verification-v1`, politique versionnée sur les cinq premiers
+  candidats généraux : six questions maximum dans une session, dédupliquées, concepts actifs
+  résolus par le backend, aucune question rare ni réponse déjà donnée. Plan local immuable.
+- Les résultats initiaux restent une fin valide. Une réponse oui/non/inconnu/passer rejoint le
+  même cas et un nouveau run généraliste complet est enregistré ; le run initial est conservé.
+  « Non évalué » reste distinct de « contradiction » jusqu'à une observation évaluée.
+- Tests sur fixtures inventées : sélection, réponses inconnues, absence de répétition,
+  conservation octet pour octet du premier run et contribution défavorable après réponse
+  négative. Aucune validation clinique de cette politique ; Huatuo indépendant reste à livrer.
+- Snapshots, `general_v1`, `semantic_v1`, goldens et statuts médicaux inchangés.
+
 ## Saisie libre locale expérimentale — 29 septembre 2026
 
 - Sur la branche `codex/v0.9-qwen-local-capture`, première tranche v0.9-A : champ narratif
