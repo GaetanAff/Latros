@@ -2,7 +2,21 @@
 
 Ce fichier est le journal de continuité du projet. Il décrit ce qui a été décidé et effectivement réalisé, afin de pouvoir reprendre la discussion sans déduire l'état du projet à partir du code seul.
 
-Dernière mise à jour : 27 septembre 2026.
+Dernière mise à jour : 28 septembre 2026.
+
+## UI v4 — profil de session et atlas étendu — 28 septembre 2026
+
+- Entrée Informations → Symptômes → Précisions/Questions → Résultats. Profil patient local
+  structuré ; seul l'âge est projeté dans le cas. Autres champs facultatifs déclaratifs,
+  sans interprétation médicale. Sélection d'un symptôme `present` en un clic, état modifiable.
+- Précisions facultatives limitées à des concepts HPO explicitement configurés ; aucune
+  assertion ou règle de score créée. Historique/reprise et `/expert` conservés.
+- Atlas porté à 47 régions et 37 images locales, dont 30 nouvelles générées hors tête.
+  Visuels non validés anatomiquement, overlays et labels indépendants, survol boutons-zones
+  synchronisé. Références non supportées masquées. Un audit offline de 14 motifs trouve 72
+  questions sans répétition, mais plusieurs premiers choix génériques ; politique inchangée.
+  Vérification de la PR isolée le 29 septembre : 242 tests Python, 19 tests frontend,
+  schémas, Ruff et mypy strict verts ; aucun snapshot ou statut médical modifié.
 
 ## État actuel en une phrase
 
