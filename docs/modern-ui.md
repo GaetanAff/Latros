@@ -31,11 +31,17 @@ l'historique, les préférences de langue/thème ou les sessions.
 uv run --offline --no-sync latros --root . ui --no-open
 ```
 
-Ouvrir `http://127.0.0.1:8765/`, renseigner un nom/pseudonyme et l'âge, puis rechercher un terme
-présent dans le catalogue local ou explorer une région. La liste n'affiche que les concepts
-réellement supportés ; un clic ajoute `present`, modifiable dans le récapitulatif. Un concept ajouté
-par les deux voies n'est pas dupliqué. Le texte libre non sélectionné n'est pas interprété.
-L'âge est demandé parce que
+Ouvrir `http://127.0.0.1:8765/`, renseigner un nom ou pseudonyme et l'âge, puis rechercher un
+terme présent dans le catalogue local ou explorer une région. La liste d'une région ne montre que
+les concepts réellement supportés ; un clic ajoute `present`. L'état reste modifiable ensuite.
+Un concept ajouté par les deux voies n'est pas dupliqué. La description libre facultative du
+profil peut être analysée par Qwen3.5 local : les segments sont proposés contre le catalogue
+du snapshot, puis confirmés par le patient avant tout ajout. Aucun concept simplement suggéré
+n'est scoré ; absence de modèle ou de correspondance n'empêche pas l'ajout manuel.
+Le profil de session est local et non chiffré. Seul l'âge alimente actuellement le cas moteur ;
+les allergies, traitements et antécédents facultatifs sont déclaratifs, sans analyse médicale.
+Les précisions structurées ne sont proposées que pour une liste explicite de concepts et restent
+facultatives ; elles ne modifient pas le score actuel. L'âge est demandé parce que
 `general_v1` exige actuellement un périmètre adulte ; l'absence d'âge peut provoquer une
 abstention. Chaque question affichée vient du backend, y compris son arrêt. Les réponses et les
 analyses sont sauvegardées dans `sessions/`, hors Git. L'historique peut reprendre une session

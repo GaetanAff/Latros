@@ -4,6 +4,23 @@ Ce fichier est le journal de continuité du projet. Il décrit ce qui a été d�
 
 Dernière mise à jour : 29 septembre 2026.
 
+## Saisie libre locale expérimentale — 29 septembre 2026
+
+- Sur la branche `codex/v0.9-qwen-local-capture`, première tranche v0.9-A : champ narratif
+  facultatif, Qwen3.5 9B lancé à la demande sur loopback avec llama.cpp et MTP. Le backend
+  rejette les segments inventés, ne propose que des concepts supportés et exige une confirmation
+  groupée avant toute observation. Texte, segment, concept et méthode restent auditables.
+- Essai réel du GGUF local sur une phrase synthétique : JSON de deux symptômes explicites obtenu
+  après désactivation du raisonnement du serveur ; aucun dossier patient réel employé. Ruff,
+  format, mypy strict, schémas, 250 tests Python et 20 tests frontend verts. Le modèle absent n'empêche pas la recherche
+  ni l'anatomie ; qualité clinique de l'extraction non validée.
+- Correctif de portabilité CI : la constante Windows de création sans fenêtre est résolue
+  seulement sur Windows ; `mypy --platform linux` passe également. Aucun changement du transport
+  loopback ou des données du cas.
+- `general_v1`, `semantic_v1`, snapshots, goldens, `clinical_validation: false`,
+  `publishable: false`, `research_unreviewed: true` et `safety_status: not_evaluated`
+  restent inchangés. Vérification facultative et Huatuo restent des tranches séparées.
+
 ## Audit d'extension généraliste — 28–29 septembre 2026
 
 - Treize sources/familles supplémentaires évaluées sur leurs distributions officielles, droits,

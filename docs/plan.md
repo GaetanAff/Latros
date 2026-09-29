@@ -2,6 +2,16 @@
 
 Référence : plan « Premières étapes de Latros — socle de données et moteur clinique pur » demandé par l'utilisateur. État au 29 septembre 2026.
 
+### v0.9-A — Saisie libre locale expérimentale (29 septembre 2026)
+
+Première tranche NLP/LLM : description facultative dans Informations, Qwen3.5 9B local via
+llama.cpp, propositions de symptômes vérifiées contre le catalogue du snapshot puis confirmées
+par le patient. Aucune proposition n'est une observation avant confirmation. Les contrats
+`SourceStatement` / `ObservationProposal` conservent texte, span et méthode ; recherche et
+anatomie restent utilisables sans modèle. Le raisonnement, les snapshots et les statuts
+cliniques ne changent pas. Voir [ADR 0020](decisions/0020-interpretation-locale-des-symptomes.md).
+La vérification post-résultats et Huatuo indépendant sont des livraisons distinctes à venir.
+
 ### Recherche locale v2 — 28–29 septembre 2026
 
 Index de désignations temporaire DuckDB, classement BM25, préfixes et fuzzy prudent sur alias
@@ -60,7 +70,7 @@ Les JS/CSS locaux sont liés à leurs hashes pour éviter une UI obsolète dans 
 | 6 | Interface interne de test R&D — `v0.6` | Terminée et fusionnée dans `main` ; parcours simple expérimental ultérieur en chantier séparé | Console experte, sessions reprenables et projection simple des moteurs ; aucun produit médical validé ni nouvelle logique clinique |
 | 7 | Fabrique souveraine généraliste — `v0.7` | D–F6, G0 et G4 technique terminés ; préparation G0/G1/G2 acceptée techniquement ; revue humaine G1/G2 et évaluation indépendante G3 à faire | `v0.7.0-general-dev-unreviewed` inchangé, non validé et non publiable ; biologie et médicaments restent futures |
 | 8 | Safety / triage séparé — `v0.8` | Prévue | Composant indépendant du différentiel, avec périmètre et validation propres |
-| 9 | NLP / LLM encadré — `v0.9` | Prévue | Structuration, reformulation et explication, jamais source implicite de connaissance |
+| 9 | NLP / LLM encadré — `v0.9` | A expérimentale en cours ; autres tranches prévues | Structuration confirmée par le patient, jamais source implicite de connaissance |
 | 10 | API, FHIR et interopérabilité — `v0.10` | Prévue | Exposition et échanges des contrats de domaine après validation des étapes précédentes |
 
 Il s'agit des étapes du plan, pas d'une série de releases GitHub publiées. Aucun tag ou changement de version rétroactif du paquet n'est nécessaire pour identifier un snapshot. L'évaluation clinique et les fonctionnalités futures restent à discuter séparément.

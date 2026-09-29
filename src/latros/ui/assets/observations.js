@@ -89,6 +89,16 @@ async function ensureSession() {
   clinicalCase.subject_context = subjectContextForSave(clinicalCase.subject_context);
   clinicalCase.observations = state.selected.map(makeObservation);
   const savedIds = new Set(clinicalCase.observations.map(item=>item.observation_id));
+  const replacementIds = new Map(state.selected.map((item,index)=>[
+    item.savedObservation?.observation_id,clinicalCase.observations[index].observation_id,
+  ]).filter(([oldId])=>Boolean(oldId)));
+  clinicalCase.observation_proposals = (clinicalCase.observation_proposals || []).map(proposal=>{
+    const oldId=proposal.confirmed_observation_id;
+    if (!oldId || savedIds.has(oldId)) return proposal;
+    const replacement=replacementIds.get(oldId);
+    return replacement ? {...proposal,confirmed_observation_id:replacement}
+      : {...proposal,state:'rejected',confirmed_observation_id:null};
+  });
   clinicalCase.question_history = (clinicalCase.question_history || [])
     .filter(item=>savedIds.has(item.resulting_observation_id));
   state.session = await api(`${sessionPath()}/case`, {

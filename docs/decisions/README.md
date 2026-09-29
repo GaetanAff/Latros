@@ -21,6 +21,7 @@ Décisions acceptées :
 - [0015 — Affichage multilingue et alias séparés de la connaissance](0015-affichage-multilingue-local.md).
 - [0016 — Navigation anatomique séparée de la connaissance](0016-navigation-anatomique-de-presentation.md).
 - [0018 — Illustrations locales indépendantes des overlays](0018-illustrations-locales-et-overlays.md).
+- [0020 — Proposition locale de symptômes et confirmation](0020-interpretation-locale-des-symptomes.md).
 
 Utiliser un fichier par décision, par exemple :
 

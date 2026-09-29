@@ -222,10 +222,19 @@ profil **expérimental mono-source MedlinePlus G4**, non validé/non publiable, 
 explicite permet `rare_question_v1`, même cas, résultats et compteurs séparés. Budgets logiciels
 6 / 12, sans valeur médicale validée. Rejouer le JSONL G4 épinglé offline avant usage ; voir le
 [rapport General/Rare](docs/reports/general-first-rare-second.md) et l'[ADR 0017](docs/decisions/0017-consultations-generale-et-rare-versionnees.md).
-Il guide de la sélection explicite de symptômes vers l'âge, les questions fournies par le backend,
-les résultats non probabilistes et leurs détails facultatifs. Aucun texte libre n'est interprété.
+Il guide des informations patient vers la sélection explicite de symptômes, les questions
+fournies par le backend, les résultats non probabilistes et leurs détails facultatifs. Une
+description libre facultative peut maintenant produire des **propositions** via Qwen3.5 local ;
+le patient doit les confirmer avant qu'elles deviennent des observations. Le modèle ne pose pas
+de diagnostic et son extraction n'est pas cliniquement validée.
 Un snapshot absent est signalé ; les libellés du catalogue local peuvent être en anglais. Voir
 [la documentation du parcours simple](docs/modern-ui.md) et [l'ADR 0011](docs/decisions/0011-parcours-simple-local.md).
+
+Le GGUF Qwen et `llama-server.exe` restent hors du dépôt. Sur cette machine, Latros détecte
+les chemins locaux connus ; ailleurs, définir `LATROS_LLAMA_SERVER` et `LATROS_QWEN_MODEL`.
+Le serveur est lancé à la demande sur `127.0.0.1` sans réseau extérieur ; en cas d'absence du
+modèle, la recherche et l'anatomie continuent. Le texte sensible est conservé dans `sessions/`
+non chiffré et ignoré par Git. Voir [ADR 0020](docs/decisions/0020-interpretation-locale-des-symptomes.md).
 
 La console experte permet uniquement les couples compatibles, notamment `v0.2.0 + semantic_v1` et
 `v0.5.0-dev-unreviewed + general_v1` ainsi que

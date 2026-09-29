@@ -1,0 +1,25 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "language": {
+      "default": "fr",
+      "enum": [
+        "fr",
+        "de",
+        "en"
+      ],
+      "title": "Language",
+      "type": "string"
+    },
+    "revision": {
+      "minimum": 0,
+      "title": "Revision",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "revision"
+  ],
+  "title": "SymptomInterpretationRequest",
+  "type": "object"
+}

@@ -20,6 +20,7 @@
     <script src="{{ assets['anatomy.js'] }}" defer></script>
     <script src="{{ assets['consultation.js'] }}" defer></script>
     <script src="{{ assets['patient.js'] }}" defer></script>
+    <script src="{{ assets['symptom-nlp.js'] }}" defer></script>
     <script src="{{ assets['refinements.js'] }}" defer></script>
     <script src="{{ assets['checker.js'] }}" defer></script>
   </head>
@@ -59,6 +60,12 @@
       <div id="app-message" class="app-message" role="alert" hidden></div>
 
       <section id="screen-home" class="screen screen-home" aria-labelledby="home-title" hidden>
+        <section id="nlp-panel" class="nlp-panel" aria-live="polite" hidden>
+          <h2 data-i18n="nlp_title">Symptômes repérés dans votre description</h2>
+          <p id="nlp-status" class="field-hint"></p>
+          <div id="nlp-mentions"></div>
+          <button id="nlp-confirm" class="button button-primary" type="button" hidden data-i18n="nlp_confirm">Confirmer les symptômes sélectionnés</button>
+        </section>
         <nav id="anatomy-breadcrumb" class="breadcrumb" aria-label="Navigation anatomique" data-i18n-aria="anatomy_navigation"></nav>
         <h1 id="home-title" data-i18n="explore">Explorez une région du corps</h1>
         <p class="anatomy-help" data-i18n="anatomy_hint">Cliquez sur une région ou utilisez la recherche.</p>
@@ -83,6 +90,9 @@
           <label for="patient-age" data-i18n="age_label">Âge en années</label>
           <input id="patient-age" class="age-input" type="number" min="0" max="130" step="1" required inputmode="numeric" placeholder="Votre âge" data-i18n-placeholder="age_placeholder">
           <p class="field-hint" data-i18n="adult_scope">Le moteur actuel est limité aux adultes.</p>
+          <label for="patient-narrative" data-i18n="narrative_label">Décrivez vos symptômes avec vos mots (facultatif)</label>
+          <textarea id="patient-narrative" rows="4" maxlength="4000" data-i18n-placeholder="narrative_placeholder" placeholder="Par exemple : J’ai le nez qui coule et mal à la gorge…"></textarea>
+          <p class="field-hint" data-i18n="narrative_note">Un modèle local peut proposer des symptômes ; vous les confirmerez avant l’analyse.</p>
           <details class="background-details"><summary data-i18n="background_title">Contexte personnel facultatif</summary>
             <p class="field-hint" data-i18n="background_note">Ces informations restent séparées des observations. Le moteur actuel ne les évalue pas.</p>
             <label><span data-i18n="allergies_label">Allergies connues</span><textarea id="patient-allergies" rows="2" maxlength="6000" data-i18n-placeholder="one_item_per_line" placeholder="Un élément par ligne"></textarea></label>
@@ -175,7 +185,7 @@
         <label for="symptom-search" data-i18n="search_label">Rechercher un symptôme</label>
         <input id="symptom-search" type="search" autocomplete="off" placeholder="Rechercher un symptôme…" data-i18n-placeholder="search_placeholder" aria-controls="symptom-suggestions" aria-expanded="false">
         <div id="symptom-suggestions" class="suggestions" role="listbox" aria-label="Suggestions de symptômes" data-i18n-aria="suggestions" hidden></div>
-        <p id="search-hint" class="field-hint" data-i18n="search_hint">Sélectionnez une suggestion. La saisie libre n’est pas encore interprétée.</p>
+        <p id="search-hint" class="field-hint" data-i18n="search_hint">Sélectionnez une suggestion. Décrivez vos symptômes dans Informations.</p>
       </div>
       <section id="region-panel" class="region-panel" hidden>
         <button id="region-back" class="back-link" type="button" data-i18n="anatomy_back">← Revenir à la région précédente</button>

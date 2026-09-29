@@ -76,6 +76,8 @@ function newAnalysis() {
   state.caseDirty = true;
   state.ageDirty = true;
   state.patientDirty = false;
+  nlpProposal = null;
+  byId('nlp-panel').hidden = true;
   state.refinements=[];state.refinementIndex=0;
   state.selection = preferredSelection(state.capabilities);
   byId("patient-age").value = "";
