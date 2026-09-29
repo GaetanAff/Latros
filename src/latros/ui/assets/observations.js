@@ -64,6 +64,7 @@ function ageContext() {
 }
 
 async function ensureSession() {
+  if (state.patientDirty) await savePatientInformation();
   if (!state.session) {
     const title = state.selected.slice(0, 2).map((item) => item.label).join(", ")
       || t("new_analysis");

@@ -8,6 +8,15 @@ Prototype **interne de recherche** pour explorer des raisonnements cliniques str
 sont locaux et explicables, sans LLM. L'interface web propose désormais un parcours simple et
 conserve la console R&D en mode expert. Elle n'est pas une interface patient validée.
 
+Le mode simple v4 expérimental commence par un profil de session local (nom ou pseudonyme, âge),
+puis Symptômes → Précisions/Questions → Résultats. Seul l'âge rejoint le cas moteur ; les
+antécédents/allergies facultatifs ne sont pas interprétés. Un symptôme sélectionné est ajouté
+`present` en un clic. L'atlas local compte 47 vues et 37 illustrations (30 nouvelles hors tête),
+avec zones SVG séparées et survol lié aux boutons de région. Images générées, non validées
+anatomiquement. Voir [rapport produit](docs/reports/ui-v4-product-flow.md),
+[rapport atlas](docs/reports/ui-atlas-v4.md), [audit des questions](docs/reports/ui-v4-question-quality.md)
+et [documentation UI](docs/modern-ui.md).
+
 Le parcours simple propose désormais **FR / DE / EN**, mémorisés localement. La recherche
 accepte synonymes, accents, préfixes et un lexique grand public versionné (139 concepts avec
 affichage FR/DE activé sur les 11 671 observations recherchables du snapshot local). Les traductions/désignations sont uniquement
@@ -15,13 +24,13 @@ de l'affichage ; les termes non traduits restent signalés **EN** et les IDs/re�
 Voir le [rapport multilingue](docs/reports/ui-i18n-local-search.md). Aucun service de traduction,
 NLP ou nouvelle connaissance médicale n'est introduit.
 
-Le mode simple offre une navigation **Corps → Tête → Sinus**, sept illustrations locales générées
-avec overlays SVG indépendants et 35 vues (oreille, thorax, abdomen, urinaire et membres inclus),
+Le mode simple offre une navigation **Corps → Tête → Sinus** et d'autres régions, 37 illustrations locales générées
+avec overlays SVG indépendants et 47 vues (oreille, thorax, abdomen, urinaire et membres inclus),
 une recherche permanente et un thème clair/sombre. Les observations d'une région sont résolues
-contre le snapshot actif avant affichage. Hors tête, les vues utilisent des zooms du corps, pas
-des planches détaillées dédiées. Les images ne sont pas anatomiquement validées. Carte et
-recherche ajoutent la même observation, une seule fois, avec état présent,
-absent ou inconnu. `/expert` reste la console R&D complète. Voir le
+contre le snapshot actif avant affichage. Les autres régions disposent désormais de planches
+dédiées. Les images ne sont pas anatomiquement validées. Carte et recherche ajoutent la même
+observation, une seule fois, avec état présent initialement, puis modifiable en absent/inconnu.
+`/expert` reste la console R&D complète. Voir le
 [rapport anatomique et audit de couverture](docs/reports/ui-anatomy-vnext.md) et
 la [documentation UI](docs/modern-ui.md).
 

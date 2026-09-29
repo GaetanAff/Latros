@@ -7,6 +7,8 @@ from pydantic import Field
 
 from latros.clinical.v2 import ClinicalCaseV2
 from latros.sources.registry import Contract
+from latros.ui.patient_context import PatientContext
+from latros.ui.refinements import RefinementAnswer
 
 
 class SessionSelection(Contract):
@@ -44,6 +46,8 @@ class ResearchSession(Contract):
     latest_question: SessionRunReference | None = None
     run_counter: int = Field(default=0, ge=0)
     consultation: ConsultationWorkflow | None = None
+    patient_context: PatientContext | None = None
+    refinement_answers: list[RefinementAnswer] = Field(default_factory=list)
 
 
 class StoredRun(Contract):

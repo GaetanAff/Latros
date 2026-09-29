@@ -1,7 +1,7 @@
 {
-  "version": "latros-atlas-1",
+  "version": "latros-atlas-2",
   "role": "generated_navigation_illustrations_not_clinical_knowledge",
-  "created": "2026-09-27",
+  "created": "2026-09-28",
   "generator": "OpenAI built-in image generation",
   "rights_status": "original_generated_assets_no_third_party_atlas_copied",
   "attribution": "Latros generated illustration series",
@@ -10,6 +10,114 @@
   "reproducibility": "Pinned output hashes; image generation is not byte-reproducible. Offline runtime uses these local files only.",
   "style_brief": "Original coherent semi-realistic modern medical illustration, intermediate detail, muted natural organ colours, soft ivory/terracotta, transparent background, no embedded labels, no text, no watermark, no photorealistic gore, independently drawn teal navigation overlays. Head establishes the style reference for subsequent views.",
   "images": [
+    {
+      "id": "abdomen",
+      "filename": "abdomen-atlas-v2.png",
+      "version": 2,
+      "bytes": 2955448,
+      "sha256": "74e114c7def4eb880ee0adb77e1fdfb28fa7c46e0f62a11ef47fd52ce698ac67",
+      "canvas": [
+        1024,
+        1536
+      ],
+      "view": "frontal or indicated cutaway",
+      "review_status": "not_anatomically_validated",
+      "human_reviewer": null,
+      "brief": "Isolated abdomen navigation plate; no clinical interpretation.",
+      "generator": "OpenAI built-in image generation",
+      "prompt_family": "Latros semi-realistic atlas, isolated anatomy, transparent alpha, natural tissue colours, no labels/text/watermark; per-asset subject: abdomen",
+      "created": "2026-09-28"
+    },
+    {
+      "id": "ankle",
+      "filename": "ankle-atlas-v2.png",
+      "version": 2,
+      "bytes": 1986244,
+      "sha256": "b9abbf056a251dc5b770a0587a70a224c6aca7b8277caca4346bedb95f1b986e",
+      "canvas": [
+        1024,
+        1536
+      ],
+      "view": "frontal or indicated cutaway",
+      "review_status": "not_anatomically_validated",
+      "human_reviewer": null,
+      "brief": "Isolated ankle navigation plate; no clinical interpretation.",
+      "generator": "OpenAI built-in image generation",
+      "prompt_family": "Latros semi-realistic atlas, isolated anatomy, transparent alpha, natural tissue colours, no labels/text/watermark; per-asset subject: ankle",
+      "created": "2026-09-28"
+    },
+    {
+      "id": "arm",
+      "filename": "arm-atlas-v2.png",
+      "version": 2,
+      "bytes": 1786690,
+      "sha256": "2966ee7130aa3033e2fd6126554ae0c97c4211ad9dabad8b5d2a6e7bad82b848",
+      "canvas": [
+        1024,
+        1536
+      ],
+      "view": "frontal or indicated cutaway",
+      "review_status": "not_anatomically_validated",
+      "human_reviewer": null,
+      "brief": "Isolated arm navigation plate; no clinical interpretation.",
+      "generator": "OpenAI built-in image generation",
+      "prompt_family": "Latros semi-realistic atlas, isolated anatomy, transparent alpha, natural tissue colours, no labels/text/watermark; per-asset subject: arm",
+      "created": "2026-09-28"
+    },
+    {
+      "id": "arms",
+      "filename": "arms-atlas-v2.png",
+      "version": 2,
+      "bytes": 1072097,
+      "sha256": "cceb1defe495f7ba9a805a8be599e0602710772a4dd65eda80cd0c38ff3a6513",
+      "canvas": [
+        1199,
+        1312
+      ],
+      "view": "frontal or indicated cutaway",
+      "review_status": "not_anatomically_validated",
+      "human_reviewer": null,
+      "brief": "Isolated arms navigation plate; no clinical interpretation.",
+      "generator": "OpenAI built-in image generation",
+      "prompt_family": "Latros semi-realistic atlas, isolated anatomy, transparent alpha, natural tissue colours, no labels/text/watermark; per-asset subject: arms",
+      "created": "2026-09-28"
+    },
+    {
+      "id": "back",
+      "filename": "back-atlas-v2.png",
+      "version": 2,
+      "bytes": 2592191,
+      "sha256": "d17c26925012a4bb6298f587ebfcfc32f53427629e9959ae980389763d2f9a4e",
+      "canvas": [
+        1024,
+        1536
+      ],
+      "view": "frontal or indicated cutaway",
+      "review_status": "not_anatomically_validated",
+      "human_reviewer": null,
+      "brief": "Isolated back navigation plate; no clinical interpretation.",
+      "generator": "OpenAI built-in image generation",
+      "prompt_family": "Latros semi-realistic atlas, isolated anatomy, transparent alpha, natural tissue colours, no labels/text/watermark; per-asset subject: back",
+      "created": "2026-09-28"
+    },
+    {
+      "id": "bladder",
+      "filename": "bladder-atlas-v2.png",
+      "version": 2,
+      "bytes": 1376830,
+      "sha256": "ed854ba1e3d12568d00a7bd8ebd7af58e8d58baf82c983bb6a5ae807961726ab",
+      "canvas": [
+        1145,
+        1374
+      ],
+      "view": "frontal or indicated cutaway",
+      "review_status": "not_anatomically_validated",
+      "human_reviewer": null,
+      "brief": "Isolated bladder navigation plate; no clinical interpretation.",
+      "generator": "OpenAI built-in image generation",
+      "prompt_family": "Latros semi-realistic atlas, isolated anatomy, transparent alpha, natural tissue colours, no labels/text/watermark; per-asset subject: bladder",
+      "created": "2026-09-28"
+    },
     {
       "id": "body",
       "filename": "body-atlas-v1.png",
@@ -24,6 +132,24 @@
       "review_status": "not_anatomically_validated",
       "human_reviewer": null,
       "brief": "Full body frontal, visible major organs and musculature, whole figure including feet."
+    },
+    {
+      "id": "cervical",
+      "filename": "cervical-atlas-v2.png",
+      "version": 2,
+      "bytes": 2183133,
+      "sha256": "c6644e6da0d0ec76d778cf95159ca856a1142f5f0425defbf8477de160976c66",
+      "canvas": [
+        1214,
+        1295
+      ],
+      "view": "frontal or indicated cutaway",
+      "review_status": "not_anatomically_validated",
+      "human_reviewer": null,
+      "brief": "Isolated cervical navigation plate; no clinical interpretation.",
+      "generator": "OpenAI built-in image generation",
+      "prompt_family": "Latros semi-realistic atlas, isolated anatomy, transparent alpha, natural tissue colours, no labels/text/watermark; per-asset subject: cervical",
+      "created": "2026-09-28"
     },
     {
       "id": "ear",
@@ -41,6 +167,24 @@
       "brief": "Ear cutaway showing outer, middle and inner structures."
     },
     {
+      "id": "elbow",
+      "filename": "elbow-atlas-v2.png",
+      "version": 2,
+      "bytes": 2099454,
+      "sha256": "eace2bc4365b0cea12ca365784676b4eb04ccd8be759e62bab3b9da31d493442",
+      "canvas": [
+        1024,
+        1536
+      ],
+      "view": "frontal or indicated cutaway",
+      "review_status": "not_anatomically_validated",
+      "human_reviewer": null,
+      "brief": "Isolated elbow navigation plate; no clinical interpretation.",
+      "generator": "OpenAI built-in image generation",
+      "prompt_family": "Latros semi-realistic atlas, isolated anatomy, transparent alpha, natural tissue colours, no labels/text/watermark; per-asset subject: elbow",
+      "created": "2026-09-28"
+    },
+    {
       "id": "eye",
       "filename": "eye-atlas-v1.png",
       "version": 1,
@@ -56,6 +200,60 @@
       "brief": "Eye cutaway revealing the globe internal layers."
     },
     {
+      "id": "foot",
+      "filename": "foot-atlas-v2.png",
+      "version": 2,
+      "bytes": 2176166,
+      "sha256": "0aa88d38ef07e0e34ba9c1cbe1aa20c9be7384a4a0374752cfc8870b8ff1ee3a",
+      "canvas": [
+        1024,
+        1536
+      ],
+      "view": "frontal or indicated cutaway",
+      "review_status": "not_anatomically_validated",
+      "human_reviewer": null,
+      "brief": "Isolated foot navigation plate; no clinical interpretation.",
+      "generator": "OpenAI built-in image generation",
+      "prompt_family": "Latros semi-realistic atlas, isolated anatomy, transparent alpha, natural tissue colours, no labels/text/watermark; per-asset subject: foot",
+      "created": "2026-09-28"
+    },
+    {
+      "id": "forearm",
+      "filename": "forearm-atlas-v2.png",
+      "version": 2,
+      "bytes": 1642640,
+      "sha256": "ddaf6cbd99e0ecc1e73bc21b64f3c504eba81fa27e18edf7fafc4ebfe98cf25b",
+      "canvas": [
+        1024,
+        1536
+      ],
+      "view": "frontal or indicated cutaway",
+      "review_status": "not_anatomically_validated",
+      "human_reviewer": null,
+      "brief": "Isolated forearm navigation plate; no clinical interpretation.",
+      "generator": "OpenAI built-in image generation",
+      "prompt_family": "Latros semi-realistic atlas, isolated anatomy, transparent alpha, natural tissue colours, no labels/text/watermark; per-asset subject: forearm",
+      "created": "2026-09-28"
+    },
+    {
+      "id": "hand",
+      "filename": "hand-atlas-v2.png",
+      "version": 2,
+      "bytes": 2320270,
+      "sha256": "6b572496d96e152159ba5438761752626287f50b5a7bf78dc5eec5c22aebb876",
+      "canvas": [
+        1024,
+        1536
+      ],
+      "view": "frontal or indicated cutaway",
+      "review_status": "not_anatomically_validated",
+      "human_reviewer": null,
+      "brief": "Isolated hand navigation plate; no clinical interpretation.",
+      "generator": "OpenAI built-in image generation",
+      "prompt_family": "Latros semi-realistic atlas, isolated anatomy, transparent alpha, natural tissue colours, no labels/text/watermark; per-asset subject: hand",
+      "created": "2026-09-28"
+    },
+    {
       "id": "head",
       "filename": "head-atlas-v1.png",
       "version": 1,
@@ -69,6 +267,186 @@
       "review_status": "not_anatomically_validated",
       "human_reviewer": null,
       "brief": "Frontal head anatomical muscles and transparent cutaways."
+    },
+    {
+      "id": "heart",
+      "filename": "heart-atlas-v2.png",
+      "version": 2,
+      "bytes": 1791523,
+      "sha256": "e3ae84b1759d4ca82108cbb9080c31a414078dd9b39eae2cb324f8924d21a316",
+      "canvas": [
+        1145,
+        1374
+      ],
+      "view": "frontal or indicated cutaway",
+      "review_status": "not_anatomically_validated",
+      "human_reviewer": null,
+      "brief": "Isolated heart navigation plate; no clinical interpretation.",
+      "generator": "OpenAI built-in image generation",
+      "prompt_family": "Latros semi-realistic atlas, isolated anatomy, transparent alpha, natural tissue colours, no labels/text/watermark; per-asset subject: heart",
+      "created": "2026-09-28"
+    },
+    {
+      "id": "hip",
+      "filename": "hip-atlas-v2.png",
+      "version": 2,
+      "bytes": 2418060,
+      "sha256": "6275bd7388314db17ff31ab0d924ef316cf8328e609f6a34fd9e5959962cd87d",
+      "canvas": [
+        1024,
+        1536
+      ],
+      "view": "frontal or indicated cutaway",
+      "review_status": "not_anatomically_validated",
+      "human_reviewer": null,
+      "brief": "Isolated hip navigation plate; no clinical interpretation.",
+      "generator": "OpenAI built-in image generation",
+      "prompt_family": "Latros semi-realistic atlas, isolated anatomy, transparent alpha, natural tissue colours, no labels/text/watermark; per-asset subject: hip",
+      "created": "2026-09-28"
+    },
+    {
+      "id": "intestines",
+      "filename": "intestines-atlas-v2.png",
+      "version": 2,
+      "bytes": 2128395,
+      "sha256": "23712b4cf5b60d536ef536c20787904f07b2f524176944274a910d72bd3297d5",
+      "canvas": [
+        1145,
+        1374
+      ],
+      "view": "frontal or indicated cutaway",
+      "review_status": "not_anatomically_validated",
+      "human_reviewer": null,
+      "brief": "Isolated intestines navigation plate; no clinical interpretation.",
+      "generator": "OpenAI built-in image generation",
+      "prompt_family": "Latros semi-realistic atlas, isolated anatomy, transparent alpha, natural tissue colours, no labels/text/watermark; per-asset subject: intestines",
+      "created": "2026-09-28"
+    },
+    {
+      "id": "kidneys",
+      "filename": "kidneys-atlas-v2.png",
+      "version": 2,
+      "bytes": 1916429,
+      "sha256": "e59a5f1820a62677bc72d32e2e4cd98cdd579d5677b3fc04dbcda63a09db5ec3",
+      "canvas": [
+        1145,
+        1374
+      ],
+      "view": "frontal or indicated cutaway",
+      "review_status": "not_anatomically_validated",
+      "human_reviewer": null,
+      "brief": "Isolated kidneys navigation plate; no clinical interpretation.",
+      "generator": "OpenAI built-in image generation",
+      "prompt_family": "Latros semi-realistic atlas, isolated anatomy, transparent alpha, natural tissue colours, no labels/text/watermark; per-asset subject: kidneys",
+      "created": "2026-09-28"
+    },
+    {
+      "id": "knee",
+      "filename": "knee-atlas-v2.png",
+      "version": 2,
+      "bytes": 2256651,
+      "sha256": "25b5cea45586ff928ca0f2c297b38986de9419b015279861c6c4d15ad6a311d6",
+      "canvas": [
+        1024,
+        1536
+      ],
+      "view": "frontal or indicated cutaway",
+      "review_status": "not_anatomically_validated",
+      "human_reviewer": null,
+      "brief": "Isolated knee navigation plate; no clinical interpretation.",
+      "generator": "OpenAI built-in image generation",
+      "prompt_family": "Latros semi-realistic atlas, isolated anatomy, transparent alpha, natural tissue colours, no labels/text/watermark; per-asset subject: knee",
+      "created": "2026-09-28"
+    },
+    {
+      "id": "legs",
+      "filename": "legs-atlas-v2.png",
+      "version": 2,
+      "bytes": 1834361,
+      "sha256": "1557d443c9fb2e493ff90bc1baceec03d77cf33338c157b36cbf27abe779ec06",
+      "canvas": [
+        1024,
+        1536
+      ],
+      "view": "frontal or indicated cutaway",
+      "review_status": "not_anatomically_validated",
+      "human_reviewer": null,
+      "brief": "Isolated legs navigation plate; no clinical interpretation.",
+      "generator": "OpenAI built-in image generation",
+      "prompt_family": "Latros semi-realistic atlas, isolated anatomy, transparent alpha, natural tissue colours, no labels/text/watermark; per-asset subject: legs",
+      "created": "2026-09-28"
+    },
+    {
+      "id": "liver",
+      "filename": "liver-atlas-v2.png",
+      "version": 2,
+      "bytes": 2298111,
+      "sha256": "baa19a8ab758fcc8905a49e771bb69597e442f50bf41dbad17a4134003a4c79f",
+      "canvas": [
+        1536,
+        1024
+      ],
+      "view": "frontal or indicated cutaway",
+      "review_status": "not_anatomically_validated",
+      "human_reviewer": null,
+      "brief": "Isolated liver navigation plate; no clinical interpretation.",
+      "generator": "OpenAI built-in image generation",
+      "prompt_family": "Latros semi-realistic atlas, isolated anatomy, transparent alpha, natural tissue colours, no labels/text/watermark; per-asset subject: liver",
+      "created": "2026-09-28"
+    },
+    {
+      "id": "lower-leg",
+      "filename": "lower-leg-atlas-v2.png",
+      "version": 2,
+      "bytes": 2077020,
+      "sha256": "9ae2d1c087a16fed3631230534a8013fe89029099ed08b53686532751ac288cf",
+      "canvas": [
+        1024,
+        1536
+      ],
+      "view": "frontal or indicated cutaway",
+      "review_status": "not_anatomically_validated",
+      "human_reviewer": null,
+      "brief": "Isolated lower-leg navigation plate; no clinical interpretation.",
+      "generator": "OpenAI built-in image generation",
+      "prompt_family": "Latros semi-realistic atlas, isolated anatomy, transparent alpha, natural tissue colours, no labels/text/watermark; per-asset subject: lower-leg",
+      "created": "2026-09-28"
+    },
+    {
+      "id": "lumbar",
+      "filename": "lumbar-atlas-v2.png",
+      "version": 2,
+      "bytes": 2825521,
+      "sha256": "04bc5c96ec4043e12ee4fa04c1c8490d3865b72a0fde906f77c34487d25a17db",
+      "canvas": [
+        1024,
+        1536
+      ],
+      "view": "frontal or indicated cutaway",
+      "review_status": "not_anatomically_validated",
+      "human_reviewer": null,
+      "brief": "Isolated lumbar navigation plate; no clinical interpretation.",
+      "generator": "OpenAI built-in image generation",
+      "prompt_family": "Latros semi-realistic atlas, isolated anatomy, transparent alpha, natural tissue colours, no labels/text/watermark; per-asset subject: lumbar",
+      "created": "2026-09-28"
+    },
+    {
+      "id": "lungs",
+      "filename": "lungs-atlas-v2.png",
+      "version": 2,
+      "bytes": 2128388,
+      "sha256": "b8f504127855e150338df95ed828b08f58790836b749e721f38cc19362dab7db",
+      "canvas": [
+        1144,
+        1375
+      ],
+      "view": "frontal or indicated cutaway",
+      "review_status": "not_anatomically_validated",
+      "human_reviewer": null,
+      "brief": "Isolated lungs navigation plate; no clinical interpretation.",
+      "generator": "OpenAI built-in image generation",
+      "prompt_family": "Latros semi-realistic atlas, isolated anatomy, transparent alpha, natural tissue colours, no labels/text/watermark; per-asset subject: lungs",
+      "created": "2026-09-28"
     },
     {
       "id": "mouth-throat",
@@ -101,6 +479,24 @@
       "brief": "Frontal nasal cavity cutaway, septum and turbinates."
     },
     {
+      "id": "shoulder",
+      "filename": "shoulder-atlas-v2.png",
+      "version": 2,
+      "bytes": 2341349,
+      "sha256": "5ff3652ec4ade518b58ad5ae2cd1716adf9fbcc8c9e08671802749de51f7e967",
+      "canvas": [
+        1223,
+        1286
+      ],
+      "view": "frontal or indicated cutaway",
+      "review_status": "not_anatomically_validated",
+      "human_reviewer": null,
+      "brief": "Isolated shoulder navigation plate; no clinical interpretation.",
+      "generator": "OpenAI built-in image generation",
+      "prompt_family": "Latros semi-realistic atlas, isolated anatomy, transparent alpha, natural tissue colours, no labels/text/watermark; per-asset subject: shoulder",
+      "created": "2026-09-28"
+    },
+    {
       "id": "sinuses",
       "filename": "sinuses-atlas-v1.png",
       "version": 1,
@@ -114,6 +510,150 @@
       "review_status": "not_anatomically_validated",
       "human_reviewer": null,
       "brief": "Frontal face cutaway with visible paranasal sinus cavities."
+    },
+    {
+      "id": "spine",
+      "filename": "spine-atlas-v2.png",
+      "version": 2,
+      "bytes": 2140201,
+      "sha256": "0ba003c0c79f801ed67b421105c72687c0a23419c9cf71a017236fe0f7e9b564",
+      "canvas": [
+        1024,
+        1536
+      ],
+      "view": "frontal or indicated cutaway",
+      "review_status": "not_anatomically_validated",
+      "human_reviewer": null,
+      "brief": "Isolated spine navigation plate; no clinical interpretation.",
+      "generator": "OpenAI built-in image generation",
+      "prompt_family": "Latros semi-realistic atlas, isolated anatomy, transparent alpha, natural tissue colours, no labels/text/watermark; per-asset subject: spine",
+      "created": "2026-09-28"
+    },
+    {
+      "id": "stomach",
+      "filename": "stomach-atlas-v2.png",
+      "version": 2,
+      "bytes": 1539795,
+      "sha256": "8140fba458c359a1c73703c2b0b5d770463302baebe19ae40838bfb836ebc8ea",
+      "canvas": [
+        1145,
+        1374
+      ],
+      "view": "frontal or indicated cutaway",
+      "review_status": "not_anatomically_validated",
+      "human_reviewer": null,
+      "brief": "Isolated stomach navigation plate; no clinical interpretation.",
+      "generator": "OpenAI built-in image generation",
+      "prompt_family": "Latros semi-realistic atlas, isolated anatomy, transparent alpha, natural tissue colours, no labels/text/watermark; per-asset subject: stomach",
+      "created": "2026-09-28"
+    },
+    {
+      "id": "thigh",
+      "filename": "thigh-atlas-v2.png",
+      "version": 2,
+      "bytes": 1790673,
+      "sha256": "e59c02ce5b5fcd93099092c243631180a313e7b4418dc016ccf777761f0a7c97",
+      "canvas": [
+        1024,
+        1536
+      ],
+      "view": "frontal or indicated cutaway",
+      "review_status": "not_anatomically_validated",
+      "human_reviewer": null,
+      "brief": "Isolated thigh navigation plate; no clinical interpretation.",
+      "generator": "OpenAI built-in image generation",
+      "prompt_family": "Latros semi-realistic atlas, isolated anatomy, transparent alpha, natural tissue colours, no labels/text/watermark; per-asset subject: thigh",
+      "created": "2026-09-28"
+    },
+    {
+      "id": "thoracic-back",
+      "filename": "thoracic-back-atlas-v2.png",
+      "version": 2,
+      "bytes": 2623847,
+      "sha256": "148db577361e7714d830b2df414b69ddab4ffc6421001e6e59d1d07e64668df2",
+      "canvas": [
+        1024,
+        1536
+      ],
+      "view": "frontal or indicated cutaway",
+      "review_status": "not_anatomically_validated",
+      "human_reviewer": null,
+      "brief": "Isolated thoracic-back navigation plate; no clinical interpretation.",
+      "generator": "OpenAI built-in image generation",
+      "prompt_family": "Latros semi-realistic atlas, isolated anatomy, transparent alpha, natural tissue colours, no labels/text/watermark; per-asset subject: thoracic-back",
+      "created": "2026-09-28"
+    },
+    {
+      "id": "thorax",
+      "filename": "thorax-atlas-v2.png",
+      "version": 2,
+      "bytes": 2051136,
+      "sha256": "3d567874d3e333b1d6d7372e9b7bd41e7c790b39483f1c93c1f7ca2fa29dff2c",
+      "canvas": [
+        1145,
+        1374
+      ],
+      "view": "frontal or indicated cutaway",
+      "review_status": "not_anatomically_validated",
+      "human_reviewer": null,
+      "brief": "Isolated thorax navigation plate; no clinical interpretation.",
+      "generator": "OpenAI built-in image generation",
+      "prompt_family": "Latros semi-realistic atlas, isolated anatomy, transparent alpha, natural tissue colours, no labels/text/watermark; per-asset subject: thorax",
+      "created": "2026-09-28"
+    },
+    {
+      "id": "ureters",
+      "filename": "ureters-atlas-v2.png",
+      "version": 2,
+      "bytes": 1519848,
+      "sha256": "b6f415d74d1e641ca8aaff968ee9f7dced1fb47d90094cbd2e07bad66d378650",
+      "canvas": [
+        1024,
+        1536
+      ],
+      "view": "frontal or indicated cutaway",
+      "review_status": "not_anatomically_validated",
+      "human_reviewer": null,
+      "brief": "Isolated ureters navigation plate; no clinical interpretation.",
+      "generator": "OpenAI built-in image generation",
+      "prompt_family": "Latros semi-realistic atlas, isolated anatomy, transparent alpha, natural tissue colours, no labels/text/watermark; per-asset subject: ureters",
+      "created": "2026-09-28"
+    },
+    {
+      "id": "urinary",
+      "filename": "urinary-atlas-v2.png",
+      "version": 2,
+      "bytes": 2621969,
+      "sha256": "c1efa594cec773c5e7f0e752e03374f20c40eeba024677f44fa45537bd563650",
+      "canvas": [
+        1024,
+        1536
+      ],
+      "view": "frontal or indicated cutaway",
+      "review_status": "not_anatomically_validated",
+      "human_reviewer": null,
+      "brief": "Isolated urinary navigation plate; no clinical interpretation.",
+      "generator": "OpenAI built-in image generation",
+      "prompt_family": "Latros semi-realistic atlas, isolated anatomy, transparent alpha, natural tissue colours, no labels/text/watermark; per-asset subject: urinary",
+      "created": "2026-09-28"
+    },
+    {
+      "id": "wrist",
+      "filename": "wrist-atlas-v2.png",
+      "version": 2,
+      "bytes": 2383033,
+      "sha256": "719132f0f810d82dbb0bd27ea0f3e21801c59f85be4f67bbc7cc4b29b1ff2730",
+      "canvas": [
+        1024,
+        1536
+      ],
+      "view": "frontal or indicated cutaway",
+      "review_status": "not_anatomically_validated",
+      "human_reviewer": null,
+      "brief": "Isolated wrist navigation plate; no clinical interpretation.",
+      "generator": "OpenAI built-in image generation",
+      "prompt_family": "Latros semi-realistic atlas, isolated anatomy, transparent alpha, natural tissue colours, no labels/text/watermark; per-asset subject: wrist",
+      "created": "2026-09-28"
     }
   ]
 }
