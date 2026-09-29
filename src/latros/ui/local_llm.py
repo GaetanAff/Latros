@@ -153,7 +153,8 @@ class LocalLlamaServer:
                     "0",
                 ]
             )
-        flags = subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0
+        # CREATE_NO_WINDOW exists only on Windows; Linux mypy checks the same source.
+        flags = getattr(subprocess, "CREATE_NO_WINDOW", 0) if sys.platform == "win32" else 0
         try:
             self._process = subprocess.Popen(
                 args,

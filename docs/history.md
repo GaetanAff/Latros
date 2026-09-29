@@ -14,6 +14,9 @@ Dernière mise à jour : 29 septembre 2026.
   après désactivation du raisonnement du serveur ; aucun dossier patient réel employé. Ruff,
   format, mypy strict, schémas, 250 tests Python et 20 tests frontend verts. Le modèle absent n'empêche pas la recherche
   ni l'anatomie ; qualité clinique de l'extraction non validée.
+- Correctif de portabilité CI : la constante Windows de création sans fenêtre est résolue
+  seulement sur Windows ; `mypy --platform linux` passe également. Aucun changement du transport
+  loopback ou des données du cas.
 - `general_v1`, `semantic_v1`, snapshots, goldens, `clinical_validation: false`,
   `publishable: false`, `research_unreviewed: true` et `safety_status: not_evaluated`
   restent inchangés. Vérification facultative et Huatuo restent des tranches séparées.
