@@ -15,7 +15,9 @@ function patientContextFromForm() {
     allergies:contextItems(byId('patient-allergies').value),
     known_conditions:contextItems(byId('patient-conditions').value),
     medications:contextItems(byId('patient-medications').value),
-    relevant_history:contextItems(byId('patient-history').value), clinical_evaluation:'not_evaluated',
+    relevant_history:contextItems(byId('patient-history').value),
+    symptom_narrative:byId('patient-narrative').value.trim() || null,
+    clinical_evaluation:'not_evaluated',
   };
 }
 
@@ -25,6 +27,7 @@ function restorePatientForm(session) {
   byId('patient-first-name').value = context?.demographics.first_name || '';
   byId('patient-last-name').value = context?.demographics.last_name || '';
   byId('patient-age').value = context?.demographics.age_years ?? session?.clinical_case?.subject_context?.age?.value ?? '';
+  byId('patient-narrative').value = context?.symptom_narrative || '';
   for (const [id,key] of [['allergies','allergies'],['conditions','known_conditions'],['medications','medications'],['history','relevant_history']]) {
     byId('patient-'+id).value = (context?.[key] || []).map(item=>item.label).join('\n');
   }
@@ -52,6 +55,7 @@ async function savePatientInformation() {
   state.patientDirty = false;
   state.ageDirty = false;
   state.caseDirty = true;
+  byId('nlp-panel').hidden = true;
   state.resultRun = null; state.questionRun = null;
   byId('patient-summary').textContent = context.demographics.first_name;
 }
@@ -61,6 +65,7 @@ byId('patient-form').addEventListener('submit',event=>{
   guarded(async()=>{
     await savePatientInformation();
     showScreen('home'); await anatomyNavigate(state.anatomy.region);
+    if (state.session.patient_context?.symptom_narrative) void startSymptomInterpretation();
   },t('saving_information'));
 });
 byId('patient-form').addEventListener('input',()=>{state.patientDirty=true;state.ageDirty=true;});

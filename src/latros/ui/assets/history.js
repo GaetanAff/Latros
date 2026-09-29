@@ -13,8 +13,10 @@ function isSimpleCompatible(session) {
     .map((item) => item.resulting_observation_id));
   return ['general_v1','general_question_v2','rare_question_v1'].includes(session.selection?.strategy_id)
     && !clinicalCase.subject_context?.sex
-    && !(clinicalCase.source_statements || []).length
-    && !(clinicalCase.observation_proposals || []).length
+    && (clinicalCase.source_statements || []).every(item=>item.author_type==='patient')
+    && (clinicalCase.observation_proposals || []).every(item=>
+      item.method?.kind==='llm' && item.method?.tool==='Qwen3.5-9B-local'
+      && ['accepted','rejected'].includes(item.state))
     && (clinicalCase.observations || []).every((item) =>
       answerIds.has(item.observation_id)
       || (["symptom", "sign", "exam"].includes(item.kind)
@@ -75,6 +77,8 @@ async function resumeSession(sessionId) {
     && item.strategy_id === session.selection.strategy_id);
   if (!available) throw new Error(t("session_snapshot_missing"));
   state.session = session;
+  nlpProposal = null;
+  byId('nlp-panel').hidden = true;
   await restoreConsultationRuns(session);
   state.caseDirty = false;
   state.ageDirty = false;

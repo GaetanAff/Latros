@@ -111,7 +111,7 @@ def test_ui_shell_is_local_static_and_explicit_about_limits(tmp_path: Path) -> N
     assert response.status_code == 200
     assert "Explorez une région du corps" in response.text
     assert 'id="anatomy-canvas"' in response.text
-    assert "La saisie libre n’est pas encore interprétée" in response.text
+    assert "Décrivez vos symptômes dans Informations" in response.text
     assert "Urgences non évaluées" in response.text
     assert "Mode expert" in response.text
     assert "script-src 'self'" in response.headers["content-security-policy"]
@@ -249,6 +249,76 @@ def test_ui_simple_flow_uses_local_concepts_and_resumable_runs(synthetic_v2) -> 
         item["session_id"] == session["session_id"]
         for item in client.get("/internal/v1/sessions").json()["items"]
     )
+
+
+def test_local_qwen_proposals_require_patient_confirmation(synthetic_v2) -> None:
+    root, registry, knowledge = synthetic_v2
+    build_snapshot_v2(root, registry, "test-v2", knowledge)
+    application = create_app(root)
+
+    async def fake_local_model(model: str, messages: list[dict[str, str]]) -> str:
+        assert model == "qwen"
+        assert all("candidate" not in message["content"] for message in messages)
+        return '{"mentions":[{"text":"Invented finding 1","status":"present"}]}'
+
+    application.state.local_llm.complete = fake_local_model
+    with TestClient(application) as client:
+        session = _select(client, _create_session(client), "test-v2", "general_v1")
+        patient = client.put(
+            f"/internal/v1/sessions/{session['session_id']}/patient-context",
+            json={
+                "revision": session["revision"],
+                "patient_context": {
+                    "context_version": 1,
+                    "demographics": {"first_name": "Pat", "last_name": "Local", "age_years": 30},
+                    "symptom_narrative": "I have Invented finding 1.",
+                },
+            },
+        ).json()
+        base = f"/internal/v1/sessions/{session['session_id']}/symptom-interpretations"
+        extracted = client.post(base, json={"revision": patient["revision"], "language": "en"})
+        assert extracted.status_code == 200, extracted.text
+        mention = extracted.json()["mentions"][0]
+        assert mention["options"]
+        assert not client.get(f"/internal/v1/sessions/{session['session_id']}").json()[
+            "clinical_case"
+        ]["observations"]
+        option = mention["options"][0]
+        confirmed = client.post(
+            base + "/confirm",
+            json={
+                "revision": patient["revision"],
+                "narrative": "I have Invented finding 1.",
+                "language": "en",
+                "confirmed": [
+                    {
+                        "text": mention["text"],
+                        "start": mention["start"],
+                        "end": mention["end"],
+                        "status": "present",
+                        "concept_id": option["concept_id"],
+                        "system": option["system"],
+                        "code": option["code"],
+                    }
+                ],
+            },
+        )
+        assert confirmed.status_code == 200, confirmed.text
+        case = confirmed.json()["clinical_case"]
+        assert case["observations"][0]["concept"]["concept_id"] == option["concept_id"]
+        assert case["observation_proposals"][0]["state"] == "accepted"
+        assert case["observation_proposals"][0]["method"]["kind"] == "llm"
+        assert (
+            client.post(
+                base + "/confirm",
+                json={
+                    "revision": patient["revision"],
+                    "narrative": "I have Invented finding 1.",
+                    "confirmed": [],
+                },
+            ).status_code
+            == 409
+        )
 
 
 def test_ui_semantic_v1_workflow_preserves_safety_and_scale(built) -> None:

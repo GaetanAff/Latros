@@ -44,7 +44,7 @@ function environment(saved = new Map()) {
       return {ok:true,status:200,json:async()=>body,text:async()=>'<svg />'};
     }});
   vm.runInContext(source("i18n.js"),context);
-  for(const name of ['state','api','search','observations','questions','results','history','anatomy','consultation','patient','refinements','checker']) vm.runInContext(source(name+'.js'),context);
+  for(const name of ['state','api','search','observations','questions','results','history','anatomy','consultation','patient','symptom-nlp','refinements','checker']) vm.runInContext(source(name+'.js'),context);
   return {context,node,calls,saved,question,run:code=>vm.runInContext(code,context)};
 }
 async function ready(env) { for(let i=0;i<20 && env.run("state.busy");i++) await new Promise(resolve=>setImmediate(resolve)); }
@@ -66,14 +66,34 @@ test('information is the first step; local patient context is structured and not
   env.node('patient-last-name').value='Local';
   env.node('patient-age').value='34';
   env.node('patient-allergies').value='Pollen\n Penicillin';
+  env.node('patient-narrative').value='J’ai le nez qui coule.';
   const context=JSON.parse(env.run('JSON.stringify(patientContextFromForm())'));
   assert.deepEqual(context.demographics,{first_name:'Pat',last_name:'Local',age_years:34});
   assert.equal(context.allergies.length,2);
   assert.equal(context.allergies[0].evaluation_status,'captured_not_evaluated');
   assert.equal(context.clinical_evaluation,'not_evaluated');
+  assert.equal(context.symptom_narrative,'J’ai le nez qui coule.');
   assert.equal(env.run('state.selected.length'),0);
   env.node('patient-age').value='';
   assert.throws(()=>env.run('patientContextFromForm()'));
+});
+
+test('Qwen suggestions remain unconfirmed until the patient acts and resume stays simple',async()=>{
+  const env=environment(); await ready(env);
+  env.run(`nlpProposal={narrative:'I have a runny nose',mentions:[{
+    text:'runny nose',start:9,end:19,status:'present',suggested_concept_id:'finding',
+    options:[{concept_id:'finding',system:'HPO',code:'HP:0031417',label:'Rhinorrhea'}]
+  }]};renderSymptomInterpretation();`);
+  assert.match(env.node('nlp-mentions').innerHTML,/runny nose/);
+  assert.match(env.node('nlp-mentions').innerHTML,/checked/);
+  assert.equal(env.run('state.selected.length'),0);
+  const compatible=env.run(`isSimpleCompatible({selection:{strategy_id:'general_v1'},
+    clinical_case:{subject_context:{},source_statements:[{author_type:'patient'}],
+    observation_proposals:[{method:{kind:'llm',tool:'Qwen3.5-9B-local'},state:'accepted'}],
+    observations:[{observation_id:'o1',kind:'symptom',concept:{concept_id:'finding'},
+      clinical_status:'present',evaluation_status:'assessed',acquisition_method:'reported',
+      certainty:'asserted',experiencer:'patient'}]}})`);
+  assert.equal(compatible,true);
 });
 
 test('profile-only session receives a general selection so history can resume it',async()=>{

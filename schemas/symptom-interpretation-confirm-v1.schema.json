@@ -1,0 +1,98 @@
+{
+  "$defs": {
+    "ConfirmedMention": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "minLength": 1,
+          "title": "Code",
+          "type": "string"
+        },
+        "concept_id": {
+          "minLength": 1,
+          "title": "Concept Id",
+          "type": "string"
+        },
+        "end": {
+          "exclusiveMinimum": 0,
+          "title": "End",
+          "type": "integer"
+        },
+        "start": {
+          "minimum": 0,
+          "title": "Start",
+          "type": "integer"
+        },
+        "status": {
+          "enum": [
+            "present",
+            "absent",
+            "unknown"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "system": {
+          "minLength": 1,
+          "title": "System",
+          "type": "string"
+        },
+        "text": {
+          "maxLength": 160,
+          "minLength": 2,
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "text",
+        "start",
+        "end",
+        "status",
+        "concept_id",
+        "system",
+        "code"
+      ],
+      "title": "ConfirmedMention",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "confirmed": {
+      "items": {
+        "$ref": "#/$defs/ConfirmedMention"
+      },
+      "maxItems": 20,
+      "title": "Confirmed",
+      "type": "array"
+    },
+    "language": {
+      "default": "fr",
+      "enum": [
+        "fr",
+        "de",
+        "en"
+      ],
+      "title": "Language",
+      "type": "string"
+    },
+    "narrative": {
+      "maxLength": 4000,
+      "minLength": 1,
+      "title": "Narrative",
+      "type": "string"
+    },
+    "revision": {
+      "minimum": 0,
+      "title": "Revision",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "revision",
+    "narrative"
+  ],
+  "title": "ConfirmInterpretationRequest",
+  "type": "object"
+}

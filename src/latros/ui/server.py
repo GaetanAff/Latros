@@ -25,6 +25,7 @@ from latros.application.service import ResearchApplicationService
 from latros.clinical.v2 import ClinicalCaseV2, QuestionResponseV2
 from latros.common import LatrosError, sha256
 from latros.ui.anatomy import load_navigation
+from latros.ui.local_llm import LocalLlamaServer
 from latros.ui.models import (
     CaseRequest,
     ConsultationWorkflow,
@@ -44,6 +45,14 @@ from latros.ui.refinements import (
 )
 from latros.ui.run_transport import summary_projection
 from latros.ui.sessions import SessionStore
+from latros.ui.symptom_interpretation import (
+    SYSTEM_PROMPT,
+    ConfirmInterpretationRequest,
+    SymptomInterpretationRequest,
+    confirm_mentions,
+    map_mentions,
+    parse_mentions,
+)
 
 PACKAGE_ROOT = Path(__file__).resolve().parent
 TEMPLATES = Jinja2Templates(directory=str(PACKAGE_ROOT / "templates"))
@@ -68,6 +77,7 @@ def create_app(root: Path) -> FastAPI:
         try:
             yield
         finally:
+            application.state.local_llm.close()
             application.state.service.close()
 
     app = FastAPI(
@@ -80,6 +90,7 @@ def create_app(root: Path) -> FastAPI:
     )
     app.state.service = ResearchApplicationService(resolved_root)
     app.state.sessions = SessionStore(resolved_root)
+    app.state.local_llm = LocalLlamaServer(resolved_root)
     app.add_middleware(
         TrustedHostMiddleware,
         allowed_hosts=["127.0.0.1", "localhost", "testserver"],
@@ -341,6 +352,77 @@ def create_app(root: Path) -> FastAPI:
                     "clinical_case": project_age(current.clinical_case, payload.patient_context),
                 }
             ),
+        )
+        return session.model_dump(mode="json")
+
+    @app.get("/internal/v1/local-models")
+    async def local_models(request: Request) -> dict[str, Any]:
+        return {"available": request.app.state.local_llm.status(), "offline_only": True}
+
+    @app.post("/internal/v1/sessions/{session_id}/symptom-interpretations")
+    async def interpret_symptoms(
+        request: Request, session_id: str, payload: SymptomInterpretationRequest
+    ) -> dict[str, Any]:
+        session = _sessions(request).load(session_id)
+        _require_request_revision(session.revision, payload.revision)
+        if session.selection is None or session.patient_context is None:
+            raise LatrosError("Select a snapshot and save patient information first")
+        narrative = (session.patient_context.symptom_narrative or "").strip()
+        if not narrative:
+            raise LatrosError("No patient symptom description has been saved")
+        raw = await request.app.state.local_llm.complete(
+            "qwen",
+            [
+                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "user", "content": narrative},
+            ],
+        )
+        extracted = parse_mentions(raw, narrative)
+        service = _service(request)
+        selection = session.selection
+        mentions = map_mentions(
+            extracted,
+            lambda phrase: service.search_display_concepts(
+                selection.snapshot_id,
+                selection.strategy_id,
+                phrase,
+                payload.language,
+                limit=3,
+            ),
+            selection.snapshot_id,
+            selection.strategy_id,
+        )
+        return {
+            "revision": session.revision,
+            "narrative": narrative,
+            "mentions": [item.model_dump(mode="json") for item in mentions],
+            "model": "Qwen3.5-9B-local",
+            "requires_confirmation": True,
+        }
+
+    @app.post("/internal/v1/sessions/{session_id}/symptom-interpretations/confirm")
+    async def confirm_symptoms(
+        request: Request, session_id: str, payload: ConfirmInterpretationRequest
+    ) -> dict[str, Any]:
+        current = _sessions(request).load(session_id)
+        _require_request_revision(current.revision, payload.revision)
+        if current.selection is None or current.patient_context is None:
+            raise LatrosError("The session has no saved patient information or snapshot")
+        if payload.narrative != (current.patient_context.symptom_narrative or "").strip():
+            raise LatrosError("The patient symptom description changed before confirmation")
+        service = _service(request)
+        selection = current.selection
+        updated_case = confirm_mentions(
+            current.clinical_case,
+            payload,
+            lambda system, code: service.resolve_question_concept(
+                selection.snapshot_id, selection.strategy_id, system, code
+            ),
+        )
+        session = _sessions(request).update(
+            session_id,
+            payload.revision,
+            lambda value: value.model_copy(update={"clinical_case": updated_case}),
         )
         return session.model_dump(mode="json")
 

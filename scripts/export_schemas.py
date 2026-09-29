@@ -30,6 +30,10 @@ from latros.sources.registry_v2 import RegistryV2
 from latros.ui.models import ResearchSession
 from latros.ui.patient_context import PatientContext
 from latros.ui.refinements import RefinementAnswer, SymptomRefinementDefinition
+from latros.ui.symptom_interpretation import (
+    ConfirmInterpretationRequest,
+    SymptomInterpretationRequest,
+)
 
 
 def main() -> None:
@@ -75,6 +79,12 @@ def main() -> None:
         "patient-context-v1.schema.json": PatientContext.model_json_schema(),
         "symptom-refinement-v1.schema.json": SymptomRefinementDefinition.model_json_schema(),
         "symptom-refinement-answer-v1.schema.json": RefinementAnswer.model_json_schema(),
+        "symptom-interpretation-request-v1.schema.json": (
+            SymptomInterpretationRequest.model_json_schema()
+        ),
+        "symptom-interpretation-confirm-v1.schema.json": (
+            ConfirmInterpretationRequest.model_json_schema()
+        ),
     }
     for name, document in documents.items():
         path = root / name

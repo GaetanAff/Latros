@@ -2,6 +2,19 @@
 // Versioned, local presentation strings. No medical inference or translation service.
 (() => {
   const catalog = {
+"narrative_label": ["Décrivez vos symptômes avec vos mots (facultatif)","Beschreiben Sie Ihre Beschwerden in eigenen Worten (freiwillig)","Describe your symptoms in your own words (optional)"],
+"narrative_placeholder": ["Par exemple : J’ai le nez qui coule et mal à la gorge…","Zum Beispiel: Meine Nase läuft und ich habe Halsschmerzen…","For example: I have a runny nose and a sore throat…"],
+"narrative_note": ["Un modèle local peut proposer des symptômes ; vous les confirmerez avant l’analyse.","Ein lokales Modell kann Symptome vorschlagen; Sie bestätigen sie vor der Analyse.","A local model may suggest symptoms; you confirm them before analysis."],
+"nlp_title": ["Symptômes repérés dans votre description","In Ihrer Beschreibung erkannte Symptome","Symptoms found in your description"],
+"nlp_loading": ["Analyse locale de votre description en cours… Vous pouvez continuer à explorer.","Ihre Beschreibung wird lokal verarbeitet… Sie können weiter erkunden.","Processing your description locally… You can keep exploring."],
+"nlp_unavailable": ["Le modèle local est indisponible. Ajoutez vos symptômes par recherche ou anatomie.","Das lokale Modell ist nicht verfügbar. Fügen Sie Symptome über Suche oder Anatomie hinzu.","The local model is unavailable. Add symptoms through search or anatomy."],
+"nlp_review": ["Vérifiez ces propositions. Rien n’est ajouté avant votre confirmation.","Prüfen Sie diese Vorschläge. Vor Ihrer Bestätigung wird nichts hinzugefügt.","Review these suggestions. Nothing is added before you confirm."],
+"nlp_no_match": ["Aucun symptôme fiable repéré. Utilisez la recherche ou l’anatomie.","Kein verlässliches Symptom erkannt. Nutzen Sie Suche oder Anatomie.","No reliable symptom found. Use search or anatomy."],
+"nlp_choice": ["Concept proposé","Vorgeschlagenes Konzept","Suggested concept"],
+"nlp_choose": ["Choisir un concept","Konzept auswählen","Choose a concept"],
+"nlp_confirm": ["Confirmer les symptômes sélectionnés","Ausgewählte Symptome bestätigen","Confirm selected symptoms"],
+"nlp_confirmed": ["Symptômes confirmés et ajoutés au cas.","Symptome bestätigt und zum Fall hinzugefügt.","Symptoms confirmed and added to the case."],
+"nlp_saving": ["Enregistrement des symptômes confirmés…","Bestätigte Symptome werden gespeichert…","Saving confirmed symptoms…"],
 "region_more": ["Voir plus","Mehr anzeigen","See more"],
 "region_search": ["Rechercher dans cette région…","In dieser Region suchen…","Search this region…"],
 "my_information": ["Mes informations","Meine Angaben","My information"],
@@ -150,9 +163,9 @@
     "Search for a symptom…"
   ],
   "search_hint": [
-    "Sélectionnez une suggestion. La saisie libre n’est pas encore interprétée.",
-    "Wählen Sie einen Vorschlag. Freitext wird noch nicht interpretiert.",
-    "Select a suggestion. Free text is not yet interpreted."
+    "Sélectionnez une suggestion. Ce champ ne convertit pas le texte libre ; décrivez vos symptômes dans Informations.",
+    "Wählen Sie einen Vorschlag. Dieses Feld wandelt Freitext nicht um; beschreiben Sie Ihre Beschwerden unter Angaben.",
+    "Select a suggestion. This field does not interpret free text; describe your symptoms in Information."
   ],
   "continue": [
     "Continuer",

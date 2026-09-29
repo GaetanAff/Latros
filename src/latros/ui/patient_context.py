@@ -43,6 +43,7 @@ class PatientContext(Contract):
     known_conditions: list[SelfReportedContextItem] = Field(default_factory=list, max_length=30)
     medications: list[SelfReportedContextItem] = Field(default_factory=list, max_length=30)
     relevant_history: list[SelfReportedContextItem] = Field(default_factory=list, max_length=30)
+    symptom_narrative: str | None = Field(default=None, max_length=4000)
     clinical_evaluation: Literal["not_evaluated"] = "not_evaluated"
 
 
