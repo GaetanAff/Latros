@@ -204,7 +204,7 @@ def test_offline_http_same_scientific_question_run_and_snapshot(display_snapshot
 def test_alias_lexicon_unambiguous_and_presentation_only():
     lexicon = load_display_lexicon()
     assert lexicon["role"] == "display_and_explicit_selection_only"
-    assert len(lexicon["entries"]) == 150
+    assert len(lexicon["entries"]) == 170
     assert normalize_search("TÊTE-qui-tourne") == "tete qui tourne"
     assert normalize_search("Übelkeit") == "ubelkeit"
     assert normalize_search("groß") == "gross"
@@ -232,9 +232,30 @@ def test_translation_review_export_is_deterministic_and_has_no_decisions(display
 def test_new_translation_drafts_have_provenance_not_human_approval():
     lexicon = load_display_lexicon()
     drafts = [row for row in lexicon["entries"] if "translation_provenance" in row]
-    assert len(drafts) == 80
+    assert len(drafts) == 100
     for row in drafts:
         provenance = row["translation_provenance"]
         assert provenance["status"] == "editorial_draft_requires_human_language_review"
         assert provenance["reviewer"] is None
         assert provenance["clinical_knowledge"] is False
+
+
+def test_navigation_options_deduplicates_canonical_concept(display_snapshot, monkeypatch):
+    root, _ = display_snapshot
+    with CanonicalKnowledgeRepositoryV2(root, "test-v2") as base:
+        repository = ObservationPresentationRepository(base)
+        repository._prepare()
+        canonical = repository.resolve_supported_codes(
+            repository.lexicon["system"], ["HP:0031417"]
+        )["HP:0031417"]
+
+        def two_identities(_system, _codes):
+            return {"HP:0031417": canonical, "HP:ALT": canonical}
+
+        monkeypatch.setattr(repository, "resolve_supported_codes", two_identities)
+        rows = repository.navigation_options(
+            repository.lexicon["system"], ["HP:0031417", "HP:ALT", "HP:0031417"], "fr"
+        )
+        assert len(rows) == 1
+        assert rows[0]["concept_id"] == canonical["concept_id"]
+        assert rows[0]["code"] == canonical["code"]

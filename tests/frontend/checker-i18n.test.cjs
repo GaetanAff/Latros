@@ -44,7 +44,7 @@ function environment(saved = new Map()) {
       return {ok:true,status:200,json:async()=>body,text:async()=>'<svg />'};
     }});
   vm.runInContext(source("i18n.js"),context);
-  for(const name of ['state','api','search','observations','questions','results','history','anatomy','consultation','checker']) vm.runInContext(source(name+'.js'),context);
+  for(const name of ['state','api','search','observations','questions','results','history','anatomy','consultation','patient','refinements','checker']) vm.runInContext(source(name+'.js'),context);
   return {context,node,calls,saved,question,run:code=>vm.runInContext(code,context)};
 }
 async function ready(env) { for(let i=0;i<20 && env.run("state.busy");i++) await new Promise(resolve=>setImmediate(resolve)); }
@@ -57,6 +57,59 @@ test('versioned general policy preferred, rare never selected implicitly',async(
     {available:true,strategy_id:'general_question_v2',snapshot_id:'new'}]}).strategy_id`);
   assert.equal(selected,'general_question_v2');
   assert.ok(!env.calls.some(c=>c.url.includes('/consultation/rare')));
+});
+
+test('information is the first step; local patient context is structured and not a case observation',async()=>{
+  const env=environment(); await ready(env);
+  assert.equal(env.run('state.screen'),'age');
+  env.node('patient-first-name').value='Pat';
+  env.node('patient-last-name').value='Local';
+  env.node('patient-age').value='34';
+  env.node('patient-allergies').value='Pollen\n Penicillin';
+  const context=JSON.parse(env.run('JSON.stringify(patientContextFromForm())'));
+  assert.deepEqual(context.demographics,{first_name:'Pat',last_name:'Local',age_years:34});
+  assert.equal(context.allergies.length,2);
+  assert.equal(context.allergies[0].evaluation_status,'captured_not_evaluated');
+  assert.equal(context.clinical_evaluation,'not_evaluated');
+  assert.equal(env.run('state.selected.length'),0);
+  env.node('patient-age').value='';
+  assert.throws(()=>env.run('patientContextFromForm()'));
+});
+
+test('profile-only session receives a general selection so history can resume it',async()=>{
+  const env=environment(); await ready(env);
+  env.node('patient-first-name').value='Test';
+  env.node('patient-last-name').value='Local';
+  env.node('patient-age').value='32';
+  env.run(`state.session={session_id:'synthetic',revision:1,selection:null};
+    state.selection={snapshot_id:'test',strategy_id:'general_question_v2'};
+    globalThis.patientCalls=[];
+    api=async(path,options)=>{
+      patientCalls.push({path,body:JSON.parse(options.body)});
+      if(path.endsWith('/patient-context')) return {...state.session,revision:2,patient_context:{demographics:{first_name:'Test'}}};
+      return {...state.session,revision:3,selection:{snapshot_id:'test',strategy_id:'general_question_v2'}};
+    };`);
+  await env.run('savePatientInformation()');
+  const calls=JSON.parse(env.run('JSON.stringify(patientCalls)'));
+  assert.equal(calls.length,2);
+  assert.match(calls[0].path,/patient-context$/);
+  assert.match(calls[1].path,/selection$/);
+  assert.equal(calls[1].body.strategy_id,'general_question_v2');
+});
+
+test('backend refinement definition is rendered without changing canonical observation identity',async()=>{
+  const env=environment(); await ready(env);
+  env.run(`state.refinements=[{
+    definition_id:'reported-observation-context-v1',observation_id:'observation-1',
+    concept_id:'finding',source_label:'Rhinorrhea',duration_units:['day','week'],
+    question_types:['duration'],
+    severity_options:['mild','moderate'],laterality_options:['left','right'],
+    reasoning_use:'not_used_by_current_strategies'}]; state.refinementIndex=0;
+    renderRefinement();showScreen('refinement');`);
+  assert.equal(env.run('state.screen'),'refinement');
+  assert.match(env.node('refinement-unit').innerHTML,/Jours/);
+  assert.match(env.node('refinement-technical').textContent,/not_used_by_current_strategies/);
+  assert.equal(env.run('state.selected.length'),0);
 });
 
 test('general and rare cards/counters separate; language never rewrites the shared case',async()=>{
@@ -86,7 +139,7 @@ test("complete local UI catalog and persistent language with explicit fallback",
   const env=environment(); await ready(env);
   const html=fs.readFileSync(path.join(root,"src/latros/ui/templates/checker.html"),"utf8");
   const keys=[...html.matchAll(/data-i18n(?:-aria|-placeholder)?="([^"]+)"/g)].map(m=>m[1]);
-  const allJs=['checker','api','search','observations','questions','results','history','anatomy','consultation'].map(name=>source(name+'.js')).join('\n');
+  const allJs=['checker','api','search','observations','questions','results','history','anatomy','consultation','patient','refinements'].map(name=>source(name+'.js')).join('\n');
   const jsKeys=[...allJs.matchAll(/\bt\(['"]([^'"]+)['"]/g)].map(m=>m[1]);
   for(const lang of ["fr","de","en"]) {
     env.run(`window.LatrosI18n.setLanguage('${lang}')`);
@@ -142,6 +195,7 @@ test("untranslated labels, abstention, research and safety stay explicit without
 
 test("body/head/sinuses breadcrumb, back navigation and supported findings",async()=>{
   const env=environment(); await ready(env);
+  env.run("showScreen('home')");
   await env.run("anatomyNavigate('head')");
   assert.equal(env.run("anatomyTrail(state.anatomy.config,'head').map(n=>n.id).join('/')"),'body/head');
   await env.run("anatomyNavigate('sinuses')");
@@ -175,8 +229,9 @@ test("anatomy and text search upsert one canonical observation with three explic
   const env=environment(); await ready(env);
   await env.run("anatomyNavigate('sinuses')");
   env.run("pickRegionFinding(0)");
-  assert.equal(env.run('state.selected.length'),0); // Picking is not a patient answer.
-  env.run("addObservation(state.anatomy.picked,'absent')");
+  assert.equal(env.run('state.selected.length'),1); // A deliberate click adds present.
+  assert.equal(env.run('state.selected[0].status'),'present');
+  env.run("addObservation(state.anatomy.items[0],'absent')");
   env.node('symptom-search').value='nez qui coule';
   await env.run('searchConcepts()'); env.run('selectSuggestion(0)');
   assert.equal(env.run('state.selected.length'),1);

@@ -36,6 +36,12 @@ from latros.ui.models import (
     SelectionRequest,
     SessionSelection,
 )
+from latros.ui.patient_context import PatientContextRequest, project_age
+from latros.ui.refinements import (
+    RefinementAnswerRequest,
+    apply_refinement,
+    refinement_definitions,
+)
 from latros.ui.run_transport import summary_projection
 from latros.ui.sessions import SessionStore
 
@@ -302,10 +308,73 @@ def create_app(root: Path) -> FastAPI:
 
     @app.put("/internal/v1/sessions/{session_id}/case")
     async def save_case(request: Request, session_id: str, payload: CaseRequest) -> dict[str, Any]:
+        active_refinements = {
+            (item.observation_id, item.concept_id)
+            for item in refinement_definitions(payload.clinical_case)
+        }
         session = _sessions(request).update(
             session_id,
             payload.revision,
-            lambda current: current.model_copy(update={"clinical_case": payload.clinical_case}),
+            lambda current: current.model_copy(
+                update={
+                    "clinical_case": payload.clinical_case,
+                    "refinement_answers": [
+                        item
+                        for item in current.refinement_answers
+                        if (item.observation_id, item.concept_id) in active_refinements
+                    ],
+                }
+            ),
+        )
+        return session.model_dump(mode="json")
+
+    @app.put("/internal/v1/sessions/{session_id}/patient-context")
+    async def save_patient_context(
+        request: Request, session_id: str, payload: PatientContextRequest
+    ) -> dict[str, Any]:
+        session = _sessions(request).update(
+            session_id,
+            payload.revision,
+            lambda current: current.model_copy(
+                update={
+                    "patient_context": payload.patient_context,
+                    "clinical_case": project_age(current.clinical_case, payload.patient_context),
+                }
+            ),
+        )
+        return session.model_dump(mode="json")
+
+    @app.get("/internal/v1/sessions/{session_id}/refinements")
+    async def get_refinements(request: Request, session_id: str) -> dict[str, Any]:
+        session = _sessions(request).load(session_id)
+        return {
+            "items": [
+                item.model_dump(mode="json")
+                for item in refinement_definitions(session.clinical_case)
+            ],
+            "answers": [item.model_dump(mode="json") for item in session.refinement_answers],
+        }
+
+    @app.put("/internal/v1/sessions/{session_id}/refinements")
+    async def save_refinement(
+        request: Request, session_id: str, payload: RefinementAnswerRequest
+    ) -> dict[str, Any]:
+        current = _sessions(request).load(session_id)
+        _require_request_revision(current.revision, payload.revision)
+        if any(
+            item.observation_id == payload.answer.observation_id
+            for item in current.refinement_answers
+        ):
+            raise LatrosError("This observation already has a captured refinement")
+        session = _sessions(request).update(
+            session_id,
+            payload.revision,
+            lambda current: current.model_copy(
+                update={
+                    "clinical_case": apply_refinement(current.clinical_case, payload.answer),
+                    "refinement_answers": [*current.refinement_answers, payload.answer],
+                }
+            ),
         )
         return session.model_dump(mode="json")
 

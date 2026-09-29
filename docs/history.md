@@ -16,6 +16,35 @@ Dernière mise à jour : 29 septembre 2026.
   définitif ; revue G1/G2/G5 et évaluation indépendante G3 toujours requises. Vérification :
   235 tests Python, Ruff, format et mypy strict verts sur cette branche documentaire.
 
+## Recherche locale v2 — 28–29 septembre 2026
+
+- Index BM25 local dérivé en mémoire, sans extension téléchargée ni mutation du snapshot,
+  préfixes et fuzzy conservateur sur alias explicites. Les négations évidentes ne deviennent
+  pas des observations `present` ; choix de suggestion toujours explicite.
+- Benchmark offline sur 78 formulations FR/DE/EN : historique top 1 62/63 cibles et deux
+  suggestions sur 15 négatifs ; BM25 pur 60/63, combiné BM25/fuzzy 63/63 et zéro suggestion
+  négative. Médiane chaude ~0,207 s. Les cibles reprennent le lexique ajouté : ce n'est pas
+  un test en aveugle ni une validation clinique.
+- Lexique FR/DE : 160 concepts sur 11 671 recherchables ; fallback EN conservé, aucune
+  assertion médicale, ID, score, snapshot ou statut clinique modifié. Évaluation indépendante
+  de recherche et revue humaine linguistique à faire. Vérification de branche isolée :
+  239 tests Python, Ruff/format/mypy verts. Après intégration du socle UI v4 : 246 tests Python,
+  19 frontend, Ruff, format, mypy, schémas et registre verts. Voir le rapport `ui-search-v2`.
+
+## UI v4 — profil de session et atlas étendu — 28 septembre 2026
+
+- Entrée Informations → Symptômes → Précisions/Questions → Résultats. Profil patient local
+  structuré ; seul l'âge est projeté dans le cas. Autres champs facultatifs déclaratifs,
+  sans interprétation médicale. Sélection d'un symptôme `present` en un clic, état modifiable.
+- Précisions facultatives limitées à des concepts HPO explicitement configurés ; aucune
+  assertion ou règle de score créée. Historique/reprise et `/expert` conservés.
+- Atlas porté à 47 régions et 37 images locales, dont 30 nouvelles générées hors tête.
+  Visuels non validés anatomiquement, overlays et labels indépendants, survol boutons-zones
+  synchronisé. Références non supportées masquées. Un audit offline de 14 motifs trouve 72
+  questions sans répétition, mais plusieurs premiers choix génériques ; politique inchangée.
+  Vérification de la PR isolée le 29 septembre : 242 tests Python, 19 tests frontend,
+  schémas, Ruff et mypy strict verts ; aucun snapshot ou statut médical modifié.
+
 ## État actuel en une phrase
 
 Latros est aujourd'hui un prototype local de recherche utilisable en ligne de commande ou dans une
