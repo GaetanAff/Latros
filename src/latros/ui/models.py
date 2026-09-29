@@ -50,6 +50,7 @@ class ResearchSession(Contract):
     refinement_answers: list[RefinementAnswer] = Field(default_factory=list)
     verification_answered_count: int = Field(default=0, ge=0, le=6)
     verification_asked_concept_ids: list[str] = Field(default_factory=list, max_length=6)
+    latest_ai_analysis_id: str | None = None
 
 
 class StoredRun(Contract):

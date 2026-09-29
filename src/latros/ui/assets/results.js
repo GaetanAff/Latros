@@ -8,6 +8,7 @@ async function diagnose() {
   await refreshDisplayLabels();
   renderResults();
   showScreen("results");
+  await refreshHuatuo();
 }
 
 function observationLabel(contribution) {

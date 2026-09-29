@@ -17,6 +17,7 @@
     <script src="{{ assets['questions.js'] }}" defer></script>
     <script src="{{ assets['results.js'] }}" defer></script>
     <script src="{{ assets['verification.js'] }}" defer></script>
+    <script src="{{ assets['huatuo.js'] }}" defer></script>
     <script src="{{ assets['history.js'] }}" defer></script>
     <script src="{{ assets['anatomy.js'] }}" defer></script>
     <script src="{{ assets['consultation.js'] }}" defer></script>
@@ -204,6 +205,15 @@
       </section>
     </main>
     <aside class="explorer-sidebar" aria-label="Recherche et observations" data-i18n-aria="search_and_observations">
+      <section id="ai-panel" class="ai-panel" aria-labelledby="ai-title" hidden>
+        <div class="ai-panel-heading"><span class="ai-indicator" aria-hidden="true">✦</span>
+          <div><p class="eyebrow" data-i18n="ai_local">Modèle local facultatif</p>
+            <h2 id="ai-title" data-i18n="ai_waiting">En attente d'analyse IA</h2></div></div>
+        <p data-i18n="ai_independent">Huatuo reçoit votre profil et vos réponses, sans les résultats Latros. Ses hypothèses sont expérimentales et séparées.</p>
+        <button id="ai-run" class="button button-secondary" type="button" data-i18n="ai_start">Lancer l'analyse IA locale</button>
+        <p id="ai-status" class="field-hint" role="status" aria-live="polite"></p>
+        <div id="ai-output" hidden></div>
+      </section>
       <div class="search-box permanent-search">
         <label for="symptom-search" data-i18n="search_label">Rechercher un symptôme</label>
         <input id="symptom-search" type="search" autocomplete="off" placeholder="Rechercher un symptôme…" data-i18n-placeholder="search_placeholder" aria-controls="symptom-suggestions" aria-expanded="false">

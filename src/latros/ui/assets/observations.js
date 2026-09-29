@@ -22,6 +22,8 @@ function addObservation(option, status = 'present') {
 }
 function observationsChanged() {
   state.caseDirty = true;
+  state.aiStale = Boolean(state.aiAnalysis);
+  renderHuatuoPanel();
   // Never answer a stale question or present a prior run as analysing unsaved edits.
   if (['question','results'].includes(state.screen)) {
     showScreen('home'); notice(t('case_changed'));

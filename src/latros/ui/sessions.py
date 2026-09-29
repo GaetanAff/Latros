@@ -12,6 +12,7 @@ from typing import Any, Literal, cast
 
 from latros.clinical.v2 import ClinicalCaseV2
 from latros.common import LatrosError, safe_id, write_json
+from latros.ui.huatuo_analysis import HuatuoAnalysisV1, case_digest, independent_case_payload
 from latros.ui.models import (
     ConsultationWorkflow,
     ResearchSession,
@@ -236,6 +237,45 @@ class SessionStore:
         path = self._verification_path(session_id, base_run_id)
         return VerificationPlanV1.model_validate_json(path.read_bytes()) if path.is_file() else None
 
+    def record_ai_analysis(
+        self, session_id: str, expected_revision: int, analysis: HuatuoAnalysisV1
+    ) -> ResearchSession:
+        """Append a local artifact only if the same patient case is still current."""
+        with self._lock:
+            current = self.load(session_id)
+            self._require_revision(current, expected_revision)
+            if (
+                analysis.session_id != session_id
+                or case_digest(independent_case_payload(current)) != analysis.case_sha256
+            ):
+                raise LatrosError("Patient case changed during local AI analysis")
+            path = self._ai_path(session_id, analysis.analysis_id)
+            if path.exists():
+                raise LatrosError("Immutable local AI analysis already exists")
+            updated = current.model_copy(
+                update={
+                    "latest_ai_analysis_id": analysis.analysis_id,
+                    "revision": current.revision + 1,
+                    "updated_at": _now(),
+                }
+            )
+            try:
+                write_json(path, analysis.model_dump(mode="json"))
+                write_json(self._session_path(session_id), updated.model_dump(mode="json"))
+            except Exception:
+                path.unlink(missing_ok=True)
+                raise
+            return updated
+
+    def latest_ai_analysis(self, session_id: str) -> HuatuoAnalysisV1 | None:
+        current = self.load(session_id)
+        if current.latest_ai_analysis_id is None:
+            return None
+        path = self._ai_path(session_id, current.latest_ai_analysis_id)
+        if not path.is_file():
+            raise LatrosError("Referenced local AI analysis is missing")
+        return HuatuoAnalysisV1.model_validate_json(path.read_bytes())
+
     @staticmethod
     def _require_revision(session: ResearchSession, expected: int) -> None:
         if session.revision != expected:
@@ -256,3 +296,8 @@ class SessionStore:
         safe_id(session_id)
         safe_id(run_id)
         return self.sessions_root / session_id / "verifications" / f"{run_id}.json"
+
+    def _ai_path(self, session_id: str, analysis_id: str) -> Path:
+        safe_id(session_id)
+        safe_id(analysis_id)
+        return self.sessions_root / session_id / "ai-analyses" / f"{analysis_id}.json"

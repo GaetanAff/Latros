@@ -4,6 +4,21 @@ Ce fichier est le journal de continuité du projet. Il décrit ce qui a été d�
 
 Dernière mise à jour : 29 septembre 2026.
 
+## Huatuo indépendant local — 29 septembre 2026
+
+- Sur `codex/v0.9-huatuo-independent-analysis`, troisième livraison : panneau en haut à droite
+  des résultats, en attente d'un clic ; hypothèses et incertitudes séparées du différentiel.
+- Entrée du modèle construite exclusivement depuis le profil patient, le cas clinique complet
+  et les précisions structurées. Aucun run ni score Latros n'est lu ou transmis. Un changement
+  du cas marque l'analyse IA précédente périmée ; aucun recalcul automatique.
+- Artefact IA local immuable, version de prompt, hash du cas et sortie structurée. Le modèle
+  absent laisse l'application fonctionnelle. Essai local du GGUF Huatuo sur un cas entièrement
+  inventé : JSON structuré reçu ; le premier chargement peut prendre plusieurs minutes. Tests
+  d'intégration sur fixtures synthétiques, dont le rejet d'une réponse tardive après changement
+  de session : 257 tests Python et 23 tests frontend, Ruff, format, mypy strict, schémas et
+  registre verts. Ni revue clinique, ni triage, ni sûreté médicale apportés par cette intégration.
+- Snapshot, `general_v1`, `semantic_v1`, goldens et statuts médicaux inchangés.
+
 ## Vérification facultative des possibilités — 29 septembre 2026
 
 - Sur `codex/v0.7-result-verification-v1`, politique versionnée sur les cinq premiers

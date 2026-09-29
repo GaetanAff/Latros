@@ -1,0 +1,167 @@
+{
+  "$defs": {
+    "HuatuoOutput": {
+      "additionalProperties": false,
+      "properties": {
+        "hypotheses": {
+          "items": {
+            "$ref": "#/$defs/LocalHypothesis"
+          },
+          "maxItems": 5,
+          "minItems": 1,
+          "title": "Hypotheses",
+          "type": "array"
+        },
+        "limitations": {
+          "maxLength": 1000,
+          "minLength": 1,
+          "title": "Limitations",
+          "type": "string"
+        },
+        "uncertainties": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 10,
+          "title": "Uncertainties",
+          "type": "array"
+        }
+      },
+      "required": [
+        "hypotheses",
+        "limitations"
+      ],
+      "title": "HuatuoOutput",
+      "type": "object"
+    },
+    "LocalHypothesis": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "maxLength": 160,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "reason": {
+          "maxLength": 1000,
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        },
+        "uncertainty": {
+          "maxLength": 1000,
+          "minLength": 1,
+          "title": "Uncertainty",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "reason",
+        "uncertainty"
+      ],
+      "title": "LocalHypothesis",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "analysis_id": {
+      "minLength": 1,
+      "title": "Analysis Id",
+      "type": "string"
+    },
+    "case_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Case Sha256",
+      "type": "string"
+    },
+    "clinical_validation": {
+      "const": false,
+      "default": false,
+      "title": "Clinical Validation",
+      "type": "boolean"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "input_case": {
+      "additionalProperties": true,
+      "title": "Input Case",
+      "type": "object"
+    },
+    "model_id": {
+      "const": "HuatuoGPT-3-27B-local",
+      "default": "HuatuoGPT-3-27B-local",
+      "title": "Model Id",
+      "type": "string"
+    },
+    "output": {
+      "$ref": "#/$defs/HuatuoOutput"
+    },
+    "output_language": {
+      "enum": [
+        "fr",
+        "de",
+        "en"
+      ],
+      "title": "Output Language",
+      "type": "string"
+    },
+    "prompt_version": {
+      "const": "huatuo_independent_v1",
+      "default": "huatuo_independent_v1",
+      "title": "Prompt Version",
+      "type": "string"
+    },
+    "publishable": {
+      "const": false,
+      "default": false,
+      "title": "Publishable",
+      "type": "boolean"
+    },
+    "raw_model_response": {
+      "maxLength": 20000,
+      "title": "Raw Model Response",
+      "type": "string"
+    },
+    "research_unreviewed": {
+      "const": true,
+      "default": true,
+      "title": "Research Unreviewed",
+      "type": "boolean"
+    },
+    "safety_status": {
+      "const": "not_evaluated",
+      "default": "not_evaluated",
+      "title": "Safety Status",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "session_id": {
+      "minLength": 1,
+      "title": "Session Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "analysis_id",
+    "session_id",
+    "created_at",
+    "output_language",
+    "case_sha256",
+    "input_case",
+    "output",
+    "raw_model_response"
+  ],
+  "title": "HuatuoAnalysisV1",
+  "type": "object"
+}

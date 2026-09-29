@@ -233,6 +233,12 @@ Le résultat initial reste visible sans répondre. Une réponse produit ensuite 
 sans altérer le premier ; les contradictions ne sont montrées qu'après évaluation réelle et ne
 sont ni exclusion absolue ni probabilité. La phase rare reste distincte. Voir
 [ADR 0021](docs/decisions/0021-verification-facultative-des-resultats.md).
+Un panneau Huatuo facultatif attend ensuite un clic : il reçoit localement le profil et le cas
+structurés, **jamais** les résultats Latros. Ses hypothèses expérimentales sont affichées à part
+et deviennent périmées si le cas change. Configurer `LATROS_HUATUO_MODEL` si le GGUF local n'est
+pas au chemin détecté ; Qwen et Huatuo sont chargés successivement par llama.cpp. L'absence du
+modèle ne bloque pas Latros. Ces sorties ne sont ni des diagnostics ni un triage ; voir
+[ADR 0022](docs/decisions/0022-analyse-huatuo-independante-locale.md).
 Un snapshot absent est signalé ; les libellés du catalogue local peuvent être en anglais. Voir
 [la documentation du parcours simple](docs/modern-ui.md) et [l'ADR 0011](docs/decisions/0011-parcours-simple-local.md).
 
