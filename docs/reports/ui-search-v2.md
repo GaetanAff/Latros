@@ -30,6 +30,11 @@ cibles et l'embedding ajouterait poids, reproductibilité, faux voisins sémanti
 sans suggestion ; c'est une prudence, pas une compréhension du langage libre. Le texte saisi
 ne crée jamais une observation avant choix explicite d'une suggestion.
 
+Les 63 cibles reprennent largement les alias éditoriaux ajoutés avec cette tranche. Le 63/63
+mesure donc surtout la non-régression du lexique préparé, **pas** un rappel utilisateur sur un
+jeu indépendant. Un test en aveugle sur de nouvelles formulations et une revue linguistique et
+médicale humaine sont nécessaires avant toute allégation de qualité produit.
+
 Couverture réelle : 11 671 concepts recherchables, 11 671 labels EN, aucune désignation FR/DE
 native dans ce catalogue ; lexique UX local pour 160 concepts FR et 160 DE (173 alias FR,
 167 DE). Il reste 11 511 concepts sans traduction FR/DE. Le fallback EN est visible. Ces

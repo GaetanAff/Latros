@@ -90,7 +90,10 @@ Le [rapport UI vNext](reports/ui-anatomy-vnext.md) mesurait 65 concepts FR/DE ac
 ambiguïtés refusées, les références indisponibles et la latence froide restante (~7 s).
 Les exemples ne constituent pas de nouveaux critères diagnostiques ou une validation clinique.
 
-Le lexique UI version 3 active désormais 139 concepts FR/DE sur 11 671 ; les 80 nouvelles
+Le lexique UI active désormais 160 concepts FR/DE sur 11 671 ; les nouvelles
 propositions ont une provenance explicite et un statut de brouillon éditorial non revu humainement.
 Le script `export_ui_translation_review.py` produit un jeu local de revue avec décisions vides.
 Les ambiguïtés ne sont jamais forcées. Aucun service de traduction, LLM ou nouvelle assertion.
+La [recherche v2](reports/ui-search-v2.md) compare historique, BM25 et fuzzy prudent ;
+l'index dérivé est local, sans embeddings ni dépendance réseau. Son benchmark recoupe les
+alias éditoriaux ajoutés et ne remplace pas une évaluation indépendante.

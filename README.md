@@ -9,11 +9,16 @@ sont locaux et explicables, sans LLM. L'interface web propose désormais un parc
 conserve la console R&D en mode expert. Elle n'est pas une interface patient validée.
 
 Le parcours simple propose désormais **FR / DE / EN**, mémorisés localement. La recherche
-accepte synonymes, accents, préfixes et un lexique grand public versionné (139 concepts avec
+accepte synonymes, accents, préfixes et un lexique grand public versionné (160 concepts avec
 affichage FR/DE activé sur les 11 671 observations recherchables du snapshot local). Les traductions/désignations sont uniquement
 de l'affichage ; les termes non traduits restent signalés **EN** et les IDs/reçus sont inchangés.
 Voir le [rapport multilingue](docs/reports/ui-i18n-local-search.md). Aucun service de traduction,
 NLP ou nouvelle connaissance médicale n'est introduit.
+
+La [recherche locale v2](docs/reports/ui-search-v2.md) utilise un index BM25 temporaire et un
+fuzzy borné sur les alias explicites : benchmark offline 63/63 cibles préparées au top 1 et
+aucune suggestion pour 15 formulations négatives. Ce jeu recoupe les alias ajoutés ; il ne
+mesure pas encore le rappel d'utilisateurs indépendants. Aucun embedding ni service externe.
 
 Le mode simple offre une navigation **Corps → Tête → Sinus**, sept illustrations locales générées
 avec overlays SVG indépendants et 35 vues (oreille, thorax, abdomen, urinaire et membres inclus),

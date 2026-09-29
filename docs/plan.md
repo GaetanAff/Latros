@@ -2,6 +2,15 @@
 
 Référence : plan « Premières étapes de Latros — socle de données et moteur clinique pur » demandé par l'utilisateur. État au 27 septembre 2026.
 
+### Recherche locale v2 — 28–29 septembre 2026
+
+Index de désignations temporaire DuckDB, classement BM25, préfixes et fuzzy prudent sur alias
+explicites. [Benchmark offline](reports/ui-search-v2.md) : 63/63 requêtes ciblées au top 1,
+15/15 négatifs sans suggestion dans le mode combiné, contre 62/63 et 13/15 auparavant.
+Ce banc recoupe le lexique et n'est pas une évaluation indépendante. Le lexique FR/DE de
+présentation couvre désormais 160 concepts sur 11 671 recherchables ; les labels source et
+IDs restent inchangés. Revue linguistique/clinique et vrai test utilisateur restent requis.
+
 Les trois jalons avaient été implémentés ensemble dans la première tranche. La reprise de l'étape 2 consiste à vérifier sa livraison et à établir le snapshot sous le nom du jalon, `v0.2.0`. Elle ne correspond pas à l'ajout de nouvelles sources ou de fonctions cliniques.
 
 ## Jalons du plan
