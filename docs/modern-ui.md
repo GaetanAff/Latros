@@ -24,6 +24,12 @@ sont exclus. L'utilisateur peut s'arrêter et voir ses résultats à tout moment
 immuable suit les réponses ; l'ancien reste disponible. Une information non évaluée n'est pas
 une contradiction. La phase rare demeure distincte et facultative.
 
+Sur l'écran de résultats, le panneau Huatuo affiche « En attente d'analyse IA » tant que
+l'utilisateur n'a pas explicitement cliqué. Son analyse locale reçoit le profil et le cas
+structurés mais aucun résultat Latros. Les hypothèses, motifs et incertitudes sont affichés
+séparément ; si le cas change, l'ancienne analyse est marquée périmée et n'est pas relancée
+automatiquement. Le panneau n'est ni un diagnostic, ni un triage, ni une validation humaine.
+
 ## Utilisation
 
 Utiliser `main` synchronisé avec les deux livraisons #19 (General/Rare) et #20 (atlas).

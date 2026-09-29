@@ -20,8 +20,16 @@ supportés. Le plan versionné est conservé localement ; chaque réponse compl�
 un nouveau run immuable est créé après la vérification. Le premier run reste consultable. Une
 absence constatée peut devenir une contribution défavorable par le moteur existant, jamais une
 exclusion certaine. Les questions rares restent derrière l'opt-in. Voir
-[ADR 0021](decisions/0021-verification-facultative-des-resultats.md). Huatuo indépendant reste
-une troisième livraison distincte, à réaliser.
+[ADR 0021](decisions/0021-verification-facultative-des-resultats.md).
+
+### v0.9-B — Hypothèses Huatuo locales indépendantes (29 septembre 2026)
+
+Troisième livraison séparée : HuatuoGPT-3-27B, sur clic explicite après le résultat, reçoit le
+profil et le cas structurés **sans aucun résultat Latros**. Sortie JSON expérimentale et
+distincte, conservation locale avec hash du cas, affichage périmé après changement. Qwen et
+Huatuo partagent séquentiellement le serveur llama.cpp loopback ; l'absence du modèle laisse
+Latros fonctionnel. Voir [ADR 0022](decisions/0022-analyse-huatuo-independante-locale.md).
+Ni ce panneau ni la vérification ne valident médicalement les hypothèses ou les questions.
 
 ### Recherche locale v2 — 28–29 septembre 2026
 

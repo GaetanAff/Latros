@@ -3687,6 +3687,18 @@
       "title": "Display Name",
       "type": "string"
     },
+    "latest_ai_analysis_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Latest Ai Analysis Id"
+    },
     "latest_diagnose": {
       "anyOf": [
         {

@@ -27,6 +27,7 @@ from latros.reasoning.profiles import ReasoningProfile
 from latros.reasoning.results_v2 import DifferentialResultV2, QuestionResultV2, RunReceipt
 from latros.sources.registry import Registry
 from latros.sources.registry_v2 import RegistryV2
+from latros.ui.huatuo_analysis import HuatuoAnalysisV1, HuatuoRequest
 from latros.ui.models import ResearchSession
 from latros.ui.patient_context import PatientContext
 from latros.ui.refinements import RefinementAnswer, SymptomRefinementDefinition
@@ -88,6 +89,8 @@ def main() -> None:
         ),
         "result-verification-plan-v1.schema.json": VerificationPlanV1.model_json_schema(),
         "result-verification-answer-v1.schema.json": VerificationAnswerRequest.model_json_schema(),
+        "huatuo-analysis-v1.schema.json": HuatuoAnalysisV1.model_json_schema(),
+        "huatuo-request-v1.schema.json": HuatuoRequest.model_json_schema(),
     }
     for name, document in documents.items():
         path = root / name

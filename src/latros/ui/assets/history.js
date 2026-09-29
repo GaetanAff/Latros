@@ -99,6 +99,7 @@ async function resumeSession(sessionId) {
     await refreshDisplayLabels();
     renderResults();
     showScreen("results");
+    await refreshHuatuo();
   } else if (session.latest_question) {
     state.questionRun = await api(`${sessionPath()}/runs/${encodeURIComponent(session.latest_question.run_id)}`);
     const question = state.questionRun.result.question;

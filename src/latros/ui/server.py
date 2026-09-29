@@ -27,6 +27,14 @@ from latros.clinical.v2 import ClinicalCaseV2, QuestionResponseV2
 from latros.common import LatrosError, sha256
 from latros.knowledge.presentation_repository import load_display_lexicon
 from latros.ui.anatomy import load_navigation
+from latros.ui.huatuo_analysis import (
+    HuatuoAnalysisV1,
+    HuatuoRequest,
+    case_digest,
+    huatuo_messages,
+    independent_case_payload,
+    parse_huatuo_output,
+)
 from latros.ui.local_llm import LocalLlamaServer
 from latros.ui.models import (
     CaseRequest,
@@ -370,6 +378,57 @@ def create_app(root: Path) -> FastAPI:
     @app.get("/internal/v1/local-models")
     async def local_models(request: Request) -> dict[str, Any]:
         return {"available": request.app.state.local_llm.status(), "offline_only": True}
+
+    @app.get("/internal/v1/sessions/{session_id}/local-ai/huatuo/latest")
+    async def latest_huatuo(request: Request, session_id: str) -> dict[str, Any]:
+        store = _sessions(request)
+        session = store.load(session_id)
+        analysis = store.latest_ai_analysis(session_id)
+        return {
+            "analysis": analysis.model_dump(
+                mode="json", exclude={"input_case", "raw_model_response"}
+            )
+            if analysis
+            else None,
+            "stale": bool(
+                analysis and analysis.case_sha256 != case_digest(independent_case_payload(session))
+            ),
+        }
+
+    @app.post("/internal/v1/sessions/{session_id}/local-ai/huatuo")
+    async def analyze_with_huatuo(
+        request: Request, session_id: str, payload: HuatuoRequest
+    ) -> dict[str, Any]:
+        store = _sessions(request)
+        session = store.load(session_id)
+        _require_request_revision(session.revision, payload.revision)
+        if session.latest_diagnose is None:
+            raise LatrosError("Finish a Latros result before requesting local AI analysis")
+        # Deliberately never call load_run / load_run_summary / load_candidate_detail here.
+        case_input = independent_case_payload(session)
+        digest = case_digest(case_input)
+        raw = await request.app.state.local_llm.complete(
+            "huatuo", huatuo_messages(case_input, payload.language)
+        )
+        output = parse_huatuo_output(raw)
+        analysis = HuatuoAnalysisV1(
+            analysis_id=f"huatuo-{uuid4()}",
+            session_id=session_id,
+            created_at=datetime.now(UTC),
+            output_language=payload.language,
+            case_sha256=digest,
+            input_case=case_input,
+            output=output,
+            raw_model_response=raw,
+        )
+        updated = store.record_ai_analysis(session_id, payload.revision, analysis)
+        return {
+            "session": updated.model_dump(mode="json"),
+            "analysis": analysis.model_dump(
+                mode="json", exclude={"input_case", "raw_model_response"}
+            ),
+            "stale": False,
+        }
 
     @app.post("/internal/v1/sessions/{session_id}/symptom-interpretations")
     async def interpret_symptoms(

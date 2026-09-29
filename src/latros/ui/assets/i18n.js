@@ -2,6 +2,19 @@
 // Versioned, local presentation strings. No medical inference or translation service.
 (() => {
   const catalog = {
+"ai_local": ["Modèle local facultatif","Freiwilliges lokales Modell","Optional local model"],
+"ai_waiting": ["En attente d'analyse IA","KI-Analyse ausstehend","AI analysis waiting"],
+"ai_independent": ["Huatuo reçoit localement votre profil et vos réponses, sans les résultats Latros. Ses hypothèses expérimentales restent séparées.","Huatuo erhält Ihr Profil und Ihre Antworten lokal, ohne Latros-Ergebnisse. Seine experimentellen Hypothesen bleiben getrennt.","Huatuo receives your profile and answers locally, without Latros results. Its experimental hypotheses remain separate."],
+"ai_start": ["Lancer l'analyse IA locale","Lokale KI-Analyse starten","Start local AI analysis"],
+"ai_loading": ["Huatuo analyse le cas localement… Cela peut prendre plusieurs minutes.","Huatuo analysiert den Fall lokal… Dies kann mehrere Minuten dauern.","Huatuo is analysing locally… This can take several minutes."],
+"ai_unavailable": ["Le modèle Huatuo local est indisponible. Les résultats Latros restent accessibles.","Das lokale Huatuo-Modell ist nicht verfügbar. Latros-Ergebnisse bleiben zugänglich.","The local Huatuo model is unavailable. Latros results remain available."],
+"ai_failed": ["L'analyse locale n'a pas abouti. Aucun résultat IA n'a été ajouté.","Die lokale Analyse ist fehlgeschlagen. Es wurde kein KI-Ergebnis hinzugefügt.","Local analysis failed. No AI result was added."],
+"ai_complete": ["Hypothèses Huatuo — expérimentales, non validées","Huatuo-Hypothesen — experimentell, nicht validiert","Huatuo hypotheses — experimental, unvalidated"],
+"ai_stale": ["Le cas a changé : cette analyse IA est périmée.","Der Fall wurde geändert: Diese KI-Analyse ist veraltet.","The case has changed: this AI analysis is stale."],
+"ai_reason": ["Pourquoi le modèle la mentionne","Warum das Modell sie erwähnt","Why the model mentions it"],
+"ai_uncertainty": ["Incertitude","Unsicherheit","Uncertainty"],
+"ai_limitations": ["Limites du modèle","Grenzen des Modells","Model limitations"],
+"ai_no_triage": ["Ne constitue ni un diagnostic, ni un triage, ni un avis médical.","Keine Diagnose, Triage oder medizinische Beratung.","Not a diagnosis, triage, or medical advice."],
 "verification_title": ["Vérifier ces possibilités","Diese Möglichkeiten prüfen","Check these possibilities"],
 "verification_intro": ["Facultatif : quelques éléments non évalués des cinq premières possibilités. Une réponse négative n'exclut pas à elle seule une maladie.","Freiwillig: einige noch nicht geprüfte Merkmale der ersten fünf Möglichkeiten. Eine negative Antwort schließt eine Erkrankung nicht allein aus.","Optional: a few unassessed findings from the first five possibilities. A negative answer alone does not rule out a condition."],
 "verification_start": ["Vérifier ces possibilités","Möglichkeiten prüfen","Check these possibilities"],

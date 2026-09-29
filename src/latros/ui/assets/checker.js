@@ -15,6 +15,7 @@ function showScreen(name) {
   });
   byId("nav-expert").href = state.session
     ? `/expert?session=${encodeURIComponent(state.session.session_id)}` : "/expert";
+  renderHuatuoPanel();
   window.scrollTo({ top: 0, behavior: "instant" });
 }
 
@@ -72,6 +73,10 @@ function newAnalysis() {
   state.verificationQuestion = null;
   state.verificationRunId = null;
   state.verificationUpdated = false;
+  state.aiAnalysis = null;
+  state.aiStale = false;
+  state.aiError = null;
+  state.aiBusy = false;
   state.selected = [];
   state.suggestions = [];
   state.displayLabels = {};
@@ -194,9 +199,11 @@ async function changeLanguage(language) {
     state.displayLabels = {};
     byId("result-dialog").close();
     updateResearchNotice(); renderSelected(); renderResults(); renderHistory();
+    renderHuatuoPanel();
     if (state.screen === "error") byId("error-text").textContent = t(state.bootErrorKey);
     await refreshDisplayLabels();
     updateResearchNotice(); renderSelected(); renderResults(); renderHistory();
+    renderHuatuoPanel();
     if (state.screen === "question" && state.questionRun?.result.question) await renderQuestion(state.questionRun.result.question);
     if (state.screen === 'verification' && state.verificationQuestion) {
       const answered = (state.session.clinical_case.question_history || []).filter(item =>

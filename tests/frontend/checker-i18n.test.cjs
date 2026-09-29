@@ -44,7 +44,7 @@ function environment(saved = new Map()) {
       return {ok:true,status:200,json:async()=>body,text:async()=>'<svg />'};
     }});
   vm.runInContext(source("i18n.js"),context);
-  for(const name of ['state','api','search','observations','questions','results','verification','history','anatomy','consultation','patient','symptom-nlp','refinements','checker']) vm.runInContext(source(name+'.js'),context);
+  for(const name of ['state','api','search','observations','questions','results','verification','huatuo','history','anatomy','consultation','patient','symptom-nlp','refinements','checker']) vm.runInContext(source(name+'.js'),context);
   return {context,node,calls,saved,question,run:code=>vm.runInContext(code,context)};
 }
 async function ready(env) { for(let i=0;i<20 && env.run("state.busy");i++) await new Promise(resolve=>setImmediate(resolve)); }
@@ -78,6 +78,44 @@ test('result verification is opt-in and presents backend questions without chang
   assert.equal(env.run('state.screen'),'verification');
   assert.equal(env.node('verification-question-text').textContent,'Avez-vous le nez qui coule ?');
   assert.equal(env.run('state.resultRun.run_id'),'first');
+});
+
+test('Huatuo panel waits for an explicit click and stays separate from the Latros result',async()=>{
+  const env=environment(); await ready(env);
+  env.run(`state.session={session_id:'local-test',revision:4,latest_diagnose:{run_id:'first'},
+    clinical_case:{observations:[],question_history:[]}};
+    state.resultRun={run_id:'first',result:{candidates:[],research_unreviewed:true}};
+    showScreen('results');`);
+  assert.equal(env.node('ai-panel').hidden,false);
+  assert.match(env.node('ai-title').textContent,/attente/);
+  assert.ok(!env.calls.some(call=>call.url.includes('/local-ai/huatuo')));
+  env.context.aiPayload={session:{session_id:'local-test',revision:5,latest_diagnose:{run_id:'first'}},
+    analysis:{analysis_id:'ai-1',output:{hypotheses:[{name:'Invented possibility',
+      reason:'Invented information.',uncertainty:'Much remains unknown.'}],
+      uncertainties:['Not reviewed'],limitations:'Experimental.'}},stale:false};
+  await env.run(`api=async()=>aiPayload; runHuatuo()`);
+  assert.match(env.node('ai-output').innerHTML,/Invented possibility/);
+  assert.equal(env.run('state.resultRun.run_id'),'first');
+  env.run(`state.aiStale=true;renderHuatuoPanel()`);
+  assert.match(env.node('ai-status').textContent,/périmée/);
+});
+
+test('a late local AI response cannot enter a new session',async()=>{
+  const env=environment(); await ready(env);
+  env.run(`state.session={session_id:'old',revision:4,latest_diagnose:{run_id:'first'}};
+    state.screen='results';`);
+  let resolveRequest;
+  const originalApi=env.run('api');
+  env.context.api=(requestPath,...args)=>requestPath.includes('/local-ai/huatuo')
+    ? new Promise(resolve=>{resolveRequest=resolve;}) : originalApi(requestPath,...args);
+  const pending=env.run('runHuatuo()');
+  assert.equal(env.run('state.aiBusy'),true);
+  env.run('newAnalysis()');
+  assert.equal(env.run('state.aiBusy'),false);
+  resolveRequest({session:{session_id:'old',revision:5},analysis:{analysis_id:'old-ai'},stale:false});
+  await pending;
+  assert.equal(env.run('state.aiAnalysis'),null);
+  assert.equal(env.run('state.session'),null);
 });
 
 test('information is the first step; local patient context is structured and not a case observation',async()=>{
