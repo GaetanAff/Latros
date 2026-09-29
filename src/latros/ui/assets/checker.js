@@ -1,14 +1,17 @@
 function showScreen(name) {
   state.screen = name;
   byId('region-panel').hidden = name !== 'home' || ['body','head'].includes(state.anatomy.region);
-  ["home", "age", "question", "results", "history", "error"].forEach((screen) => {
+  ["home", "age", "refinement", "question", "results", "history", "error"].forEach((screen) => {
     byId(`screen-${screen}`).hidden = screen !== name;
   });
-  const steps = ["home", "age", "question", "results"];
+  document.documentElement.dataset.screen = name;
+  const steps = ["age", "home", "question", "results"];
+  const progressName = name === 'refinement' ? 'question' : name;
   document.querySelectorAll("[data-progress]").forEach((element) => {
     const step = element.dataset.progress;
-    element.classList.toggle("active", step === name);
-    element.classList.toggle("done", steps.indexOf(step) < steps.indexOf(name) && steps.includes(name));
+    element.classList.toggle("active", step === progressName);
+    element.classList.toggle("done", steps.indexOf(step) < steps.indexOf(progressName) && steps.includes(progressName));
+    element.setAttribute('aria-current',step===progressName?'step':'false');
   });
   byId("nav-expert").href = state.session
     ? `/expert?session=${encodeURIComponent(state.session.session_id)}` : "/expert";
@@ -51,7 +54,7 @@ async function boot() {
     // History labels are resolved when history is opened, not on the landing page.
     renderHistory();
     renderSelected();
-    showScreen("home");
+    showScreen("age");
     // Navigation metadata/SVG only; no repository warm-up delaying startup.
     anatomyNavigate('body');
   } catch (error) {
@@ -72,13 +75,16 @@ function newAnalysis() {
   state.questionCount = 0;
   state.caseDirty = true;
   state.ageDirty = true;
+  state.patientDirty = false;
+  state.refinements=[];state.refinementIndex=0;
   state.selection = preferredSelection(state.capabilities);
   byId("patient-age").value = "";
+  restorePatientForm(null);
   byId("symptom-search").value = "";
   updateResearchNotice();
   renderSelected();
   renderSuggestions();
-  showScreen("home");
+  showScreen("age");
   anatomyNavigate('body');
 }
 
@@ -120,22 +126,11 @@ byId('selected-symptoms').addEventListener('change',event=>{
 function beginAnalysis(action) {
   state.pendingAction=action; notice('');
   if(!state.selected.length) return;
-  if(!state.session) showScreen('age');
-  else guarded(async()=>{await ensureSession(); await (action==='question'?askNextQuestion():diagnose());});
+  if(!state.session || state.patientDirty) showScreen('age');
+  else guarded(()=>beginRefinements(action),t('prepare_questions'));
 }
 byId("home-continue").addEventListener("click", () => beginAnalysis('diagnose'));
 byId("home-question").addEventListener("click", () => beginAnalysis('question'));
-byId('patient-age').addEventListener('change',()=>{state.caseDirty=true;state.ageDirty=true;});
-byId("age-continue").addEventListener("click", () => guarded(async () => {
-  await ensureSession();
-  await (state.pendingAction==='question'?askNextQuestion():diagnose());
-}, t("prepare_questions")));
-byId("age-skip").addEventListener("click", () => guarded(async () => {
-  byId("patient-age").value = "";
-  state.ageDirty = true;
-  await ensureSession();
-  await (state.pendingAction==='question'?askNextQuestion():diagnose());
-}, t("prepare_questions")));
 document.querySelectorAll("[data-answer]").forEach((button) => {
   button.addEventListener("click", () => guarded(() => answerQuestion(button.dataset.answer), t("analyse_answer")));
 });
@@ -150,7 +145,7 @@ byId("show-more-results").addEventListener("click", () => {
 });
 byId("close-dialog").addEventListener("click", () => byId("result-dialog").close());
 byId("results-new").addEventListener("click", newAnalysis);
-byId("results-edit").addEventListener("click", () => { notice(""); showScreen("home"); });
+byId("results-edit").addEventListener("click", () => { notice(""); showScreen("age"); });
 byId("results-history").addEventListener("click", () => guarded(openHistory));
 byId("nav-history").addEventListener("click", () => guarded(openHistory));
 byId("history-new").addEventListener("click", newAnalysis);
@@ -197,6 +192,7 @@ async function changeLanguage(language) {
     await refreshDisplayLabels();
     updateResearchNotice(); renderSelected(); renderResults(); renderHistory();
     if (state.screen === "question" && state.questionRun?.result.question) await renderQuestion(state.questionRun.result.question);
+    if (state.screen === 'refinement' && state.refinements[state.refinementIndex]) renderRefinement();
     if (state.selection && byId("symptom-search").value.trim()) await searchConcepts();
     await anatomyNavigate(state.anatomy.region);
     byId("search-hint").textContent = t("search_hint");

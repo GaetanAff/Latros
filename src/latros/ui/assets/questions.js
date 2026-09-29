@@ -23,6 +23,9 @@ async function renderQuestion(question) {
       remaining:budget.remaining_budget,
     });
   }
+  byId('question-progress').max = Math.max(1,Number.isInteger(budget.maximum_questions)?budget.maximum_questions:6);
+  byId('question-progress').value = Math.min(byId('question-progress').max,Number.isInteger(budget.answered_in_phase)?budget.answered_in_phase:state.questionCount-1);
+  byId('question-reason').textContent = t('question_policy_reason');
   const params = new URLSearchParams({snapshot: state.selection.snapshot_id, strategy: state.selection.strategy_id,
     system: question.concept.system, code: question.concept.code, language: locale()});
   let display;

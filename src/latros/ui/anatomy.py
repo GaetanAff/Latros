@@ -1,6 +1,7 @@
 """Anatomical navigation configuration, never a clinical assertion or a body-site inference."""
 
 import hashlib
+import re
 from functools import lru_cache
 from pathlib import Path
 from typing import Any
@@ -37,7 +38,9 @@ def load_navigation() -> dict[str, Any]:
     manifest = orjson.loads((CONFIG_PATH.parent / "illustrations.json").read_bytes())
     images = {image["filename"]: image for image in manifest["images"]}
     for filename, image in images.items():
-        if Path(filename).name != filename or not filename.endswith("-atlas-v1.png"):
+        if Path(filename).name != filename or not re.fullmatch(
+            r"[a-z0-9-]+-atlas-v[12]\.png", filename
+        ):
             raise LatrosError("Invalid illustration path")
         path = CONFIG_PATH.parent / filename
         stat = path.stat()

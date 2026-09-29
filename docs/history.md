@@ -16,7 +16,22 @@ Dernière mise à jour : 29 septembre 2026.
 - Lexique FR/DE : 160 concepts sur 11 671 recherchables ; fallback EN conservé, aucune
   assertion médicale, ID, score, snapshot ou statut clinique modifié. Évaluation indépendante
   de recherche et revue humaine linguistique à faire. Vérification de branche isolée :
-  239 tests Python, Ruff/format/mypy verts. Voir le rapport `ui-search-v2`.
+  239 tests Python, Ruff/format/mypy verts. Après intégration du socle UI v4 : 246 tests Python,
+  19 frontend, Ruff, format, mypy, schémas et registre verts. Voir le rapport `ui-search-v2`.
+
+## UI v4 — profil de session et atlas étendu — 28 septembre 2026
+
+- Entrée Informations → Symptômes → Précisions/Questions → Résultats. Profil patient local
+  structuré ; seul l'âge est projeté dans le cas. Autres champs facultatifs déclaratifs,
+  sans interprétation médicale. Sélection d'un symptôme `present` en un clic, état modifiable.
+- Précisions facultatives limitées à des concepts HPO explicitement configurés ; aucune
+  assertion ou règle de score créée. Historique/reprise et `/expert` conservés.
+- Atlas porté à 47 régions et 37 images locales, dont 30 nouvelles générées hors tête.
+  Visuels non validés anatomiquement, overlays et labels indépendants, survol boutons-zones
+  synchronisé. Références non supportées masquées. Un audit offline de 14 motifs trouve 72
+  questions sans répétition, mais plusieurs premiers choix génériques ; politique inchangée.
+  Vérification de la PR isolée le 29 septembre : 242 tests Python, 19 tests frontend,
+  schémas, Ruff et mypy strict verts ; aucun snapshot ou statut médical modifié.
 
 ## État actuel en une phrase
 

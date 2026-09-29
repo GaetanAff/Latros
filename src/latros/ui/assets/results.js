@@ -50,8 +50,11 @@ function resultCards(candidates, phase) {
     return `<article class="result-card"><div class="result-heading">
       <span class="rank-badge" aria-label="${escapeHtml(t("rank", {rank: candidate.rank || index + 1}))}">${escapeHtml(candidate.rank || index + 1)}</span>
       <h2>${escapeHtml(displayLabel(candidate.candidate_id, candidate.label))}</h2></div>
-      ${favorable ? `<ul aria-label="${escapeHtml(t("favorable"))}">${favorable}</ul>` : ""}
-      ${unfavorable ? `<ul aria-label="${escapeHtml(t("unfavorable"))}"><li>${escapeHtml(t("contradiction"))}</li>${unfavorable}</ul>` : ""}
+      <p class="result-caption">${escapeHtml(t('result_card_explanation'))}</p>
+      <div class="result-evidence">
+      <section><h3>${escapeHtml(t('favorable'))}</h3>${favorable ? `<ul>${favorable}</ul>` : `<p>${escapeHtml(t('no_favorable_short'))}</p>`}</section>
+      <section><h3>${escapeHtml(t('unfavorable'))}</h3>${unfavorable ? `<ul>${unfavorable}</ul>` : `<p>${escapeHtml(t('no_unfavorable_short'))}</p>`}</section>
+      </div>
       <button type="button" class="text-link" data-detail-index="${index}">${escapeHtml(t("see_why"))}</button>
     </article>`;
   }).join("");

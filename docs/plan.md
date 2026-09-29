@@ -1,6 +1,6 @@
 # Plan d'implémentation et avancement
 
-Référence : plan « Premières étapes de Latros — socle de données et moteur clinique pur » demandé par l'utilisateur. État au 27 septembre 2026.
+Référence : plan « Premières étapes de Latros — socle de données et moteur clinique pur » demandé par l'utilisateur. État au 29 septembre 2026.
 
 ### Recherche locale v2 — 28–29 septembre 2026
 
@@ -10,6 +10,19 @@ explicites. [Benchmark offline](reports/ui-search-v2.md) : 63/63 requêtes cibl�
 Ce banc recoupe le lexique et n'est pas une évaluation indépendante. Le lexique FR/DE de
 présentation couvre désormais 160 concepts sur 11 671 recherchables ; les labels source et
 IDs restent inchangés. Revue linguistique/clinique et vrai test utilisateur restent requis.
+
+### UI v4 : parcours produit et atlas expérimental (28 septembre 2026)
+
+Informations locales → Symptômes → Précisions/Questions → Résultats, avec sélection `present`
+immédiate. Le contexte patient facultatif est stocké localement mais non interprété ; les
+précisions structurées sont une allowlist sans effet sur le scoring. L'atlas compte 47 nœuds,
+37 images générées non validées anatomiquement, et des overlays/boutons à survol partagé.
+Voir [rapport produit](reports/ui-v4-product-flow.md), [atlas](reports/ui-atlas-v4.md),
+[audit des questions](reports/ui-v4-question-quality.md) et
+[ADR 0019](decisions/0019-profil-patient-local-et-precisions-structurees.md). L'audit de
+14 cas montre des questions souvent trop génériques ; leur qualité clinique et la couverture
+généraliste restent des chantiers distincts. Aucun
+snapshot ni statut clinique ne change.
 
 Les trois jalons avaient été implémentés ensemble dans la première tranche. La reprise de l'étape 2 consiste à vérifier sa livraison et à établir le snapshot sous le nom du jalon, `v0.2.0`. Elle ne correspond pas à l'ajout de nouvelles sources ou de fonctions cliniques.
 
