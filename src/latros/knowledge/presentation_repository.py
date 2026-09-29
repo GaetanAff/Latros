@@ -10,6 +10,7 @@ from typing import Any, Literal
 import orjson
 
 from latros.common import LatrosError
+from latros.knowledge.local_search import prepare_bm25, ranked_ids
 from latros.knowledge.repository_v2 import CanonicalKnowledgeRepositoryV2
 
 Language = Literal["fr", "de", "en"]
@@ -52,6 +53,7 @@ class ObservationPresentationRepository:
         self.repository = repository
         self.connection = repository.connection
         self.lexicon = load_display_lexicon()
+        self._bm25_ready = False
 
     def _prepare(self) -> None:
         self.repository.assert_unchanged()
@@ -155,19 +157,75 @@ class ObservationPresentationRepository:
         self._prepare()
         resolved = self.resolve_supported_codes(system, codes)
         displays = self.display_labels([row["concept_id"] for row in resolved.values()], language)
-        return [
-            {**resolved[code], **displays.get(resolved[code]["concept_id"], {})}
-            for code in dict.fromkeys(codes)
-            if code in resolved
-        ]
+        options: list[dict[str, Any]] = []
+        seen_concepts: set[str] = set()
+        for code in dict.fromkeys(codes):
+            if code not in resolved:
+                continue
+            canonical_id = resolved[code]["concept_id"]
+            if canonical_id in seen_concepts:
+                continue
+            seen_concepts.add(canonical_id)
+            options.append({**resolved[code], **displays.get(canonical_id, {})})
+        return options
 
-    def search(self, query: str, language: Language, limit: int) -> list[dict[str, Any]]:
+    def search(
+        self,
+        query: str,
+        language: Language,
+        limit: int,
+        *,
+        search_mode: Literal["existing", "bm25", "bm25_fuzzy"] = "bm25_fuzzy",
+    ) -> list[dict[str, Any]]:
         if not 1 <= limit <= 50:
             raise LatrosError("Concept result limit must be between 1 and 50")
         normalized = normalize_search(query[:120])
         if len(normalized) < 2:
             return []
         self._prepare()
+        if search_mode != "existing":
+            if not self._bm25_ready:
+                prepare_bm25(self.connection)
+                self._bm25_ready = True
+            ranked = ranked_ids(self.connection, normalized, language, limit, search_mode)
+            if not ranked:
+                return []
+            ids = [row[0] for row in ranked]
+            ranks = {row[0]: row[1] for row in ranked}
+            raw = self.connection.execute(
+                "SELECT concept_id,system,code,label,language,kind FROM ui_observations "
+                "WHERE concept_id IN (SELECT unnest(?::VARCHAR[]))",
+                [ids],
+            ).fetchall()
+            row_by_id = {str(row[0]): row for row in raw}
+            rows = [(*row_by_id[concept_id], ranks[concept_id]) for concept_id in ids]
+        else:
+            rows = self._search_existing(normalized, language, limit)
+        displays = self.display_labels([row[0] for row in rows], language)
+        return [
+            {
+                "concept_id": row[0],
+                "system": row[1],
+                "code": row[2],
+                "label": row[3],
+                "language": row[4],
+                "observation_kind": row[5],
+                "match_rank": row[6],
+                **displays.get(
+                    row[0],
+                    {
+                        "display_label": row[3],
+                        "display_language": row[4],
+                        "fallback_english": row[4] != language,
+                    },
+                ),
+            }
+            for row in rows
+        ]
+
+    def _search_existing(
+        self, normalized: str, language: Language, limit: int
+    ) -> list[tuple[Any, ...]]:
         tokens = normalized.split()[:10]
         token_sql = " AND ".join("contains(normalized, ?)" for _ in tokens)
         # Fuzzy is restricted to explicit public aliases, edit distance one, unique target.
@@ -205,28 +263,7 @@ class ObservationPresentationRepository:
             *tokens,
             limit,
         ]
-        rows = self.connection.execute(sql, parameters).fetchall()
-        displays = self.display_labels([row[0] for row in rows], language)
-        return [
-            {
-                "concept_id": row[0],
-                "system": row[1],
-                "code": row[2],
-                "label": row[3],
-                "language": row[4],
-                "observation_kind": row[5],
-                "match_rank": row[6],
-                **displays.get(
-                    row[0],
-                    {
-                        "display_label": row[3],
-                        "display_language": row[4],
-                        "fallback_english": row[4] != language,
-                    },
-                ),
-            }
-            for row in rows
-        ]
+        return self.connection.execute(sql, parameters).fetchall()
 
     def display_labels(self, ids: list[str], language: Language) -> dict[str, dict[str, Any]]:
         if len(ids) > 100:

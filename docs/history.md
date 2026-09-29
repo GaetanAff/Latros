@@ -2,7 +2,22 @@
 
 Ce fichier est le journal de continuité du projet. Il décrit ce qui a été décidé et effectivement réalisé, afin de pouvoir reprendre la discussion sans déduire l'état du projet à partir du code seul.
 
-Dernière mise à jour : 28 septembre 2026.
+Dernière mise à jour : 29 septembre 2026.
+
+## Recherche locale v2 — 28–29 septembre 2026
+
+- Index BM25 local dérivé en mémoire, sans extension téléchargée ni mutation du snapshot,
+  préfixes et fuzzy conservateur sur alias explicites. Les négations évidentes ne deviennent
+  pas des observations `present` ; choix de suggestion toujours explicite.
+- Benchmark offline sur 78 formulations FR/DE/EN : historique top 1 62/63 cibles et deux
+  suggestions sur 15 négatifs ; BM25 pur 60/63, combiné BM25/fuzzy 63/63 et zéro suggestion
+  négative. Médiane chaude ~0,207 s. Les cibles reprennent le lexique ajouté : ce n'est pas
+  un test en aveugle ni une validation clinique.
+- Lexique FR/DE : 160 concepts sur 11 671 recherchables ; fallback EN conservé, aucune
+  assertion médicale, ID, score, snapshot ou statut clinique modifié. Évaluation indépendante
+  de recherche et revue humaine linguistique à faire. Vérification de branche isolée :
+  239 tests Python, Ruff/format/mypy verts. Après intégration du socle UI v4 : 246 tests Python,
+  19 frontend, Ruff, format, mypy, schémas et registre verts. Voir le rapport `ui-search-v2`.
 
 ## UI v4 — profil de session et atlas étendu — 28 septembre 2026
 
