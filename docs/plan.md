@@ -2,6 +2,16 @@
 
 Référence : plan « Premières étapes de Latros — socle de données et moteur clinique pur » demandé par l'utilisateur. État au 27 septembre 2026.
 
+### Audit d'extension souveraine de médecine générale — 28–29 septembre 2026
+
+Un [rapport documentaire](reports/general-medicine-source-expansion.md) examine 13 sources ou
+familles supplémentaires : distribution bulk/versionnable, rôle possible, droits de
+transformation/redistribution et intérêt pour les lacunes généralistes. La curation ciblée
+PMC CC BY/CC0, Bookshelf OA et AHRQ, ainsi que Wikidata CC0 pour mappings/découvrabilité,
+reste une piste conditionnelle. NHS/CDC et d'autres sources demeurent différées ou exigent
+une permission explicite. **Aucune acquisition, ingestion, assertion ni nouveau snapshot** n'est
+autorisée par cet audit seul ; G1/G2/G5 humains et G3 indépendant restent à faire.
+
 Les trois jalons avaient été implémentés ensemble dans la première tranche. La reprise de l'étape 2 consiste à vérifier sa livraison et à établir le snapshot sous le nom du jalon, `v0.2.0`. Elle ne correspond pas à l'ajout de nouvelles sources ou de fonctions cliniques.
 
 ## Jalons du plan

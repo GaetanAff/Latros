@@ -8,6 +8,11 @@ Prototype **interne de recherche** pour explorer des raisonnements cliniques str
 sont locaux et explicables, sans LLM. L'interface web propose désormais un parcours simple et
 conserve la console R&D en mode expert. Elle n'est pas une interface patient validée.
 
+L'[audit documentaire d'extension généraliste](docs/reports/general-medicine-source-expansion.md)
+compare des distributions officielles et leurs droits avant toute ingestion. Il ne télécharge
+ni n'ajoute aucune source médicale, ne change aucun snapshot et ne constitue pas une validation
+clinique. Les permissions et la revue humaine restent des préalables.
+
 Le parcours simple propose désormais **FR / DE / EN**, mémorisés localement. La recherche
 accepte synonymes, accents, préfixes et un lexique grand public versionné (139 concepts avec
 affichage FR/DE activé sur les 11 671 observations recherchables du snapshot local). Les traductions/désignations sont uniquement
