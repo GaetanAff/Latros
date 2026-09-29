@@ -3764,6 +3764,21 @@
       "format": "date-time",
       "title": "Updated At",
       "type": "string"
+    },
+    "verification_answered_count": {
+      "default": 0,
+      "maximum": 6,
+      "minimum": 0,
+      "title": "Verification Answered Count",
+      "type": "integer"
+    },
+    "verification_asked_concept_ids": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 6,
+      "title": "Verification Asked Concept Ids",
+      "type": "array"
     }
   },
   "required": [

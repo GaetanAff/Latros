@@ -17,6 +17,13 @@ Corps → Tête → Sinus avec recherche toujours disponible et thème clair/som
 Les deux vues utilisent le même backend et les mêmes
 runs immuables.
 
+Après les premiers résultats généraux, une vérification facultative peut poser jusqu'à six
+questions neutres, issues des findings non évalués des cinq premiers candidats. Le plafond est
+global à la session, pas par maladie ; réponses déjà données et concepts absents du catalogue
+sont exclus. L'utilisateur peut s'arrêter et voir ses résultats à tout moment. Un nouveau run
+immuable suit les réponses ; l'ancien reste disponible. Une information non évaluée n'est pas
+une contradiction. La phase rare demeure distincte et facultative.
+
 ## Utilisation
 
 Utiliser `main` synchronisé avec les deux livraisons #19 (General/Rare) et #20 (atlas).

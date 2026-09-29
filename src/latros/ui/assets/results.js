@@ -42,6 +42,11 @@ function renderResults() {
   const visible = candidates.slice(0, state.visibleCount);
   byId("result-list").innerHTML = resultCards(visible, consultationPhase());
   byId("show-more-results").hidden = candidates.length <= state.visibleCount;
+  const verified = state.session?.verification_answered_count || 0;
+  byId('verification-cta').hidden = consultationPhase() !== 'general'
+    || !candidates.length || Boolean(result.abstention);
+  byId('verification-start').hidden = verified >= 6;
+  byId('verification-updated').hidden = !state.verificationUpdated;
 }
 function resultCards(candidates, phase) {
   return candidates.map((candidate, index) => {
@@ -55,6 +60,8 @@ function resultCards(candidates, phase) {
       <section><h3>${escapeHtml(t('favorable'))}</h3>${favorable ? `<ul>${favorable}</ul>` : `<p>${escapeHtml(t('no_favorable_short'))}</p>`}</section>
       <section><h3>${escapeHtml(t('unfavorable'))}</h3>${unfavorable ? `<ul>${unfavorable}</ul>` : `<p>${escapeHtml(t('no_unfavorable_short'))}</p>`}</section>
       </div>
+      ${Number.isInteger(candidate.unknown_count)
+    ? `<p class="field-hint">${escapeHtml(t('verification_missing_count',{count:candidate.unknown_count}))}</p>` : ''}
       <button type="button" class="text-link" data-detail-index="${index}">${escapeHtml(t("see_why"))}</button>
     </article>`;
   }).join("");
@@ -68,10 +75,11 @@ function detailList(items, empty) {
 
 function unknownDetails(items) {
   if (!items?.length) return `<p>${escapeHtml(t("no_missing"))}</p>`;
-  const known = items.filter((item) => observationLabel(item) !== t("documented"));
-  return known.length
-    ? detailList(known, "")
-    : `<p>${escapeHtml(t("missing_count", {count: items.length}))}</p>`;
+  const findings = [...new Set(items.map(item => item.finding).filter(Boolean))];
+  const displayed = findings.slice(0, 20);
+  return `<ul class="detail-list">${displayed.map(id => `<li>${escapeHtml(displayLabel(id, id))}</li>`).join('')}</ul>`
+    + (findings.length > displayed.length
+      ? `<p>${escapeHtml(t('missing_count', {count:findings.length-displayed.length}))}</p>` : '');
 }
 
 function sourceLabel(source) {
@@ -89,6 +97,15 @@ async function openDetail(index, phase) {
   const detail = await api(`${sessionPath()}/runs/${encodeURIComponent(run.run_id)}`
     + `/candidates/${encodeURIComponent(selected.candidate_id)}`);
   const candidate = detail.candidate;
+  const missingIds = [...new Set((candidate.unknown || []).map(item => item.finding).filter(Boolean))].slice(0, 20);
+  if (missingIds.length) {
+    const params = new URLSearchParams({snapshot:state.selection.snapshot_id,
+      strategy:state.selection.strategy_id,language:locale()});
+    missingIds.forEach(id => params.append('ids', id));
+    const labels = await api('/internal/v1/presentation/labels?' + params);
+    Object.entries(labels.items || {}).forEach(([concept_id, display]) =>
+      rememberDisplay({...display, concept_id}));
+  }
   byId("dialog-title").textContent = t("why_candidate", {label: displayLabel(candidate.candidate_id, candidate.label)});
   byId("dialog-content").innerHTML = `
     <p>${escapeHtml(t("rank_notice", {rank: candidate.rank}))}</p>

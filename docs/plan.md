@@ -10,7 +10,18 @@ par le patient. Aucune proposition n'est une observation avant confirmation. Les
 `SourceStatement` / `ObservationProposal` conservent texte, span et méthode ; recherche et
 anatomie restent utilisables sans modèle. Le raisonnement, les snapshots et les statuts
 cliniques ne changent pas. Voir [ADR 0020](decisions/0020-interpretation-locale-des-symptomes.md).
-La vérification post-résultats et Huatuo indépendant sont des livraisons distinctes à venir.
+La vérification post-résultats et Huatuo indépendant sont des livraisons distinctes.
+
+### Vérification post-résultats — `result_verification_v1` (29 septembre 2026)
+
+Livraison distincte : les cinq premiers candidats du run généraliste alimentent au plus six
+questions facultatives **au total par session**, uniquement sur des findings non évalués et
+supportés. Le plan versionné est conservé localement ; chaque réponse complète le même cas et
+un nouveau run immuable est créé après la vérification. Le premier run reste consultable. Une
+absence constatée peut devenir une contribution défavorable par le moteur existant, jamais une
+exclusion certaine. Les questions rares restent derrière l'opt-in. Voir
+[ADR 0021](decisions/0021-verification-facultative-des-resultats.md). Huatuo indépendant reste
+une troisième livraison distincte, à réaliser.
 
 ### Recherche locale v2 — 28–29 septembre 2026
 

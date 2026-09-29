@@ -227,6 +227,12 @@ fournies par le backend, les résultats non probabilistes et leurs détails facu
 description libre facultative peut maintenant produire des **propositions** via Qwen3.5 local ;
 le patient doit les confirmer avant qu'elles deviennent des observations. Le modèle ne pose pas
 de diagnostic et son extraction n'est pas cliniquement validée.
+Après les premiers résultats généraux, « Vérifier ces possibilités » est une étape facultative :
+au plus six questions **au total** sur les éléments non évalués des cinq premières hypothèses.
+Le résultat initial reste visible sans répondre. Une réponse produit ensuite un nouveau run,
+sans altérer le premier ; les contradictions ne sont montrées qu'après évaluation réelle et ne
+sont ni exclusion absolue ni probabilité. La phase rare reste distincte. Voir
+[ADR 0021](docs/decisions/0021-verification-facultative-des-resultats.md).
 Un snapshot absent est signalé ; les libellés du catalogue local peuvent être en anglais. Voir
 [la documentation du parcours simple](docs/modern-ui.md) et [l'ADR 0011](docs/decisions/0011-parcours-simple-local.md).
 

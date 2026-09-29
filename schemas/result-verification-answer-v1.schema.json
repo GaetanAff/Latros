@@ -1,0 +1,32 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "answer": {
+      "enum": [
+        "present",
+        "absent",
+        "unknown",
+        "not_assessed"
+      ],
+      "title": "Answer",
+      "type": "string"
+    },
+    "question_id": {
+      "minLength": 1,
+      "title": "Question Id",
+      "type": "string"
+    },
+    "revision": {
+      "minimum": 0,
+      "title": "Revision",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "revision",
+    "question_id",
+    "answer"
+  ],
+  "title": "VerificationAnswerRequest",
+  "type": "object"
+}

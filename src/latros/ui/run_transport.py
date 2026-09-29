@@ -34,6 +34,7 @@ def summary_projection(run: StoredRun) -> dict[str, Any]:
                 "aggregate": candidate["aggregate"],
                 "favorable": _brief_contributions(candidate.get("favorable", [])),
                 "unfavorable": _brief_contributions(candidate.get("unfavorable", [])),
+                "unknown_count": len(candidate.get("unknown", [])),
             }
         )
     return {

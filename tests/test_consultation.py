@@ -283,6 +283,77 @@ def test_explicit_rare_opt_in_separate_immutable_runs_and_resume(scoped_fixture,
         assert rare_result["run"]["result"]["safety"]["status"] == "not_evaluated"
 
 
+def test_optional_verification_creates_new_immutable_general_run(scoped_fixture, monkeypatch):
+    root, general, parent, _ = scoped_fixture
+    monkeypatch.setattr(
+        ResearchApplicationService,
+        "profile",
+        lambda self, strategy, snapshot=None: (
+            general if strategy == "general_question_v2" else parent
+        ),
+    )
+    with TestClient(create_app(root)) as client:
+        session = _select(client, _create_session(client), "test-v2", "general_question_v2")
+        path = f"/internal/v1/sessions/{session['session_id']}"
+        case = _case(_symptom(1, "present"), _symptom(2, "absent")).model_dump(mode="json")
+        session = client.put(
+            path + "/case", json={"revision": session["revision"], "clinical_case": case}
+        ).json()
+        diagnosis = client.post(
+            path + "/analyses?view=summary", json={"revision": session["revision"]}
+        ).json()
+        session = diagnosis["session"]
+        base_id = diagnosis["run"]["run_id"]
+        original = client.get(path + f"/runs/{base_id}").content
+        verification = client.post(
+            path + f"/runs/{base_id}/verification", json={"revision": session["revision"]}
+        )
+        assert verification.status_code == 200, verification.text
+        plan = verification.json()
+        assert plan["plan"]["policy_id"] == "result_verification_v1"
+        assert plan["plan"]["top_candidate_ids"] == [
+            item["candidate_id"] for item in diagnosis["run"]["result"]["candidates"][:5]
+        ]
+        assert len(plan["plan"]["items"]) <= 6
+        if plan["question"]:
+            answer = client.post(
+                path + f"/runs/{base_id}/verification/answer",
+                json={
+                    "revision": session["revision"],
+                    "question_id": plan["question"]["question_id"],
+                    "answer": "absent",
+                },
+            )
+            assert answer.status_code == 200, answer.text
+            session = answer.json()["session"]
+            assert session["clinical_case"]["question_history"][-1]["question_id"].startswith(
+                "result_verification_v1:"
+            )
+            assert (
+                client.post(
+                    path + f"/runs/{base_id}/verification/answer",
+                    json={
+                        "revision": session["revision"],
+                        "question_id": plan["question"]["question_id"],
+                        "answer": "present",
+                    },
+                ).status_code
+                == 400
+            )
+            updated = client.post(
+                path + "/analyses?view=summary", json={"revision": session["revision"]}
+            )
+            assert updated.status_code == 200, updated.text
+            assert updated.json()["run"]["run_id"] != base_id
+            updated_full = client.get(path + f"/runs/{updated.json()['run']['run_id']}").json()
+            assert any(
+                contribution["finding"] == plan["question"]["concept_id"]
+                for candidate in updated_full["result"]["candidates"]
+                for contribution in candidate["unfavorable"]
+            )
+        assert client.get(path + f"/runs/{base_id}").content == original
+
+
 def test_ambiguous_identifiers_refused_only_in_new_policy(scoped_fixture):
     root, profile, _, _ = scoped_fixture
     strategy = ConsultationStrategy(root, "test-v2", profile)
