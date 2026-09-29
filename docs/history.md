@@ -4,6 +4,18 @@ Ce fichier est le journal de continuité du projet. Il décrit ce qui a été d�
 
 Dernière mise à jour : 29 septembre 2026.
 
+## Audit d'extension généraliste — 28–29 septembre 2026
+
+- Treize sources/familles supplémentaires évaluées sur leurs distributions officielles, droits,
+  provenance et rôle. Pistes conditionnelles : documents PMC CC BY/CC0, titres Bookshelf OA,
+  rapports AHRQ, Wikidata CC0 pour mappings/UX. Aucun corpus prêt à remplacer une base de
+  symptom checker propriétaire n'a été identifié.
+- NHS/CDC différés comme fondation bulk générale ; autres licences et droits tiers à fermer
+  document par document. Aucun téléchargement médical, nouvelle assertion, changement de
+  snapshot, scoring ou statut clinique. Rapport documentaire seulement, non avis juridique
+  définitif ; revue G1/G2/G5 et évaluation indépendante G3 toujours requises. Vérification :
+  235 tests Python, Ruff, format et mypy strict verts sur cette branche documentaire.
+
 ## Recherche locale v2 — 28–29 septembre 2026
 
 - Index BM25 local dérivé en mémoire, sans extension téléchargée ni mutation du snapshot,

@@ -8,6 +8,11 @@ Prototype **interne de recherche** pour explorer des raisonnements cliniques str
 sont locaux et explicables, sans LLM. L'interface web propose désormais un parcours simple et
 conserve la console R&D en mode expert. Elle n'est pas une interface patient validée.
 
+L'[audit documentaire d'extension généraliste](docs/reports/general-medicine-source-expansion.md)
+compare des distributions officielles et leurs droits avant toute ingestion. Il ne télécharge
+ni n'ajoute aucune source médicale, ne change aucun snapshot et ne constitue pas une validation
+clinique. Les permissions et la revue humaine restent des préalables.
+
 Le mode simple v4 expérimental commence par un profil de session local (nom ou pseudonyme, âge),
 puis Symptômes → Précisions/Questions → Résultats. Seul l'âge rejoint le cas moteur ; les
 antécédents/allergies facultatifs ne sont pas interprétés. Un symptôme sélectionné est ajouté
